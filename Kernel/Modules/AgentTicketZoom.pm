@@ -2052,16 +2052,16 @@ sub _ArticleTree {
         $ArticleViewSelected = 'Timeline';
     }
 
-    # Add disabled teaser option for OTRSBusiness timeline view
-    my $OTRSBusinessIsInstalled = $Kernel::OM->Get('Kernel::System::OTRSBusiness')->OTRSBusinessIsInstalled();
-    if ( !$OTRSBusinessIsInstalled ) {
-        push @ArticleViews, {
-            Key   => 'Timeline',
-            Value => $LayoutObject->{LanguageObject}
-                ->Translate( 'Show Ticket Timeline View (%s)', 'OTRS Business Solution™' ),
-            Disabled => 1,
-        };
-    }
+#    # Add disabled teaser option for OTRSBusiness timeline view
+#    my $OTRSBusinessIsInstalled = $Kernel::OM->Get('Kernel::System::OTRSBusiness')->OTRSBusinessIsInstalled();
+#    if ( !$OTRSBusinessIsInstalled ) {
+#        push @ArticleViews, {
+#            Key   => 'Timeline',
+#            Value => $LayoutObject->{LanguageObject}
+#                ->Translate( 'Show Ticket Timeline View (%s)', 'OTRS Business Solution™' ),
+#            Disabled => 1,
+#        };
+#    }
 
     my $ArticleViewStrg = $LayoutObject->BuildSelection(
         Data        => \@ArticleViews,
