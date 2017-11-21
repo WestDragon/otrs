@@ -126,7 +126,7 @@ sub Run {
         my @SettingNames = $SysConfigObject->ConfigurationInvalidList();
         my @Parameters   = (
             {
-                Name  => 'Invalid settings',
+                Name  => Translatable('Invalid settings'),
                 Value => 'Invalid',
             }
         );
@@ -586,7 +586,9 @@ sub Run {
 
             return $LayoutObject->ErrorScreen(
                 Message =>
-                    'System Configuration could not be imported due to a unknown error, please check OTRS logs for more information',
+                    Translatable(
+                    'System Configuration could not be imported due to an unknown error, please check OTRS logs for more information.'
+                    ),
             );
         }
         elsif ( $ConfigurationLoad && $ConfigurationLoad eq '-1' ) {
@@ -648,7 +650,7 @@ sub _GetCategoriesStrg {
         SelectedID   => $Category || 'All',
         PossibleNone => 0,
         Translation  => 1,
-        Sort         => 'AlfaNumericKey',
+        Sort         => 'AlphaNumericKey',
         Class        => 'Modernize',
         Title        => $Kernel::OM->Get('Kernel::Language')->Translate('Category Search'),
     );
