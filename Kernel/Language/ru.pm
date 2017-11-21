@@ -6112,7 +6112,7 @@ Thanks for your help!
         'Comment for new history entries in the customer interface.' => 'Комметарий для новых записей истории в интерфейсе клиента.',
         'Comment2' => 'Комментарий2',
         'Communication' => 'Взаимодействие',
-        'Communication & Notifications' => '',
+        'Communication & Notifications' => 'Взаимодействие и Уведомления',
         'Communication Log GUI' => '',
         'Communication log limit per page for CommunicationLog Overview' =>
             '',
