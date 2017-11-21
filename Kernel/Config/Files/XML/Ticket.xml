@@ -5319,7 +5319,7 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::MenuModule###999-TeaserAttachmentView" Required="0" Valid="1">
+    <Setting Name="Ticket::Frontend::MenuModule###999-TeaserAttachmentView" Required="0" Valid="0">
         <Description Translatable="1">Shows a teaser link in the menu for the ticket attachment view of OTRS Business Solution™.</Description>
         <Navigation>Frontend::Agent::View::TicketZoom::MenuModule</Navigation>
         <Value>
