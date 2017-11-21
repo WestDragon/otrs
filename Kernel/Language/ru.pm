@@ -7489,7 +7489,7 @@ Thanks for your help!
         'Locked Tickets' => 'Заблокированные заявки',
         'Locked Tickets.' => 'Заблокированные Заявки.',
         'Locked ticket.' => 'Заблокирована заявка.',
-        'Logged-In Users' => '',
+        'Logged-In Users' => 'Авторизованные пользователи',
         'Logout of customer panel.' => 'Панель выхода для клиента.',
         'Look into a ticket!' => 'Просмотреть заявку!',
         'Loop protection: no auto-response sent to "%s".' => '',
