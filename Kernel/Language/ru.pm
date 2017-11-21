@@ -5834,7 +5834,7 @@ Thanks for your help!
         'Add a note to this ticket' => 'Добавить заметку к этой заявке',
         'Add an inbound phone call to this ticket' => 'Добавить входящий звонок клиента к этой заявке',
         'Add an outbound phone call to this ticket' => 'Добавить исходящий звонок клиенту к этой заявке',
-        'Added %s time unit(s), for a total of %s time unit(s).' => 'Добавлено %sединиц времени, всего единиц времени %s.',
+        'Added %s time unit(s), for a total of %s time unit(s).' => 'Добавлено %s единиц(а) времени, всего %s единиц(а) времени.',
         'Added email. %s' => 'Получено письмо от %s.',
         'Added follow-up to ticket [%s]. %s' => 'Добавлено дополнение к заявке [%s]. %s',
         'Added link to ticket "%s".' => 'К заявке «%s» добавлена связь.',
