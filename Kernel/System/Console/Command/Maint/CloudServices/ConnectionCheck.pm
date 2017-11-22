@@ -90,14 +90,14 @@ sub Run {
     my $TimeStartObject = $Kernel::OM->Create('Kernel::System::DateTime');
 
     # send request
-    my %Response = $Kernel::OM->Get('Kernel::System::WebUserAgent')->Request(
-        Type => 'POST',
-        URL  => 'https://cloud.otrs.com/otrs/public.pl',
-        Data => {
-            Action      => 'PublicCloudService',
-            RequestData => $RequestData,
-        },
-    );
+#    my %Response = $Kernel::OM->Get('Kernel::System::WebUserAgent')->Request(
+#        Type => 'POST',
+#        URL  => 'https://cloud.otrs.com/otrs/public.pl',
+#        Data => {
+#            Action      => 'PublicCloudService',
+#            RequestData => $RequestData,
+#        },
+#    );
 
     # calculate and print the time spent in the request
     my $TimeEndObject = $Kernel::OM->Create('Kernel::System::DateTime');
