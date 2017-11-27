@@ -73,11 +73,13 @@ sub CheckPreviousRequirement {
         print "    Error: Setting character_set_client needs to be utf8.\n";
         return;
     }
-    elsif ($Verbose) {
-        print "    Setting character_set_client is: $ClientCharacterSet. ";
+
+    if ($Verbose) {
+        print "    The setting character_set_client is: $ClientCharacterSet. ";
     }
 
     my $DatabaseIsUTF8       = 0;
+    my $DatabaseIsUTF8MB4    = 0;
     my $DatabaseCharacterSet = "";
 
     # Check database character set.
@@ -87,14 +89,26 @@ sub CheckPreviousRequirement {
         if ( $DatabaseCharacterSet =~ /utf8/i ) {
             $DatabaseIsUTF8 = 1;
         }
+        if ( $DatabaseCharacterSet =~ /utf8mb4/i ) {
+            $DatabaseIsUTF8MB4 = 1;
+        }
+    }
+
+    if ($DatabaseIsUTF8MB4) {
+        print "\n    Error: The setting character_set_database is set to '$DatabaseCharacterSet'.";
+        print
+            "\n    Error: This character set is not yet supported, please see https://bugs.otrs.org/show_bug.cgi?id=12361.";
+        print "\n    Error: Please convert your database to the character set 'utf8'.\n";
+        return;
     }
 
     if ( !$DatabaseIsUTF8 ) {
-        print "\n    Error: Setting character_set_database needs to be UNICODE or UTF8.\n";
+        print "\n    Error: The setting character_set_database needs to be 'utf8'.\n";
         return;
     }
-    elsif ($Verbose) {
-        print "Setting character_set_database is: $DatabaseCharacterSet. ";
+
+    if ($Verbose) {
+        print "The setting character_set_database is: $DatabaseCharacterSet. ";
     }
 
     my @TablesWithInvalidCharset;
@@ -102,17 +116,18 @@ sub CheckPreviousRequirement {
     # Check for tables with invalid character set. Views have engine == null, ignore those.
     $DBObject->Prepare( SQL => 'show table status where engine is not null' );
     while ( my @Row = $DBObject->FetchrowArray() ) {
-        if ( $Row[14] !~ /^utf8/i ) {
+        if ( $Row[14] =~ /^utf8mb4/i || $Row[14] !~ /^utf8/i ) {
             push @TablesWithInvalidCharset, $Row[0];
         }
     }
 
     if (@TablesWithInvalidCharset) {
-        print "\n    Error: There were tables found which do not have utf8 as charset.\n";
-        print "    " . join( ', ', @TablesWithInvalidCharset ) . "\n";
+        print "\n    Error: There were tables found which do not have 'utf8' as charset: '";
+        print join( "', '", @TablesWithInvalidCharset ) . "'.\n";
         return;
     }
-    elsif ($Verbose) {
+
+    if ($Verbose) {
         print "No tables found with invalid charset.\n";
     }
 

@@ -1,4 +1,13 @@
 #6.0.2 2017-??-??
+ - 2017-11-27 Fixed bug#[13325](https://bugs.otrs.org/show_bug.cgi?id=13325) - OTRS_CUSTOMER_BODY not working for most notification events.
+ - 2017-11-27 Fixed bug#[13385](https://bugs.otrs.org/show_bug.cgi?id=13385) - Customer web request results in a phone article.
+ - 2017-11-27 Fixed bug#[13342](https://bugs.otrs.org/show_bug.cgi?id=13342) - Package installation results in an error until web server is restarted.
+ - 2017-11-27 Fixed bug#[13370](https://bugs.otrs.org/show_bug.cgi?id=13370) - Cloning DateTime object returns bad object(wrong unix timestamp).
+ - 2017-11-24 Fixed bug#[13266](https://bugs.otrs.org/show_bug.cgi?id=13266) - Article field not mandatory if time units are added.
+ - 2017-11-24 Fixed bug#[13323](https://bugs.otrs.org/show_bug.cgi?id=13323) - Visibility issues in SysConfig settings with large number of list items.
+ - 2017-11-24 Fixed bug#[13382](https://bugs.otrs.org/show_bug.cgi?id=13382) - Stats dashboard generate fails because of missing parameters in Stats.pm.
+ - 2017-11-23 Fixed bug#[13381](https://bugs.otrs.org/show_bug.cgi?id=13381) - Categories in Navigation (AgentPreferences screen) are not working for non-admin users.
+ - 2017-11-23 Fixed bug#[13374](https://bugs.otrs.org/show_bug.cgi?id=13374) - DBUpdate script deletes user time zone information on patch level updates.
  - 2017-11-23 Fixed bug#[13376](https://bugs.otrs.org/show_bug.cgi?id=13376) - Standard values in System Configuration displayed as modified and contained in config.pm and locked.
  - 2017-11-22 Fixed bug#[13365](https://bugs.otrs.org/show_bug.cgi?id=13365) - Incorrect accentuated characters in the draft name.
  - 2017-11-22 Fixed bug#[13286](https://bugs.otrs.org/show_bug.cgi?id=13286) - SysConfig frontends allows changing seemingly read-only values.
