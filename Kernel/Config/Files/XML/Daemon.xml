@@ -755,40 +755,40 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="Daemon::SchedulerCronTaskManager::Task###OTRSBusinessEntitlementCheck" Required="1" Valid="1" ReadOnly="1" ConfigLevel="100">
-        <Description Translatable="1">Checks the entitlement status of OTRS Business Solution™.</Description>
-        <Navigation>Daemon::SchedulerCronTaskManager::Task</Navigation>
-        <Value>
-            <Hash>
-                <Item Key="TaskName">OTRSBusinessEntitlementCheck</Item>
-                <Item Key="Schedule">25,45 */1 * * *</Item> <!-- default: each hour in the minute 15 and 45 -->
-                <Item Key="Module">Kernel::System::Console::Command::Maint::OTRSBusiness::EntitlementCheck</Item>
-                <Item Key="Function">Execute</Item>
-                <Item Key="MaximumParallelInstances">1</Item>
-                <Item Key="Params">
-                    <Array>
-                    </Array>
-                </Item>
-            </Hash>
-        </Value>
-    </Setting>
-    <Setting Name="Daemon::SchedulerCronTaskManager::Task###OTRSBusinessAvailabilityCheck" Required="1" Valid="1" ReadOnly="1" ConfigLevel="100">
-        <Description Translatable="1">Checks the availability of OTRS Business Solution™ for this system.</Description>
-        <Navigation>Daemon::SchedulerCronTaskManager::Task</Navigation>
-        <Value>
-            <Hash>
-                <Item Key="TaskName">OTRSBusinessAvailabilityCheck</Item>
-                <Item Key="Schedule">15,35,55 */1 * * *</Item> <!-- default: each hour in the minute 15,35 and 55 -->
-                <Item Key="Module">Kernel::System::Console::Command::Maint::OTRSBusiness::AvailabilityCheck</Item>
-                <Item Key="Function">Execute</Item>
-                <Item Key="MaximumParallelInstances">1</Item>
-                <Item Key="Params">
-                    <Array>
-                    </Array>
-                </Item>
-            </Hash>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Daemon::SchedulerCronTaskManager::Task###OTRSBusinessEntitlementCheck" Required="1" Valid="1" ReadOnly="1" ConfigLevel="100">-->
+        <!--<Description Translatable="1">Checks the entitlement status of OTRS Business Solution™.</Description>-->
+        <!--<Navigation>Daemon::SchedulerCronTaskManager::Task</Navigation>-->
+        <!--<Value>-->
+            <!--<Hash>-->
+                <!--<Item Key="TaskName">OTRSBusinessEntitlementCheck</Item>-->
+                <!--<Item Key="Schedule">25,45 */1 * * *</Item> &lt;!&ndash; default: each hour in the minute 15 and 45 &ndash;&gt;-->
+                <!--<Item Key="Module">Kernel::System::Console::Command::Maint::OTRSBusiness::EntitlementCheck</Item>-->
+                <!--<Item Key="Function">Execute</Item>-->
+                <!--<Item Key="MaximumParallelInstances">1</Item>-->
+                <!--<Item Key="Params">-->
+                    <!--<Array>-->
+                    <!--</Array>-->
+                <!--</Item>-->
+            <!--</Hash>-->
+        <!--</Value>-->
+    <!--</Setting>-->
+    <!--<Setting Name="Daemon::SchedulerCronTaskManager::Task###OTRSBusinessAvailabilityCheck" Required="1" Valid="1" ReadOnly="1" ConfigLevel="100">-->
+        <!--<Description Translatable="1">Checks the availability of OTRS Business Solution™ for this system.</Description>-->
+        <!--<Navigation>Daemon::SchedulerCronTaskManager::Task</Navigation>-->
+        <!--<Value>-->
+            <!--<Hash>-->
+                <!--<Item Key="TaskName">OTRSBusinessAvailabilityCheck</Item>-->
+                <!--<Item Key="Schedule">15,35,55 */1 * * *</Item> &lt;!&ndash; default: each hour in the minute 15,35 and 55 &ndash;&gt;-->
+                <!--<Item Key="Module">Kernel::System::Console::Command::Maint::OTRSBusiness::AvailabilityCheck</Item>-->
+                <!--<Item Key="Function">Execute</Item>-->
+                <!--<Item Key="MaximumParallelInstances">1</Item>-->
+                <!--<Item Key="Params">-->
+                    <!--<Array>-->
+                    <!--</Array>-->
+                <!--</Item>-->
+            <!--</Hash>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Daemon::SchedulerGenericInterfaceTaskManager::FutureTaskTimeDiff" Required="1" Valid="1" ConfigLevel="100">
         <Description Translatable="1">Defines the default the number of seconds (from current time) to re-schedule a generic interface failed task.</Description>
         <Navigation>Daemon::SchedulerGenericInterfaceTaskManager</Navigation>

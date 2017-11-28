@@ -6824,32 +6824,32 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="PreferencesGroups###TicketOverviewSmallPageShown" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview.</Description>
-        <Navigation>Frontend::Agent::View::Preferences</Navigation>
-        <Value>
-            <Hash>
-                <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
-                <Item Key="PreferenceGroup">Miscellaneous</Item>
-                <Item Key="Label" Translatable="1">Ticket Overview "Small" Limit</Item>
-                <Item Key="Key" Translatable="1">Ticket limit per page for Ticket Overview "Small"</Item>
-                <Item Key="Data">
-                    <Hash>
-                        <Item Key="10">10</Item>
-                        <Item Key="15">15</Item>
-                        <Item Key="20">20</Item>
-                        <Item Key="25">25</Item>
-                        <Item Key="30">30</Item>
-                        <Item Key="35">35</Item>
-                    </Hash>
-                </Item>
-                <Item Key="DataSelected">25</Item>
-                <Item Key="PrefKey">UserTicketOverviewSmallPageShown</Item>
-                <Item Key="Prio">8000</Item>
-                <Item Key="Active">0</Item>
-            </Hash>
-        </Value>
-    </Setting>
+    <!--<Setting Name="PreferencesGroups###TicketOverviewSmallPageShown" Required="0" Valid="1">-->
+        <!--<Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview.</Description>-->
+        <!--<Navigation>Frontend::Agent::View::Preferences</Navigation>-->
+        <!--<Value>-->
+            <!--<Hash>-->
+                <!--<Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>-->
+                <!--<Item Key="PreferenceGroup">Miscellaneous</Item>-->
+                <!--<Item Key="Label" Translatable="1">Ticket Overview "Small" Limit</Item>-->
+                <!--<Item Key="Key" Translatable="1">Ticket limit per page for Ticket Overview "Small"</Item>-->
+                <!--<Item Key="Data">-->
+                    <!--<Hash>-->
+                        <!--<Item Key="10">10</Item>-->
+                        <!--<Item Key="15">15</Item>-->
+                        <!--<Item Key="20">20</Item>-->
+                        <!--<Item Key="25">25</Item>-->
+                        <!--<Item Key="30">30</Item>-->
+                        <!--<Item Key="35">35</Item>-->
+                    <!--</Hash>-->
+                <!--</Item>-->
+                <!--<Item Key="DataSelected">25</Item>-->
+                <!--<Item Key="PrefKey">UserTicketOverviewSmallPageShown</Item>-->
+                <!--<Item Key="Prio">8000</Item>-->
+                <!--<Item Key="Active">0</Item>-->
+            <!--</Hash>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="PreferencesGroups###TicketOverviewFilterSettings" Required="0" Valid="1">
         <Description Translatable="1">Parameters for the column filters of the small ticket overview.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
@@ -6882,6 +6882,9 @@
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">20</Item>
@@ -6908,6 +6911,9 @@
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">15</Item>
@@ -11844,6 +11850,9 @@ Thanks for your help!
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">25</Item>
