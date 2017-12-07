@@ -1538,7 +1538,11 @@ sub TicketSearch {
     # catch searches for non-existing dynamic fields
     PARAMS:
     for my $Key ( sort keys %Param ) {
-        next PARAMS if !$Param{$Key};
+
+        # Only look at fields which start with DynamicField_ and contain a substructure that is meant for searching.
+        #   It could happen that similar scalar parameters are sent to this method, that should be ignored
+        #   (see bug#13412).
+        next PARAMS if !ref $Param{$Key};
         next PARAMS if $Key !~ /^DynamicField_(.*)$/;
 
         my $DynamicFieldName = $1;
@@ -2551,14 +2555,20 @@ sub _TicketHistoryReferenceForSearchArgument {
         CreatedUserIDs     => 'th0',
 
         # Ticket change columns reference.
-        TicketChangeTimeNewerDate     => 'th1',
-        TicketChangeTimeOlderDate     => 'th1',
-        TicketLastChangeTimeNewerDate => 'th1',
-        TicketLastChangeTimeOlderDate => 'th1',
+        TicketChangeTimeNewerDate        => 'th1',
+        TicketChangeTimeNewerMinutes     => 'th1',
+        TicketChangeTimeOlderDate        => 'th1',
+        TicketChangeTimeOlderMinutes     => 'th1',
+        TicketLastChangeTimeNewerDate    => 'th1',
+        TicketLastChangeTimeNewerMinutes => 'th1',
+        TicketLastChangeTimeOlderDate    => 'th1',
+        TicketLastChangeTimeOlderMinutes => 'th1',
 
         # Ticket close columns reference.
-        TicketCloseTimeNewerDate => 'th2',
-        TicketCloseTimeOlderDate => 'th2',
+        TicketCloseTimeNewerDate    => 'th2',
+        TicketCloseTimeNewerMinutes => 'th2',
+        TicketCloseTimeOlderDate    => 'th2',
+        TicketCloseTimeOlderMinutes => 'th2',
     );
 
     my $Argument = $Param{Argument};

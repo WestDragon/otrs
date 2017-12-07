@@ -1,6 +1,28 @@
 #6.0.3 2017-??-??
+ - 2017-12-07 Fixed bug#[13434](https://bugs.otrs.org/show_bug.cgi?id=13434) - ArticleCheck/PGP.pm still contains unported code.
+ - 2017-12-07 Fixed bug#[13422](https://bugs.otrs.org/show_bug.cgi?id=13422) - Recipient agents of notes no longer visible.
+ - 2017-12-06 Fixed bug#[13394](https://bugs.otrs.org/show_bug.cgi?id=13394) - Changes in CustomerUserListFields are not applied.
+ - 2017-12-06 Fixed bug#[13424](https://bugs.otrs.org/show_bug.cgi?id=13424) - The CustomerID is missing after the ticket split.
+ - 2017-12-04 Fixed bug#[13412](https://bugs.otrs.org/show_bug.cgi?id=13412) - Statistics with date or date time dynamic fields are no longer working.
+ - 2017-12-04 Fixed bug#[13392](https://bugs.otrs.org/show_bug.cgi?id=13392) - Unable to create a multiselection Articlefilter in AgentTicketZoom.
+ - 2017-12-04 Follow-up fix for bug#[13262](https://bugs.otrs.org/show_bug.cgi?id=13262) - Dynamic Fields Management breadcrumb is not translatable.
+ - 2017-12-04 Fixed bug#[13097](https://bugs.otrs.org/show_bug.cgi?id=13097) - Button "Add Customer" in Customer Information Center is missing.
+ - 2017-12-04 Fixed bug#[13404](https://bugs.otrs.org/show_bug.cgi?id=13404) - Native Browser Spellchecker doesn't work.
+ - 2017-12-01 Fixed bug#[13225](https://bugs.otrs.org/show_bug.cgi?id=13225) - Too many DB calls when rebuilding system configuration.
+ - 2017-12-01 Fixed bug#[13251](https://bugs.otrs.org/show_bug.cgi?id=13251) - SysConfig Date settings with complex names are broken.
+ - 2017-12-01 Fixed bug#[13363](https://bugs.otrs.org/show_bug.cgi?id=13363) - Missing code migration in TicketUpdate operation.
+ - 2017-12-01 Fixed bug#[13335](https://bugs.otrs.org/show_bug.cgi?id=13335) - Changes in Network Transport of Web Services are not saved.
+ - 2017-12-01 Fixed bug#[13312](https://bugs.otrs.org/show_bug.cgi?id=13312) - ACLs not working as expected in AgentTicketFreeText.
+ - 2017-12-01 Fixed bug#[13170](https://bugs.otrs.org/show_bug.cgi?id=13170) - Frontend::RichTextWidth setting is not honored.
+ - 2017-12-01 Fixed bug#[13350](https://bugs.otrs.org/show_bug.cgi?id=13350) - CheckMXRecord should not act when setting email address to invalid.
+ - 2017-11-30 Fixed bug#[13299](https://bugs.otrs.org/show_bug.cgi?id=13299) - Dashboard widgets can't be rearranged in Chrome and Internet Explorer on touchscreen devices.
+ - 2017-11-30 Fixed bug#[13379](https://bugs.otrs.org/show_bug.cgi?id=13379) - PendingTimeDiff is not updated, if no state update was done in a transition action.
+ - 2017-11-29 Fixed bug#[13395](https://bugs.otrs.org/show_bug.cgi?id=13395) - ConfigImportAllowed: configuration option missing.
 
 #6.0.2 2017-12-05
+ - 2017-11-30 Fixed bug#[13362](https://bugs.otrs.org/show_bug.cgi?id=13362) - Issue with dynamic fields in ticket information widget in ticket zoom.
+ - 2017-11-30 Fixed bug#[13398](https://bugs.otrs.org/show_bug.cgi?id=13398) - ActivityDialog communication-channel not in config.
+ - 2017-11-29 Fixed bug#[13391](https://bugs.otrs.org/show_bug.cgi?id=13391) - Ticket history mapping reference missing in TicketSearch.
  - 2017-11-27 Updated translations, thanks to all translators.
  - 2017-11-27 Fixed bug#[13262](https://bugs.otrs.org/show_bug.cgi?id=13262) - Dynamic Fields Management breadcrumb is not translatable.
  - 2017-11-27 Fixed bug#[13366](https://bugs.otrs.org/show_bug.cgi?id=13366) - Maintenance Message cannot exceed 250 characters, that is not reflected in the GUI.
@@ -358,8 +380,7 @@
  - 2015-11-27 Improved Generic Agent performance at deleting old execution times. Thanks to Moritz Lenz @ noris networks.
  - 2015-11-27 Improved command Maint::Ticket::InvalidUserCleanup. It can now now both unlock tickets of invalid users and also (optionally) change their state to make sure they will not be overlooked. Thanks to Moritz Lenz @ noris networks.
 
-#5.0.24 2017-??-??
- - 2017-11-21 Fixed bug#[13362](https://bugs.otrs.org/show_bug.cgi?id=13362) - Issue with dynamic fields in ticket information widget in ticket zoom.
+#5.0.24 2017-11-21
  - 2017-11-03 Fixed bug#[11165](https://bugs.otrs.org/show_bug.cgi?id=11165) - Agent list for Owner and Responsible fields in bulk screen is different.
  - 2017-11-03 Fixed bug#[13130](https://bugs.otrs.org/show_bug.cgi?id=13130) - Broken From-Header in auto response.
  - 2017-10-27 Fixed bug#[13241](https://bugs.otrs.org/show_bug.cgi?id=13241) - Index for fulltext search not created when body empty or contains only stopwords.

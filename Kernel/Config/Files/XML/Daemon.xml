@@ -143,13 +143,13 @@
             </Item>
         </Value>
     </Setting>
-    <Setting Name="Daemon::SchedulerTaskWorker::NotificationRecipientEmail" Required="1" Valid="1">
-        <Description Translatable="1">Specifies the email addresses to get notification messages from scheduler tasks.</Description>
-        <Navigation>Daemon::SchedulerTaskWorker</Navigation>
-        <Value>
-            <Item ValueType="String" ValueRegex="^\S+@\S+">root@localhost</Item> <!-- default root@localhost-->
-        </Value>
-    </Setting>
+    <!--<Setting Name="Daemon::SchedulerTaskWorker::NotificationRecipientEmail" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Specifies the email addresses to get notification messages from scheduler tasks.</Description>-->
+        <!--<Navigation>Daemon::SchedulerTaskWorker</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="String" ValueRegex="^\S+@\S+">root@localhost</Item> &lt;!&ndash; default root@localhost&ndash;&gt;-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Daemon::SchedulerGenericAgentTaskManager::TicketLimit" Required="1" Valid="1">
         <Description Translatable="1">Defines the maximum number of affected tickets per job.</Description>
         <Navigation>Daemon::SchedulerGenericAgentTaskManager</Navigation>
