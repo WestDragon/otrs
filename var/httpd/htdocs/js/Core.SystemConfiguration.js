@@ -76,7 +76,7 @@ var Core = Core || {};
             return false;
         });
 
-        $("input:checkbox").on("change", function() {
+        $("input:checkbox").on("click", function() {
             TargetNS.CheckboxValueSet($(this));
         });
 
@@ -85,14 +85,14 @@ var Core = Core || {};
 
             var $WidgetObj = $(this).closest('.WidgetSimple.Setting');
 
-            if (!Event || !Event.keyCode) {
+            if (!Event) {
                 return false;
             }
 
             if ($WidgetObj.hasClass('IsLockedByMe')) {
 
                 // Enter: Save current setting
-                if (Event.keyCode === 13) {
+                if (Event.keyCode && Event.keyCode === 13) {
 
                     if ($(this).hasClass('Key')) {
                         $(this).closest('.HashItem').find('button.AddKey').trigger('click');
@@ -103,8 +103,9 @@ var Core = Core || {};
 
                     return false;
                 }
+
                 // Esc: Cancel editing
-                else if (Event.keyCode === 27) {
+                else if (Event.keyCode && Event.keyCode === 27) {
                     $WidgetObj.find('button.Cancel').trigger('click');
                 }
             }
@@ -1457,44 +1458,56 @@ var Core = Core || {};
 
                     $ClosestItem = $ClosestItem.parent().closest(".HashItem");
                 }
-            }
-            if (ID.indexOf("_Array") > 0) {
-                // put placeholders
-                while (ID.indexOf("_Array") > 0) {
-                    SubString = ID.match(/(_Array\d+)/)[1];
-                    ID = ID.replace(SubString, "_PLACEHOLDER" + Count);
-                    Count++;
+
+                // set new id
+                if ($(this).hasClass("Entry")) {
+                    $(this).attr("id", ID);
                 }
-
-                $ClosestItem = $(this).closest(".ArrayItem");
-
-                while (Count > 0) {
-                    Count--;
-
-                    // get index
-                    Key = $ClosestItem.index() + 1;
-
-                    // update id
-                    ID = ID.replace("_PLACEHOLDER" + Count, "_Array" + Key);
-
-                    $ClosestItem = $ClosestItem.parent().closest(".ArrayItem");
+                else {
+                    $(this).attr("data-suffix", ID);
                 }
             }
+            if (ID.indexOf("_Array") >= 0) {
+                $(this).closest('.Array').find(".ArrayItem").each(function() {
+                    Count = 0;
 
-            if (ValueType != null) {
+                    $(this).find(
+                        ".SettingContent input:visible:not(.InputField_Search), " +
+                        ".SettingContent select:visible, .SettingContent select.Modernize, " +
+                        ".SettingContent textarea:visible"
+                    ).each(function() {
+                        var OldID = $(this).attr('id');
 
-                // Run dedicated CheckID() for this ValueType (in a Core.SystemConfiguration.ValueTypeX.js).
-                if (window["Core"]["SystemConfiguration"][ValueType]["CheckID"]) {
-                    window["Core"]["SystemConfiguration"][ValueType]["CheckID"]($(this), ID);
-                }
-            }
+                        ID = OldID;
 
-            // set new id
-            if ($(this).hasClass("Entry")) {
-                $(this).attr("id", ID);
-            }
-            else {
-                $(this).attr("data-suffix", ID);
+                        while (ID.indexOf("_Array") >= 0) {
+                            SubString = ID.match(/(_Array\d+)/)[1];
+                            ID = ID.replace(SubString, "_PLACEHOLDER" + Count);
+                            Count++;
+                        }
+
+                        $ClosestItem = $(this).closest('.ArrayItem');
+
+                        while (Count > 0) {
+                            Count--;
+
+                            Key = $ClosestItem.index() + 1;
+                            ID = ID.replace("_PLACEHOLDER" + Count, "_Array" + Key);
+                            // update id
+                            $(this).attr('id', ID);
+
+                            $ClosestItem = $ClosestItem.parent().closest(".ArrayItem");
+                        }
+
+                        if (OldID != ID && ValueType) {
+
+                            // Run dedicated CheckID() for this ValueType (in a Core.SystemConfiguration.ValueTypeX.js).
+                            if (window["Core"]["SystemConfiguration"][ValueType]["CheckID"]) {
+                                window["Core"]["SystemConfiguration"][ValueType]["CheckID"]($(this), OldID);
+                            }
+                        }
+                    });
+                });
             }
         });
     }
