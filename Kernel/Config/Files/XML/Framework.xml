@@ -1123,13 +1123,13 @@
             <Item ValueType="TimeZone">UTC</Item>
         </Value>
     </Setting>
-    <Setting Name="UserDefaultTimeZone" Required="1" Valid="1">
-        <Description Translatable="1">Sets the time zone that will be assigned to newly created users and will be used for users that haven't yet set a time zone. This is the time zone being used as default to convert date and time between the OTRS time zone and the user's time zone.</Description>
-        <Navigation>Core::Time</Navigation>
-        <Value>
-            <Item ValueType="TimeZone">UTC</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="UserDefaultTimeZone" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Sets the time zone that will be assigned to newly created users and will be used for users that haven't yet set a time zone. This is the time zone being used as default to convert date and time between the OTRS time zone and the user's time zone.</Description>-->
+        <!--<Navigation>Core::Time</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="TimeZone">UTC</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="ShowUserTimeZoneSelectionNotification" Required="1" Valid="1">
         <Description Translatable="1">If enabled, users that haven't selected a time zone yet will be notified to do so. Note: Notification will not be shown if (1) user has not yet selected a time zone and (2) OTRSTimeZone and UserDefaultTimeZone do match and (3) are not set to UTC.</Description>
         <Navigation>Core::Time</Navigation>
