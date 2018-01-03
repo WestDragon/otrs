@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -93,16 +93,12 @@ Core.App = (function (TargetNS) {
      * @name GetSessionInformation
      * @memberof Core.App
      * @function
-     * @returns {Object} Hash with session data, if needed.
+     * @returns {Object} Hash with session data.
      * @description
      *      Collects session data in a hash if available.
      */
     TargetNS.GetSessionInformation = function () {
         var Data = {};
-        if (!Core.Config.Get('SessionIDCookie')) {
-            Data[Core.Config.Get('SessionName')] = Core.Config.Get('SessionID');
-            Data[Core.Config.Get('CustomerPanelSessionName')] = Core.Config.Get('SessionID');
-        }
         Data.ChallengeToken = Core.Config.Get('ChallengeToken');
         return Data;
     };
@@ -388,7 +384,6 @@ Core.App = (function (TargetNS) {
      * @param {Object} Data - The query data (like: {Action: 'MyAction', Subaction: 'Add'})
      * @description
      *      Performs an internal redirect based on the given data parameters.
-     *      If needed, session information like SessionID and ChallengeToken are appended.
      */
     TargetNS.InternalRedirect = function (Data) {
         var URL;

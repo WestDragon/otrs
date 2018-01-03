@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -457,6 +457,38 @@ sub Run {
         $Output .= $LayoutObject->Footer();
 
         return $Output;
+    }
+
+    # ------------------------------------------------------------ #
+    # show AJAX navigation tree
+    # ------------------------------------------------------------ #
+    if ( $Self->{Subaction} eq 'AJAXNavigationTree' ) {
+
+        my $Category = $ParamObject->GetParam( Param => 'Category' ) || '';
+        my $UserModificationActive = $ParamObject->GetParam( Param => 'UserModificationActive' ) || '0';
+        my $IsValid = $ParamObject->GetParam( Param => 'IsValid' ) // undef;
+
+        my %Tree = $Kernel::OM->Get('Kernel::System::SysConfig')->ConfigurationNavigationTree(
+            Action                 => 'AgentPreferences',
+            Category               => $Category,
+            UserModificationActive => $UserModificationActive,
+            IsValid                => $IsValid,
+        );
+
+        my $Output = $LayoutObject->Output(
+            TemplateFile => 'SystemConfiguration/NavigationTree',
+            Data         => {
+                Tree => \%Tree,
+            },
+        );
+
+        return $LayoutObject->Attachment(
+            NoCache     => 1,
+            ContentType => 'text/html',
+            Charset     => $LayoutObject->{UserCharset},
+            Content     => $Output || '',
+            Type        => 'inline',
+        );
     }
 
     # ------------------------------------------------------------ #

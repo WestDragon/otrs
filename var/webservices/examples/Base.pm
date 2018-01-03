@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -24,7 +24,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-var::websertvices::examples::Base - base class for ready to run web services examples
+var::websertvices::examples::Base - base class for Ready2Adopt web services examples
 
 =head1 DESCRIPTION
 

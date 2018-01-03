@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,9 +14,9 @@ use Kernel::System::Valid;
 use Kernel::System::ObjectManager;
 
 $Self->Is(
-    $Kernel::OM->Get('Kernel::System::UnitTest'),
+    $Kernel::OM->Get('Kernel::System::UnitTest::Driver'),
     $Self,
-    "Global OM returns $Self as 'Kernel::System::UnitTest'",
+    "Global OM returns $Self as 'Kernel::System::UnitTest::Driver'",
 );
 
 local $Kernel::OM = Kernel::System::ObjectManager->new();

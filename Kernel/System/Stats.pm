@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -244,7 +244,15 @@ sub StatsGet {
 
     # time zone
     if ( defined $StatsXML->{TimeZone}->[1]->{Content} ) {
-        $Stat{TimeZone} = $StatsXML->{TimeZone}->[1]->{Content};
+
+        # Check if stored time zone is valid. It can happen stored time zone is still an old-style offset. Otherwise,
+        #   fall back to the system time zone. Please see bug#13373 for more information.
+        if ( Kernel::System::DateTime->IsTimeZoneValid( TimeZone => $StatsXML->{TimeZone}->[1]->{Content} ) ) {
+            $Stat{TimeZone} = $StatsXML->{TimeZone}->[1]->{Content};
+        }
+        else {
+            $Stat{TimeZone} = Kernel::System::DateTime->OTRSTimeZoneGet();
+        }
     }
 
     # process all arrays
@@ -2300,7 +2308,7 @@ sub _GenerateDynamicStats {
                     if ( $Param{TimeZone} ) {
                         $DateTimeObject->ToTimeZone(
                             TimeZone => $Param{TimeZone},
-                            )
+                        );
                     }
 
                     my $DateTimeValues = $DateTimeObject->Get();
@@ -4304,11 +4312,17 @@ sub _MondayOfWeek {
 
     my $DateTimeValues = $DateTimeObject->Get();
     my $DaysToSubtract = $DateTimeValues->{DayOfWeek} - 1;
-    return $DateTimeValues->{Day} if !$DaysToSubtract;
 
-    $DateTimeObject->Subtract( Days => $DaysToSubtract );
-    $DateTimeValues = $DateTimeObject->Get();
-    return $DateTimeValues->{Day};
+    if ($DaysToSubtract) {
+        $DateTimeObject->Subtract( Days => $DaysToSubtract );
+        $DateTimeValues = $DateTimeObject->Get();
+    }
+
+    return (
+        $DateTimeValues->{Year},
+        $DateTimeValues->{Month},
+        $DateTimeValues->{Day},
+    );
 }
 
 =head2 _WeekOfYear()

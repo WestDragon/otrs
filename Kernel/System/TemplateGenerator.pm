@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -943,6 +943,13 @@ sub NotificationEvent {
         # set the accounted time as part of the articles information
         $ArticleData->{TimeUnit} = $AccountedTime;
     }
+
+    # Populate the hash 'CustomerMessageParams' with all the customer-article data
+    # and overwrite it with 'CustomerMessageParams' passed in the Params (bug #13325).
+    $Param{CustomerMessageParams} = {
+        %CustomerArticle,
+        %{ $Param{CustomerMessageParams} || {} },
+    };
 
     # get system default language
     my $DefaultLanguage = $Kernel::OM->Get('Kernel::Config')->Get('DefaultLanguage') || 'en';

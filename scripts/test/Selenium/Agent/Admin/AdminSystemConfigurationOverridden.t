@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -133,6 +133,20 @@ $Selenium->RunTest(
             'Check second hash item value',
         );
 
+        # Navigate to AdminSysConfig screen.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AdminSystemConfiguration;Subaction=View;Setting=Frontend%3A%3ACSSPath"
+        );
+
+        # Check if setting is overridden
+        my $CSSPathOverridden = $Selenium->execute_script(
+            'return $(".SettingsList .WidgetSimple i.fa-exclamation-triangle").length;'
+        );
+        $Self->False(
+            $CSSPathOverridden,
+            'Make sure that Frontend::CSSPath is not overridden.'
+        );
+
         if ( $Kernel::OM->Get('Kernel::System::OTRSBusiness')->OTRSBusinessIsInstalled() ) {
 
             # Navigate to AgentPreferences screen.
@@ -145,36 +159,36 @@ $Selenium->RunTest(
 
             # Expand navigation.
             $Selenium->WaitFor(
-                JavaScript => 'return typeof($) === "function" && $("#ConfigTree li#Frontend > i").length;',
+                JavaScript => 'return $("#ConfigTree li#Frontend > i").length;',
             );
-            $Selenium->find_element( '#ConfigTree li#Frontend > i', 'css' )->click();
+            $Selenium->execute_script("\$('#ConfigTree li#Frontend > i').trigger('click')");
 
             $Selenium->WaitFor(
                 JavaScript =>
-                    'return typeof($) === "function" && $("#ConfigTree li#Frontend\\\\:\\\\:Agent > i").length;',
+                    'return $("#ConfigTree li#Frontend\\\\:\\\\:Agent > i").length;',
             );
-            $Selenium->find_element( '#ConfigTree li#Frontend\\:\\:Agent > i', 'css' )->click();
+            $Selenium->execute_script("\$('#ConfigTree li#Frontend\\\\:\\\\:Agent > i').trigger('click')");
 
             $Selenium->WaitFor(
                 JavaScript =>
-                    'return typeof($) === "function" && $("#ConfigTree li#Frontend\\\\:\\\\:Agent\\\\:\\\\:View > i").length;',
+                    'return $("#ConfigTree li#Frontend\\\\:\\\\:Agent\\\\:\\\\:View > i").length;',
             );
-            $Selenium->find_element( '#ConfigTree li#Frontend\\:\\:Agent\\:\\:View > i', 'css' )->click();
+            $Selenium->execute_script(
+                "\$('#ConfigTree li#Frontend\\\\:\\\\:Agent\\\\:\\\\:View > i').trigger('click')"
+            );
 
             $Selenium->WaitFor(
                 JavaScript =>
-                    'return typeof($) === "function" && $("a#Frontend\\\\:\\\\:Agent\\\\:\\\\:View\\\\:\\\\:TicketEscalation_anchor").length;',
+                    'return $("a#Frontend\\\\:\\\\:Agent\\\\:\\\\:View\\\\:\\\\:TicketEscalation_anchor").length;',
             );
-            $Selenium->find_element( 'a#Frontend\\:\\:Agent\\:\\:View\\:\\:TicketEscalation_anchor', 'css' )->click();
+            $Selenium->execute_script(
+                "\$('a#Frontend\\\\:\\\\:Agent\\\\:\\\\:View\\\\:\\\\:TicketEscalation_anchor').trigger('click')"
+            );
 
             # Wait for AJAX.
             $Selenium->WaitFor(
-                JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length',
-            );
-
-            $Selenium->WaitFor(
                 JavaScript =>
-                    'return typeof($) === "function" && $("#Ticket\\\\:\\\\:Frontend\\\\:\\\\:AgentTicketEscalationView\\\\#\\\\#\\\\#Order\\\\:\\\\:Default").length',
+                    'return !$(".AJAXLoader:visible").length && $("#Ticket\\\\:\\\\:Frontend\\\\:\\\\:AgentTicketEscalationView\\\\#\\\\#\\\\#Order\\\\:\\\\:Default").length',
             );
 
             # Update setting and save.
@@ -183,7 +197,7 @@ $Selenium->RunTest(
                     .val("Down").trigger("redraw.InputField").trigger("change");'
             );
 
-            $Selenium->find_element( '.SettingsList li:nth-child(1) .SettingUpdateBox .Update', 'css' )->click();
+            $Selenium->execute_script("\$('.SettingsList li:nth-child(1) .SettingUpdateBox .Update').trigger('click')");
 
             # Wait for AJAX.
             $Selenium->WaitFor(
@@ -197,7 +211,7 @@ $Selenium->RunTest(
             );
 
             my $ModificationAllowed = $Selenium->execute_script(
-                'return typeof($) === "function" && $(".fa-exclamation-triangle").length === 0',
+                'return typeof($) === "function" && !$(".fa-exclamation-triangle").length',
             );
 
             $Self->True(

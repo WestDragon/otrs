@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -88,6 +88,24 @@ sub Configure {
         ValueRegex => qr/.*/smx,
         Multiple   => 1
     );
+    $Self->AddOption(
+        Name => 'post-test-script',
+        Description =>
+            'Script(s) to execute after a test has been run. You can specify %File%, %TestOk% and %TestNotOk% as dynamic arguments.',
+        Required   => 0,
+        HasValue   => 1,
+        ValueRegex => qr/.*/smx,
+        Multiple   => 1
+    );
+    $Self->AddOption(
+        Name => 'pre-submit-script',
+        Description =>
+            'Script(s) to execute after all tests have been executed and the results are about to be sent to the server.',
+        Required   => 0,
+        HasValue   => 1,
+        ValueRegex => qr/.*/smx,
+        Multiple   => 1
+    );
     return;
 }
 
@@ -122,6 +140,8 @@ sub Run {
         SubmitResultAsExitCode => $Self->GetOption('submit-result-as-exit-code') || '',
         Verbose                => $Self->GetOption('verbose'),
         AttachmentPath         => $Self->GetOption('attachment-path'),
+        PostTestScripts        => $Self->GetOption('post-test-script'),
+        PreSubmitScripts       => $Self->GetOption('pre-submit-script'),
     );
 
     if ($FunctionResult) {

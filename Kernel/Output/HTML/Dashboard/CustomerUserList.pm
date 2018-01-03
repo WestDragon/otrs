@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -154,14 +154,21 @@ sub Run {
         }
     }
 
-    # show add new customer button if there are writable customer backends and if
-    # the agent has permission
-    my $AddAccess = $LayoutObject->Permission(
-        Action => 'AdminCustomerUser',
-        Type   => 'rw',                  # ro|rw possible
-    );
+    # Show add new customer button if:
+    #   - The agent has permission to use the module
+    #   - There are writable customer backends
+    my $AddAccess;
 
-    # get writable data sources
+    TYPE:
+    for my $Permission (qw(ro rw)) {
+        $AddAccess = $LayoutObject->Permission(
+            Action => 'AdminCustomerUser',
+            Type   => $Permission,
+        );
+        last TYPE if $AddAccess;
+    }
+
+    # Get writable data sources.
     my %CustomerSource = $CustomerUserObject->CustomerSourceList(
         ReadOnly => 0,
     );
@@ -346,7 +353,7 @@ sub Run {
         );
 
         my $TicketCountClosed = $TicketObject->TicketSearch(
-            StateType            => 'closed',
+            StateType            => 'Closed',
             CustomerUserLoginRaw => $CustomerKey,
             Result               => 'COUNT',
             Permission           => $Self->{Config}->{Permission},

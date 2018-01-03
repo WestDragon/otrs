@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -615,7 +615,7 @@ sub Run {
     }
 
     # Set order for blocks.
-    $TicketSearch{OrderBy} = $TicketSearch{OrderBy} || 'Up';
+    $TicketSearch{OrderBy} = $TicketSearch{OrderBy} || 'Down';
 
     # Set previous sorting column parameter for all columns.
     $Param{SortingColumn} = $Self->{SortBy};
@@ -1033,7 +1033,7 @@ sub Run {
     $LayoutObject->AddJSData(
         Key   => 'InitContainerDashboard' . $Self->{Name},
         Value => {
-            SortBy => $Self->{SortBy} || 'Up',
+            SortBy => $Self->{SortBy} || 'Age',
             OrderBy => $TicketSearch{OrderBy},
         },
     );
@@ -1046,11 +1046,11 @@ sub Run {
         if ( $Self->{SortBy} && $Self->{SortBy} eq $Item ) {
             my $TitleDesc = '';
             if ( $TicketSearch{OrderBy} eq 'Down' ) {
-                $CSS .= ' SortAscendingLarge';
+                $CSS .= ' SortDescendingLarge';
                 $TitleDesc = Translatable('sorted descending');
             }
             else {
-                $CSS .= ' SortDescendingLarge';
+                $CSS .= ' SortAscendingLarge';
                 $TitleDesc = Translatable('sorted ascending');
             }
 
@@ -1089,6 +1089,7 @@ sub Run {
                     Name             => $Self->{Name},
                     OrderBy          => $TicketSearch{OrderBy},
                     HeaderColumnName => $Item,
+                    SortingColumn    => $Param{SortingColumn},
                 },
             );
 
@@ -1129,11 +1130,11 @@ sub Run {
             if ( $Self->{SortBy} && $Self->{SortBy} eq $HeaderColumn ) {
                 my $TitleDesc = '';
                 if ( $TicketSearch{OrderBy} eq 'Down' ) {
-                    $CSS .= ' SortAscendingLarge';
+                    $CSS .= ' SortDescendingLarge';
                     $TitleDesc = Translatable('sorted descending');
                 }
                 else {
-                    $CSS .= ' SortDescendingLarge';
+                    $CSS .= ' SortAscendingLarge';
                     $TitleDesc = Translatable('sorted ascending');
                 }
 
@@ -1468,11 +1469,11 @@ sub Run {
                     )
                 {
                     if ( $TicketSearch{OrderBy} eq 'Down' ) {
-                        $CSS .= ' SortAscendingLarge';
+                        $CSS .= ' SortDescendingLarge';
                         $TitleDesc = Translatable('sorted descending');
                     }
                     else {
-                        $CSS .= ' SortDescendingLarge';
+                        $CSS .= ' SortAscendingLarge';
                         $TitleDesc = Translatable('sorted ascending');
                     }
 
@@ -1750,7 +1751,7 @@ sub Run {
                         Age                => $EscalationData{EscalationTime},
                         TimeShowAlwaysLong => 1,
                         Space              => ' ',
-                    );
+                    ) || '-';
                     $EscalationData{EscalationTimeWorkingTime} = $LayoutObject->CustomerAge(
                         Age                => $EscalationData{EscalationTimeWorkingTime},
                         TimeShowAlwaysLong => 1,
@@ -1886,7 +1887,7 @@ sub Run {
                     $LayoutObject->Block(
                         Name => "ContentLargeTicketGenericColumn$BlockType",
                         Data => {
-                            GenericValue => $DataValue || '',
+                            GenericValue => $DataValue || '-',
                             Class        => $CSSClass  || '',
                         },
                     );

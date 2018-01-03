@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -458,7 +458,7 @@ $Selenium->RunTest(
         # Wait for dialog to close and AJAX to finish.
         $Selenium->WaitFor(
             JavaScript =>
-                'return typeof($) === "function" && !$(".Dialog:visible").length && !$(".CalendarWidget.Loading").length'
+                'return typeof($) === "function" && !$(".Dialog:visible").length && !$(".fc-timeline-event .fc-title").length'
         );
 
         # Wait until all AJAX calls finished.

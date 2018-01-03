@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -315,15 +315,10 @@ sub ArticleQuote {
             );
 
             # display inline images if exists
-            my $SessionID = '';
-            if ( $Self->{SessionID} && !$Self->{SessionIDCookie} ) {
-                $SessionID = ';' . $Self->{SessionName} . '=' . $Self->{SessionID};
-            }
             my $AttachmentLink = $Self->{Baselink}
                 . 'Action=PictureUpload'
                 . ';FormID='
                 . $Param{FormID}
-                . $SessionID
                 . ';ContentID=';
 
             # search inline documents in body and add it to upload cache

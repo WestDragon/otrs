@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -277,6 +277,9 @@ sub Auth {
         my $ValidID = $Kernel::OM->Get('Kernel::System::Valid')->ValidLookup(
             Valid => 'invalid-temporarily',
         );
+
+        # Make sure not to accidentially overwrite the password.
+        delete $User{UserPw};
 
         my $Update = $UserObject->UserUpdate(
             %User,

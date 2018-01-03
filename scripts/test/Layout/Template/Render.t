@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -393,20 +393,7 @@ Core.Config.AddConfig({"Config.Test":123,"Config.Test2":[1,2,{"test":"test"}],"P
         },
     },
     {
-        Name     => 'Form with SessionID (no cookie) and ChallengeToken',
-        Template => '
-<form action="#"></form>',
-        Result => '
-<form action="#"><input type="hidden" name="ChallengeToken" value="TestToken"/><input type="hidden" name="SID" value="123"/></form>',
-        Env => {
-            UserChallengeToken => 'TestToken',
-            SessionID          => '123',
-            SessionName        => 'SID',
-            SessionIDCookie    => 0,
-        },
-    },
-    {
-        Name     => 'Form with SessionID (with cookie) and ChallengeToken',
+        Name     => 'Form with ChallengeToken',
         Template => '
 <form action="#"></form>',
         Result => '
@@ -415,20 +402,6 @@ Core.Config.AddConfig({"Config.Test":123,"Config.Test2":[1,2,{"test":"test"}],"P
             UserChallengeToken => 'TestToken',
             SessionID          => '123',
             SessionName        => 'Session',
-            SessionIDCookie    => 1,
-        },
-    },
-    {
-        Name     => 'Link with SessionID (no cookie)',
-        Template => '
-<a href="index.pl?Action=Test">link</a>',
-        Result => '
-<a href="index.pl?Action=Test;SID=123">link</a>',
-        Env => {
-            UserChallengeToken => 'TestToken',
-            SessionID          => '123',
-            SessionName        => 'SID',
-            SessionIDCookie    => 0,
         },
     },
     {
@@ -441,7 +414,6 @@ Core.Config.AddConfig({"Config.Test":123,"Config.Test2":[1,2,{"test":"test"}],"P
             UserChallengeToken => 'TestToken',
             SessionID          => '123',
             SessionName        => 'Session',
-            SessionIDCookie    => 1,
         },
     },
     {

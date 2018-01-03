@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -347,26 +347,6 @@ sub Run {
                     Transport             => $Transport,
                     TransportObject       => $TransportObject,
                     UserID                => $Param{UserID},
-                );
-            }
-        }
-
-        if ( %AlreadySent && $Param{Data}->{ArticleID} && $Param{Data}->{ArticleType} ) {
-
-            # update to field
-            my $UpdateToSuccess = $Self->_ArticleToUpdate(
-                ArticleID   => $Param{Data}->{ArticleID},
-                ArticleType => $Param{Data}->{ArticleType},
-                UserIDs     => \%AlreadySent,
-                UserID      => $Param{UserID},
-            );
-
-            # check for errors
-            if ( !$UpdateToSuccess ) {
-
-                $Kernel::OM->Get('Kernel::System::Log')->Log(
-                    Priority => 'error',
-                    Message  => "Could not update To field for Article: $Param{Data}->{ArticleID}.",
                 );
             }
         }
@@ -1196,14 +1176,14 @@ sub _SendRecipientNotification {
             my $LastNotificationDateTimeObject = $Kernel::OM->Create(
                 'Kernel::System::DateTime',
                 ObjectParams => {
-                    String => $LastNotificationHistory->{CreateTime}
-                    }
+                    String => $LastNotificationHistory->{CreateTime},
+                },
             );
 
             # do not send the notification if it has been sent already today
             if (
-                $DateTimeObject->Format( Format => "%Y-%M-%D" ) eq
-                $LastNotificationDateTimeObject->Format( Format => "%Y-%M-%D" )
+                $DateTimeObject->Format( Format => "%Y-%m-%d" ) eq
+                $LastNotificationDateTimeObject->Format( Format => "%Y-%m-%d" )
                 )
             {
                 return;
@@ -1258,47 +1238,6 @@ sub _SendRecipientNotification {
     # ticket event
     $TicketObject->EventHandler(
         %EventData,
-    );
-
-    return 1;
-}
-
-sub _ArticleToUpdate {
-    my ( $Self, %Param ) = @_;
-
-    # check needed params
-    for my $Needed (qw(ArticleID ArticleType UserIDs UserID)) {
-        return if !$Param{$Needed};
-    }
-
-    # not update for User 1
-    return 1 if $Param{UserID} eq 1;
-
-    # get needed objects
-    my $DBObject   = $Kernel::OM->Get('Kernel::System::DB');
-    my $UserObject = $Kernel::OM->Get('Kernel::System::User');
-
-    # not update if its not a note article
-    return 1 if $Param{ArticleType} !~ /^note\-/;
-
-    my $NewTo = $Param{To} || '';
-    for my $UserID ( sort keys %{ $Param{UserIDs} } ) {
-        my %UserData = $UserObject->GetUserData(
-            UserID => $UserID,
-            Valid  => 1,
-        );
-        if ($NewTo) {
-            $NewTo .= ', ';
-        }
-        $NewTo .= "$UserData{UserFullname} <$UserData{UserEmail}>";
-    }
-
-    # not update if To is the same
-    return 1 if !$NewTo;
-
-    return if !$DBObject->Do(
-        SQL  => 'UPDATE article SET a_to = ? WHERE id = ?',
-        Bind => [ \$NewTo, \$Param{ArticleID} ],
     );
 
     return 1;

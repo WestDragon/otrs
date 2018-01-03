@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -288,26 +288,6 @@ sub CustomerSearch {
 
         # get customer search result of backend and merge it
         my %SubData = $Self->{"CustomerUser$Count"}->CustomerSearch(%Param);
-
-        # get configuration for the full name order
-        my $FirstnameLastNameOrder = $Kernel::OM->Get('Kernel::Config')->Get('FirstnameLastnameOrder') || 0;
-
-        for my $CustomerLogin ( sort keys %SubData ) {
-            my %User = $Self->{"CustomerUser$Count"}->CustomerUserDataGet(
-                User => $CustomerLogin,
-            );
-
-            # generate the full name and save it in the hash
-            my $UserFullname = $Self->_CustomerUserFullname(
-                UserFirstname => $User{UserFirstname},
-                UserLastname  => $User{UserLastname},
-                UserLogin     => $User{UserLogin},
-                NameOrder     => $FirstnameLastNameOrder,
-            );
-
-            $SubData{$CustomerLogin} = $UserFullname . ' ' . $User{UserEmail};
-            $SubData{$CustomerLogin} =~ s/^(.*)\s(.+?\@.+?\..+?)(\s|)$/"$1" <$2>/;
-        }
 
         %Data = ( %SubData, %Data );
     }
@@ -1364,7 +1344,7 @@ sub _CustomerUserFullname {
     my ( $Self, %Param ) = @_;
 
     for my $Needed (qw(UserFirstname UserLastname UserLogin)) {
-        if ( !$Param{$Needed} ) {
+        if ( !defined $Param{$Needed} ) {
             $Kernel::OM->Get('Kernel::System::Log')->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",

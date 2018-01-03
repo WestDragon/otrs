@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -276,7 +276,7 @@ sub SendNotification {
         );
         return if !$SecurityOptions;
 
-        my $IsVisibleForCustomer = 1;
+        my $IsVisibleForCustomer = 0;
         if ( defined $Notification{Data}->{IsVisibleForCustomer} ) {
             $IsVisibleForCustomer = $Notification{Data}->{IsVisibleForCustomer}->[0];
         }
@@ -528,7 +528,7 @@ sub TransportParamSettingsGet {
 
     PARAMETER:
     for my $Parameter (
-        qw(RecipientEmail NotificationArticleTypeID TransportEmailTemplate
+        qw(RecipientEmail TransportEmailTemplate
         EmailSigningCrypting EmailMissingSigningKeys EmailMissingCryptingKeys
         EmailSecuritySettings)
         )

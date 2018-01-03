@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -12,7 +12,7 @@
 </span>
 [% RenderBlockEnd("ContentLargeCustomerUserListNavBar") %]
 [% RenderBlockStart("ContentLargeCustomerUserAdd") %]
-<h2><a class="CallForAction" href="[% Env("Baselink") %]Action=AdminCustomerUser;Subaction=Add;CustomerID=[% Data.CustomerID | uri %]"><span><i class="fa fa-plus-square"></i> [% Translate("Add Customer") | html %]</span></a></h2>
+<h2><a class="CallForAction" href="[% Env("Baselink") %]Action=AdminCustomerUser;Subaction=Add;CustomerID=[% Data.CustomerID | uri %]"><span><i class="fa fa-plus-square"></i> [% Translate("Add Customer User") | html %]</span></a></h2>
 [% RenderBlockEnd("ContentLargeCustomerUserAdd") %]
 
 <table class="DataTable">
@@ -69,14 +69,14 @@
             </td>
 [% RenderBlockStart("ContentLargeCustomerUserListRowCustomerUserTicketsOpen") %]
             <td>
-                <a href="[% Env("Baselink") %]Action=AgentTicketSearch;Subaction=Search;StateType=open;CustomerUserLoginRaw=[% Data.CustomerKeySQL | uri %]" title="[% Translate("%s open ticket(s) of %s", Data.Count, Data.CustomerKey) | html %]" class="AsBlock">
+                <a href="[% Env("Baselink") %]Action=AgentTicketSearch;Subaction=Search;StateType=Open;CustomerUserLoginRaw=[% Data.CustomerKeySQL | uri %]" title="[% Translate("%s open ticket(s) of %s", Data.Count, Data.CustomerKey) | html %]" class="AsBlock">
                     [% Data.Count | html %]
                 </a>
             </td>
 [% RenderBlockEnd("ContentLargeCustomerUserListRowCustomerUserTicketsOpen") %]
 [% RenderBlockStart("ContentLargeCustomerUserListRowCustomerUserTicketsClosed") %]
             <td>
-                <a href="[% Env("Baselink") %]Action=AgentTicketSearch;Subaction=Search;StateType=closed;CustomerUserLoginRaw=[% Data.CustomerKeySQL | uri %]" title="[% Translate("%s closed ticket(s) of %s", Data.Count, Data.CustomerKey) | html %]" class="AsBlock">
+                <a href="[% Env("Baselink") %]Action=AgentTicketSearch;Subaction=Search;StateType=Closed;CustomerUserLoginRaw=[% Data.CustomerKeySQL | uri %]" title="[% Translate("%s closed ticket(s) of %s", Data.Count, Data.CustomerKey) | html %]" class="AsBlock">
                     [% Data.Count | html %]
                 </a>
             </td>

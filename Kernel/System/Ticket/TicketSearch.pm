@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1538,7 +1538,11 @@ sub TicketSearch {
     # catch searches for non-existing dynamic fields
     PARAMS:
     for my $Key ( sort keys %Param ) {
-        next PARAMS if !$Param{$Key};
+
+        # Only look at fields which start with DynamicField_ and contain a substructure that is meant for searching.
+        #   It could happen that similar scalar parameters are sent to this method, that should be ignored
+        #   (see bug#13412).
+        next PARAMS if !ref $Param{$Key};
         next PARAMS if $Key !~ /^DynamicField_(.*)$/;
 
         my $DynamicFieldName = $1;
@@ -2329,6 +2333,8 @@ sub TicketSearch {
                 $SQLExt .= ',';
             }
 
+            my $NullsLast = 0;
+
             # sort by dynamic field
             if ( $ValidDynamicFieldParams{ $SortByArray[$Count] } ) {
                 my ($DynamicFieldName) = $SortByArray[$Count] =~ m/^DynamicField_(.*)$/smx;
@@ -2414,9 +2420,41 @@ sub TicketSearch {
                     $SQLExt .= " u.first_name $OrderBySuffix, u.last_name ";
                 }
             }
+            elsif (
+                $SortByArray[$Count] eq 'EscalationUpdateTime'
+                || $SortByArray[$Count] eq 'EscalationResponseTime'
+                || $SortByArray[$Count] eq 'EscalationSolutionTime'
+                || $SortByArray[$Count] eq 'EscalationTime'
+                || $SortByArray[$Count] eq 'PendingTime'
+                )
+            {
+
+                # Tickets with no Escalation or Pending time have '0' as value in the according ticket columns.
+                # When sorting by these columns always place ticket's with '0' value on the end, no matter order by.
+                if ( $Kernel::OM->Get('Kernel::System::DB')->{'DB::Type'} eq 'mysql' ) {
+
+                    # For MySQL create SQL order by query 'ORDER BY column_value = 0, column_value ASC/DESC'.
+                    $SQLSelect .= ', ' . $SortOptions{ $SortByArray[$Count] };
+                    $SQLExt
+                        .= ' ' . $SortOptions{ $SortByArray[$Count] } . ' = 0, ' . $SortOptions{ $SortByArray[$Count] };
+                }
+                else {
+
+                    # For PostgreSQL and Oracle transform selected 0 values to NULL and use 'NULLS LAST'
+                    #   in the end of SQL query.
+                    $SQLSelect
+                        .= ', CASE WHEN '
+                        . $SortOptions{ $SortByArray[$Count] }
+                        . ' = 0 THEN NULL ELSE '
+                        . $SortOptions{ $SortByArray[$Count] }
+                        . ' END AS order_value ';
+                    $SQLExt .= ' order_value ';
+                    $NullsLast = 1;
+                }
+            }
             else {
 
-                # regular sort
+                # Regular sort.
                 $SQLSelect .= ', ' . $SortOptions{ $SortByArray[$Count] };
                 $SQLExt    .= ' ' . $SortOptions{ $SortByArray[$Count] };
             }
@@ -2426,6 +2464,11 @@ sub TicketSearch {
             }
             else {
                 $SQLExt .= ' DESC';
+            }
+
+            # For PostgreSQL and Oracle add 'NULLS LAST' if sorting is done on Escalation or Pending time columns.
+            if ($NullsLast) {
+                $SQLExt .= ' NULLS LAST';
             }
         }
     }
@@ -2551,14 +2594,20 @@ sub _TicketHistoryReferenceForSearchArgument {
         CreatedUserIDs     => 'th0',
 
         # Ticket change columns reference.
-        TicketChangeTimeNewerDate     => 'th1',
-        TicketChangeTimeOlderDate     => 'th1',
-        TicketLastChangeTimeNewerDate => 'th1',
-        TicketLastChangeTimeOlderDate => 'th1',
+        TicketChangeTimeNewerDate        => 'th1',
+        TicketChangeTimeNewerMinutes     => 'th1',
+        TicketChangeTimeOlderDate        => 'th1',
+        TicketChangeTimeOlderMinutes     => 'th1',
+        TicketLastChangeTimeNewerDate    => 'th1',
+        TicketLastChangeTimeNewerMinutes => 'th1',
+        TicketLastChangeTimeOlderDate    => 'th1',
+        TicketLastChangeTimeOlderMinutes => 'th1',
 
         # Ticket close columns reference.
-        TicketCloseTimeNewerDate => 'th2',
-        TicketCloseTimeOlderDate => 'th2',
+        TicketCloseTimeNewerDate    => 'th2',
+        TicketCloseTimeNewerMinutes => 'th2',
+        TicketCloseTimeOlderDate    => 'th2',
+        TicketCloseTimeOlderMinutes => 'th2',
     );
 
     my $Argument = $Param{Argument};

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -154,7 +154,7 @@ $Selenium->RunTest(
                 $CheckBredcrumb->(
                     OverviewTitle  => $OverviewTitleBreadcrumb,
                     BreadcrumbText => $LanguageObject->Translate($Type) . ': '
-                        . $LanguageObject->Translate( 'Add ' . $IDText . ' Field' )
+                        . $LanguageObject->Translate( 'Add %s field', $LanguageObject->Translate($IDText) )
                 );
 
                 $Selenium->find_element( "#Name",  'css' )->send_keys($RandomID);
@@ -173,11 +173,9 @@ $Selenium->RunTest(
 
                 # Check breadcrumb on Edit screen.
                 $CheckBredcrumb->(
-                    OverviewTitle => $OverviewTitleBreadcrumb,
-                    BreadcrumbText =>
-                        $LanguageObject->Translate($Type)
-                        . ': '
-                        . $LanguageObject->Translate( 'Change ' . $IDText . ' Field' ) . ' - '
+                    OverviewTitle  => $OverviewTitleBreadcrumb,
+                    BreadcrumbText => $LanguageObject->Translate($Type) . ': '
+                        . $LanguageObject->Translate( 'Change %s field', $LanguageObject->Translate($IDText) ) . ' - '
                         . $RandomID
                 );
 

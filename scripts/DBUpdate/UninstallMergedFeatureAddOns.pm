@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -45,7 +45,7 @@ sub Run {
 
     # Uninstall feature add-ons that were merged, keeping the DB structures intact.
     for my $PackageName (
-        qw( OTRSAppointmentCalendar OTRSTicketNumberCounterDatabase OTRSAdvancedTicketSplit OTRSGenericInterfaceInvokerEventFilter)
+        qw()
         )
     {
         my $Success = $PackageObject->_PackageUninstallMerged(

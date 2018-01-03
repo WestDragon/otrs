@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -568,6 +568,12 @@ sub Run {
 
         # Challenge token check for write action.
         $LayoutObject->ChallengeTokenCheck();
+
+        if ( !$Kernel::OM->Get('Kernel::Config')->Get('ConfigImportAllowed') ) {
+            return $LayoutObject->FatalError(
+                Message => Translatable('Import not allowed!'),
+            );
+        }
 
         my $FormID = $ParamObject->GetParam( Param => 'FormID' ) || '';
         my %UploadStuff = $ParamObject->GetUploadAll(

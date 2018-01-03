@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -338,6 +338,20 @@ for my $Test (@Tests) {
         ObjectID    => $TicketID,
         Action      => 'AgentTicketNote',
         Title       => 'UnitTest FormDraft - Update',
+        FormDraftID => $FormDraftID,
+        UserID      => 1,
+        Success     => 1,
+    },
+    {
+        Name     => 'All Parameters OK - Update Success - utf8 characters in title',
+        FormData => {
+            Subject => 'UnitTest Subject - Update - шђчћж',
+            Body    => 'UnitTest Body - Update - шђчћж',
+        },
+        ObjectType  => 'Ticket',
+        ObjectID    => $TicketID,
+        Action      => 'AgentTicketNote',
+        Title       => 'UnitTest FormDraft - Update - utf8 characters - шђчћж',
         FormDraftID => $FormDraftID,
         UserID      => 1,
         Success     => 1,

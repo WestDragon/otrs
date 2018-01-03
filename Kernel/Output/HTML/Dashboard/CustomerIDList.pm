@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -174,7 +174,7 @@ sub Run {
         my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
 
         my $TicketCountOpen = $TicketObject->TicketSearch(
-            StateType  => 'open',
+            StateType  => 'Open',
             CustomerID => $CustomerID,
             Result     => 'COUNT',
             Permission => $Self->{Config}->{Permission},
@@ -195,7 +195,7 @@ sub Run {
         );
 
         my $TicketCountClosed = $TicketObject->TicketSearch(
-            StateType  => 'closed',
+            StateType  => 'Closed',
             CustomerID => $CustomerID,
             Result     => 'COUNT',
             Permission => $Self->{Config}->{Permission},

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -119,14 +119,6 @@ sub ActionRow {
             next MENUMODULE if !IsHashRefWithData($Item);
 
             if ( $Item->{Block} eq 'DocumentActionRowItem' ) {
-
-                # add session id if needed
-                if ( !$LayoutObject->{SessionIDCookie} && $Item->{Link} ) {
-                    $Item->{Link}
-                        .= ';'
-                        . $LayoutObject->{SessionName} . '='
-                        . $LayoutObject->{SessionID};
-                }
 
                 # create id
                 $Item->{ID} = $Item->{Name};
@@ -485,14 +477,6 @@ sub _Show {
             );
             next MENU if !$Item;
             next MENU if ref $Item ne 'HASH';
-
-            # add session id if needed
-            if ( !$LayoutObject->{SessionIDCookie} && $Item->{Link} ) {
-                $Item->{Link}
-                    .= ';'
-                    . $LayoutObject->{SessionName} . '='
-                    . $LayoutObject->{SessionID};
-            }
 
             # create id
             $Item->{ID} = $Item->{Name};

@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -145,15 +145,14 @@ Core.UI.RichTextEditor = (function (TargetNS) {
                     + 'Action='
                     + Core.Config.Get('RichText.PictureUploadAction', 'PictureUpload')
                     + '&FormID='
-                    + CheckFormID($EditorArea).val()
-                    + '&' + Core.Config.Get('SessionName')
-                    + '=' + Core.Config.Get('SessionID');
+                    + CheckFormID($EditorArea).val();
         }
 
         // set default editor config, but allow custom config for other types for editors
         /*eslint-disable camelcase */
         EditorConfig = {
             customConfig: '', // avoid loading external config files
+            disableNativeSpellChecker: false,
             defaultLanguage: UserLanguage,
             language: UserLanguage,
             width: Core.Config.Get('RichText.Width', 620),

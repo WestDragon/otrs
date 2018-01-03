@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -80,7 +80,7 @@ sub Run {
 
     if ( !$ArticleContent ) {
         $LogObject->Log(
-            Message  => "No such attacment! May be an attack!!!",
+            Message  => 'No such article!',
             Priority => 'error',
         );
         return $LayoutObject->ErrorScreen();
@@ -95,10 +95,10 @@ sub Run {
 
     my %Data = (
         Content            => $Content,
-        ContentAlternative => "",
-        ContentID          => "",
-        ContentType        => "text/html; charset=\"utf-8\"",
-        Disposition        => "inline",
+        ContentAlternative => '',
+        ContentID          => '',
+        ContentType        => 'text/html; charset="utf-8"',
+        Disposition        => 'inline',
         FilesizeRaw        => bytes::length($Content),
     );
 
@@ -110,14 +110,6 @@ sub Run {
         Key   => 'AttachmentDownloadType',
         Value => 'inline'
     );
-
-    # just return for non-html attachment (e. g. images)
-    if ( $Data{ContentType} !~ /text\/html/i ) {
-        return $LayoutObject->Attachment(
-            %Data,
-            Sandbox => 1,
-        );
-    }
 
     # set filename for inline viewing
     $Data{Filename} = "Ticket-$TicketNumber-ArticleID-$Article{ArticleID}.html";

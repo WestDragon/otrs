@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -39,6 +39,8 @@ our @ObjectDependencies = (
     'Kernel::System::Log',
 );
 
+our $Locale = DateTime::Locale->load('en_US');
+
 use overload
     '>'        => \&_OpIsNewerThan,
     '<'        => \&_OpIsOlderThan,
@@ -74,7 +76,7 @@ Creates a DateTime object. Do not use new() directly, instead use the object man
     my $DateTimeObject = $Kernel::OM->Create(
         'Kernel::System::DateTime',
         ObjectParams => {
-            TimeZone => 'Europe/Berlin',        # optional
+            TimeZone => 'Europe/Berlin',        # optional, TimeZone name.
         }
     );
 
@@ -123,14 +125,21 @@ sub new {
     my $Self = {};
     bless( $Self, $Type );
 
-    # CPAN DateTime:
-    # Only use English descriptions and abbreviations internally.
-    # This has nothing to do with the user's locale settings in OTRS.
-    $Self->{Locale} = 'en_US';
+    # CPAN DateTime: only use English descriptions and abbreviations internally.
+    #   This has nothing to do with the user's locale settings in OTRS.
+    $Self->{Locale} = $Locale;
 
-    # create CPAN/Perl DateTime object
+    # Use private parameter to pass in an already created CPANDateTimeObject (used)
+    #   by the Clone() method).
+    if ( $Param{_CPANDateTimeObject} ) {
+        $Self->{CPANDateTimeObject} = $Param{_CPANDateTimeObject};
+        return $Self;
+    }
+
+    # Create the CPAN/Perl DateTime object.
     my $CPANDateTimeObject = $Self->_CPANDateTimeObjectCreate(%Param);
-    if ( !$CPANDateTimeObject ) {
+
+    if ( ref $CPANDateTimeObject ne 'DateTime' ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             'Priority' => 'Error',
             'Message'  => 'Error creating DateTime object.',
@@ -140,7 +149,6 @@ sub new {
     }
 
     $Self->{CPANDateTimeObject} = $CPANDateTimeObject;
-
     return $Self;
 }
 
@@ -1372,12 +1380,9 @@ Clones the DateTime object.
 sub Clone {
     my ( $Self, %Param ) = @_;
 
-    my $ClonedDateTimeObject = $Kernel::OM->Create(
-        __PACKAGE__,
-        ObjectParams => $Self->Get(),
+    return __PACKAGE__->new(
+        _CPANDateTimeObject => $Self->{CPANDateTimeObject}->clone()
     );
-
-    return $ClonedDateTimeObject;
 }
 
 =head2 TimeZoneList()

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -57,15 +57,7 @@ sub Run {
         return $Self->ExitCodeOk();
     }
 
-    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
-    my %RepositoryList;
-    if ( $ConfigObject->Get('Package::RepositoryList') ) {
-        %RepositoryList = %{ $ConfigObject->Get('Package::RepositoryList') };
-    }
-
-    if ( $ConfigObject->Get('Package::RepositoryRoot') ) {
-        %RepositoryList = ( %RepositoryList, $PackageObject->PackageOnlineRepositories() );
-    }
+    my %RepositoryList = $PackageObject->_ConfiguredRepositoryDefinitionGet();
 
     # Show cloud repositories if system is registered.
     my $RepositoryCloudList;
@@ -73,7 +65,11 @@ sub Run {
         Key => 'Registration::State',
     ) || '';
 
-    if ( $RegistrationState eq 'registered' && !$ConfigObject->Get('CloudServices::Disabled') ) {
+    if (
+        $RegistrationState eq 'registered'
+        && !$Kernel::OM->Get('Kernel::Config')->Get('CloudServices::Disabled')
+        )
+    {
 
         $Self->Print("<yellow>Getting cloud repositories information...</yellow>\n");
 

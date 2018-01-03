@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -5616,14 +5616,19 @@ sub HistoryAdd {
         ],
     );
 
-    # trigger event
-    $Self->EventHandler(
-        Event => 'HistoryAdd',
-        Data  => {
-            TicketID => $Param{TicketID},
-        },
-        UserID => $Param{CreateUserID},
-    );
+    # Prevent infinite loops for notifications base on 'HistoryAdd' event
+    # see bug#13002
+    if ( $Param{HistoryType} ne 'SendAgentNotification' ) {
+
+        # trigger event
+        $Self->EventHandler(
+            Event => 'HistoryAdd',
+            Data  => {
+                TicketID => $Param{TicketID},
+            },
+            UserID => $Param{CreateUserID},
+        );
+    }
 
     return 1;
 }

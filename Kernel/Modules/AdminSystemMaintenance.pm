@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -128,6 +128,17 @@ sub Run {
             # add server error class
             $Error{CommentServerError} = 'ServerError';
 
+        }
+
+        # Trigger server error if 'Login message' or 'Notify message' is longer then 250 characters.
+        #   See bug#13366 (https://bugs.otrs.org/show_bug.cgi?id=13366)
+        if ( $SystemMaintenanceData->{LoginMessage} && length $SystemMaintenanceData->{LoginMessage} > 250 ) {
+
+            $Error{LoginMessageServerError} = 'ServerError';
+        }
+        if ( $SystemMaintenanceData->{NotifyMessage} && length $SystemMaintenanceData->{NotifyMessage} > 250 ) {
+
+            $Error{NotifyMessageServerError} = 'ServerError';
         }
 
         if ( !$SystemMaintenanceData->{ValidID} ) {
@@ -320,6 +331,17 @@ sub Run {
             # add server error class
             $Error{CommentServerError} = 'ServerError';
 
+        }
+
+        # Trigger server error if 'Login message' or 'Notify message' is longer then 250 characters.
+        #   See bug#13366 (https://bugs.otrs.org/show_bug.cgi?id=13366)
+        if ( $SystemMaintenanceData->{LoginMessage} && length $SystemMaintenanceData->{LoginMessage} > 250 ) {
+
+            $Error{LoginMessageServerError} = 'ServerError';
+        }
+        if ( $SystemMaintenanceData->{NotifyMessage} && length $SystemMaintenanceData->{NotifyMessage} > 250 ) {
+
+            $Error{NotifyMessageServerError} = 'ServerError';
         }
 
         if ( !$SystemMaintenanceData->{ValidID} ) {

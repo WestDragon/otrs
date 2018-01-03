@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -167,16 +167,12 @@ Core.AJAX = (function (TargetNS) {
      * @name GetSessionInformation
      * @memberof Core.AJAX
      * @function
-     * @returns {Object} Hash with session data, if needed.
+     * @returns {Object} Hash with session data.
      * @description
      *      Collects session data in a hash if available.
      */
     function GetSessionInformation() {
         var Data = {};
-        if (!Core.Config.Get('SessionIDCookie')) {
-            Data[Core.Config.Get('SessionName')] = Core.Config.Get('SessionID');
-            Data[Core.Config.Get('CustomerPanelSessionName')] = Core.Config.Get('SessionID');
-        }
         Data.ChallengeToken = Core.Config.Get('ChallengeToken');
         return Data;
     }

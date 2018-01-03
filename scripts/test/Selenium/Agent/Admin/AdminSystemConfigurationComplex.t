@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -335,6 +335,9 @@ my @Tests = (
                 Click => '.Setting > .Array > .AddArrayItem',
             },
             {
+                Click => '.Setting > .Array > .ArrayItem:nth-of-type(2) > .RemoveButton',
+            },
+            {
                 Select => '.Setting > .Array > .ArrayItem:nth-of-type(4) .HashItem:nth-of-type(1) input',
             },
             {
@@ -353,31 +356,28 @@ my @Tests = (
                 Write => '3',
             },
             {
-                Click => '.Setting > .Array > .ArrayItem:nth-of-type(2) > .RemoveButton',
+                Click => '.Setting > .Array > .ArrayItem:nth-of-type(4) .AddHashKey',
             },
             {
-                Click => '.Setting > .Array > .ArrayItem:nth-of-type(3) .AddHashKey',
-            },
-            {
-                Select => '.Setting > .Array > .ArrayItem:nth-of-type(3) .HashItem:nth-of-type(2) input',
+                Select => '.Setting > .Array > .ArrayItem:nth-of-type(4) .HashItem:nth-of-type(2) input',
             },
             {
                 # Key
                 Write => '4th',
             },
             {
-                Click => '.Setting > .Array > .ArrayItem:nth-of-type(3) .HashItem:nth-of-type(2) .AddKey',
+                Click => '.Setting > .Array > .ArrayItem:nth-of-type(4) .HashItem:nth-of-type(2) .AddKey',
             },
             {
                 Select =>
-                    '.Setting > .Array > .ArrayItem:nth-of-type(3) .HashItem:nth-of-type(2) .SettingContent input',
+                    '.Setting > .Array > .ArrayItem:nth-of-type(4) .HashItem:nth-of-type(2) .SettingContent input',
             },
             {
                 # Value
                 Write => '4',
             },
             {
-                Click => '.Setting > .Array > .ArrayItem:nth-of-type(2) > .RemoveButton',
+                Click => '.Setting > .Array > .ArrayItem:nth-of-type(3) > .RemoveButton',
             },
             {
                 Click => '.Update',
@@ -392,12 +392,15 @@ my @Tests = (
                 'Two' => '2',
             },
             {
+                'Three' => '3',
+                'Four'  => '4',
+            },
+            {
                 '3th' => '3',
                 '4th' => '4',
             },
         ],
     },
-
     {
         Name     => 'ExampleAoHDate',
         Index    => 6,
@@ -740,8 +743,56 @@ my @Tests = (
         },
     },
     {
-        Name     => 'ExampleHoADate',
+        Name     => 'ExampleHoA2',
         Index    => 10,
+        Commands => [
+            {
+                Scroll => 1,
+            },
+            {
+                Hover => '.Content',
+            },
+            {
+                Click => '.SettingEnable',
+            },
+            {
+                Hover => '.Content',
+            },
+            {
+                Click => '.SettingEdit',
+            },
+            {
+                # Delete second item.
+                Click => '.Array .ArrayItem:nth-of-type(2) .RemoveButton',
+            },
+            {
+                # Add new item to the array.
+                Click => '.Array .AddArrayItem',
+            },
+            {
+                Select => '.Array .ArrayItem:nth-of-type(2) input',
+            },
+            {
+                Write => 'Value 3',
+            },
+            {
+                Click => '.Update',
+            },
+            {
+                Select => 'input',
+            },
+        ],
+        ExpectedResult => {
+            'ArrayItems' => [
+                'Value 1',
+                'Value 3',
+            ],
+            'String' => 'String value',
+        },
+    },
+    {
+        Name     => 'ExampleHoADate',
+        Index    => 11,
         Commands => [
             {
                 Scroll => 1,
@@ -771,19 +822,19 @@ my @Tests = (
             },
             {
                 # select day (05)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .ArrayItem:nth-of-type(1) "
                     . "select:nth-of-type(2)').val(\"5\")",
             },
             {
                 # select month (05)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .ArrayItem:nth-of-type(1) "
                     . "select:nth-of-type(1)').val(\"5\")",
             },
             {
                 # select year (2016)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .ArrayItem:nth-of-type(1) "
                     . "select:nth-of-type(3)').val(\"2016\")",
             },
@@ -802,19 +853,19 @@ my @Tests = (
             },
             {
                 # select day (15)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .ArrayItem:nth-of-type(3) "
                     . "select:nth-of-type(2)').val(\"15\")",
             },
             {
                 # select month (12)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .ArrayItem:nth-of-type(3) "
                     . "select:nth-of-type(1)').val(\"12\")",
             },
             {
                 # select year (2017)
-                JS => "\$('.SettingsList li:nth-of-type(10) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(11) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .ArrayItem:nth-of-type(3) "
                     . "select:nth-of-type(3)').val(\"2017\")",
             },
@@ -841,7 +892,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoADirectory',
-        Index    => 11,
+        Index    => 12,
         Commands => [
             {
                 Scroll => 1,
@@ -909,7 +960,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoASelect',
-        Index    => 12,
+        Index    => 13,
         Commands => [
             {
                 Scroll => 1,
@@ -939,7 +990,7 @@ my @Tests = (
             },
             {
                 # Select Kernel::System::Log::File
-                JS => "\$('.SettingsList li:nth-of-type(12) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(13) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .ArrayItem:nth-of-type(1) "
                     . " select').val('option-1')"
                     . ".trigger('redraw.InputField').trigger('change');",
@@ -979,7 +1030,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoH',
-        Index    => 13,
+        Index    => 14,
         Commands => [
             {
                 Scroll => 1,
@@ -1063,7 +1114,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoHDate',
-        Index    => 14,
+        Index    => 15,
         Commands => [
             {
                 Scroll => 1,
@@ -1103,19 +1154,19 @@ my @Tests = (
             },
             {
                 # select day (05)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .HashItem:nth-of-type(1) .SettingContent "
                     . "select:nth-of-type(2)').val(\"5\")",
             },
             {
                 # select month (05)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .HashItem:nth-of-type(1) .SettingContent "
                     . "select:nth-of-type(1)').val(\"5\")",
             },
             {
                 # select year (2016)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .HashItem:nth-of-type(1) .SettingContent "
                     . "select:nth-of-type(3)').val(\"2016\")",
             },
@@ -1141,19 +1192,19 @@ my @Tests = (
             },
             {
                 # select day (15)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .HashItem:nth-of-type(2) .SettingContent "
                     . "select:nth-of-type(2)').val(\"15\")",
             },
             {
                 # select month (12)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .HashItem:nth-of-type(2) .SettingContent "
                     . "select:nth-of-type(1)').val(\"12\")",
             },
             {
                 # select year (2017)
-                JS => "\$('.SettingsList li:nth-of-type(14) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(15) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(2) .HashItem:nth-of-type(2) .SettingContent "
                     . "select:nth-of-type(3)').val(\"2017\")",
             },
@@ -1177,7 +1228,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoHDirectory',
-        Index    => 15,
+        Index    => 16,
         Commands => [
             {
                 Scroll => 1,
@@ -1260,7 +1311,7 @@ my @Tests = (
     },
     {
         Name     => 'ExampleHoHSelect',
-        Index    => 16,
+        Index    => 17,
         Commands => [
             {
                 Scroll => 1,
@@ -1300,7 +1351,7 @@ my @Tests = (
             },
             {
                 # Select Kernel::System::Log::File
-                JS => "\$('.SettingsList li:nth-of-type(16) .WidgetSimple "
+                JS => "\$('.SettingsList li:nth-of-type(17) .WidgetSimple "
                     . ".Setting > .Hash > .HashItem:nth-of-type(3) .HashItem:nth-of-type(1) .SettingContent "
                     . " select').val('option-1')"
                     . ".trigger('redraw.InputField').trigger('change');",

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -272,6 +272,7 @@ sub Run {
         my %Article;
         my %CustomerData;
         my $ArticleFrom = '';
+        my %SplitTicketData;
         if ( $GetParam{ArticleID} ) {
 
             my $Access = $TicketObject->TicketPermission(
@@ -288,7 +289,7 @@ sub Run {
             }
 
             # Get information from original ticket (SplitTicket).
-            my %SplitTicketData = $TicketObject->TicketGet(
+            %SplitTicketData = $TicketObject->TicketGet(
                 TicketID      => $Self->{TicketID},
                 DynamicFields => 1,
                 UserID        => $Self->{UserID},
@@ -348,7 +349,6 @@ sub Run {
                 if ( !defined $QueueLookup{ $Article{To} } && defined $SystemAddressLookup{$SystemAddressEmail} ) {
                     $ArticleFrom = $Article{To};
                 }
-
             }
 
             # body preparation for plain text processing
@@ -738,8 +738,8 @@ sub Run {
             From         => $Article{From},
             Subject      => $Subject,
             Body         => $Body,
-            CustomerID   => $Article{CustomerID},
-            CustomerUser => $Article{CustomerUserID},
+            CustomerUser => $SplitTicketData{CustomerUserID},
+            CustomerID   => $SplitTicketData{CustomerID},
             CustomerData => \%CustomerData,
             Attachments  => \@Attachments,
             LinkTicketID => $GetParam{LinkTicketID} || '',
@@ -2222,14 +2222,24 @@ sub _GetTos {
 sub _GetStandardTemplates {
     my ( $Self, %Param ) = @_;
 
-    # get create templates
     my %Templates;
+    my $QueueID = $Param{QueueID} || '';
+
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+    my $QueueObject  = $Kernel::OM->Get('Kernel::System::Queue');
+
+    if ( !$QueueID ) {
+        my $UserDefaultQueue = $ConfigObject->Get('Ticket::Frontend::UserDefaultQueue') || '';
+
+        if ($UserDefaultQueue) {
+            $QueueID = $QueueObject->QueueLookup( Queue => $UserDefaultQueue );
+        }
+    }
 
     # check needed
-    return \%Templates if !$Param{QueueID} && !$Param{TicketID};
+    return \%Templates if !$QueueID && !$Param{TicketID};
 
-    my $QueueID = $Param{QueueID} || '';
-    if ( !$Param{QueueID} && $Param{TicketID} ) {
+    if ( !$QueueID && $Param{TicketID} ) {
 
         # get QueueID from the ticket
         my %Ticket = $Kernel::OM->Get('Kernel::System::Ticket')->TicketGet(
@@ -2241,7 +2251,7 @@ sub _GetStandardTemplates {
     }
 
     # fetch all std. templates
-    my %StandardTemplates = $Kernel::OM->Get('Kernel::System::Queue')->QueueStandardTemplateMemberList(
+    my %StandardTemplates = $QueueObject->QueueStandardTemplateMemberList(
         QueueID       => $QueueID,
         TemplateTypes => 1,
     );

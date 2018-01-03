@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -40,6 +40,9 @@ sub Run {
     my $Search       = $ParamObject->GetParam( Param => 'Search' )       || '';
     my $Notification = $ParamObject->GetParam( Param => 'Notification' ) || '';
 
+    # Get list of valid IDs.
+    my @ValidIDList = $Kernel::OM->Get('Kernel::System::Valid')->ValidIDsGet();
+
     # ------------------------------------------------------------ #
     #  switch to user
     # ------------------------------------------------------------ #
@@ -65,7 +68,7 @@ sub Run {
             SessionSource   => 'AgentInterface',
         );
 
-        # create a new LayoutObject with SessionIDCookie
+        # Create a new LayoutObject with session cookie.
         my $Expires = '+' . $ConfigObject->Get('SessionMaxTime') . 's';
         if ( !$ConfigObject->Get('SessionUseCookieAfterBrowserClose') ) {
             $Expires = '';
@@ -82,7 +85,7 @@ sub Run {
             'Kernel::Output::HTML::Layout' => {
                 %UserData,
                 SetCookies => {
-                    SessionIDCookie => $ParamObject->SetCookie(
+                    SessionID => $ParamObject->SetCookie(
                         Key      => $ConfigObject->Get('SessionName'),
                         Value    => $NewSessionID,
                         Expires  => $Expires,
@@ -93,7 +96,7 @@ sub Run {
                 },
                 SessionID   => $NewSessionID,
                 SessionName => $ConfigObject->Get('SessionName'),
-                }
+            },
         );
 
         $Kernel::OM->ObjectsDiscard( Objects => ['Kernel::Output::HTML::Layout'] );
@@ -166,6 +169,7 @@ sub Run {
         if (
             $GetParam{UserEmail}
             && !$CheckItemObject->CheckEmail( Address => $GetParam{UserEmail} )
+            && grep { $_ eq $GetParam{ValidID} } @ValidIDList
             )
         {
             $Errors{UserEmailInvalid} = 'ServerError';
@@ -338,6 +342,7 @@ sub Run {
         if (
             $GetParam{UserEmail}
             && !$CheckItemObject->CheckEmail( Address => $GetParam{UserEmail} )
+            && grep { $_ eq $GetParam{ValidID} } @ValidIDList
             )
         {
             $Errors{UserEmailInvalid} = 'ServerError';

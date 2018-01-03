@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -90,6 +90,10 @@ sub SystemMaintenanceAdd {
 
     # date start shouldn't be higher than stop date
     return if ( $Param{StartDate} > $Param{StopDate} );
+
+    # Database columns for LoginMessage and NotifyMessage in system_maintenance are limited to 250 characters.
+    return if $Param{LoginMessage}  && length $Param{LoginMessage} > 250;
+    return if $Param{NotifyMessage} && length $Param{NotifyMessage} > 250;
 
     # get database object
     my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
@@ -292,6 +296,10 @@ sub SystemMaintenanceUpdate {
 
     # date start shouldn't be higher than stop date
     return if ( $Param{StartDate} > $Param{StopDate} );
+
+    # Database columns for LoginMessage and NotifyMessage in system_maintenance table are limited to 250 characters.
+    return if $Param{LoginMessage}  && length $Param{LoginMessage} > 250;
+    return if $Param{NotifyMessage} && length $Param{NotifyMessage} > 250;
 
     # get database object
     my $DBObject = $Kernel::OM->Get('Kernel::System::DB');

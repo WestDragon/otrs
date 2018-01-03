@@ -341,6 +341,11 @@ o Name:    CPAN Sisimai
   License: # BSD 2-Clause - https://opensource.org/licenses/BSD-2-Clause
   Note:    # Copyright (C) 2014-2017 azumakuniyuki, All rights reserved.
 
+o Name:    CPAN String::ShellQuote
+  Web:     n/a
+  License: # GNU v1 - http://dev.perl.org/licenses/gpl1.html
+  Note:    # Copyright (c) 1997 Roderick Schertler. All rights reserved.
+
 
 #
 # JavaScript

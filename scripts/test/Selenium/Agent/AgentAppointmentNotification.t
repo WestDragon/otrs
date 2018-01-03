@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -41,6 +41,18 @@ $Selenium->RunTest(
             Months => 1,
         );
         my $NextMonthSettings = $NextMonthObject->Get();
+
+        my $LastYearDateTimeObject = $Kernel::OM->Create('Kernel::System::DateTime');
+        $LastYearDateTimeObject->Subtract(
+            Years => 1,
+        );
+        my $LastYearSettings = $LastYearDateTimeObject->Get();
+
+        my $YearBeforeLastDateTimeObject = $LastYearDateTimeObject->Clone();
+        $YearBeforeLastDateTimeObject->Subtract(
+            Years => 1,
+        );
+        my $YearBeforeLastSettings = $YearBeforeLastDateTimeObject->Get();
 
         # change resolution (desktop mode)
         $Selenium->set_window_size( 768, 1050 );
@@ -635,10 +647,10 @@ $Selenium->RunTest(
         # define appointment test with custom notification templates
         my @TemplateCustomDateTimeCreateTests = (
 
-            # custom datetime notification 2016-09-01 10:10:00
+            # custom datetime notification $YearBeforeLast-09-01 10:10:00
             {
                 Data => {
-                    Description                           => 'Custom datetime 2016-09-01 10:10:00',
+                    Description                           => "Custom datetime $YearBeforeLastSettings->{Year}-09-01 10:10:00",
                     NotificationTemplate                  => 'Custom',
                     NotificationCustomRelativeInput       => 0,
                     NotificationCustomDateTimeInput       => 1,
@@ -647,26 +659,82 @@ $Selenium->RunTest(
                     NotificationCustomRelativePointOfTime => 'beforestart',
                     DateTimeDay                           => '1',
                     DateTimeMonth                         => '9',
-                    DateTimeYear                          => '2016',
+                    DateTimeYear                          => $YearBeforeLastSettings->{Year},
                     DateTimeHour                          => '10',
                     DateTimeMinute                        => '10',
                     UserID                                => $UserID,
                 },
                 Result => {
-                    NotificationDate                      => '2016-09-01 10:10:00',
+                    NotificationDate                      => "$YearBeforeLastSettings->{Year}-09-01 10:10:00",
                     NotificationTemplate                  => 'Custom',
                     NotificationCustom                    => 'datetime',
                     NotificationCustomRelativeUnitCount   => 0,
                     NotificationCustomRelativeUnit        => 'minutes',
                     NotificationCustomRelativePointOfTime => 'beforestart',
-                    NotificationCustomDateTime            => '2016-09-01 10:10:00'
+                    NotificationCustomDateTime            => "$YearBeforeLastSettings->{Year}-09-01 10:10:00",
                 },
             },
 
-            # custom datetime notification 2016-10-18 00:03:00
+            # custom datetime notification $YearBeforeLast-10-18 00:03:00
             {
                 Data => {
-                    Description                           => 'Custom datetime 2016-10-18 01:03:00',
+                    Description                           => "Custom datetime $YearBeforeLastSettings->{Year}-10-18 01:03:00",
+                    NotificationTemplate                  => 'Custom',
+                    NotificationCustomRelativeInput       => 0,
+                    NotificationCustomDateTimeInput       => 1,
+                    NotificationCustomRelativeUnitCount   => 0,
+                    NotificationCustomRelativeUnit        => 'minutes',
+                    NotificationCustomRelativePointOfTime => 'beforestart',
+                    DateTimeDay                           => '18',
+                    DateTimeMonth                         => '10',
+                    DateTimeYear                          => $YearBeforeLastSettings->{Year},
+                    DateTimeHour                          => '1',
+                    DateTimeMinute                        => '3',
+                    UserID                                => $UserID,
+                },
+                Result => {
+                    NotificationDate                      => "$YearBeforeLastSettings->{Year}-10-18 01:03:00",
+                    NotificationTemplate                  => 'Custom',
+                    NotificationCustom                    => 'datetime',
+                    NotificationCustomRelativeUnitCount   => 0,
+                    NotificationCustomRelativeUnit        => 'minutes',
+                    NotificationCustomRelativePointOfTime => 'beforestart',
+                    NotificationCustomDateTime            => "$YearBeforeLastSettings->{Year}-10-18 01:03:00",
+                },
+            },
+
+            # custom datetime notification $LastYear-10-18 00:03:00
+            {
+                Data => {
+                    Description                           => "Custom datetime $LastYearSettings->{Year}-10-18 03:03:00",
+                    NotificationTemplate                  => 'Custom',
+                    NotificationCustomRelativeInput       => 0,
+                    NotificationCustomDateTimeInput       => 1,
+                    NotificationCustomRelativeUnitCount   => 0,
+                    NotificationCustomRelativeUnit        => 'minutes',
+                    NotificationCustomRelativePointOfTime => 'beforestart',
+                    DateTimeDay                           => '18',
+                    DateTimeMonth                         => '10',
+                    DateTimeYear                          => $LastYearSettings->{Year},
+                    DateTimeHour                          => '3',
+                    DateTimeMinute                        => '3',
+                    UserID                                => $UserID,
+                },
+                Result => {
+                    NotificationDate                      => "$LastYearSettings->{Year}-10-18 03:03:00",
+                    NotificationTemplate                  => 'Custom',
+                    NotificationCustom                    => 'datetime',
+                    NotificationCustomRelativeUnitCount   => 0,
+                    NotificationCustomRelativeUnit        => 'minutes',
+                    NotificationCustomRelativePointOfTime => 'beforestart',
+                    NotificationCustomDateTime            => "$LastYearSettings->{Year}-10-18 03:03:00",
+                },
+            },
+
+            # custom datetime notification $YearBeforeLast-10-18 02:03:00
+            {
+                Data => {
+                    Description                           => "Custom datetime $YearBeforeLastSettings->{Year}-10-18 02:03:00",
                     NotificationTemplate                  => 'Custom',
                     NotificationCustomRelativeInput       => 0,
                     NotificationCustomDateTimeInput       => 1,
@@ -676,74 +744,18 @@ $Selenium->RunTest(
                     DateTimeDay                           => '18',
                     DateTimeMonth                         => '10',
                     DateTimeYear                          => '2016',
-                    DateTimeHour                          => '1',
-                    DateTimeMinute                        => '3',
-                    UserID                                => $UserID,
-                },
-                Result => {
-                    NotificationDate                      => '2016-10-18 01:03:00',
-                    NotificationTemplate                  => 'Custom',
-                    NotificationCustom                    => 'datetime',
-                    NotificationCustomRelativeUnitCount   => 0,
-                    NotificationCustomRelativeUnit        => 'minutes',
-                    NotificationCustomRelativePointOfTime => 'beforestart',
-                    NotificationCustomDateTime            => '2016-10-18 01:03:00'
-                },
-            },
-
-            # custom datetime notification 2017-10-18 00:03:00
-            {
-                Data => {
-                    Description                           => 'Custom datetime 2017-10-18 03:03:00',
-                    NotificationTemplate                  => 'Custom',
-                    NotificationCustomRelativeInput       => 0,
-                    NotificationCustomDateTimeInput       => 1,
-                    NotificationCustomRelativeUnitCount   => 0,
-                    NotificationCustomRelativeUnit        => 'minutes',
-                    NotificationCustomRelativePointOfTime => 'beforestart',
-                    DateTimeDay                           => '18',
-                    DateTimeMonth                         => '10',
-                    DateTimeYear                          => '2017',
-                    DateTimeHour                          => '3',
-                    DateTimeMinute                        => '3',
-                    UserID                                => $UserID,
-                },
-                Result => {
-                    NotificationDate                      => '2017-10-18 03:03:00',
-                    NotificationTemplate                  => 'Custom',
-                    NotificationCustom                    => 'datetime',
-                    NotificationCustomRelativeUnitCount   => 0,
-                    NotificationCustomRelativeUnit        => 'minutes',
-                    NotificationCustomRelativePointOfTime => 'beforestart',
-                    NotificationCustomDateTime            => '2017-10-18 03:03:00'
-                },
-            },
-
-            # custom datetime notification 2012-10-18 00:03:00
-            {
-                Data => {
-                    Description                           => 'Custom datetime 2012-10-18 02:03:00',
-                    NotificationTemplate                  => 'Custom',
-                    NotificationCustomRelativeInput       => 0,
-                    NotificationCustomDateTimeInput       => 1,
-                    NotificationCustomRelativeUnitCount   => 0,
-                    NotificationCustomRelativeUnit        => 'minutes',
-                    NotificationCustomRelativePointOfTime => 'beforestart',
-                    DateTimeDay                           => '18',
-                    DateTimeMonth                         => '10',
-                    DateTimeYear                          => '2012',
                     DateTimeHour                          => '2',
                     DateTimeMinute                        => '3',
                     UserID                                => $UserID,
                 },
                 Result => {
-                    NotificationDate                      => '2012-10-18 02:03:00',
+                    NotificationDate                      => "$YearBeforeLastSettings->{Year}-10-18 02:03:00",
                     NotificationTemplate                  => 'Custom',
                     NotificationCustom                    => 'datetime',
                     NotificationCustomRelativeUnitCount   => 0,
                     NotificationCustomRelativeUnit        => 'minutes',
                     NotificationCustomRelativePointOfTime => 'beforestart',
-                    NotificationCustomDateTime            => '2012-10-18 02:03:00'
+                    NotificationCustomDateTime            => "$YearBeforeLastSettings->{Year}-10-18 02:03:00",
                 },
             },
         );

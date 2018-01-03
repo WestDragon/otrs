@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -96,7 +96,7 @@ sub new {
         $Self->{UserTheme} = $ConfigObject->Get('DefaultTheme');
     }
 
-    $Self->{UserTimeZone} ||= '';
+    $Self->{UserTimeZone} ||= Kernel::System::DateTime->UserDefaultTimeZoneGet();
 
     # Determine the language to use based on the browser setting, if there
     #   is none yet.
@@ -560,7 +560,7 @@ sub Redirect {
 
     # add cookies if exists
     my $Cookies = '';
-    if ( $Self->{SetCookies} && $ConfigObject->Get('SessionUseCookie') ) {
+    if ( $Self->{SetCookies} ) {
         for ( sort keys %{ $Self->{SetCookies} } ) {
             $Cookies .= "Set-Cookie: $Self->{SetCookies}->{$_}\n";
         }
@@ -626,40 +626,6 @@ sub Redirect {
         Data         => \%Param
         );
 
-    # add session id to redirect if no cookie is enabled
-    if ( !$Self->{SessionIDCookie} && !( $Self->{BrowserHasCookie} && $Param{Login} ) ) {
-
-        # rewrite location header
-        $Output =~ s{
-            (location:\s)(.*)
-        }
-        {
-            my $Start  = $1;
-            my $Target = $2;
-            my $End = '';
-            if ($Target =~ /^(.+?)#(|.+?)$/) {
-                $Target = $1;
-                $End = "#$2";
-            }
-            if ($Target =~ /http/i || !$Self->{SessionID}) {
-                "$Start$Target$End";
-            }
-            else {
-                if ($Target =~ /(\?|&)$/) {
-                    "$Start$Target$Self->{SessionName}=$Self->{SessionID}$End";
-                }
-                elsif ($Target !~ /\?/) {
-                    "$Start$Target?$Self->{SessionName}=$Self->{SessionID}$End";
-                }
-                elsif ($Target =~ /\?/) {
-                    "$Start$Target&$Self->{SessionName}=$Self->{SessionID}$End";
-                }
-                else {
-                    "$Start$Target?&$Self->{SessionName}=$Self->{SessionID}$End";
-                }
-            }
-        }iegx;
-    }
     return $Output;
 }
 
@@ -673,29 +639,9 @@ sub Login {
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
     my $Output = '';
-    if ( $ConfigObject->Get('SessionUseCookie') ) {
-
-        # always set a cookie, so that at the time the user submits
-        # the password, we know already if the browser supports cookies.
-        # ( the session cookie isn't available at that time ).
-        my $CookieSecureAttribute = 0;
-        if ( $ConfigObject->Get('HttpType') eq 'https' ) {
-
-            # Restrict Cookie to HTTPS if it is used.
-            $CookieSecureAttribute = 1;
-        }
-        $Self->{SetCookies}->{OTRSBrowserHasCookie} = $Kernel::OM->Get('Kernel::System::Web::Request')->SetCookie(
-            Key      => 'OTRSBrowserHasCookie',
-            Value    => 1,
-            Expires  => '+1y',
-            Path     => $ConfigObject->Get('ScriptAlias'),
-            Secure   => $CookieSecureAttribute,
-            HttpOnly => 1,
-        );
-    }
 
     # add cookies if exists
-    if ( $Self->{SetCookies} && $ConfigObject->Get('SessionUseCookie') ) {
+    if ( $Self->{SetCookies} ) {
         for ( sort keys %{ $Self->{SetCookies} } ) {
             $Output .= "Set-Cookie: $Self->{SetCookies}->{$_}\n";
         }
@@ -1083,36 +1029,41 @@ sub Warning {
 
 =head2 Notify()
 
-create notify lines
+Generate HTML code for a notification line and return it.
 
-    infos, the text will be translated
+The C<Info>/C<Data> text of the notification will always be translated. Use the C<Priority> parameter to style the
+notification:
 
     my $Output = $LayoutObject->Notify(
         Priority => 'Warning',
-        Info => 'Some Info Message',
+        Info     => 'Some Info Message',
     );
 
-    data with link, the text will be translated
+If you supply C<Data> with a C<Link>, the text will be wrapped in an anchor tag with defined C<LinkClass> and
+C<LinkTarget>:
 
     my $Output = $LayoutObject->Notify(
-        Priority  => 'Warning',
-        Data      => 'Template content',
-        Link      => 'http://example.com/',
-        LinkClass => 'some_CSS_class',              # optional
+        Priority   => 'Warning',
+        Data       => 'Template content',
+        Link       => 'http://example.com/',
+        LinkClass  => 'some_CSS_class',              # optional
+        LinkTarget => '_blank',                      # optional
     );
 
-    errors, the text will be translated
-
-    my $Output = $LayoutObject->Notify(
-        Priority => 'Error',
-        Info => 'Some Error Message',
-    );
-
-    errors from log backend, if no error exists, a '' will be returned
+For error notifications, you can supply your own error message:
 
     my $Output = $LayoutObject->Notify(
         Priority => 'Error',
+        Info     => 'Some Error Message',
     );
+
+Or use the last error message from the log backend.
+
+    my $Output = $LayoutObject->Notify(
+        Priority => 'Error',
+    );
+
+If no error was found, an empty string will be returned.
 
 =cut
 
@@ -1155,8 +1106,9 @@ sub Notify {
         $Self->Block(
             Name => 'LinkStart',
             Data => {
-                LinkStart => $Param{Link},
-                LinkClass => $Param{LinkClass} || '',
+                LinkStart  => $Param{Link},
+                LinkClass  => $Param{LinkClass} || '',
+                LinkTarget => $Param{LinkTarget} || '',
             },
         );
     }
@@ -1286,7 +1238,7 @@ sub Header {
 
     # add cookies if exists
     my $Output = '';
-    if ( $Self->{SetCookies} && $ConfigObject->Get('SessionUseCookie') ) {
+    if ( $Self->{SetCookies} ) {
         for ( sort keys %{ $Self->{SetCookies} } ) {
             $Output .= "Set-Cookie: $Self->{SetCookies}->{$_}\n";
         }
@@ -1577,7 +1529,6 @@ sub Footer {
         WebPath                        => $ConfigObject->Get('Frontend::WebPath'),
         Action                         => $Self->{Action},
         Subaction                      => $Self->{Subaction},
-        SessionIDCookie                => $Self->{SessionIDCookie},
         SessionName                    => $Self->{SessionName},
         SessionID                      => $Self->{SessionID},
         ChallengeToken                 => $Self->{UserChallengeToken},
@@ -2098,7 +2049,7 @@ sub CustomerAge {
     }
 
     # get minutes (just if age < 1 day)
-    if ( $Param{TimeShowAlwaysLong} || $ConfigObject->Get('TimeShowAlwaysLong') || $Age < 86400 ) {
+    if ( ( $Param{TimeShowAlwaysLong} || $ConfigObject->Get('TimeShowAlwaysLong') || $Age < 86400 ) && $Age != 0 ) {
         $AgeStrg .= int( ( $Age / 60 ) % 60 ) . ' ';
         $AgeStrg .= $Self->{LanguageObject}->Translate($MinuteDsc);
     }
@@ -3769,29 +3720,7 @@ sub CustomerLogin {
 
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-    if ( $ConfigObject->Get('SessionUseCookie') ) {
-
-        # always set a cookie, so that at the time the user submits
-        # the password, we know already if the browser supports cookies.
-        # ( the session cookie isn't available at that time ).
-        my $CookieSecureAttribute = 0;
-        if ( $ConfigObject->Get('HttpType') eq 'https' ) {
-
-            # Restrict Cookie to HTTPS if it is used.
-            $CookieSecureAttribute = 1;
-        }
-        $Self->{SetCookies}->{OTRSBrowserHasCookie} = $Kernel::OM->Get('Kernel::System::Web::Request')->SetCookie(
-            Key      => 'OTRSBrowserHasCookie',
-            Value    => 1,
-            Expires  => '+1y',
-            Path     => $ConfigObject->Get('ScriptAlias'),
-            Secure   => $CookieSecureAttribute,
-            HttpOnly => 1,
-        );
-    }
-
-    # add cookies if exists
-    if ( $Self->{SetCookies} && $ConfigObject->Get('SessionUseCookie') ) {
+    if ( $Self->{SetCookies} ) {
         for ( sort keys %{ $Self->{SetCookies} } ) {
             $Output .= "Set-Cookie: $Self->{SetCookies}->{$_}\n";
         }
@@ -3963,9 +3892,8 @@ sub CustomerHeader {
 
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-    # add cookies if exists
     my $Output = '';
-    if ( $Self->{SetCookies} && $ConfigObject->Get('SessionUseCookie') ) {
+    if ( $Self->{SetCookies} ) {
         for ( sort keys %{ $Self->{SetCookies} } ) {
             $Output .= "Set-Cookie: $Self->{SetCookies}->{$_}\n";
         }
@@ -4156,7 +4084,6 @@ sub CustomerFooter {
         WebPath                  => $ConfigObject->Get('Frontend::WebPath'),
         Action                   => $Self->{Action},
         Subaction                => $Self->{Subaction},
-        SessionIDCookie          => $Self->{SessionIDCookie},
         SessionName              => $Self->{SessionName},
         SessionID                => $Self->{SessionID},
         ChallengeToken           => $Self->{UserChallengeToken},
@@ -4818,12 +4745,12 @@ sub _RichTextReplaceLinkOfInlineContent {
 
 =head2 RichTextDocumentServe()
 
-serve a rich text (HTML) document for local view inside of an C<iframe> in correct charset and with correct
-links for inline documents.
+Serve a rich text (HTML) document for local view inside of an C<iframe> in correct charset and with correct links for
+inline documents.
 
-By default, all inline/active content (such as C<script>, C<object>, C<applet> or C<embed> tags)
-will be stripped. If there are external images, they will be stripped too,
-but a message will be shown allowing the user to reload the page showing the external images.
+By default, all inline/active content (such as C<script>, C<object>, C<applet> or C<embed> tags) will be stripped. If
+there are external images, they will be stripped too, but a message will be shown allowing the user to reload the page
+showing the external images.
 
     my %HTMLFile = $LayoutObject->RichTextDocumentServe(
         Data => {
@@ -4855,7 +4782,7 @@ sub RichTextDocumentServe {
         }
     }
 
-    # get charset and convert content to internal charset
+    # Get charset from passed content type parameter.
     my $Charset;
     if ( $Param{Data}->{ContentType} =~ m/.+?charset=("|'|)(.+)/ig ) {
         $Charset = $2;
@@ -4866,7 +4793,7 @@ sub RichTextDocumentServe {
         $Param{Data}->{ContentType} .= '; charset="us-ascii"';
     }
 
-    # convert charset
+    # Convert to internal charset.
     if ($Charset) {
         $Param{Data}->{Content} = $Kernel::OM->Get('Kernel::System::Encode')->Convert(
             Text  => $Param{Data}->{Content},
@@ -4875,9 +4802,14 @@ sub RichTextDocumentServe {
             Check => 1,
         );
 
-        # replace charset in content
+        # Replace charset in content type and content.
         $Param{Data}->{ContentType} =~ s/\Q$Charset\E/utf-8/gi;
-        $Param{Data}->{Content} =~ s/(<meta[^>]+charset=("|'|))\Q$Charset\E/$1utf-8/gi;
+        if ( !( $Param{Data}->{Content} =~ s/(<meta[^>]+charset=("|'|))\Q$Charset\E/$1utf-8/gi ) ) {
+
+            # Add explicit charset if missing.
+            $Param{Data}->{Content}
+                =~ s/(<meta [^>]+ http-equiv=("|')?Content-Type("|')? [^>]+ content=("|')?[^;"'>]+)/$1; charset=utf-8/ixms;
+        }
     }
 
     # add html links
@@ -4943,12 +4875,6 @@ sub RichTextDocumentServe {
         }
     }
 
-    # build base url for inline images
-    my $SessionID = '';
-    if ( $Self->{SessionID} && !$Self->{SessionIDCookie} ) {
-        $SessionID = ';' . $Self->{SessionName} . '=' . $Self->{SessionID};
-    }
-
     # replace inline images in content with runtime url to images
     my $AttachmentLink = $Self->{Baselink} . $Param{URL};
     $Param{Data}->{Content} =~ s{
@@ -4971,7 +4897,7 @@ sub RichTextDocumentServe {
         ATTACHMENT_ID:
         for my $AttachmentID (  sort keys %{ $Param{Attachments} }) {
             next ATTACHMENT_ID if lc $Param{Attachments}->{$AttachmentID}->{ContentID} ne lc "<$ContentID>";
-            $ContentID = $AttachmentLink . $AttachmentID . $SessionID;
+            $ContentID = $AttachmentLink . $AttachmentID;
             last ATTACHMENT_ID;
         }
 
@@ -5011,7 +4937,7 @@ sub RichTextDocumentServe {
         }
 
         # return new runtime url
-        $ContentID = $AttachmentLink . $AttachmentID . $SessionID;
+        $ContentID = $AttachmentLink . $AttachmentID;
         $Start . $ContentID . $End;
     }egxi;
     }

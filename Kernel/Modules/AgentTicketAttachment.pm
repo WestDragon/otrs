@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -83,7 +83,7 @@ sub Run {
     );
     if ( !%Data ) {
         $LogObject->Log(
-            Message  => "No such attacment ($FileID)! May be an attack!!!",
+            Message  => "No such attachment ($FileID).",
             Priority => 'error',
         );
         return $LayoutObject->ErrorScreen();

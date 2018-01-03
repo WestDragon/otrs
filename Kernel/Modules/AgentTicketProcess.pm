@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -2848,6 +2848,9 @@ sub _RenderArticle {
             $Param{TimeUnitsRequired} = 'Validate_Required';
         }
 
+        # Get TimeUnits value.
+        $Param{TimeUnits} = $Param{GetParam}{TimeUnits};
+
         $LayoutObject->Block(
             Name => 'TimeUnits',
             Data => \%Param,
@@ -5491,6 +5494,7 @@ sub _DisplayProcessList {
         Sort         => 'AlphanumericValue',
         Translation  => 0,
         AutoComplete => 'off',
+        TreeView     => 1,
     );
 
     # add rich text editor
@@ -5677,14 +5681,20 @@ sub _CheckField {
 
             $Value = 1;
 
-            my ( $Body, $Subject, $AttachmentExists ) = (
+            my ( $Body, $Subject, $AttachmentExists, $TimeUnits ) = (
                 $ParamObject->GetParam( Param => 'Body' ),
                 $ParamObject->GetParam( Param => 'Subject' ),
-                $ParamObject->GetParam( Param => 'AttachmentExists' )
+                $ParamObject->GetParam( Param => 'AttachmentExists' ),
+                $ParamObject->GetParam( Param => 'TimeUnits' )
             );
 
             # If attachment exists and body and subject not, it is error (see bug#13081).
             if ( $AttachmentExists && ( !$Body && !$Subject ) ) {
+                $Value = 0;
+            }
+
+            # If time units exists and body and subject not, it is error (see bug#13266).
+            if ( $TimeUnits && ( !$Body && !$Subject ) ) {
                 $Value = 0;
             }
         }

@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -16,20 +16,10 @@ Core.App = (function (Namespace) {
         QUnit.module('Core.App');
 
         QUnit.test('Core.App.GetSessionInformation()', function(Assert){
-            Assert.expect(2);
+            Assert.expect(1);
 
-            Core.Config.Set('SessionName', 'CSID');
-            Core.Config.Set('SessionID', '1234');
-            Core.Config.Set('CustomerPanelSessionName', 'CPanelSID');
             Core.Config.Set('ChallengeToken', 'C123');
 
-            Assert.deepEqual(Core.App.GetSessionInformation(), {
-                CSID: '1234',
-                CPanelSID: '1234',
-                ChallengeToken: 'C123'
-            });
-
-            Core.Config.Set('SessionIDCookie', true);
             Assert.deepEqual(Core.App.GetSessionInformation(), {
                 ChallengeToken: 'C123'
             });

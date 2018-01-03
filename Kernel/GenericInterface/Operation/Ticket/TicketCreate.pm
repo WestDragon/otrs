@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -427,8 +427,6 @@ sub Run {
 
     # isolate Article parameter
     my $Article = $Param{Data}->{Article};
-
-    # add UserType to Validate ArticleType
     $Article->{UserType} = $UserType;
 
     # remove leading and trailing spaces
@@ -820,8 +818,7 @@ sub _CheckArticle {
 
         # return internal server error
         return {
-            ErrorMessage => "TicketCreate: Article->AutoResponseType parameter is required and"
-                . " Sysconfig ArticleTypeID setting could not be read!"
+            ErrorMessage => "TicketCreate: Article->AutoResponseType parameter is required!"
         };
     }
 
@@ -1435,6 +1432,16 @@ sub _TicketCreate {
         ChannelName => $Article->{CommunicationChannel},
     );
 
+    my $PlainBody = $Article->{Body};
+
+    # Convert article body to plain text, if HTML content was supplied. This is necessary since auto response code
+    #   expects plain text content. Please see bug#13397 for more information.
+    if ( $Article->{ContentType} =~ /text\/html/i || $Article->{MimeType} =~ /text\/html/i ) {
+        $PlainBody = $Kernel::OM->Get('Kernel::System::HTMLUtils')->ToAscii(
+            String => $Article->{Body},
+        );
+    }
+
     # Create article.
     my $ArticleID = $ArticleBackendObject->ArticleCreate(
         NoAgentNotify => $Article->{NoAgentNotify} || 0,
@@ -1457,7 +1464,7 @@ sub _TicketCreate {
             From    => $From,
             To      => $To,
             Subject => $Article->{Subject},
-            Body    => $Article->{Body},
+            Body    => $PlainBody,
         },
     );
 

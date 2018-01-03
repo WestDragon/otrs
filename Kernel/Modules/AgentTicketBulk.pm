@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1408,11 +1408,6 @@ sub _Mask {
     if ( $Param{TicketsWereLocked} ) {
 
         my $URL = $Self->{LastScreenOverview};
-
-        # add session if no cookies are enabled
-        if ( $Self->{SessionID} && !$Self->{SessionIDCookie} ) {
-            $URL .= ';' . $Self->{SessionName} . '=' . $Self->{SessionID};
-        }
 
         $LayoutObject->AddJSData(
             Key   => 'TicketBulkURL',
