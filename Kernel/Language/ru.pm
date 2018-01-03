@@ -4596,7 +4596,7 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
         'You have %s invalid setting(s) deployed. Click here to show invalid settings.' =>
-            'У вас%sошибочных настроек. Нажмите здесь для их показа.',
+            'У вас %s ошибочных настроек. Нажмите здесь для их показа.',
 
         # Perl Module: Kernel/Output/HTML/Notification/SystemConfigurationIsDirtyCheck.pm
         'You have undeployed settings, would you like to deploy them?' =>
@@ -5842,7 +5842,7 @@ Thanks for your help!
         'Add a note to this ticket' => 'Добавить заметку к этой заявке',
         'Add an inbound phone call to this ticket' => 'Добавить входящий звонок клиента к этой заявке',
         'Add an outbound phone call to this ticket' => 'Добавить исходящий звонок клиенту к этой заявке',
-        'Added %s time unit(s), for a total of %s time unit(s).' => 'Добавлено %sединиц времени, всего единиц времени %s.',
+        'Added %s time unit(s), for a total of %s time unit(s).' => 'Добавлено %s единиц(а) времени, всего %s единиц(а) времени.',
         'Added email. %s' => 'Получено письмо от %s.',
         'Added follow-up to ticket [%s]. %s' => 'Добавлено дополнение к заявке [%s]. %s',
         'Added link to ticket "%s".' => 'К заявке «%s» добавлена связь.',
@@ -6121,7 +6121,7 @@ Thanks for your help!
         'Comment for new history entries in the customer interface.' => 'Комметарий для новых записей истории в интерфейсе клиента.',
         'Comment2' => 'Комментарий2',
         'Communication' => 'Взаимодействие',
-        'Communication & Notifications' => '',
+        'Communication & Notifications' => 'Взаимодействие и Уведомления',
         'Communication Log GUI' => '',
         'Communication log limit per page for CommunicationLog Overview' =>
             '',
@@ -7502,7 +7502,7 @@ Thanks for your help!
         'Locked Tickets' => 'Заблокированные заявки',
         'Locked Tickets.' => 'Заблокированные Заявки.',
         'Locked ticket.' => 'Заблокирована заявка.',
-        'Logged-In Users' => '',
+        'Logged-In Users' => 'Авторизованные пользователи',
         'Logout of customer panel.' => 'Панель выхода для клиента.',
         'Look into a ticket!' => 'Просмотреть заявку!',
         'Loop protection: no auto-response sent to "%s".' => '',
@@ -7919,13 +7919,13 @@ Thanks for your help!
             'Посылать напоминание о разблокированных заявках после истечения времени напоминания (посылается только владельцу заявки).',
         'Sends the notifications which are configured in the admin interface under "Notfication (Event)".' =>
             'Отсылать уведомления, настроенные администратором в разделе Уведомленя о событиях.',
-        'Sent "%s" notification to "%s" via "%s".' => '',
+        'Sent "%s" notification to "%s" via "%s".' => 'Отправлено "%s" уведомление "%s" с помощью "%s".',
         'Sent auto follow-up to "%s".' => '',
         'Sent auto reject to "%s".' => '',
-        'Sent auto reply to "%s".' => '',
-        'Sent email to "%s".' => '',
-        'Sent email to customer.' => '',
-        'Sent notification to "%s".' => '',
+        'Sent auto reply to "%s".' => 'Отправлен автоматический ответ на "%s".',
+        'Sent email to "%s".' => 'Отправлено электронное письмо на %s".',
+        'Sent email to customer.' => 'Отправлено электронное письмо клиенту.',
+        'Sent notification to "%s".' => 'Отправлено уведомление для "%s".',
         'Serbian Cyrillic' => 'Сербский Кириллица',
         'Serbian Latin' => 'Сербский Латиница',
         'Service Level Agreements' => 'Соглашения об Уровне Сервиса',
