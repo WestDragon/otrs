@@ -1,4 +1,22 @@
-#6.0.4 ????-??-??
+#6.0.5 2018-??-??
+
+#6.0.4 2018-01-16
+ - 2018-01-08 Updated translations, thanks to all translators.
+ - 2018-01-08 Fixed bug#[13460](https://bugs.otrs.org/show_bug.cgi?id=13460) - upgrade packages result in a output with strange characters.
+ - 2018-01-06 Fixed bug#[13478](https://bugs.otrs.org/show_bug.cgi?id=13478) - Maint::Config::Rebuild does not show error if old-style configuration file is found.
+ - 2018-01-05 Fixed bug#[13428](https://bugs.otrs.org/show_bug.cgi?id=13428) - Timeline view dynamic field values.
+ - 2018-01-05 Fixed bug#[13516](https://bugs.otrs.org/show_bug.cgi?id=13516) - In the setting window of linked widgets dynamic field labels are not displayed.
+ - 2018-01-05 Fixed bug#[13503](https://bugs.otrs.org/show_bug.cgi?id=13503) - Delete button of filter is not unified.
+ - 2018-01-05 Fixed bug#[13338](https://bugs.otrs.org/show_bug.cgi?id=13338) - DBUpdate-script isn't checking ZZZAuto.pm for wrong Sysconfig settings.
+ - 2018-01-05 Fixed bug#[13502](https://bugs.otrs.org/show_bug.cgi?id=13502) - communication log delete is slow.
+ - 2018-01-05 Fixed bug#[13353](https://bugs.otrs.org/show_bug.cgi?id=13353) - inline picture not shown in AgentTicketZoom.
+ - 2018-01-05 Fixed bug#[13437](https://bugs.otrs.org/show_bug.cgi?id=13437) - Upgrade script repeatedly asks for time zone configuration.
+ - 2018-01-05 Fixed bug#[13326](https://bugs.otrs.org/show_bug.cgi?id=13326) - System was unable to lock Default Settings - after DBsetup/Step 2.
+ - 2018-01-04 Fixed bug#[13267](https://bugs.otrs.org/show_bug.cgi?id=13267) - User specific settings which are overwritten in user files are not shown correctly in agent preferences screen (OTRS Business Solution™).
+ - 2018-01-04 Fixed bug#[13518](https://bugs.otrs.org/show_bug.cgi?id=13518) - Invisible settings still available in SysConfig autocomplete search.
+ - 2018-01-04 Fixed bug#[13294](https://bugs.otrs.org/show_bug.cgi?id=13294) - Safari autofill broken when two factor authentication is enabled.
+ - 2018-01-04 Fixed bug#[13260](https://bugs.otrs.org/show_bug.cgi?id=13260) - Endless loop for recurrent daemon task with the same task name.
+ - 2018-01-03 Fixed bug#[13510](https://bugs.otrs.org/show_bug.cgi?id=13510) - Article fields like Signed and Crypted are missing from the article header.
  - 2018-01-02 Fixed bug#[13444](https://bugs.otrs.org/show_bug.cgi?id=13444) - DynamicField Dropdown values are not verified if submitted via web service.
  - 2018-01-02 Follow-up fix for bug#[12569](https://bugs.otrs.org/show_bug.cgi?id=12569) - Missing explanation users (with visual impairments) in the 'Preferences' page.
  - 2017-12-29 Fixed bug#[13509](https://bugs.otrs.org/show_bug.cgi?id=13509) - Ordering in ticket overview screens is not consistent with dashboard tables.

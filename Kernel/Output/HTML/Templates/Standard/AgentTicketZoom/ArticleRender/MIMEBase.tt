@@ -42,20 +42,13 @@
                         <span class="Switch [% ArticleField.RealnameHidden | html %]">[% ArticleField.Realname | html %]</span>
                     </p>
                     <div class="Clear"></div>
-    [% ELSIF ArticleField.Label == "RowData" %]
-        [% FOREACH RowData IN Data.ArticleFields %]
-                    <label>[% Translate(RowData.Label) | html %]:</label>
-                    <p class="Value" title="[% RowData.Value | html %]">[% RowData.Value | html %]</p>
-                    <div class="Clear"></div>
-        [% END %]
-    [% ELSIF ArticleField.Label == "ArticleOption" %]
+    [% ELSIF ArticleField.Type == "ArticleOption" %]
                     <!-- show article options like signed, crypted, ...-->
                     <label>[% Translate(ArticleField.Label) | html %]:</label>
-                    <div title="[% ArticleField.Value | html %]" class="[% ArticleField.Result | html %] Value">
+                    <div title="[% ArticleField.Value | html %]" class="[% ArticleField.Class | html %] Value">
                         [% Translate(ArticleField.Value) | html %]
                     </div>
                     <div class="Clear"></div>
-
     [% ELSIF ArticleField.Label == "Subject" %]
                     <!-- Include the full subject so that it can be copied. The one in the title bar is shortened. -->
                     <label>[% Translate("Subject") | html %]:</label>
