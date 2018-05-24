@@ -7078,7 +7078,7 @@
         <Description Translatable="1">Defines the default ticket type for new customer tickets in the customer interface.</Description>
         <Navigation>Frontend::Customer::View::TicketMessage</Navigation>
         <Value>
-            <Item ValueType="Entity" ValueEntityType="Type">Unclassified</Item>
+            <Item ValueType="Entity" ValueEntityType="Type">Не классифицировано</Item>
         </Value>
     </Setting>
     <Setting Name="Ticket::Frontend::CustomerTicketMessage###Service" Required="1" Valid="1">
