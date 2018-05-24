@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,7 +14,6 @@ use vars (qw($Self));
 
 use Kernel::Language;
 
-# get selenium object
 my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 my $CheckBredcrumb = sub {
@@ -39,7 +38,6 @@ my $CheckBredcrumb = sub {
 $Selenium->RunTest(
     sub {
 
-        # Get needed objects.
         my $Helper             = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
         my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
         my $CacheObject        = $Kernel::OM->Get('Kernel::System::Cache');
@@ -71,13 +69,11 @@ $Selenium->RunTest(
             Password => $TestUserLogin,
         );
 
-        # Get script alias.
         my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
         # Navigate to AdminDynamiField screen.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminDynamicField");
 
-        # Get language object.
         my $LanguageObject = Kernel::Language->new(
             UserLanguage => $Language,
         );
@@ -219,74 +215,35 @@ $Selenium->RunTest(
                     Name => $RandomID
                 )->{ID};
 
-                # Click on delete icon.
-                my $CheckConfirmJSBlock = <<"JAVASCRIPT";
-(function () {
-    var lastConfirm = undefined;
-    window.confirm = function (message) {
-        lastConfirm = message;
-        return false; // stop procedure at first try
-    };
-    window.getLastConfirm = function () {
-        var result = lastConfirm;
-        lastConfirm = undefined;
-        return result;
-    };
-}());
-JAVASCRIPT
-                $Selenium->execute_script($CheckConfirmJSBlock);
-
                 $Selenium->find_element(
                     "//a[contains(\@data-query-string, \'Subaction=DynamicFieldDelete;ID=$DynamicFieldID' )]"
-                )->VerifiedClick();
+                )->click();
+
+                $Selenium->WaitFor( AlertPresent => 1 );
 
                 $Self->Is(
-                    $Selenium->execute_script("return window.getLastConfirm()"),
+                    $Selenium->get_alert_text(),
                     $LanguageObject->Translate(
                         'Do you really want to delete this dynamic field? ALL associated data will be LOST!'
                     ),
-                    'Check for opened confirm text',
+                    'Check for open confirm text',
                 );
 
-                my $CheckConfirmJSProceed = <<"JAVASCRIPT";
-(function () {
-    var lastConfirm = undefined;
-    window.confirm = function (message) {
-        lastConfirm = message;
-        return true; // allow procedure at second try
-    };
-    window.getLastConfirm = function () {
-        var result = lastConfirm;
-        lastConfirm = undefined;
-        return result;
-    };
-}());
-JAVASCRIPT
-                $Selenium->execute_script($CheckConfirmJSProceed);
+                $Selenium->accept_alert();
 
-                $Selenium->find_element(
-                    "//a[contains(\@data-query-string, \'Subaction=DynamicFieldDelete;ID=$DynamicFieldID' )]"
-                )->VerifiedClick();
-
-                # Wait for delete dialog to disappear.
+                $Selenium->WaitFor( JavaScript => "return !\$('.Dialog').length" );
                 $Selenium->WaitFor(
-                    JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 0;'
+                    JavaScript =>
+                        'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
                 );
-
-                # Navigate to AdminDynamicField screen.
-                $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminDynamicField");
 
                 # Check if dynamic filed is deleted.
-                my $Success;
-                eval {
-                    $Success = $Selenium->find_element( $RandomID, 'link_text' )->is_displayed();
-                };
-
                 $Self->False(
-                    $Success,
-                    "$RandomID dynamic field is deleted!",
+                    $Selenium->execute_script(
+                        "return \$('#DynamicFieldID_$DynamicFieldID').length"
+                    ),
+                    "DynamicField ($Type-$ID) $RandomID is deleted!",
                 );
-
             }
 
             # Make sure the cache is correct.
@@ -325,9 +282,12 @@ JAVASCRIPT
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminDynamicField");
 
         # Set 10 fields per page.
-        $Selenium->find_element( "a#ShowContextSettingsDialog", 'css' )->VerifiedClick();
+        $Selenium->find_element( "a#ShowContextSettingsDialog", 'css' )->click();
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && $("#AdminDynamicFieldsOverviewPageShown").length'
+        );
         $Selenium->execute_script(
-            "\$('#UserTicketOverviewMediumPageShown').val('10').trigger('redraw.InputField').trigger('change');"
+            "\$('#AdminDynamicFieldsOverviewPageShown').val('10').trigger('redraw.InputField').trigger('change');"
         );
         $Selenium->find_element( "#DialogButton1", 'css' )->VerifiedClick();
 
@@ -379,6 +339,16 @@ JAVASCRIPT
                 ID     => $TestDynamicFieldID,
                 UserID => 1,
             );
+
+            # Dynamic field deletion could fail. Try again in this case.
+            if ( !$Success ) {
+                sleep 3;
+                $Success = $DynamicFieldObject->DynamicFieldDelete(
+                    ID     => $TestDynamicFieldID,
+                    UserID => 1,
+                );
+            }
+
             $Self->True(
                 $Success,
                 "DynamicFieldID $TestDynamicFieldID is deleted",

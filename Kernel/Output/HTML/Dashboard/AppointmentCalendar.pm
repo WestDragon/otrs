@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -403,10 +403,17 @@ sub Run {
         my $StartTimeObject = $Kernel::OM->Create(
             'Kernel::System::DateTime',
             ObjectParams => {
-                String   => $Appointments{$AppointmentID}->{StartTime},
-                TimeZone => $Self->{UserTimeZone},
+                String => $Appointments{$AppointmentID}->{StartTime},
             },
         );
+
+        # Convert time to user time zone.
+        if ( $Self->{UserTimeZone} ) {
+            $StartTimeObject->ToTimeZone(
+                TimeZone => $Self->{UserTimeZone},
+            );
+        }
+
         my $StartTimeSettings = $StartTimeObject->Get();
 
         # prepare dates and times

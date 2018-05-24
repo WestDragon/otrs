@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -20,6 +20,13 @@ $Selenium->RunTest(
         # Get needed objects.
         my $Helper       = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
         my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+
+        # make sure to enable cloud services
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'CloudServices::Disabled',
+            Value => 0,
+        );
 
         # Disable all dashboard plugins.
         my $Config = $ConfigObject->Get('DashboardBackend');

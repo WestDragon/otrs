@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -28,6 +28,13 @@ $Selenium->RunTest(
         my $PrivatePath = $ConfigObject->Get('Home') . "/var/tmp/private";
         mkpath( [$CertPath],    0, 0770 );    ## no critic
         mkpath( [$PrivatePath], 0, 0770 );    ## no critic
+
+        # make sure to enable cloud services
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'CloudServices::Disabled',
+            Value => 0,
+        );
 
         # enable SMIME in config
         $Helper->ConfigSettingChange(

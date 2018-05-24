@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -270,10 +270,6 @@ sub Form {
         }
     }
     else {
-        %Data = $ArticleObject->ArticleLastCustomerArticle(
-            TicketID      => $Self->{TicketID},
-            DynamicFields => 1,
-        );
 
         # Get last customer article.
         my @Articles = $ArticleObject->ArticleList(
@@ -491,6 +487,10 @@ sub Form {
 
     # run compose modules
     if ( ref( $ConfigObject->Get('Ticket::Frontend::ArticleComposeModule') ) eq 'HASH' ) {
+
+        # use ticket QueueID in compose modules
+        $GetParam{QueueID} = $Ticket{QueueID};
+
         my %Jobs = %{ $ConfigObject->Get('Ticket::Frontend::ArticleComposeModule') };
         for my $Job ( sort keys %Jobs ) {
 
@@ -515,7 +515,13 @@ sub Form {
             }
 
             # run module
-            $Object->Run( %Data, %GetParam, Config => $Jobs{$Job} );
+            my $NewParams = $Object->Run( %Data, %GetParam, Config => $Jobs{$Job} );
+
+            if ($NewParams) {
+                for my $Parameter ( $Object->Option( %GetParam, Config => $Jobs{$Job} ) ) {
+                    $GetParam{$Parameter} = $NewParams;
+                }
+            }
 
             # get errors
             %Error = ( %Error, $Object->Error( %GetParam, Config => $Jobs{$Job} ) );
@@ -1212,7 +1218,7 @@ sub SendEmail {
         if ($To) {
             $To .= ', ';
         }
-        $To .= $GetParam{$Key}
+        $To .= $GetParam{$Key};
     }
 
     my $IsVisibleForCustomer = $Config->{IsVisibleForCustomerDefault};
@@ -1396,7 +1402,7 @@ sub AjaxUpdate {
 
             # get AJAX param values
             if ( $Object->can('GetParamAJAX') ) {
-                %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) )
+                %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) );
             }
 
             # get options that have to be removed from the selection visible

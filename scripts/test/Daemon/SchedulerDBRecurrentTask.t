@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -308,7 +308,7 @@ for my $Test (@Tests) {
         $CacheObject->CleanUp(
             Type => 'SchedulerDBRecurrentTaskExecute',
         );
-        print "  Cache cleared before RecurrentTaskExecute()...\n"
+        print "  Cache cleared before RecurrentTaskExecute()...\n";
     }
 
     my $Success = $SchedulerDBObject->RecurrentTaskExecute( %{ $Test->{Config} } );
@@ -374,7 +374,7 @@ for my $Test (@Tests) {
                 )->ToString();
             }
             else {
-                $ExpectedTask{$Attribute} = $Test->{ExpectedTask}->{$Attribute}
+                $ExpectedTask{$Attribute} = $Test->{ExpectedTask}->{$Attribute};
             }
         }
 

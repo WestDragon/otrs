@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -26,7 +26,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::DynamicField::Driver::Text
+Kernel::System::DynamicField::Driver::ProcessManagement::ProcessID
 
 =head1 DESCRIPTION
 
@@ -177,7 +177,7 @@ sub ColumnFilterValuesGet {
     # get the display value if still exist in dynamic field configuration
     for my $Key ( sort keys %{$ColumnFilterValues} ) {
         if ( $SelectionData->{$Key} ) {
-            $ColumnFilterValues->{$Key} = $SelectionData->{$Key}
+            $ColumnFilterValues->{$Key} = $SelectionData->{$Key};
         }
     }
 

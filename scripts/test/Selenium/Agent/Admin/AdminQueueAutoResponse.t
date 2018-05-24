@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -180,7 +180,7 @@ $Selenium->RunTest(
         $Self->True(
             $Selenium->find_element(
                 "//a[contains(\@href, 'Action=AdminAutoResponse;Subaction=Change;ID=$AutoResponseIDs[1]->{ID}' )]"
-                )->is_displayed(),
+            )->is_displayed(),
             "$AutoResponseIDs[1]->{Name} found on screen",
         );
 
@@ -188,7 +188,7 @@ $Selenium->RunTest(
             index(
                 $Selenium->get_page_source(),
                 'Action=AdminAutoResponse;Subaction=Change;ID=$AutoResponseIDs[2]->{ID}'
-                ) == -1,
+            ) == -1,
             "$AutoResponseIDs[2]->{Name} is not found screen",
         );
 

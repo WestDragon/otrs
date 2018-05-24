@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -767,7 +767,7 @@ sub AddScreen {
     my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     # In case of page reload because of errors
-    my %Errors   = %{ $Param{Errors}   // {} };
+    my %Errors   = %{ $Param{Errors} //   {} };
     my %GetParam = %{ $Param{GetParam} // {} };
 
     my %Frontend;

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -20,6 +20,7 @@ our @ObjectDependencies = (
     'Kernel::System::State',
     'Kernel::System::Ticket',
     'Kernel::System::DateTime',
+    'Kernel::System::Queue',
 );
 
 sub new {
@@ -165,8 +166,10 @@ sub TicketAcceleratorUpdateOnQueueUpdate {
         }
     }
 
-    #update ticket_index for changed queue name
-    return if !$Kernel::OM->Get('Kernel::System::DB')->Do(
+    my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+
+    # Update ticket_index for changed queue name.
+    return if !$DBObject->Do(
         SQL => '
             UPDATE ticket_index
             SET queue = ?
@@ -176,6 +179,36 @@ sub TicketAcceleratorUpdateOnQueueUpdate {
             \$Param{OldQueueName},
         ],
     );
+
+    # Updated ticket_index for all sub queue names when parent name is changed.
+    #   See bug#13570 for more information.
+    my %AllQueue = $Kernel::OM->Get('Kernel::System::Queue')->QueueList( Valid => 0 );
+    my @ParentQueue = split( /::/, $Param{OldQueueName} );
+
+    for my $QueueID ( sort keys %AllQueue ) {
+
+        my @SubQueue = split( /::/, $AllQueue{$QueueID} );
+
+        if ( $#SubQueue > $#ParentQueue ) {
+
+            if ( $AllQueue{$QueueID} =~ /^\Q$Param{OldQueueName}::\E/i ) {
+
+                my $NewQueueName = $AllQueue{$QueueID};
+                $NewQueueName =~ s/\Q$Param{OldQueueName}\E/$Param{NewQueueName}/;
+
+                return if !$DBObject->Do(
+                    SQL => '
+                        UPDATE ticket_index
+                        SET queue = ?
+                        WHERE queue = ?',
+                    Bind => [
+                        \$NewQueueName,
+                        \$AllQueue{$QueueID},
+                    ],
+                );
+            }
+        }
+    }
 
     return 1;
 }

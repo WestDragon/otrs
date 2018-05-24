@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -85,7 +85,7 @@ sub Run {
     return $ModuleConfigCheck if !$ModuleConfigCheck->{Success};
 
     # Set basic information including possibly existing past execution data.
-    my $RetryCount = $Param{PastExecutionData}->{RetryCount} // 0;
+    my $RetryCount      = $Param{PastExecutionData}->{RetryCount} // 0;
     my $CurrentDateTime = $Kernel::OM->Create('Kernel::System::DateTime');
 
     # Get date-time of last (=this) request. If we are not in a retry, use current date-time.

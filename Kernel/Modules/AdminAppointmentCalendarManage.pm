@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -872,8 +872,8 @@ sub _TicketAppointments {
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     $TicketAppointments{QueueIDStrg} = $LayoutObject->AgentQueueListOption(
-        Class => 'Validate_Required Modernize ' . ( $Param{Error}->{QueueIDInvalid} // '' ),
-        Data => \%AvailableQueues,
+        Class              => 'Validate_Required Modernize ' . ( $Param{Error}->{QueueIDInvalid} // '' ),
+        Data               => \%AvailableQueues,
         Multiple           => 1,
         Size               => 0,
         Name               => 'QueueID' . $FieldID,

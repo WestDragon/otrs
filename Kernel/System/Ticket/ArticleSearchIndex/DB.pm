@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -300,7 +300,7 @@ sub ArticleSearchIndexWhereCondition {
         if ( $Param{SearchParams}->{ConditionInline} ) {
 
             $SQLQuery .= $DBObject->QueryCondition(
-                Key => $Field eq 'Fulltext' ? 'ArticleFulltext.article_value' : "$Field.article_value",
+                Key => $Field eq 'Fulltext' ? [ 'ArticleFulltext.article_value', 'st.title' ] : "$Field.article_value",
                 Value         => lc $Param{SearchParams}->{$Field},
                 SearchPrefix  => $Param{SearchParams}->{ContentSearchPrefix},
                 SearchSuffix  => $Param{SearchParams}->{ContentSearchSuffix},
@@ -329,6 +329,10 @@ sub ArticleSearchIndexWhereCondition {
             $Value = lc $DBObject->Quote( $Value, 'Like' );
 
             $SQLQuery .= " $Label.article_value LIKE '$Value'";
+
+            if ( $Field eq 'Fulltext' ) {
+                $SQLQuery .= " OR st.title LIKE '$Value'";
+            }
         }
     }
 
@@ -484,7 +488,7 @@ sub _ArticleSearchIndexString {
                 $IndexString .= ' ';
             }
 
-            $IndexString .= $Word
+            $IndexString .= $Word;
         }
     }
 

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -79,8 +79,8 @@ sub Auth {
     # if we get to here (user has preference), we need a passed token
     if ( !$Param{TwoFactorToken} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
-            Priority => 'error',
-            Message  => "Need TwoFactorToken!"
+            Priority => 'notice',
+            Message  => "CustomerUser: $Param{User} two factor customer authentication failed (TwoFactorToken missing)."
         );
         return;
     }

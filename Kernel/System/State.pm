@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -646,13 +646,13 @@ sub StateTypeList {
 
 returns the id or the name of a state type
 
-    my $StateTypeID = $StateTypeObject->StateTypeLookup(
+    my $StateTypeID = $StateObject->StateTypeLookup(
         StateType => 'pending auto',
     );
 
 or
 
-    my $StateType = $StateTypeObject->StateTypeLookup(
+    my $StateType = $StateObject->StateTypeLookup(
         StateTypeID => 1,
     );
 

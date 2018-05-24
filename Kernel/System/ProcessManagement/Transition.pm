@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -225,7 +225,7 @@ sub TransitionCheck {
 
                             # If matches for one item go to next filter (debug keeps active).
                             if ( $Self->{TransitionDebugFilters}->{$DebugFilter} eq $Item ) {
-                                next DEBUGFILTER
+                                next DEBUGFILTER;
                             }
                         }
 

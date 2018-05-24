@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -256,7 +256,7 @@ my @Tests = (
         },
     },
 );
-use Data::Dumper;
+
 my @SystemMaintenanceIDs;
 TEST:
 for my $Test (@Tests) {
@@ -516,10 +516,9 @@ $ConfigObject->Set(
     Value => 30,
 );
 
-TEST:
 @Tests = (
     {
-        Name         => 'Test ' . $Index++ . ' - ',
+        Name         => 'Test ' . $Index++ . ' -',
         StartDate    => '2014-01-10 12:00:00',
         StopDate     => '2014-01-10 14:59:59',
         FixedTimeSet => '2014-01-10 13:00:00',
@@ -528,7 +527,7 @@ TEST:
         IsComming    => 0,
     },
     {
-        Name         => 'Test ' . $Index++ . ' - ',
+        Name         => 'Test ' . $Index++ . ' -',
         StartDate    => '2014-01-10 12:00:00',
         StopDate     => '2014-01-10 14:59:59',
         FixedTimeSet => '2014-01-10 11:59:59',
@@ -537,7 +536,7 @@ TEST:
         IsComming    => 1,
     },
     {
-        Name         => 'Test ' . $Index++ . ' - ',
+        Name         => 'Test ' . $Index++ . ' -',
         StartDate    => '2014-01-10 12:00:00',
         StopDate     => '2014-01-10 14:59:59',
         FixedTimeSet => '2014-01-10 15:00:00',
@@ -573,23 +572,23 @@ for my $Test (@Tests) {
             ObjectParams => {
                 String => $Test->{FixedTimeSet}
                 }
-            )->ToEpoch(),
+        )->ToEpoch(),
     );
 
-    my $IsComming = $Kernel::OM->Get('Kernel::System::SystemMaintenance')->SystemMaintenanceIsComing();
+    my %IsComming = $Kernel::OM->Get('Kernel::System::SystemMaintenance')->SystemMaintenanceIsComing();
 
     if ( $Test->{IsComming} ) {
 
         $Self->True(
-            $IsComming,
-            "$Test->{Name} - A system maintenance period is comming!",
+            $IsComming{StartDate},
+            "$Test->{Name} A system maintenance period is comming!",
         );
     }
     else {
 
         $Self->False(
-            $IsComming,
-            "$Test->{Name} - A system maintenance period is not comming!",
+            $IsComming{StartDate},
+            "$Test->{Name} A system maintenance period is not comming!",
         );
     }
 
@@ -599,14 +598,14 @@ for my $Test (@Tests) {
 
         $Self->True(
             $IsActive,
-            "$Test->{Name} - A system maintenance period is active!",
+            "$Test->{Name} A system maintenance period is active!",
         );
     }
     else {
 
         $Self->False(
             $IsActive,
-            "$Test->{Name} - A system maintenance period is not active!",
+            "$Test->{Name} A system maintenance period is not active!",
         );
     }
 

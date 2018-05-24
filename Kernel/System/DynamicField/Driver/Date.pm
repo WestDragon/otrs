@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -746,7 +746,7 @@ EOF
             Sort           => 'IndividualKey',
             SortIndividual => [ 'Before', 'Last', 'Next', 'After' ],
             Name           => $FieldName . 'Start',
-            SelectedID => $Value->{Start}->{ $FieldName . 'Start' } || 'Last',
+            SelectedID     => $Value->{Start}->{ $FieldName . 'Start' } || 'Last',
         );
         $HTMLString .= ' ' . $Param{LayoutObject}->BuildSelection(
             Data       => [ 1 .. 59 ],
@@ -1245,7 +1245,7 @@ sub StatsSearchFieldParameterBuild {
 
     # set start of day
     elsif ( $Operator eq 'GreaterThanEquals' ) {
-        $ToReturn .= ' 00:00:00'
+        $ToReturn .= ' 00:00:00';
     }
 
     # same values for unknown operators

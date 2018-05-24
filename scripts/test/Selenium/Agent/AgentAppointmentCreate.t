@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -117,7 +117,7 @@ $Selenium->RunTest(
         );
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -175,7 +175,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for AJAX to finish
         $Selenium->WaitFor(
@@ -266,7 +266,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for AJAX to finish
         $Selenium->WaitFor(
@@ -349,7 +349,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for AJAX to finish
         $Selenium->WaitFor(
@@ -441,7 +441,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -532,7 +532,7 @@ $Selenium->RunTest(
 
         # deselect selected day
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomWeeklyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomWeeklyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -602,7 +602,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('6');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -708,7 +708,7 @@ $Selenium->RunTest(
 
         # deselect selected day
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomWeeklyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomWeeklyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -733,7 +733,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -841,7 +841,7 @@ $Selenium->RunTest(
 
         # deselect selected day
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomMonthlyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomMonthlyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -911,7 +911,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('20');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -1014,7 +1014,7 @@ $Selenium->RunTest(
 
         # deselect selected day
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomMonthlyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomMonthlyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -1039,7 +1039,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -1144,7 +1144,7 @@ $Selenium->RunTest(
 
         # deselect selected month
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomYearlyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomYearlyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -1214,7 +1214,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('6');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(
@@ -1318,7 +1318,7 @@ $Selenium->RunTest(
 
         # deselect selected month
         $Selenium->execute_script(
-            "return \$('#RecurrenceCustomYearlyDiv button.fc-state-active').click();"
+            "\$('#RecurrenceCustomYearlyDiv button.fc-state-active').click();"
         );
 
         # make sure it's deselected
@@ -1343,7 +1343,7 @@ $Selenium->RunTest(
         $Selenium->find_element( 'RecurrenceCount', 'name' )->send_keys('3');
 
         # click on Save
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # wait for dialog to close and AJAX to finish
         $Selenium->WaitFor(

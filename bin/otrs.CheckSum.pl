@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU AFFERO General Public License as published by
@@ -159,7 +159,7 @@ sub ProcessDirectory {
             }
             elsif ( -e "$File.save" )
             {    ## report .save files as modified by the OTRS Package Manager
-                print "Notice: OPM Changed $File\n"
+                print "Notice: OPM Changed $File\n";
             }
             if ( defined $Compare{$File} ) {
                 delete $Compare{$File};

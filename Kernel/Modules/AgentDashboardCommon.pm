@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -680,7 +680,7 @@ sub Run {
         # if column is not a default column, add it for translation
         for my $Column ( sort keys %{ $Element{Config}->{DefaultColumns} } ) {
             if ( !defined $Columns->{$Column} ) {
-                $Columns->{$Column} = $Element{Config}->{DefaultColumns}->{$Column}
+                $Columns->{$Column} = $Element{Config}->{DefaultColumns}->{$Column};
             }
         }
 

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -301,7 +301,7 @@ sub ValidateCustomer {
 
     # if customer is not registered in the database, check if email is valid
     if ( !IsHashRefWithData( \%CustomerData ) ) {
-        return $Self->ValidateFrom( From => $Param{CustomerUser} )
+        return $Self->ValidateFrom( From => $Param{CustomerUser} );
     }
 
     # if ValidID is present, check if it is valid!
@@ -742,7 +742,7 @@ sub ValidatePendingTime {
     # check that no time attribute is empty or negative
     for my $TimeAttribute ( sort keys %{ $Param{PendingTime} } ) {
         return if $Param{PendingTime}->{$TimeAttribute} eq '';
-        return if int $Param{PendingTime}->{$TimeAttribute} < 0,
+        return if int $Param{PendingTime}->{$TimeAttribute} < 0;
     }
 
     # try to convert pending time to a DateTime object
@@ -783,7 +783,7 @@ sub ValidateAutoResponseType {
     return if !%AutoResponseType;
 
     for my $AutoResponseType ( values %AutoResponseType ) {
-        return 1 if $AutoResponseType eq $Param{AutoResponseType}
+        return 1 if $AutoResponseType eq $Param{AutoResponseType};
     }
     return;
 }
@@ -1120,7 +1120,44 @@ sub ValidateDynamicFieldValue {
         UserID             => 1,
     );
 
-    return $ValueType;
+    return if !$ValueType;
+
+    # Check if value parameter exists in config of possible values, for example for dropdown/multi-select fields.
+    #   Please see bug#13444 for more information.
+    if (
+        defined $Param{Value}
+        && length $Param{Value}
+        && (
+            IsArrayRefWithData( $DynamicFieldConfig->{Config}->{PossibleValues} )
+            || IsHashRefWithData( $DynamicFieldConfig->{Config}->{PossibleValues} )
+        )
+        )
+    {
+        my @Values;
+        if ( ref $Param{Value} eq 'ARRAY' ) {
+            @Values = @{ $Param{Value} };
+        }
+        else {
+            push @Values, $Param{Value};
+        }
+
+        if ( IsArrayRefWithData( $DynamicFieldConfig->{Config}->{PossibleValues} ) ) {
+            for my $Value (@Values) {
+                if ( !grep { $_ eq $Value } @{ $DynamicFieldConfig->{Config}->{PossibleValues} } ) {
+                    return;
+                }
+            }
+        }
+        else {
+            for my $Value (@Values) {
+                if ( !grep { $_ eq $Value } keys %{ $DynamicFieldConfig->{Config}->{PossibleValues} } ) {
+                    return;
+                }
+            }
+        }
+    }
+
+    return 1;
 }
 
 =head2 ValidateDynamicFieldObjectType()
@@ -1236,7 +1273,7 @@ sub SetDynamicFieldValue {
 
     return {
         Success => $Success,
-        }
+    };
 }
 
 =head2 CreateAttachment()

@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -94,7 +94,7 @@ Core.Agent.TicketSplit = (function (TargetNS) {
                             .appendTo($('#AgentSplitSelection'));
                     }
 
-                    if(Core.UI.Popup !== undefined && Core.UI.Popup.CurrentIsPopupWindow) {
+                    if(Core.UI.Popup !== undefined && Core.UI.Popup.CurrentIsPopupWindow()) {
                         URL = Core.Config.Get('Baselink') + $('#AgentSplitSelection').serialize();
                         Core.UI.Popup.ExecuteInParentWindow(function(WindowObject) {
                             WindowObject.Core.UI.Popup.FirePopupEvent('URL', {

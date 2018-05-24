@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -116,11 +116,15 @@ sub Run {
     # Split Selection Dialog
     # ---------------------------------------------------------- #
 
-    # build split selection the modal dialog
-    my %SplitSelectionContent = (
-        PhoneTicket => Translatable('Phone ticket'),
-        EmailTicket => Translatable('Email ticket'),
-    );
+    # Build split selection based on availability of corresponding registered modules.
+    # See bug#13690 (https://bugs.otrs.org/show_bug.cgi?id=13690) for more information.
+    my %SplitSelectionContent;
+    if ( $ConfigObject->Get('Frontend::Module')->{AgentTicketPhone} ) {
+        $SplitSelectionContent{PhoneTicket} = Translatable('Phone ticket');
+    }
+    if ( $ConfigObject->Get('Frontend::Module')->{AgentTicketEmail} ) {
+        $SplitSelectionContent{EmailTicket} = Translatable('Email ticket');
+    }
 
     # only display process tickets if active processes are available
     my $Processes = $ConfigObject->Get('Process');

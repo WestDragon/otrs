@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -81,11 +81,11 @@ sub Run {
             $LayoutObject->AddJSData(
                 Key   => 'AppointmentCreate',
                 Value => {
-                    Start     => $ParamObject->GetParam( Param => 'Start' )     // undef,
-                    End       => $ParamObject->GetParam( Param => 'End' )       // undef,
+                    Start     => $ParamObject->GetParam( Param => 'Start' ) // undef,
+                    End       => $ParamObject->GetParam( Param => 'End' ) // undef,
                     PluginKey => $ParamObject->GetParam( Param => 'PluginKey' ) // undef,
-                    Search    => $ParamObject->GetParam( Param => 'Search' )    // undef,
-                    ObjectID  => $ParamObject->GetParam( Param => 'ObjectID' )  // undef,
+                    Search    => $ParamObject->GetParam( Param => 'Search' ) // undef,
+                    ObjectID  => $ParamObject->GetParam( Param => 'ObjectID' ) // undef,
                 },
             );
         }

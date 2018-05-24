@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -60,7 +60,7 @@ sub new {
 
 Check if provided EffectiveValue matches structure defined in XMLContentParsed.
 
-    my %Result = $SysConfigObject->SettingEffectiveValueCheck(
+    my %Result = $ValueTypeObject->SettingEffectiveValueCheck(
         XMLContentParsed => {
             Value => [
                 {
@@ -352,14 +352,17 @@ sub SettingRender {
                 $GroupIndex++;
             }
 
-            if ( $Param{RW} ) {
-                $HTML
-                    .= "    <button data-suffix='$Param{Name}$Param{IDSuffix}_Hash###$Key\_Array$GroupIndex' class='AddArrayItem' "
-                    . "type='button' title='$AddNewEntry' value='Add new entry'>\n"
-                    . "        <i class='fa fa-plus-circle'></i>\n"
-                    . "        <span class='InvisibleText'>$AddNewEntry</span>\n"
-                    . "    </button>\n";
+            my $ButtonClass = 'AddArrayItem';
+            if ( !$Param{RW} ) {
+                $ButtonClass .= " Hidden";
             }
+
+            $HTML
+                .= "    <button data-suffix='$Param{Name}$Param{IDSuffix}_Hash###$Key\_Array$GroupIndex' class='$ButtonClass' "
+                . "type='button' title='$AddNewEntry' value='Add new entry'>\n"
+                . "        <i class='fa fa-plus-circle'></i>\n"
+                . "        <span class='InvisibleText'>$AddNewEntry</span>\n"
+                . "    </button>\n";
             $HTML .= "</div>\n";
         }
         else {

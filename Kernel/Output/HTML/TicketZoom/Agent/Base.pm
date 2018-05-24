@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -206,7 +206,8 @@ sub _ArticleSenderImage {
     if (@Addresses) {
         my $Email = $EmailParser->GetEmailAddress( Email => $Addresses[0] );
         if ($Email) {
-            my $DefaultIcon = 'identicon';    # a geometric pattern based on an email hash
+            my $DefaultIcon
+                = $Kernel::OM->Get('Kernel::Config')->Get('Frontend::Gravatar::ArticleDefaultImage') || 'mm';
 
             # Get current user's email and compare it to the sender's email.
             if ( $Param{UserID} ) {

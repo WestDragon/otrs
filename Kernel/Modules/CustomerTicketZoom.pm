@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -170,7 +170,7 @@ sub Run {
         );
 
         if ( IsHashRefWithData( \%AtmIndex ) ) {
-            $ArticleData{Attachment} = \%AtmIndex
+            $ArticleData{Attachment} = \%AtmIndex;
         }
 
         push @ArticleBox, \%ArticleData;
@@ -1223,7 +1223,7 @@ sub _Mask {
             );
 
             if ($ACL) {
-                %{$NextActivityDialogs} = $TicketObject->TicketAclData()
+                %{$NextActivityDialogs} = $TicketObject->TicketAclData();
             }
 
             $LayoutObject->Block(
@@ -1464,7 +1464,7 @@ sub _Mask {
     # get params
     my $ZoomExpand = $ParamObject->GetParam( Param => 'ZoomExpand' );
     if ( !defined $ZoomExpand ) {
-        $ZoomExpand = $ConfigObject->Get('Ticket::Frontend::ZoomExpand') || '';
+        $ZoomExpand = $ConfigObject->Get('Ticket::Frontend::CustomerTicketZoom')->{CustomerZoomExpand} || '';
     }
 
     # Expand option
@@ -1576,7 +1576,7 @@ sub _Mask {
         if ( !IsHashRefWithData( \%Article ) ) {
             %Article = %Param;
             if ( !$Article{StateID} ) {
-                $Article{StateID} = $Param{TicketStateID}
+                $Article{StateID} = $Param{TicketStateID};
             }
         }
 
@@ -1606,7 +1606,7 @@ sub _Mask {
     if ( !IsHashRefWithData( \%Article ) ) {
         %Article = %Param;
         if ( !$Article{StateID} ) {
-            $Article{StateID} = $Param{TicketStateID}
+            $Article{StateID} = $Param{TicketStateID};
         }
     }
 

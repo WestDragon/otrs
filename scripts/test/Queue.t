@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -182,7 +182,7 @@ $Self->True(
     "Follow-up list contains the follow-up \'$FollowUpOption\' of the queue $QueueID",
 );
 
-my $QueueUpdate1Name = $QueueRand . '1',;
+my $QueueUpdate1Name = $QueueRand . '1';
 my $QueueUpdate1     = $QueueObject->QueueUpdate(
     QueueID             => $QueueID,
     Name                => $QueueUpdate1Name,

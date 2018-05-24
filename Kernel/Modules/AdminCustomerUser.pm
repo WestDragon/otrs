@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -644,7 +644,7 @@ sub Run {
 
                     my $ValueSet = $DynamicFieldBackendObject->ValueSet(
                         DynamicFieldConfig => $DynamicFieldConfig,
-                        ObjectName         => $GetParam{UserLogin},
+                        ObjectName         => $User,
                         Value              => $GetParam{ $Entry->[0] },
                         UserID             => $Self->{UserID},
                     );
@@ -668,7 +668,7 @@ sub Run {
 
                     # get user data
                     my %UserData = $CustomerUserObject->CustomerUserDataGet(
-                        User => $GetParam{UserLogin}
+                        User => $User,
                     );
                     my $Module = $Preferences{$Group}->{Module};
                     if ( !$MainObject->Require($Module) ) {
@@ -963,7 +963,7 @@ sub _Overview {
                 $LayoutObject->Block(
                     Name => 'OverviewResultRow',
                     Data => {
-                        Valid => $ValidList{ $UserData{ValidID} || '' } || '-',
+                        Valid       => $ValidList{ $UserData{ValidID} || '' } || '-',
                         Search      => $Param{Search},
                         CustomerKey => $ListKey,
                         %UserData,

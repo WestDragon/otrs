@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -22,7 +22,7 @@ our $ObjectManagerDisabled = 1;
 
 =head1 NAME
 
-Kernel::GenericInterface::Operation::Ticket::TicketyHistorGet - GenericInterface Ticket History Get Operation backend
+Kernel::GenericInterface::Operation::Ticket::TicketHistoryGet - GenericInterface Ticket History Get Operation backend
 
 =head1 PUBLIC INTERFACE
 

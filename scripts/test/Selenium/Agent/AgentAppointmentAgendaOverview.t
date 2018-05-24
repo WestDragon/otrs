@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -129,7 +129,8 @@ $Selenium->RunTest(
         $Selenium->find_element( '#AppointmentCreateButton', 'css' )->click();
         $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#Title').length" );
         $Selenium->find_element( 'Title',  'name' )->send_keys( $AppointmentNames[1] );
-        $Selenium->find_element( 'AllDay', 'name' )->VerifiedClick();
+        $Selenium->find_element( 'AllDay', 'name' )->click();
+        $Selenium->WaitFor( JavaScript => "return \$('input[name=AllDay]:checked').length" );
         for my $Group (qw(Start End)) {
             for my $Field (qw(Day Month Year)) {
                 $Selenium->execute_script(
@@ -196,8 +197,9 @@ $Selenium->RunTest(
         # Delete third appointment master.
         $Selenium->find_element( $AppointmentNames[2], 'link_text' )->click();
         $Selenium->WaitFor(
-            JavaScript => "return typeof(\$) === 'function' && \$('#Title').length && \$('#EditFormDelete').length"
+            JavaScript => "return typeof(\$) === 'function' && \$('.Dialog.Modal #EditFormDelete').length"
         );
+        sleep 2;
         $Selenium->find_element( "#EditFormDelete", 'css' )->click();
 
         $Selenium->WaitFor( AlertPresent => 1 );

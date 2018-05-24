@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -12,24 +12,28 @@ use utf8;
 
 use vars (qw($Self));
 
-# get selenium object
 my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
     sub {
 
-        # get helper object
         my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
-        # do not check email addresses
+        # Do not check email addresses.
         $Helper->ConfigSettingChange(
             Key   => 'CheckEmailAddresses',
             Value => 0,
         );
 
-        # create test user and login
+        # Enable Service.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Service',
+            Value => 1,
+        );
+
         my $TestUserLogin = $Helper->TestUserCreate(
-            Groups => ['admin'],
+            Groups => [ 'admin', 'users' ],
         ) || die "Did not get test user";
 
         $Selenium->Login(
@@ -38,10 +42,9 @@ $Selenium->RunTest(
             Password => $TestUserLogin,
         );
 
-        # get script alias
         my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
-        # navigate to AdminUser screen
+        # Navigate to AdminUser screen.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminUser");
 
         # check overview AdminUser
@@ -49,19 +52,19 @@ $Selenium->RunTest(
         $Selenium->find_element( "table thead tr th", 'css' );
         $Selenium->find_element( "table tbody tr td", 'css' );
 
-        # check breadcrumb on Overview screen
+        # Check breadcrumb on Overview screen.
         $Self->True(
             $Selenium->find_element( '.BreadCrumb', 'css' ),
             "Breadcrumb is found on Overview screen.",
         );
 
-        # check for test agent in AdminUser
+        # Check for test agent in AdminUser.
         $Self->True(
             index( $Selenium->get_page_source(), $TestUserLogin ) > -1,
             "$TestUserLogin found on page",
         );
 
-        # check search field
+        # Check search field.
         $Selenium->find_element( "#Search", 'css' )->send_keys($TestUserLogin);
         $Selenium->find_element("//button[\@value='Search'][\@type='submit']")->VerifiedClick();
         $Self->True(
@@ -69,7 +72,7 @@ $Selenium->RunTest(
             "$TestUserLogin found on page",
         );
 
-        # check add agent page
+        # Check add agent page.
         $Selenium->find_element("//a[contains(\@href, \'Action=AdminUser;Subaction=Add' )]")->VerifiedClick();
 
         for my $ID (
@@ -81,7 +84,7 @@ $Selenium->RunTest(
             $Element->is_displayed();
         }
 
-        # check breadcrumb on Add screen
+        # Check breadcrumb on Add screen.
         my $Count = 1;
         for my $BreadcrumbText ( 'Agent Management', 'Add Agent' ) {
             $Self->Is(
@@ -93,10 +96,9 @@ $Selenium->RunTest(
             $Count++;
         }
 
-        # check client side validation
-        my $Element = $Selenium->find_element( "#UserFirstname", 'css' );
-        $Element->send_keys("");
-        $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
+        # Check client side validation.
+        $Selenium->find_element( "#UserFirstname", 'css' )->send_keys("");
+        $Selenium->find_element( "#Submit",        'css' )->click();
 
         $Self->Is(
             $Selenium->execute_script(
@@ -106,28 +108,29 @@ $Selenium->RunTest(
             'Client side validation correctly detected missing input value',
         );
 
-        # Reload page
+        # Reload page.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminUser;Subaction=Add");
 
-        # create a real test agent
-        my $UserRandomID = 'TestAgent' . $Helper->GetRandomID();
+        # Create a real test agent.
+        my $RandomID     = $Helper->GetRandomID();
+        my $UserRandomID = 'TestAgent' . $RandomID;
         $Selenium->find_element( "#UserFirstname", 'css' )->send_keys($UserRandomID);
         $Selenium->find_element( "#UserLastname",  'css' )->send_keys($UserRandomID);
         $Selenium->find_element( "#UserLogin",     'css' )->send_keys($UserRandomID);
         $Selenium->find_element( "#UserEmail",     'css' )->send_keys( $UserRandomID . '@localhost.com' );
         $Selenium->find_element( "#Submit",        'css' )->VerifiedClick();
 
-        # test search filter by agent $UserRandomID
+        # Test search filter by agent $UserRandomID.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminUser");
         $Selenium->find_element( "#Search", 'css' )->clear();
         $Selenium->find_element( "#Search", 'css' )->send_keys($UserRandomID);
         $Selenium->find_element("//button[\@value='Search'][\@type='submit']")->VerifiedClick();
 
-        # edit real test agent values
-        my $EditRandomID = 'EditedTestAgent' . $Helper->GetRandomID();
+        # Edit real test agent values.
+        my $EditRandomID = 'EditedTestAgent' . $RandomID;
         $Selenium->find_element( $UserRandomID, 'link_text' )->VerifiedClick();
 
-        # check breadcrumb on Edit screen
+        # Check breadcrumb on Edit screen.
         $Count = 1;
         for my $BreadcrumbText ( 'Agent Management', 'Edit Agent: ' . $UserRandomID ) {
             $Self->Is(
@@ -139,26 +142,26 @@ $Selenium->RunTest(
             $Count++;
         }
 
-        # edit some values
+        # Edit some values.
         $Selenium->find_element( "#UserFirstname", 'css' )->clear();
         $Selenium->find_element( "#UserFirstname", 'css' )->send_keys($EditRandomID);
         $Selenium->find_element( "#UserLastname",  'css' )->clear();
         $Selenium->find_element( "#UserLastname",  'css' )->send_keys($EditRandomID);
         $Selenium->find_element( "#Submit",        'css' )->VerifiedClick();
 
-        #check is there notification after agent is updated
+        # Check is there notification after agent is updated.
         my $Notification = 'Agent updated!';
         $Self->True(
             $Selenium->execute_script("return \$('.MessageBox.Notice p:contains($Notification)').length"),
             "$Notification - notification is found."
         );
 
-        # test search filter by agent $EditRandomID
+        # Test search filter by agent $EditRandomID.
         $Selenium->find_element( "#Search", 'css' )->clear();
         $Selenium->find_element( "#Search", 'css' )->send_keys($EditRandomID);
         $Selenium->find_element("//button[\@value='Search'][\@type='submit']")->VerifiedClick();
 
-        #check new agent values
+        # Check new agent values.
         $Selenium->find_element( $UserRandomID, 'link_text' )->VerifiedClick();
         $Self->Is(
             $Selenium->find_element( '#UserFirstname', 'css' )->get_value(),
@@ -181,20 +184,170 @@ $Selenium->RunTest(
             "#UserEmail stored value",
         );
 
-        # set added test agent to invalid
+        # Set added test agent to invalid.
         $Selenium->execute_script("\$('#ValidID').val('2').trigger('redraw.InputField').trigger('change');");
         $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
 
-        # test search filter by agent $UserRandomID
+        # Test search filter by agent $UserRandomID.
         $Selenium->find_element( "#Search", 'css' )->clear();
         $Selenium->find_element( "#Search", 'css' )->send_keys($UserRandomID);
         $Selenium->find_element("//button[\@value='Search'][\@type='submit']")->VerifiedClick();
 
-        # check class of invalid Agent in the overview table
+        # Check class of invalid Agent in the overview table.
         $Self->True(
             $Selenium->find_element( "tr.Invalid", 'css' ),
             "There is a class 'Invalid' for test Agent",
         );
+
+        # Testing bug#13463 (https://bugs.otrs.org/show_bug.cgi?id=13463),
+        #   updating Agent data, removes it's 'My Queue' and 'My Services' preferences.
+        my $QueueName = 'TestQueue' . $RandomID;
+        my $QueueID   = $Kernel::OM->Get('Kernel::System::Queue')->QueueAdd(
+            Name            => $QueueName,
+            ValidID         => 1,
+            GroupID         => 1,
+            SystemAddressID => 1,
+            SalutationID    => 1,
+            SignatureID     => 1,
+            UserID          => 1,
+            Comment         => 'Selenium Test',
+        );
+        $Self->True(
+            $QueueID,
+            "QueueID $QueueID is created.",
+        );
+
+        my $ServiceName = 'TestService' . $RandomID;
+        my $ServiceID   = $Kernel::OM->Get('Kernel::System::Service')->ServiceAdd(
+            Name    => $ServiceName,
+            Comment => 'Selenium Test',
+            ValidID => 1,
+            UserID  => 1,
+        );
+        $Self->True(
+            $ServiceID,
+            "ServiceID $ServiceID is created."
+        );
+
+        # Navigate to AgentPreferences notification setting screen.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentPreferences;Subaction=Group;Group=NotificationSettings"
+        );
+
+        # Select test created Queue as 'My Queue' and update preference.
+        $Selenium->execute_script(
+            "\$('#QueueID').val('$QueueID').trigger('redraw.InputField').trigger('change');"
+        );
+        $Selenium->execute_script(
+            "\$('#QueueID').closest('.WidgetSimple').find('.SettingUpdateBox').find('button').trigger('click');"
+        );
+
+        # Wait for the AJAX call to finish.
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('#QueueID').closest('.WidgetSimple').hasClass('HasOverlay')"
+        );
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return !\$('#QueueID').closest('.WidgetSimple').hasClass('HasOverlay')"
+        );
+
+        # Select test created Service as 'My Service' and update preference.
+        $Selenium->execute_script(
+            "\$('#ServiceID').val('$ServiceID').trigger('redraw.InputField').trigger('change');"
+        );
+        $Selenium->execute_script(
+            "\$('#ServiceID').closest('.WidgetSimple').find('.SettingUpdateBox').find('button').trigger('click');"
+        );
+
+        # Wait for the AJAX call to finish.
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('#ServiceID').closest('.WidgetSimple').hasClass('HasOverlay')"
+        );
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return !\$('#ServiceID').closest('.WidgetSimple').hasClass('HasOverlay')"
+        );
+
+        # Refresh screen.
+        $Selenium->VerifiedRefresh();
+
+        # Verify selected 'My Queue' and 'My Service' preference values.
+        $Self->Is(
+            $Selenium->execute_script("return \$('#QueueID :selected').text().trim()"),
+            $QueueName,
+            "Selected Queue '$QueueName' is in 'My Queue'",
+        );
+        $Self->Is(
+            $Selenium->execute_script("return \$('#ServiceID :selected').text().trim()"),
+            $ServiceName,
+            "Selected Service '$ServiceName' is in 'My Services'",
+        );
+
+        # Navigate to AdminUser screen.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminUser");
+        $Selenium->find_element( $TestUserLogin, 'link_text' )->VerifiedClick();
+
+        # Submit not changed Agent data.
+        $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
+
+        # Navigate to AgentPreferences notification setting screen.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentPreferences;Subaction=Group;Group=NotificationSettings"
+        );
+
+        # Verify 'My Queue' and 'My Service' values are not modified.
+        $Self->Is(
+            $Selenium->execute_script("return \$('#QueueID :selected').text().trim()"),
+            $QueueName,
+            "Selected Queue '$QueueName' is in 'My Queue'",
+        );
+        $Self->Is(
+            $Selenium->execute_script("return \$('#ServiceID :selected').text().trim()"),
+            $ServiceName,
+            "Selected Service '$ServiceName' is in 'My Services'",
+        );
+
+        # Delete Queue.
+        my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+        my $Success  = $DBObject->Do(
+            SQL => "DELETE FROM personal_queues WHERE queue_id = $QueueID",
+        );
+        $Self->True(
+            $Success,
+            "Delete personal queues - $QueueID",
+        );
+        $Success = $DBObject->Do(
+            SQL => "DELETE FROM queue WHERE id = $QueueID",
+        );
+        $Self->True(
+            $Success,
+            "Delete Queue - $QueueID",
+        );
+
+        # Delete Service.
+        $Success = $DBObject->Do(
+            SQL => "DELETE FROM personal_services WHERE service_id = $ServiceID",
+        );
+        $Self->True(
+            $Success,
+            "Delete personal services - $ServiceID",
+        );
+        $Success = $DBObject->Do(
+            SQL => "DELETE FROM service WHERE id = $ServiceID",
+        );
+        $Self->True(
+            $Success,
+            "Delete Service - $ServiceID",
+        );
+
+        # Make sure the cache is correct.
+        for my $Cache (qw(Queue Service)) {
+            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp(
+                Type => $Cache,
+            );
+        }
 
     }
 

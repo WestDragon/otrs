@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -81,11 +81,13 @@ $Selenium->RunTest(
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentAppointmentCalendarOverview");
 
         # Wait for AJAX to finish.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".CalendarWidget.Loading").length' );
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $(".fc-timelineWeek-view .fc-slats td.fc-widget-content:nth-child(5)").length'
+        );
 
         # Click on the timeline view for an appointment dialog.
-        $Selenium->find_element( '.fc-timelineWeek-view .fc-slats td.fc-widget-content:nth-child(5)', 'css' )
-            ->VerifiedClick();
+        $Selenium->find_element( '.fc-timelineWeek-view .fc-slats td.fc-widget-content:nth-child(5)', 'css' )->click();
 
         # Wait until form and overlay has loaded, if necessary.
         $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#Title').length" );
@@ -112,7 +114,7 @@ $Selenium->RunTest(
         );
 
         # Click on Save.
-        $Selenium->find_element( '#EditFormSubmit', 'css' )->VerifiedClick();
+        $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
 
         # Wait for dialog to close and AJAX to finish.
         $Selenium->WaitFor(
@@ -120,7 +122,7 @@ $Selenium->RunTest(
                 'return typeof($) === "function" && !$(".Dialog:visible").length && !$(".CalendarWidget.Loading").length'
         );
 
-        # Cerify appointment is visible.
+        # Verify appointment is visible.
         $Self->Is(
             $Selenium->execute_script(
                 "return \$('.fc-timeline-event .fc-title').text();"
@@ -257,9 +259,11 @@ $Selenium->RunTest(
             );
         }
 
+        my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
+
         # Make sure cache is correct.
         for my $Cache (qw(Calendar Appointment)) {
-            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp( Type => $Cache );
+            $CacheObject->CleanUp( Type => $Cache );
         }
     },
 );

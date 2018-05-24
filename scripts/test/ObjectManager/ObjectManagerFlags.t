@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -105,7 +105,7 @@ $Object = eval {
     $Kernel::OM->Create(
         'scripts::test::ObjectManager::WrongPackageName',
         Silent => 1,
-        )
+    );
 };
 $Self->False(
     $@,
@@ -130,7 +130,7 @@ $Object = eval {
     $Kernel::OM->Create(
         'scripts::test::ObjectManager::ConstructorFailure',
         Silent => 1,
-        )
+    );
 };
 $Self->False(
     $@,
@@ -144,7 +144,7 @@ $Self->False(
 $Object = eval {
     $Kernel::OM->Create(
         'scripts::test::ObjectManager::AllowConstructorFailure',
-        )
+    );
 };
 $Self->False(
     $@,

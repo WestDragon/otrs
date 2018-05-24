@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -241,10 +241,12 @@ Core.Agent.Overview = (function (TargetNS) {
                                         $TriggerObj
                                             .next('.ColumnSettingsContainer')
                                             .find('select')
-                                            .after('<span class="SelectedValue Hidden"><a href="#">x</a>' + AutoCompleteText + ' (' + AutoCompleteValue + ')</span>')
+                                            .after('<span class="SelectedValue Hidden">' + AutoCompleteText + ' (' + AutoCompleteValue + ')</span>')
                                             .parent()
-                                            .find('.SelectedValue')
-                                            .find('a')
+                                            .find('input[type=text]')
+                                            .after('<a href="#" class="DeleteFilter"><i class="fa fa-trash-o"></i></a>')
+                                            .parent()
+                                            .find('a.DeleteFilter')
                                             .off()
                                             .on('click', function() {
                                                 $(this)

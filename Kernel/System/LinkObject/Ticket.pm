@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -51,7 +51,7 @@ sub new {
 
 fill up the link list with data
 
-    $Success = $LinkObjectBackend->LinkListWithData(
+    $Success = $LinkObject->LinkListWithData(
         LinkList                     => $HashRef,
         IgnoreLinkedTicketStateTypes => 0|1,        # (optional) default 0
         UserID                       => 1,
@@ -243,7 +243,7 @@ Returns:
         },
     };
 
-    $SearchList = $LinkObjectBackend->ObjectSearch(
+    $SearchList = $LinkObject->ObjectSearch(
         SubObject    => 'Bla',     # (optional)
         SearchParams => $HashRef,  # (optional)
         UserID       => 1,

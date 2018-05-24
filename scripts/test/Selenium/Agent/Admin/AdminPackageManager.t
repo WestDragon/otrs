@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -13,6 +13,13 @@ use utf8;
 use vars (qw($Self));
 
 my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+
+# make sure to enable cloud services
+$Helper->ConfigSettingChange(
+    Valid => 1,
+    Key   => 'CloudServices::Disabled',
+    Value => 0,
+);
 
 my $RandomID = $Helper->GetRandomID();
 
@@ -171,7 +178,7 @@ $Selenium->RunTest(
         $Self->True(
             $Selenium->find_element(
                 "//a[contains(\@href, \'Subaction=View;Name=Test' )]"
-                )->is_displayed(),
+            )->is_displayed(),
             'Test package is installed'
         );
 

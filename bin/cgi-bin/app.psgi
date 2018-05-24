@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU AFFERO General Public License as published by
@@ -73,7 +73,7 @@ my $App = CGI::Emulate::PSGI->handler(
         my $Profile;
         if ( $ENV{NYTPROF} && $ENV{REQUEST_URI} =~ /NYTProf=([\w-]+)/ ) {
             $Profile = 1;
-            DB::enable_profile("nytprof-$1.out")
+            DB::enable_profile("nytprof-$1.out");
         }
 
         # Load the requested script

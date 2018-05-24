@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -94,7 +94,7 @@ sub Run {
     }
 
     # return error if file is not possible to show inline
-    if ( $File{Filename} !~ /\.(png|gif|jpg|jpeg)$/i ) {
+    if ( $File{Filename} !~ /\.(png|gif|jpg|jpeg|bmp)$/i ) {
         $LayoutObject->Block(
             Name => 'ErrorNoImageFile',
             Data => {

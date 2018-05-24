@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -118,7 +118,7 @@ sub Run {
     my %Tickets;
     if (%QueuesConfigured) {
         %Tickets = $TicketObject->TicketSearch(
-            SortBy => $ConfigObject->{'SortBy::Default'} || 'Age',
+            SortBy   => $ConfigObject->{'SortBy::Default'} || 'Age',
             QueueIDs => [ sort keys %QueuesConfigured ],
             UserID   => $Self->{UserID},
             StateIDs => \@ViewableStateIDs,

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -23,6 +23,7 @@ our @ObjectDependencies = (
     'Kernel::System::Encode',
     'Kernel::System::Web::UploadCache',
     'Kernel::System::FormDraft',
+    'Kernel::System::Main',
 );
 
 =head1 NAME
@@ -267,6 +268,12 @@ sub GetUploadAll {
     # replace all devices like c: or d: and dirs for IE!
     $NewFileName =~ s/.:\\(.*)/$1/g;
     $NewFileName =~ s/.*\\(.+?)/$1/g;
+
+    # cleanup filename
+    $NewFileName = $Kernel::OM->Get('Kernel::System::Main')->FilenameCleanUp(
+        Filename => $NewFileName,
+        Type     => 'Attachment',
+    );
 
     # return a string
     my $Content = '';

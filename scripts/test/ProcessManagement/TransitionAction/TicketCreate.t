@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -281,8 +281,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -327,8 +327,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -413,8 +413,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -460,8 +460,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -507,8 +507,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -555,8 +555,8 @@ my @Tests = (
                 InReplyTo      => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -597,8 +597,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -640,8 +640,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -682,8 +682,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -812,8 +812,8 @@ my @Tests = (
                 InReplyTo            => '<asdasdasd.12@example.com>',
                 References =>
                     '<asdasdasd.1@example.com> <asdasdasd.12@example.com>',
-                NoAgentNotify             => 0,
-                ForceNotificationToUserID => [ 1, 43, 56, ],
+                NoAgentNotify                   => 0,
+                ForceNotificationToUserID       => [ 1, 43, 56, ],
                 ExcludeNotificationToUserID     => [ 43, 56, ],
                 ExcludeMuteNotificationToUserID => [ 43, 56, ],
 
@@ -1162,6 +1162,29 @@ for my $Test (@Tests) {
                         "$ModuleName - Test:'$Test->{Name}' | Attribute: $Attribute value:"
                     );
                 }
+                elsif ( $OrigTest->{Config}->{Config}->{$Attribute} =~ m{<OTRS_TICKET_DynamicField_(\S+)>} ) {
+                    $Self->IsNot(
+                        $Test->{Config}->{Config}->{$Attribute},
+                        $OrigTest->{Config}->{Config}->{$Attribute},
+                        "$ModuleName - Test:'$Test->{Name}' | Attribute: $Attribute value: $OrigTest->{Config}->{Config}->{$Attribute} should been replaced"
+                    );
+                    my $DynamicFieldName = $1;
+
+                    my $DynamicFieldConfig = $DynamicFieldObject->DynamicFieldGet(
+                        Name => $DynamicFieldName,
+                    );
+
+                    my $ValueStrg = $DynamicFieldBackendObject->ReadableValueRender(
+                        DynamicFieldConfig => $DynamicFieldConfig,
+                        Value              => $Ticket{"DynamicField_$DynamicFieldName"},
+                    );
+
+                    $Self->Is(
+                        $Test->{Config}->{Config}->{$Attribute},
+                        $ValueStrg->{Value},
+                        "$ModuleName - Test:'$Test->{Name}' | Attribute: $Attribute value:"
+                    );
+                }
                 else {
                     $Self->IsNotDeeply(
                         $Test->{Config}->{Config}->{$Attribute},
@@ -1272,7 +1295,7 @@ for my $Test (@Tests) {
                                 || {}
                         };
                         for my $ObjectID ( sort keys %{ObjectsPerRelation} ) {
-                            $LinkLookup{$ObjectID} = $LinkType
+                            $LinkLookup{$ObjectID} = $LinkType;
                         }
                     }
                 }

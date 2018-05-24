@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -282,7 +282,7 @@ sub ValueGet {
     );
 
     if ( exists $CacheData{ $Param{FieldID} } ) {
-        return $CacheData{ $Param{FieldID} }
+        return $CacheData{ $Param{FieldID} };
     }
 
     return [];
@@ -463,7 +463,7 @@ sub ValueValidate {
         return if !$TimeStamp;
 
         # compare if the date is the same
-        return if !( $Value{ValueDateTime} eq $TimeStamp )
+        return if !( $Value{ValueDateTime} eq $TimeStamp );
     }
 
     # validate integer

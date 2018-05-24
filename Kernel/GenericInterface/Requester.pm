@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -315,7 +315,7 @@ sub Run {
 
     if ( !$FunctionResult->{Success} ) {
 
-        my $Summary = $FunctionResult->{ErrorMessage} // 'TransportObject returned an error, cancelling Request';
+        my $Summary     = $FunctionResult->{ErrorMessage} // 'TransportObject returned an error, cancelling Request';
         my $ErrorReturn = $Self->_HandleError(
             %HandleErrorData,
             DataInclude => \%DataInclude,
@@ -340,7 +340,7 @@ sub Run {
                 next RESPONSEKEY if $ResponseKey eq 'ErrorMessage';
 
                 # Add any other key from the invoker HandleResponse() in Data.
-                $ErrorReturn->{$ResponseKey} = $Response->{$ResponseKey}
+                $ErrorReturn->{$ResponseKey} = $Response->{$ResponseKey};
             }
         }
 
@@ -441,7 +441,7 @@ sub Run {
 
     if ( !$FunctionResult->{Success} ) {
 
-        my $Summary = $FunctionResult->{ErrorMessage} // 'InvokerObject returned an error, cancelling Request';
+        my $Summary     = $FunctionResult->{ErrorMessage} // 'InvokerObject returned an error, cancelling Request';
         my $ErrorReturn = $Self->_HandleError(
             %HandleErrorData,
             DataInclude => \%DataInclude,
@@ -460,7 +460,7 @@ sub Run {
                 next RESPONSEKEY if $ResponseKey eq 'ErrorMessage';
 
                 # Add any other key from the invoker HandleResponse() in Data.
-                $ErrorReturn->{$ResponseKey} = $FunctionResult->{$ResponseKey}
+                $ErrorReturn->{$ResponseKey} = $FunctionResult->{$ResponseKey};
             }
         }
 

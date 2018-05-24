@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -51,8 +51,11 @@ sub Run {
 
     return 1 if !$BounceMessage;
 
-    my $BounceData = Sisimai::Data->make( data => $BounceMessage )->[0];
-    my $MessageID = $BounceData->messageid();
+    my $BounceData = Sisimai::Data->make( data => $BounceMessage );
+
+    return 1 if !$BounceData || !@{$BounceData};
+
+    my $MessageID = $BounceData->[0]->messageid();
 
     return 1 if !$MessageID;
 

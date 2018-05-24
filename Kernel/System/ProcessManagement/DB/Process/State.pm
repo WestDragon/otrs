@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -19,7 +19,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::ProcessManagement::DB::Process::State.pm
+Kernel::System::ProcessManagement::DB::Process::State
 
 =head1 DESCRIPTION
 
@@ -136,7 +136,7 @@ sub StateLookup {
     # return state entity ID
     else {
         my %ReversedStateList = reverse %{ $Self->{StateList} };
-        $Result = $ReversedStateList{ $Param{Name} }
+        $Result = $ReversedStateList{ $Param{Name} };
     }
 
     return $Result;

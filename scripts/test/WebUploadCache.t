@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -78,6 +78,11 @@ for my $Module (qw(DB FS)) {
         );
 
         my $Filename = "UploadCache Test1äöüß.$File";
+
+        # In filesystem storage filenames will be cleaned up.
+        if ( $Module eq 'FS' ) {
+            $Filename = "UploadCache_Test1äöüß.$File";
+        }
 
         # Mac OS (HFS+) will store all filenames as NFD internally.
         if ( $^O eq 'darwin' && $Module eq 'FS' ) {
@@ -175,6 +180,11 @@ for my $Module (qw(DB FS)) {
         );
 
         my $Filename = "UploadCache Test1äöüß.$File";
+
+        # In filesystem storage filenames will be cleaned up.
+        if ( $Module eq 'FS' ) {
+            $Filename = "UploadCache_Test1äöüß.$File";
+        }
 
         # Mac OS (HFS+) will store all filenames as NFD internally.
         if ( $^O eq 'darwin' && $Module eq 'FS' ) {

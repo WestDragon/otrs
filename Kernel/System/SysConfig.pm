@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -10,6 +10,8 @@ package Kernel::System::SysConfig;
 
 use strict;
 use warnings;
+
+use Time::HiRes();
 use utf8;
 
 use Kernel::System::VariableCheck qw(:all);
@@ -331,27 +333,16 @@ sub SettingGet {
         }
 
         # Get real EffectiveValue - EffectiveValue from DB could be modified in the ZZZAbc.pm file.
-        my $LoadedEffectiveValue;
-
-        my @SettingStructure = split( '###', $Setting{Name} );
-        for my $Key (@SettingStructure) {
-            if ( !defined $LoadedEffectiveValue ) {
-
-                # first iteration
-                $LoadedEffectiveValue = $ConfigObject->Get($Key);
-            }
-            elsif ( ref $LoadedEffectiveValue eq 'HASH' ) {
-                $LoadedEffectiveValue = $LoadedEffectiveValue->{$Key};
-            }
-        }
+        my $LoadedEffectiveValue = $Self->GlobalEffectiveValueGet(
+            SettingName => $Setting{Name},
+        );
 
         my $IsOverridden = DataIsDifferent(
-            Data1 => $SettingDeployed{EffectiveValue},
-            Data2 => $LoadedEffectiveValue,
+            Data1 => $SettingDeployed{EffectiveValue} // {},
+            Data2 => $LoadedEffectiveValue //            {},
         );
 
         if ($IsOverridden) {
-
             $Setting{OverriddenFileName} = $Self->OverriddenFileNameGet(
                 SettingName    => $Setting{Name},
                 EffectiveValue => $Setting{EffectiveValue},
@@ -388,6 +379,9 @@ sub SettingGet {
             $Setting{Description},
         );
     }
+
+    # If setting is overridden in the perl file, using the "delete" statement, EffectiveValue is undef.
+    $Setting{EffectiveValue} //= '';
 
     # Return updated default.
     return %Setting;
@@ -559,6 +553,14 @@ sub SettingUpdate {
         );
 
         $UserModificationActive = undef;    # prevent setting this value
+
+        my %GlobalSetting = $Self->SettingGet(
+            Name            => $Param{Name},
+            OverriddenInXML => 1,
+            UserID          => 1,
+        );
+
+        $Setting{EffectiveValue} = $GlobalSetting{EffectiveValue};
     }
 
     # Add new modified setting (if there wasn't).
@@ -2126,7 +2128,9 @@ sub ConfigurationTranslatedGet {
 
     return %{$Cache} if ref $Cache eq 'HASH';
 
-    my @SettingList = $Self->ConfigurationList();
+    my @SettingList = $Self->ConfigurationList(
+        IncludeInvisible => 1,
+    );
 
     my %Result;
 
@@ -2536,15 +2540,18 @@ sub ConfigurationXML2DB {
 
         @{ $SettingsByInit{$InitValue} } = ( @{ $SettingsByInit{$InitValue} }, @ParsedSettings );
 
-        $CacheObject->Set(
-            Key   => $CacheKey,
-            Type  => $CacheType,
-            Value => {
-                Init     => $InitValue,
-                Settings => \@ParsedSettings,
-            },
-            TTL => 60 * 60 * 24 * 20,
-        );
+        # There might be an error parsing file. If we cache the result, error message will not be present.
+        if (@ParsedSettings) {
+            $CacheObject->Set(
+                Key   => $CacheKey,
+                Type  => $CacheType,
+                Value => {
+                    Init     => $InitValue,
+                    Settings => \@ParsedSettings,
+                },
+                TTL => 60 * 60 * 24 * 20,
+            );
+        }
     }
 
     # Combine everything together in the correct order.
@@ -2577,7 +2584,9 @@ sub ConfigurationXML2DB {
         return;
     }
 
-    my @SettingList = $Self->ConfigurationList();
+    my @SettingList = $Self->ConfigurationList(
+        IncludeInvisible => 1,
+    );
 
     my $StorableObject = $Kernel::OM->Get('Kernel::System::Storable');
 
@@ -2820,6 +2829,48 @@ sub ConfigurationNavigationTree {
         IsValid => $Param{IsValid},
     );
 
+    # For AgentPreference take into account which settings are Forbidden to update by user or disabled when counting
+    #   settings. See bug#13488 (https://bugs.otrs.org/show_bug.cgi?id=13488).
+    if ( $Param{Action} && $Param{Action} eq 'AgentPreferences' ) {
+
+        # Get List of all modified settings which are valid and forbidden to update by user.
+        my @ForbiddenSettings = $SysConfigDBObject->ModifiedSettingListGet(
+            %CategoryOptions,
+            UserModificationActive => 0,
+            IsValid                => 1,
+        );
+
+        # Get List of all modified settings which are invalid and allowed to update by user.
+        my @InvalidSettings = $SysConfigDBObject->ModifiedSettingListGet(
+            %CategoryOptions,
+            UserModificationActive => 1,
+            IsValid                => 0,
+        );
+
+        my @ModifiedSettings;
+        for my $Setting (@SettingsRaw) {
+            push @ModifiedSettings, $Setting
+                if !grep { $_->{Name} eq $Setting->{Name} } ( @ForbiddenSettings, @InvalidSettings );
+        }
+        @SettingsRaw = @ModifiedSettings;
+
+        # Add settings which by default are not UserModifiedActive and are changed, to the navigation list
+        #   in preference screen. Please see bug#13489 for more information.
+        @ModifiedSettings = $SysConfigDBObject->ModifiedSettingListGet(
+            %CategoryOptions,
+            UserModificationActive => 1,
+            IsValid                => 1,
+        );
+        for my $Setting (@ModifiedSettings) {
+            my %DefaultSetting = $SysConfigDBObject->DefaultSettingGet(
+                Name => $Setting->{Name},
+            );
+            if ( !grep { $_->{Name} eq $DefaultSetting{Name} } @SettingsRaw ) {
+                push @SettingsRaw, \%DefaultSetting;
+            }
+        }
+    }
+
     my @Settings;
 
     # Skip invisible settings from the navigation tree
@@ -2984,8 +3035,8 @@ sub ConfigurationListGet {
     my @ConfigurationList = $SysConfigDBObject->DefaultSettingListGet(
         Navigation               => $Param{Navigation},
         UserModificationPossible => $Param{TargetUserID} ? 1 : undef,
-        UserPreferencesGroup => $Param{UserPreferencesGroup} || undef,
-        IsInvisible => $Param{Invisible} ? undef : 0,
+        UserPreferencesGroup     => $Param{UserPreferencesGroup} || undef,
+        IsInvisible              => $Param{Invisible} ? undef : 0,
         %CategoryOptions,
     );
 
@@ -3118,7 +3169,7 @@ Returns:
 sub ConfigurationList {
     my ( $Self, %Param ) = @_;
 
-    return $Kernel::OM->Get('Kernel::System::SysConfig::DB')->DefaultSettingList();
+    return $Kernel::OM->Get('Kernel::System::SysConfig::DB')->DefaultSettingList(%Param);
 }
 
 =head2 ConfigurationInvalidList()
@@ -3214,7 +3265,7 @@ sub ConfigurationInvalidList {
 
 Write configuration items from database into a perl module file.
 
-    my $Success = $SysConfigObject->ConfigurationDeploy(
+    my %Result = $SysConfigObject->ConfigurationDeploy(
         Comments            => "Some comments",     # (optional)
         NoValidation        => 0,                   # (optional) 1 or 0, default 0, skips settings validation
         UserID              => 123,                 # if ExclusiveLockGUID is used, UserID must match the user that creates the lock
@@ -3229,12 +3280,25 @@ Write configuration items from database into a perl module file.
 
 Returns:
 
-    $Success = 1;    # or false in case of an error
+    %Result = (
+        Success => 1,           # Deployment successful.
+    );
+
+    or
+
+    %Result = (
+        Success => 0,           # Deployment failed.
+        Error   => 'Error...',  # Error message (if available)
+    );
 
 =cut
 
 sub ConfigurationDeploy {
     my ( $Self, %Param ) = @_;
+
+    my %Result = (
+        Success => 0,
+    );
 
     if ( !$Param{UserID} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
@@ -3242,15 +3306,17 @@ sub ConfigurationDeploy {
             Message  => "Need UserID!",
         );
 
-        return;
+        return %Result;
     }
     if ( !IsPositiveInteger( $Param{UserID} ) ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => "UserID is invalid!",
         );
-        return;
+        return %Result;
     }
+
+    my $LanguageObject = $Kernel::OM->Get('Kernel::Language');
 
     if ( $Param{AllSettings} ) {
         $Param{NotDirty}      = 0;
@@ -3390,11 +3456,29 @@ sub ConfigurationDeploy {
 
         next SETTING if $EffectiveValueCheck{Success};
 
+        # Check if setting is overridden, in this case allow deployemnt.
+        my $OverriddenFileName = $Self->OverriddenFileNameGet(
+            SettingName    => $CurrentSetting->{Name},
+            UserID         => $Param{UserID},
+            EffectiveValue => $CurrentSetting->{EffectiveValue},
+        );
+
+        if ($OverriddenFileName) {
+
+            # Setting in the DB has invalid value, but it's overridden in perl file.
+
+            # Note: This check can't be moved to the SettingEffectiveValueCheck(), since it works with Cache,
+            # so if perl file is updated, changes won't be reflected.
+            next SETTING;
+        }
+
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => "Setting $CurrentSetting->{Name} Effective value is not correct: $EffectiveValueCheck{Error}",
         );
-        return;
+
+        $Result{Error} = $LanguageObject->Translate( "Invalid setting: %s", $CurrentSetting->{Name} );
+        return %Result;
     }
 
     # Set cache for SettingEffectiveValueCheck().
@@ -3415,7 +3499,8 @@ sub ConfigurationDeploy {
                 Message  => "Could not combine settings values into a perl hash",
             );
 
-            return;
+            $Result{Error} = $LanguageObject->Translate("Could not combine settings values into a perl hash.");
+            return %Result;
         }
     }
 
@@ -3444,7 +3529,11 @@ sub ConfigurationDeploy {
                 Message  => "Can not lock the deployment for UserID '$Param{UserID}'!",
             );
 
-            return;
+            $Result{Error} = $LanguageObject->Translate(
+                "Can not lock the deployment for UserID '%s'!",
+                $Param{UserID},
+            );
+            return %Result;
         }
 
         # Get system time stamp (string formated).
@@ -3494,7 +3583,7 @@ sub ConfigurationDeploy {
 
         # Make sure to return on errors after we unlock the deployment.
         if ( !$HandleSettingsSuccess || !$DeploymentID ) {
-            return;
+            return %Result;
         }
 
         # If setting is updated on global level, check all user specific settings, maybe it's needed
@@ -3541,10 +3630,12 @@ sub ConfigurationDeploy {
         mkdir $BasePath;
     }
 
-    return $Self->_FileWriteAtomic(
+    $Result{Success} = $Self->_FileWriteAtomic(
         Filename => "$Self->{Home}/$TargetPath",
         Content  => \$EffectiveValueStrg,
     );
+
+    return %Result;
 }
 
 =head2 ConfigurationDeployList()
@@ -3615,6 +3706,23 @@ sub ConfigurationDeploySync {
     my $CurrentDeploymentID = $Kernel::OM->Get('Kernel::Config')->Get('CurrentDeploymentID') || 0;
 
     my $SysConfigDBObject = $Kernel::OM->Get('Kernel::System::SysConfig::DB');
+
+    # Check that all deployments are valid, but wait if there are deployments in add procedure
+    my $CleanupSuccess;
+    TRY:
+    for my $Try ( 1 .. 40 ) {
+        $CleanupSuccess = $SysConfigDBObject->DeploymentListCleanup();
+        last TRY if !$CleanupSuccess;
+        last TRY if $CleanupSuccess == 1;
+        sleep .5;
+    }
+    if ( $CleanupSuccess != 1 ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "There are invalid deployments in the database that could not be removed!",
+        );
+        return;
+    }
 
     my %LastDeployment = $SysConfigDBObject->DeploymentGetLast();
 
@@ -3691,7 +3799,7 @@ sub ConfigurationDeployCleanup {
 
 Wrapper of Kernel::System::SysConfig::DB::DeploymentGet() - Get deployment information.
 
-    my %Deployment = $SysConfigDBObject->ConfigurationDeployGet(
+    my %Deployment = $SysConfigObject->ConfigurationDeployGet(
         DeploymentID => 123,
     );
 
@@ -4251,7 +4359,9 @@ sub ConfigurationSearch {
 
     my $Search = lc $Param{Search};
 
-    my %Settings = $Self->ConfigurationTranslatedGet();
+    my %Settings = $Self->ConfigurationTranslatedGet(
+        IncludeInvisible => $Param{IncludeInvisible},
+    );
 
     my %Result;
 
@@ -4608,14 +4718,14 @@ sub SettingsSet {
     }
 
     # Deploy successfully updated settings.
-    my $DeploymentSuccess = $Self->ConfigurationDeploy(
-        Comments => $Param{Comments} || '',
-        UserID   => $Param{UserID},
-        Force    => 1,
-        DirtySettings => \@DeploySettings
+    my %DeploymentResult = $Self->ConfigurationDeploy(
+        Comments      => $Param{Comments} || '',
+        UserID        => $Param{UserID},
+        Force         => 1,
+        DirtySettings => \@DeploySettings,
     );
 
-    return $DeploymentSuccess;
+    return $DeploymentResult{Success};
 }
 
 =head2 OverriddenFileNameGet()
@@ -4625,7 +4735,7 @@ Returns file name which overrides setting Effective value.
     my $FileName = $SysConfigObject->OverriddenFileNameGet(
         SettingName    => 'Setting::Name',  # (required)
         UserID         => 1,                # (required)
-        EffectiveValue => '3',              # (optional)
+        EffectiveValue => '3',              # (optional) EffectiveValue stored in the DB.
     );
 
 Returns:
@@ -4650,19 +4760,10 @@ sub OverriddenFileNameGet {
 
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-    my $LoadedEffectiveValue;
-
+    my $LoadedEffectiveValue = $Self->GlobalEffectiveValueGet(
+        SettingName => $Param{SettingName},
+    );
     my @SettingStructure = split( '###', $Param{SettingName} );
-    for my $Key (@SettingStructure) {
-        if ( !defined $LoadedEffectiveValue ) {
-
-            # first iteration
-            $LoadedEffectiveValue = $ConfigObject->Get($Key);
-        }
-        elsif ( ref $LoadedEffectiveValue eq 'HASH' ) {
-            $LoadedEffectiveValue = $LoadedEffectiveValue->{$Key};
-        }
-    }
 
     my $EffectiveValue = $Param{EffectiveValue};
 
@@ -4672,8 +4773,8 @@ sub OverriddenFileNameGet {
     $EffectiveValue =~ s/\<OTRS_CONFIG_(.+?)\>/$ConfigObject->{$1}/g;
 
     my $IsOverridden = DataIsDifferent(
-        Data1 => $EffectiveValue,
-        Data2 => $LoadedEffectiveValue,
+        Data1 => $EffectiveValue //       {},
+        Data2 => $LoadedEffectiveValue // {},
     );
 
     # This setting is not Overridden in perl file, return.
@@ -4684,11 +4785,15 @@ sub OverriddenFileNameGet {
     my $Home      = $ConfigObject->Get('Home');
     my $Directory = "$Home/Kernel/Config/Files";
 
+    my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
+
     # Get all .pm files that start with 'ZZZ'.
-    my @FilesInDirectory = $Kernel::OM->Get('Kernel::System::Main')->DirectoryRead(
+    my @FilesInDirectory = $MainObject->DirectoryRead(
         Directory => $Directory,
         Filter    => 'ZZZ*.pm',
     );
+
+    my @Modules;
 
     FILE:
     for my $File (@FilesInDirectory) {
@@ -4700,38 +4805,92 @@ sub OverriddenFileNameGet {
         # Skip the file that was regulary deployed.
         next FILE if $FileName eq 'ZZZAAuto';
 
-        # Check if this file overrides our setting.
+        push @Modules, {
+            "Kernel::Config::Files::$FileName" => $File,
+        };
+    }
+
+    # Check Config.pm as well.
+    push @Modules, {
+        'Kernel::Config' => 'Kernel/Config.pm',
+    };
+
+    # Read EffectiveValues from DB (they are stored in ZZZAAuto file).
+    my $Loaded = $MainObject->Require(
+        'Kernel::Config::Files::ZZZAAuto',
+    );
+
+    # If module couldn't be loaded, there is no user specific setting.
+    return if !$Loaded;
+
+    my $ConfigFromDB = {};
+    Kernel::Config::Files::ZZZAAuto->Load($ConfigFromDB);
+
+    for my $Module (@Modules) {
+        my $ModuleName = ( keys %{$Module} )[0];
+
+        # Check if this module overrides our setting.
         my $SettingFound = $Self->_IsOverriddenInModule(
-            Module           => "Kernel::Config::Files::$FileName",
+            Module           => $ModuleName,
             SettingStructure => \@SettingStructure,
+            ConfigFromDB     => $ConfigFromDB,
         );
 
         if ($SettingFound) {
-            $Result = $File;
+            $Result = $Module->{$ModuleName};
         }
     }
 
     if ($Result) {
         $Result =~ s/^$Home\/?(.*)$/$1/;
     }
-    else {
 
-        $Result = 'Kernel/Config.pm';
+    return $Result;
+}
 
-        # Check if there is user specific value for this setting.
-        my $SettingFound = $Self->_IsOverriddenInModule(
-            Module           => "Kernel::Config::Files::User::$Param{UserID}",
-            SettingStructure => \@SettingStructure,
+=head2 GlobalEffectiveValueGet()
+
+Returns global effective value for provided setting name.
+
+    my $EffectiveValue = $SysConfigObject->GlobalEffectiveValueGet(
+        SettingName    => 'Setting::Name',  # (required)
+    );
+
+Returns:
+
+    $EffectiveValue = 'test';
+
+=cut
+
+sub GlobalEffectiveValueGet {
+    my ( $Self, %Param ) = @_;
+
+    # Check needed stuff.
+    if ( !$Param{SettingName} ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need SettingName!",
         );
+        return;
+    }
 
-        if ($SettingFound) {
+    my $GlobalConfigObject = Kernel::Config->new();
 
-            # There is user specific value, allow admin modification.
-            $Result = 0;
+    my $LoadedEffectiveValue;
+
+    my @SettingStructure = split( '###', $Param{SettingName} );
+    for my $Key (@SettingStructure) {
+        if ( !defined $LoadedEffectiveValue ) {
+
+            # first iteration
+            $LoadedEffectiveValue = $GlobalConfigObject->Get($Key);
+        }
+        elsif ( ref $LoadedEffectiveValue eq 'HASH' ) {
+            $LoadedEffectiveValue = $LoadedEffectiveValue->{$Key};
         }
     }
 
-    return $Result;
+    return $LoadedEffectiveValue;
 }
 
 =head1 PRIVATE INTERFACE
@@ -4752,7 +4911,7 @@ sub _IsOverriddenInModule {
     my ( $Self, %Param ) = @_;
 
     # Check needed stuff.
-    for my $Needed (qw(Module SettingStructure)) {
+    for my $Needed (qw(Module SettingStructure ConfigFromDB)) {
         if ( !$Param{$Needed} ) {
             $Kernel::OM->Get('Kernel::System::Log')->Log(
                 Priority => 'error',
@@ -4770,12 +4929,9 @@ sub _IsOverriddenInModule {
         return;
     }
 
-    my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
-
     my $Result;
 
-    # Check if the setting applies to the current user only.
-    my $Loaded = $MainObject->Require(
+    my $Loaded = $Kernel::OM->Get('Kernel::System::Main')->Require(
         $Param{Module},
         Silent => 1,
     );
@@ -4783,16 +4939,30 @@ sub _IsOverriddenInModule {
     # If module couldn't be loaded, there is no user specific setting.
     return $Result if !$Loaded;
 
-    # Try to load setting value.
-    my $OverriddenSettings = {};
-    $Param{Module}->Load($OverriddenSettings);
+    # Get effective value from the DB.
+    my $OverriddenSettings = $Kernel::OM->Get('Kernel::System::Storable')->Clone(
+        Data => $Param{ConfigFromDB},
+    );
+
+    if ( $Param{Module} eq 'Kernel::Config' ) {
+        bless( $OverriddenSettings, 'Kernel::Config' );
+        $OverriddenSettings->Load();
+    }
+    else {
+        # Apply changes from this file only.
+        $Param{Module}->Load($OverriddenSettings);
+    }
+
+    # OverridenSettings contains EffectiveValues from DB, overridden by provided Module,
+    # so we can compare if setting was changed in this file.
 
     # Loaded hash is empty, return.
-    return $Result if !IsHashRefWithData($OverriddenSettings);
+    return $Result if !IsHashRefWithData($OverriddenSettings) && ref $OverriddenSettings ne 'Kernel::Config';
 
     # Check if this file overrides our setting.
     my $SettingFound = 0;
     my $LoadedEffectiveValue;
+    my $ConfigFromDB;
 
     KEY:
     for my $Key ( @{ $Param{SettingStructure} } ) {
@@ -4800,7 +4970,20 @@ sub _IsOverriddenInModule {
 
             # First iteration.
             $LoadedEffectiveValue = $OverriddenSettings->{$Key};
-            if ( defined $LoadedEffectiveValue ) {
+            $ConfigFromDB         = $Param{ConfigFromDB}->{$Key};
+
+            if ( defined $ConfigFromDB && !defined $LoadedEffectiveValue ) {
+
+                # Setting is overridden using the "delete" statement.
+                $SettingFound = 1;
+            }
+            elsif (
+                DataIsDifferent(
+                    Data1 => $LoadedEffectiveValue // {},
+                    Data2 => $ConfigFromDB //         {},
+                )
+                )
+            {
                 $SettingFound = 1;
             }
             else {
@@ -4809,12 +4992,31 @@ sub _IsOverriddenInModule {
         }
         elsif ( ref $LoadedEffectiveValue eq 'HASH' ) {
             $LoadedEffectiveValue = $LoadedEffectiveValue->{$Key};
-            if ( defined $LoadedEffectiveValue ) {
+            $ConfigFromDB         = $ConfigFromDB->{$Key};
+
+            if ( defined $ConfigFromDB && !defined $LoadedEffectiveValue ) {
+
+                # Setting is overridden using the "delete" statement.
+                $SettingFound = 1;
+            }
+            elsif (
+                DataIsDifferent(
+                    Data1 => $LoadedEffectiveValue // {},
+                    Data2 => $ConfigFromDB //         {},
+                )
+                )
+            {
                 $SettingFound = 1;
             }
             else {
                 $SettingFound = 0;
             }
+        }
+        else {
+            $Kernel::OM->Get('Kernel::System::Log')->Log(
+                Priority => 'error',
+                Message  => "Unhandled exception!"
+            );
         }
     }
 
@@ -6081,7 +6283,9 @@ sub _DefaultSettingAddBulk {
     }
 
     # Get again all settings.
-    @SettingList = $Self->ConfigurationList();
+    @SettingList = $Self->ConfigurationList(
+        IncludeInvisible => 1,
+    );
 
     $Success = $SysConfigDBObject->DefaultSettingVersionBulkAdd(
         Settings    => \%Settings,

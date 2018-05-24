@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -53,6 +53,8 @@ my $SettingsAdd = sub {
         my $SettingName = "Test$Counter$RandomID";
 
         my $XMLContentRaw = << "EOF";
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_config version="2.0" init="Framework">
     <Setting Name="$SettingName" Required="1" Valid="1">
         <Description Translatable="1">Test.</Description>
         <Navigation>Core::Test</Navigation>
@@ -60,6 +62,7 @@ my $SettingsAdd = sub {
             <Item ValueType="String" ValueRegex=".*">Test</Item>
         </Value>
     </Setting>
+</otrs_config>
 EOF
 
         my @DefaultSettingAddParams = $SysConfigXMLObject->SettingListParse(
@@ -229,7 +232,7 @@ for my $Test (@Tests) {
         $Self->IsDeeply(
             scalar @List,
             0,
-            "$Test->{Name} ConfigurationList() returns no settings",
+            "$Test->{Name} ConfigurationListGet() returns no settings",
         );
         next TEST;
     }
@@ -237,7 +240,7 @@ for my $Test (@Tests) {
     $Self->Is(
         scalar @List,
         $Test->{NumberOfSettings},
-        "$Test->{Name}  ConfigurationList() cardinality",
+        "$Test->{Name}  ConfigurationListGet() cardinality",
     );
 
     my @ExpectedResult;
@@ -276,7 +279,7 @@ for my $Test (@Tests) {
     $Self->IsDeeply(
         \@List,
         \@ExpectedResult,
-        "$Test->{Name} ConfigurationList()",
+        "$Test->{Name} ConfigurationListGet()",
     );
 }
 continue {

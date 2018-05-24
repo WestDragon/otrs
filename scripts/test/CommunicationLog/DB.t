@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -250,6 +250,18 @@ my $TestObjectLogEntryList = sub {
     $Self->True(
         $Result && scalar @{$Result} == 1,
         'List communication logging for object type "Connection" and key "Key-0"',
+    );
+
+    # Delete the communication.
+    $Result = $CommunicationLogDBObj->CommunicationDelete(
+        CommunicationID => $CommunicationLogObject->CommunicationIDGet(),
+    );
+    $Self->True(
+        $Result,
+        sprintf(
+            "Communication '%s' deleted",
+            $CommunicationLogObject->CommunicationIDGet(),
+        ),
     );
 
     return;

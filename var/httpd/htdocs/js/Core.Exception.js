@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -135,11 +135,8 @@ Core.Exception = (function (TargetNS) {
                 return false;
             }
 
-            if (ErrorType === 'ConnectionError') {
+            if (ErrorType === 'ConnectionError' || ErrorType === 'CommunicationError') {
                 Core.App.Publish('Core.App.AjaxError');
-            }
-            else if(ErrorType === 'CommunicationError') {
-                Core.App.Publish('Core.App.AjaxCommunicationError');
             }
             else {
                 TargetNS.ShowError(ErrorObject.GetMessage(), ErrorType);

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -63,7 +63,7 @@ sub new {
             $MainObject->Die("Can't load plugin module $GenericModule! $@");
         }
 
-        $Self->{Plugins}->{$PluginKey}->{PluginName} = $PluginConfig->{$PluginKey}->{Name} // $GenericModule;
+        $Self->{Plugins}->{$PluginKey}->{PluginName}   = $PluginConfig->{$PluginKey}->{Name} // $GenericModule;
         $Self->{Plugins}->{$PluginKey}->{PluginModule} = $GenericModule->new( %{$Self} );
 
         my $PluginURL = $PluginConfig->{$PluginKey}->{URL};

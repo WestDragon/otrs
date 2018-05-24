@@ -3,11 +3,12 @@
 # Adam Sadovsky <sadovsky.adam@gmail.com>, 2015
 # Daniel Pogač <dano.pogac@gmail.com>, 2015
 # Jaroslav Abaffy <jabaffy@unitedclassifieds.sk>, 2016
+# RXD RXD <rxd1978@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: OTRS\n"
-"POT-Creation-Date: 2017-12-11 23:26+0000\n"
-"PO-Revision-Date: 2017-12-11 23:28+0000\n"
+"POT-Creation-Date: 2018-04-23 17:42+0000\n"
+"PO-Revision-Date: 2018-04-23 17:46+0000\n"
 "Last-Translator: Carlos Rodríguez <carlos.rodriguez@otrs.com>\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/otrs/OTRS/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +23,7 @@ msgstr "Správa ACL"
 
 #. Template: AdminACL
 msgid "Actions"
-msgstr "Akcia"
+msgstr "Akcie"
 
 #. Template: AdminACL
 msgid "Create New ACL"
@@ -30,7 +31,7 @@ msgstr "Vytvoriť nové ACL"
 
 #. Template: AdminACL
 msgid "Deploy ACLs"
-msgstr ""
+msgstr "Nasadenie ACLs"
 
 #. Template: AdminACL
 msgid "Export ACLs"
@@ -42,17 +43,17 @@ msgstr "Filter pre ACL"
 
 #. Template: AdminACL
 msgid "Just start typing to filter..."
-msgstr ""
+msgstr "Začni písať pre filtrovanie..."
 
 #. Template: AdminACL
 msgid "Configuration Import"
-msgstr ""
+msgstr "Import konfigurácie"
 
 #. Template: AdminACL
 msgid ""
 "Here you can upload a configuration file to import ACLs to your system. The "
 "file needs to be in .yml format as exported by the ACL editor module."
-msgstr ""
+msgstr "Tu môžete nahrať konfiguračný súbor pre import ACLs do systému. Súbor musí byť v .yml fomáte, exportovaný z ACL editor modulu."
 
 #. Template: AdminACL
 msgid "This field is required."
@@ -60,7 +61,7 @@ msgstr "Toto pole je povinné."
 
 #. Template: AdminACL
 msgid "Overwrite existing ACLs?"
-msgstr ""
+msgstr "Prepísať existujúce ACLs?"
 
 #. Template: AdminACL
 msgid "Upload ACL configuration"
@@ -78,7 +79,7 @@ msgstr "Popis "
 msgid ""
 "To create a new ACL you can either import ACLs which were exported from "
 "another system or create a complete new one."
-msgstr ""
+msgstr "Na vytvorenie nových ACL môžete buď importovať ACLs exportované z iného systému alebo vytvoriť úplne nové."
 
 #. Template: AdminACL
 msgid ""
@@ -108,7 +109,7 @@ msgstr "poznámka"
 
 #. Template: AdminACL
 msgid "Validity"
-msgstr ""
+msgstr "platnosť"
 
 #. Template: AdminACL
 msgid "Export"
@@ -124,7 +125,7 @@ msgstr "Neboli nájdene žiadne dáta."
 
 #. Template: AdminACL
 msgid "No matches found."
-msgstr "Nebola nájdená zhoda"
+msgstr "Nebola nájdená zhoda."
 
 #. Template: AdminACLEdit
 msgid "Edit ACL %s"
@@ -132,7 +133,7 @@ msgstr "Upraviť ACL %"
 
 #. Template: AdminACLEdit
 msgid "Edit ACL"
-msgstr ""
+msgstr "Upraviť ACL"
 
 #. Template: AdminACLEdit
 msgid "Go to overview"
@@ -148,14 +149,14 @@ msgstr "Zmazať chybný ACL"
 
 #. Template: AdminACLEdit
 msgid "Match settings"
-msgstr ""
+msgstr "Nastavenie zhody"
 
 #. Template: AdminACLEdit
 msgid ""
 "Set up matching criteria for this ACL. Use 'Properties' to match the current"
 " screen or 'PropertiesDatabase' to match attributes of the current ticket "
 "that are in the database."
-msgstr ""
+msgstr "Nastav zodpovedajúce kritériá pre toto ACL. Použi \"vlastnosti\" pre zhodu s momentálnou obrazovkou alebo \"vlastnosti databázy\" pre zhodu atribútov aktuálneho tiketu, ktorý je v databáze."
 
 #. Template: AdminACLEdit
 msgid "Change settings"
@@ -165,11 +166,11 @@ msgstr "Zmena nastavenia"
 msgid ""
 "Set up what you want to change if the criteria match. Keep in mind that "
 "'Possible' is a white list, 'PossibleNot' a black list."
-msgstr ""
+msgstr "Nastav, čo chceš zmeniť, ak kritériá pasujú. Mysli na to, že \"možné\" je \"white list\" a \"nemožné\" je \"black list\"."
 
 #. Template: AdminACLEdit
 msgid "Check the official"
-msgstr ""
+msgstr "Skontoroluj oficiálne"
 
 #. Template: AdminACLEdit
 msgid "documentation"
@@ -177,11 +178,11 @@ msgstr "dokumentácia"
 
 #. Template: AdminACLEdit
 msgid "Show or hide the content"
-msgstr ""
+msgstr "Zobraziť alebo skryť obsah"
 
 #. Template: AdminACLEdit
 msgid "Edit ACL Information"
-msgstr ""
+msgstr "Edituj ACL informáciu"
 
 #. Template: AdminACLEdit
 msgid "Name"
@@ -189,15 +190,15 @@ msgstr "Meno"
 
 #. Template: AdminACLEdit
 msgid "Stop after match"
-msgstr ""
+msgstr "Zastav po zhode"
 
 #. Template: AdminACLEdit
 msgid "Edit ACL Structure"
-msgstr ""
+msgstr "Edituj ACL štruktúru"
 
 #. Template: AdminACLEdit
 msgid "Save ACL"
-msgstr ""
+msgstr "Ulož ACL"
 
 #. Template: AdminACLEdit
 msgid "Save"
@@ -223,86 +224,86 @@ msgstr "Určite chcete zmazať toto ACL?"
 msgid ""
 "Create a new ACL by submitting the form data. After creating the ACL, you "
 "will be able to add configuration items in edit mode."
-msgstr ""
+msgstr "Vytvor nové ACL zaslaním dát z formuláru. Po vytvorení ACL, budete mať možnosť pridať configuračnú položku v editovacom móde."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar Management"
-msgstr ""
+msgstr "Menežment kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Add Calendar"
-msgstr ""
+msgstr "Pridaj kalendár"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Edit Calendar"
-msgstr ""
+msgstr "Edituj kalendár"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Go back"
-msgstr ""
+msgstr "Choď späť"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar Overview"
-msgstr ""
+msgstr "Celkový prehľad kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Add new Calendar"
-msgstr ""
+msgstr "Pridaj nový kalendár"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Import Appointments"
-msgstr ""
+msgstr "Import schôdzok"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar Import"
-msgstr ""
+msgstr "Import kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid ""
 "Here you can upload a configuration file to import a calendar to your "
 "system. The file needs to be in .yml format as exported by calendar "
 "management module."
-msgstr ""
+msgstr "Tu môžete nahrať konfiguračný súbor pre import kalendára do systému. Súbor musí byť v .yml fomáte, exportovaný z modulu menežmentu kalendára."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Overwrite existing entities"
-msgstr ""
+msgstr "Prepíš existujúce entity"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Upload calendar configuration"
-msgstr ""
+msgstr "Nahraj konfiguráciu kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Import Calendar"
-msgstr ""
+msgstr "Import kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Filter for calendars"
-msgstr ""
+msgstr "Filter pre kalendáre"
 
 #. Template: AdminAppointmentCalendarManage
 msgid ""
 "Depending on the group field, the system will allow users the access to the "
 "calendar according to their permission level."
-msgstr ""
+msgstr "V závislosti od skupinového poľa, systém umožní užívateľovi prístup do kalendára v závislosti od úrovne oprávnenia."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Read only: users can see and export all appointments in the calendar."
-msgstr ""
+msgstr "Iba na čítanie: užívateľ môže vidieť a exportovať všetky schôdzky v kalendári."
 
 #. Template: AdminAppointmentCalendarManage
 msgid ""
 "Move into: users can modify appointments in the calendar, but without "
 "changing the calendar selection."
-msgstr ""
+msgstr "Presuň do: užívateľ môže upraviť schôdzky v kalendári, ale bez zmeny výberu kalendára."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Create: users can create and delete appointments in the calendar."
-msgstr ""
+msgstr "Vytvor: užívatelia môžu vytvoriť a vymazať schôdzky v kalendári."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Read/write: users can manage the calendar itself."
-msgstr ""
+msgstr "Čítať/Zapisovať: užívatelia môžu menežovať kalendár."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Group"
@@ -318,23 +319,23 @@ msgstr "Vytvorený"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Download"
-msgstr ""
+msgstr "Stiahnuť"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Export calendar"
-msgstr ""
+msgstr "Export kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Download calendar"
-msgstr ""
+msgstr "Stiahni kalendár"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Copy public calendar URL"
-msgstr ""
+msgstr "Kopíruj verejnú URL kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar"
@@ -342,31 +343,31 @@ msgstr "Kalendár"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar name"
-msgstr ""
+msgstr "Názov kalendára"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Calendar with same name already exists."
-msgstr ""
+msgstr "Kalendár s rovnakým názvom už existuje."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Color"
-msgstr ""
+msgstr "Farba"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Permission group"
-msgstr ""
+msgstr "Skupina oprávnení"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Ticket Appointments"
-msgstr ""
+msgstr "Ticketové schôdzky"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Rule"
-msgstr ""
+msgstr "Pravidlo"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Remove this entry"
-msgstr ""
+msgstr "Odstrániť túto položku"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Remove"
@@ -374,11 +375,11 @@ msgstr "Vymazať"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Start date"
-msgstr ""
+msgstr "Počiatočný dátum"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "End date"
-msgstr ""
+msgstr "Konečný dátum"
 
 #. Template: AdminAppointmentCalendarManage
 msgid ""
@@ -392,15 +393,15 @@ msgstr "Fronty"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Please select a valid queue."
-msgstr ""
+msgstr "Prosím zvoľte platnú frontu."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Search attributes"
-msgstr ""
+msgstr "Atribúty vyhľadávania"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Add entry"
-msgstr ""
+msgstr "Pridať položku"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Add"
@@ -410,29 +411,29 @@ msgstr "Pridať "
 msgid ""
 "Define rules for creating automatic appointments in this calendar based on "
 "ticket data."
-msgstr ""
+msgstr "Definuj pravidlá pre automatické vytvorenie schôdzky v tomto kalendári na základe dát z tiketov."
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Add Rule"
-msgstr ""
+msgstr "Pridaj pravidlo"
 
 #. Template: AdminAppointmentCalendarManage
 msgid "Submit"
-msgstr "Predloženie"
+msgstr "Odoslať"
 
 #. Template: AdminAppointmentImport
 msgid "Appointment Import"
-msgstr ""
+msgstr "Import schôdzky"
 
 #. Template: AdminAppointmentImport
 msgid "Uploaded file must be in valid iCal format (.ics)."
-msgstr ""
+msgstr "Nahrávaný súbor musí byť v platnom iCAL formáte (.ics)."
 
 #. Template: AdminAppointmentImport
 msgid ""
 "If desired Calendar is not listed here, please make sure that you have at "
 "least 'create' permissions."
-msgstr ""
+msgstr "Ak požadovaný kalendár tu nie je uvedený, uistite sa, že máte minimálne oprávnenie na jeho vytvorenie."
 
 #. Template: AdminAppointmentImport
 msgid "Upload"
@@ -440,68 +441,68 @@ msgstr "Nahrať"
 
 #. Template: AdminAppointmentImport
 msgid "Update existing appointments?"
-msgstr ""
+msgstr "Aktualizovať existujúcu schôdzku?"
 
 #. Template: AdminAppointmentImport
 msgid ""
 "All existing appointments in the calendar with same UniqueID will be "
 "overwritten."
-msgstr ""
+msgstr "Všetky existujúce schôdzky v kalendári s rovnakým UniqueID budú prepísané."
 
 #. Template: AdminAppointmentImport
 msgid "Upload calendar"
-msgstr ""
+msgstr "Nahraj kalendár"
 
 #. Template: AdminAppointmentImport
 msgid "Import appointments"
-msgstr ""
+msgstr "Import schôdzok"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Appointment Notification Management"
-msgstr ""
+msgstr "Menežment notifikácií schôdzok"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Add Notification"
-msgstr ""
+msgstr "Pridaj notifikáciu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Edit Notification"
-msgstr ""
+msgstr "Edituj notifikáciu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Add notification"
-msgstr ""
+msgstr "Pridaj notifikáciu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Export Notifications"
-msgstr ""
+msgstr "Export notifikácií"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Filter for Notifications"
-msgstr ""
+msgstr "Filter pre notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Filter for notifications"
-msgstr ""
+msgstr "Filter pre notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
 "Here you can upload a configuration file to import appointment notifications"
 " to your system. The file needs to be in .yml format as exported by the "
 "appointment notification module."
-msgstr ""
+msgstr "Tu môžete nahrať konfiguračný súbor na import notifikácií schôdzok do Vášho systému. Súbor musí byť v .yml formáte exportovaný z modulu notifikácií schôdzok."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Overwrite existing notifications?"
-msgstr ""
+msgstr "Prepísať existujúce notifikácie?"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Upload Notification configuration"
-msgstr ""
+msgstr "Nahrať konfiguráciu notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Import Notification configuration"
-msgstr ""
+msgstr "Import konfigurácie notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "List"
@@ -513,15 +514,15 @@ msgstr "Zmazať"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Delete this notification"
-msgstr ""
+msgstr "Zmazať túto notifikáciu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Show in agent preferences"
-msgstr ""
+msgstr "Zobraz v nastaveniach agenta"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Agent preferences tooltip"
-msgstr ""
+msgstr "Nástrojové tipy vlastností agenta "
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
@@ -550,7 +551,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Appointment Filter"
-msgstr ""
+msgstr "Filter schôdzok"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Type"
@@ -566,31 +567,31 @@ msgstr "Poloha"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Resource"
-msgstr ""
+msgstr "Zdroj"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Recipients"
-msgstr ""
+msgstr "Príjemcovia"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Send to"
-msgstr ""
+msgstr "Komu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Send to these agents"
-msgstr ""
+msgstr "Poslať týmto agentom"
 
 #. Template: AdminAppointmentNotificationEvent
-msgid "Send to all group members"
+msgid "Send to all group members (agents only)"
 msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Send to all role members"
-msgstr ""
+msgstr "Poslať všetkým členom role"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Send on out of office"
@@ -598,11 +599,11 @@ msgstr "Pošli Neprítomnosť v kancelárii"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Also send if the user is currently out of office."
-msgstr ""
+msgstr "Pošli aj v prípade, že užívateľ je mimo kanceláriu."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Once per day"
-msgstr ""
+msgstr "Jedenkrát za deň"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
@@ -612,7 +613,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Notification Methods"
-msgstr ""
+msgstr "Spôsoby notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
@@ -622,7 +623,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Enable this notification method"
-msgstr ""
+msgstr "Aktivuj túto notifikačnú metódu"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Transport"
@@ -630,11 +631,11 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "At least one method is needed per notification."
-msgstr ""
+msgstr "Na notifikovanie je potrebná aspoň jedna metóda."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Active by default in agent preferences"
-msgstr ""
+msgstr "Štandartne aktívny v nastaveniach agenta"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
@@ -645,11 +646,11 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "This feature is currently not available."
-msgstr ""
+msgstr "Táto funkcia momentálne nie je k dispozícii."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Upgrade to %s"
-msgstr ""
+msgstr "Aktualizované na %s"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Please activate this transport in order to use it."
@@ -657,15 +658,15 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "No data found"
-msgstr ""
+msgstr "Neboli nájdené žiadne dáta"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "No notification method found."
-msgstr ""
+msgstr "Nebola nájdená notifikačná metóda."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Notification Text"
-msgstr ""
+msgstr "Text notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid ""
@@ -675,7 +676,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Remove Notification Language"
-msgstr ""
+msgstr "Vymaž jazyk notifikácie"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Subject"
@@ -687,15 +688,15 @@ msgstr "Text"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Message body"
-msgstr ""
+msgstr "Telo správy"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Add new notification language"
-msgstr ""
+msgstr "Pridaj nový notifikačný jazyk"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Save Changes"
-msgstr ""
+msgstr "Ulož zmeny"
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Tag Reference"
@@ -703,7 +704,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "Notifications are sent to an agent."
-msgstr ""
+msgstr "Notifikácie boli poslané agentovi."
 
 #. Template: AdminAppointmentNotificationEvent
 msgid "You can use the following tags"
@@ -743,7 +744,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid "Article visible for customer"
-msgstr ""
+msgstr "Článok viditeľný pre zákazníka"
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid ""
@@ -753,7 +754,7 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid "Email template"
-msgstr ""
+msgstr "Vzor emailu"
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid ""
@@ -762,11 +763,11 @@ msgstr ""
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid "Enable email security"
-msgstr ""
+msgstr "Povoliť zabezpečenie e-mailu"
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid "Email security level"
-msgstr ""
+msgstr "Úroveň zabezpečenia e-mailu"
 
 #. Template: AdminAppointmentNotificationEventTransportEmailSettings
 msgid "If signing key/certificate is missing"
@@ -790,11 +791,11 @@ msgstr "Upraviť prílohu"
 
 #. Template: AdminAttachment
 msgid "Filter for Attachments"
-msgstr ""
+msgstr "Filter pre prílohy"
 
 #. Template: AdminAttachment
 msgid "Filter for attachments"
-msgstr ""
+msgstr "Filter pre prílohy"
 
 #. Template: AdminAttachment
 msgid "Filename"
@@ -810,7 +811,7 @@ msgstr "Vymazať túto prílohu"
 
 #. Template: AdminAttachment
 msgid "Do you really want to delete this attachment?"
-msgstr ""
+msgstr "Chceš skutočne vymazať túto prílohu?"
 
 #. Template: AdminAttachment
 msgid "Attachment"
@@ -870,7 +871,7 @@ msgstr ""
 
 #. Template: AdminAutoResponse
 msgid "Ticket owner options"
-msgstr ""
+msgstr "Možnosti vlastníka tiketu"
 
 #. Template: AdminAutoResponse
 msgid "Ticket responsible options"
@@ -991,11 +992,11 @@ msgstr ""
 
 #. Template: AdminCommunicationLog
 msgid "Communication Log"
-msgstr ""
+msgstr "Komunikačný log"
 
 #. Template: AdminCommunicationLog
 msgid "Time range"
-msgstr ""
+msgstr "Časové rozpätie"
 
 #. Template: AdminCommunicationLog
 msgid "Show only communication logs created in specific time range."
@@ -2822,10 +2823,6 @@ msgid ""
 msgstr ""
 
 #. Template: AdminGenericInterfaceInvokerDefault
-msgid "Please provide a unique name for this web service invoker."
-msgstr ""
-
-#. Template: AdminGenericInterfaceInvokerDefault
 msgid "Invoker backend"
 msgstr ""
 
@@ -3222,16 +3219,6 @@ msgid ""
 msgstr ""
 
 #. Template: AdminGenericInterfaceOperationDefault
-msgid "Mapping for incoming request data"
-msgstr ""
-
-#. Template: AdminGenericInterfaceOperationDefault
-msgid ""
-"The request data will be processed by this mapping, to transform it to the "
-"kind of data OTRS expects."
-msgstr ""
-
-#. Template: AdminGenericInterfaceOperationDefault
 msgid "Operation backend"
 msgstr ""
 
@@ -3239,6 +3226,16 @@ msgstr ""
 msgid ""
 "This OTRS operation backend module will be called internally to process the "
 "request, generating data for the response."
+msgstr ""
+
+#. Template: AdminGenericInterfaceOperationDefault
+msgid "Mapping for incoming request data"
+msgstr ""
+
+#. Template: AdminGenericInterfaceOperationDefault
+msgid ""
+"The request data will be processed by this mapping, to transform it to the "
+"kind of data OTRS expects."
 msgstr ""
 
 #. Template: AdminGenericInterfaceOperationDefault
@@ -3256,9 +3253,7 @@ msgid "Include Ticket Data"
 msgstr ""
 
 #. Template: AdminGenericInterfaceOperationDefault
-msgid ""
-"Include ticket data by response. Only available for TicketCreate and "
-"TicketUpdate operations."
+msgid "Include ticket data in response."
 msgstr ""
 
 #. Template: AdminGenericInterfaceTransportHTTPREST
@@ -6362,7 +6357,7 @@ msgid "Session Management"
 msgstr ""
 
 #. Template: AdminSession
-msgid "Detail Session View for"
+msgid "Detail Session View for %s (%s)"
 msgstr ""
 
 #. Template: AdminSession
@@ -6414,7 +6409,7 @@ msgid "Kill"
 msgstr ""
 
 #. Template: AdminSession
-msgid "Detail View for SessionID"
+msgid "Detail View for SessionID: %s - %s"
 msgstr ""
 
 #. Template: AdminSignature
@@ -6481,6 +6476,12 @@ msgstr ""
 
 #. Template: AdminState
 msgid "State type"
+msgstr ""
+
+#. Template: AdminState
+msgid ""
+"It's not possible to invalidate this entry because there is no other merge "
+"states in system!"
 msgstr ""
 
 #. Template: AdminState
@@ -6821,6 +6822,10 @@ msgstr ""
 
 #. Template: AdminSystemConfigurationView
 msgid "View single Setting: %s"
+msgstr ""
+
+#. Template: AdminSystemConfigurationView
+msgid "Go back to Deployment Details"
 msgstr ""
 
 #. Template: AdminSystemMaintenance
@@ -7781,8 +7786,7 @@ msgid "Preferences"
 msgstr "Nastavenia"
 
 #. Template: AgentPreferences
-msgid ""
-"Warning! You're currently not editing your own preferences, but those of %s."
+msgid "Please note: you're currently editing the preferences of %s."
 msgstr ""
 
 #. Template: AgentPreferences
@@ -8346,6 +8350,10 @@ msgstr ""
 
 #. Template: AgentTicketHistory
 msgid "Expand/collapse all"
+msgstr ""
+
+#. Template: AgentTicketHistory
+msgid "CreateTime"
 msgstr ""
 
 #. Template: AgentTicketHistory
@@ -8926,17 +8934,9 @@ msgstr ""
 
 #. Template: CustomerFooterJS
 msgid ""
-"Your browser was not able to communicate with OTRS properly, there seems to "
-"be something wrong with your network connection. You could either try "
-"reloading this page manually or wait until your browser has re-established "
-"the connection on its own."
-msgstr ""
-
-#. Template: CustomerFooterJS
-msgid ""
-"There was an error in communication with the server. Server might be "
-"experiencing some temporary problems, please reload this page to check if "
-"they have been resolved."
+"%s detected possible network issues. You could either try reloading this "
+"page manually or wait until your browser has re-established the connection "
+"on its own."
 msgstr ""
 
 #. Template: CustomerFooterJS
@@ -9227,6 +9227,10 @@ msgstr "Pošli report o chybách"
 #. Template: Error
 msgid "Expand"
 msgstr "Rozšíriť"
+
+#. Template: AttachmentList
+msgid "Click to delete this attachment."
+msgstr ""
 
 #. Template: DraftButtons
 msgid "Update draft"
@@ -10181,6 +10185,10 @@ msgid "Loading, please wait..."
 msgstr ""
 
 #. JS Template: UploadContainer
+msgid "Click to select a file for upload."
+msgstr ""
+
+#. JS Template: UploadContainer
 msgid "Click to select files or just drop them here."
 msgstr ""
 
@@ -10569,7 +10577,7 @@ msgid "Auto Response added!"
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminCommunicationLog.pm
-msgid "Invalid CommunicationID "
+msgid "Invalid CommunicationID!"
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminCommunicationLog.pm
@@ -10963,47 +10971,47 @@ msgstr ""
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "0 seconds"
-msgstr ""
+msgstr "0 sekúnd"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "15 seconds"
-msgstr ""
+msgstr "15 sekúnd"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "30 seconds"
-msgstr ""
+msgstr "30 sekúnd"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "45 seconds"
-msgstr ""
+msgstr "45 sekúnd"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "1 minute"
-msgstr ""
+msgstr "1 minuta"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minuty"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minuty"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "4 minutes"
-msgstr ""
+msgstr "4 minuty"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minút"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
@@ -11018,93 +11026,77 @@ msgstr " 15 minút"
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minút"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "1 hour"
-msgstr ""
+msgstr "1 hodina"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "2 hours"
-msgstr ""
+msgstr "2 hodiny"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "3 hours"
-msgstr ""
+msgstr "3 hodiny"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "4 hours"
-msgstr ""
+msgstr "4 hodiny"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "5 hours"
-msgstr ""
+msgstr "5 hodín"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "6 hours"
-msgstr ""
+msgstr "6 hodín"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "12 hours"
-msgstr ""
+msgstr "12 hodín"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "18 hours"
-msgstr ""
+msgstr "18 hodín"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "1 day"
-msgstr ""
+msgstr "1 deň"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "2 days"
-msgstr ""
+msgstr "2 dni"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "3 days"
-msgstr ""
+msgstr "3 dni"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "4 days"
-msgstr ""
+msgstr "4 dni"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "6 days"
-msgstr ""
+msgstr "6 dní"
 
 #. Perl Module:
 #. Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
 msgid "1 week"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
-msgid "Need InvokerType"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
-msgid "InvokerType %s is not registered"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
-msgid "Need InvokerType!"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
-msgid "Need Invoker"
-msgstr ""
+msgstr "1 týždeň"
 
 #. Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
 msgid "Could not determine config for invoker %s"
@@ -11184,22 +11176,6 @@ msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminGenericInterfaceMappingXSLT.pm
 msgid "Outgoing response data before mapping"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
-msgid "Need OperationType"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
-msgid "Operation %s is not registered"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
-msgid "OperationType %s is not registered"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
-msgid "Need Operation"
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
@@ -11291,6 +11267,12 @@ msgstr "Skupina aktualizovaná!"
 #. Perl Module: Kernel/Modules/AdminMailAccount.pm
 msgid "Mail account added!"
 msgstr "Mailové konto pridané!"
+
+#. Perl Module: Kernel/Modules/AdminMailAccount.pm
+msgid ""
+"Email account fetch already fetched by another process. Please try again "
+"later!"
+msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminMailAccount.pm
 msgid "Dispatching by email To: field."
@@ -11446,6 +11428,10 @@ msgid "Installed"
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminPackageManager.pm
+msgid "Not correctly deployed"
+msgstr ""
+
+#. Perl Module: Kernel/Modules/AdminPackageManager.pm
 msgid "Package updated correctly"
 msgstr ""
 
@@ -11455,6 +11441,10 @@ msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminPackageManager.pm
 msgid "Dependency installed correctly"
+msgstr ""
+
+#. Perl Module: Kernel/Modules/AdminPackageManager.pm
+msgid "The package needs to be reinstalled"
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminPackageManager.pm
@@ -12325,10 +12315,6 @@ msgstr ""
 
 #. Perl Module: Kernel/Modules/AgentPreferences.pm
 msgid "Setting not found!"
-msgstr ""
-
-#. Perl Module: Kernel/Modules/AgentPreferences.pm
-msgid "This feature is part of the %s Please contact us at %s for an upgrade."
 msgstr ""
 
 #. Perl Module: Kernel/Modules/AgentPreferences.pm
@@ -13390,6 +13376,10 @@ msgid ""
 "please have a look at %s."
 msgstr ""
 
+#. Perl Module: Kernel/Modules/Installer.pm
+msgid "Wrong database collation (%s is %s, but it needs to be utf8)."
+msgstr ""
+
 #. Perl Module: Kernel/Modules/PublicCalendar.pm
 msgid "No %s!"
 msgstr ""
@@ -13867,8 +13857,9 @@ msgstr ""
 
 #. Perl Module:
 #. Kernel/Output/HTML/Notification/CustomerSystemMaintenanceCheck.pm
-msgid "A system maintenance period will start at: "
-msgstr "Plánovaná systémová údržba začína o:"
+msgid ""
+"A system maintenance period will start at: %s and is expected to stop at: %s"
+msgstr ""
 
 #. Perl Module: Kernel/Output/HTML/Notification/DaemonCheck.pm
 msgid "OTRS Daemon is not running."
@@ -14714,6 +14705,19 @@ msgid "The setting innodb_log_file_size must be at least 256 MB."
 msgstr ""
 
 #. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/mysql/InvalidDefaultValues.pm
+msgid "Invalid Default Values"
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/mysql/InvalidDefaultValues.pm
+msgid ""
+"Tables with invalid default values were found. In order to fix it "
+"automatically, please run: bin/otrs.Console.pl Maint::Database::Check "
+"--repair"
+msgstr ""
+
+#. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/Database/mysql/MaxAllowedPacket.pm
 msgid "Maximum Query Size"
 msgstr ""
@@ -14782,6 +14786,18 @@ msgid "NLS_DATE_FORMAT Setting SQL Check"
 msgstr ""
 
 #. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/oracle/PrimaryKeySequencesAndTriggers.pm
+msgid "Primary Key Sequences and Triggers"
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/oracle/PrimaryKeySequencesAndTriggers.pm
+msgid ""
+"The following sequences and/or triggers with possible wrong names have been "
+"found. Please rename them manually."
+msgstr ""
+
+#. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/Database/postgresql/Charset.pm
 msgid "Setting client_encoding needs to be UNICODE or UTF8."
 msgstr ""
@@ -14799,6 +14815,18 @@ msgstr ""
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/Database/postgresql/DateStyle.pm
 msgid "Setting DateStyle needs to be ISO."
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/postgresql/PrimaryKeySequences.pm
+msgid "Primary Key Sequences"
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/Database/postgresql/PrimaryKeySequences.pm
+msgid ""
+"The following sequences with possible wrong names have been found. Please "
+"rename them manually."
 msgstr ""
 
 #. Perl Module:
@@ -15034,6 +15062,11 @@ msgid "Tickets Per Month (avg)"
 msgstr ""
 
 #. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/OTRS/DatabaseRecords.pm
+msgid "Open Tickets"
+msgstr ""
+
+#. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/DefaultSOAPUser.pm
 msgid "Default SOAP Username And Password"
 msgstr ""
@@ -15105,6 +15138,20 @@ msgstr ""
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
 msgid "No legacy configuration backup files found."
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
+msgid ""
+"Legacy configuration backup files found in %s, but they might still be "
+"required by some packages."
+msgstr ""
+
+#. Perl Module:
+#. Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
+msgid ""
+"Legacy configuration backup files are no longer needed for the installed "
+"packages, please remove them from %s."
 msgstr ""
 
 #. Perl Module:
@@ -15197,11 +15244,6 @@ msgstr ""
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/Ticket/InvalidUsersWithLockedTickets.pm
 msgid "There are invalid users with locked tickets."
-msgstr ""
-
-#. Perl Module:
-#. Kernel/System/SupportDataCollector/Plugin/OTRS/Ticket/OpenTickets.pm
-msgid "Open Tickets"
 msgstr ""
 
 #. Perl Module:
@@ -15457,6 +15499,18 @@ msgstr ""
 
 #. Perl Module: Kernel/System/SysConfig.pm
 msgid "Missing key %s!"
+msgstr ""
+
+#. Perl Module: Kernel/System/SysConfig.pm
+msgid "Invalid setting: %s"
+msgstr ""
+
+#. Perl Module: Kernel/System/SysConfig.pm
+msgid "Could not combine settings values into a perl hash."
+msgstr ""
+
+#. Perl Module: Kernel/System/SysConfig.pm
+msgid "Can not lock the deployment for UserID '%s'!"
 msgstr ""
 
 #. Perl Module: Kernel/System/SysConfig.pm
@@ -16661,11 +16715,6 @@ msgid "Please turn off Compatibility Mode in Internet Explorer!"
 msgstr "Prosím vypnite Compatibility Mode v Internet Exploreri"
 
 #. JS File: Core.Agent
-msgid ""
-"This feature is part of the %s.  Please contact us at %s for an upgrade."
-msgstr "Táto funkcionalita je častou %s. Prosím kontaktujte nás ak chcete vyššiu verziu %s"
-
-#. JS File: Core.Agent
 msgid "Find out more"
 msgstr ""
 
@@ -16678,15 +16727,11 @@ msgid "Error: Browser Check failed!"
 msgstr ""
 
 #. JS File: Core.App
-msgid "Connection error"
-msgstr ""
-
-#. JS File: Core.App
 msgid "Reload page"
 msgstr ""
 
 #. JS File: Core.App
-msgid "Communication error"
+msgid "Reload page (%ss)"
 msgstr ""
 
 #. JS File: Core.Debug
@@ -17200,6 +17245,10 @@ msgid "Admin area navigation for the agent interface."
 msgstr ""
 
 #. SysConfig
+msgid "Admin modules overview."
+msgstr ""
+
+#. SysConfig
 msgid "Admin."
 msgstr ""
 
@@ -17225,6 +17274,10 @@ msgstr ""
 
 #. SysConfig
 msgid "Agent Preferences."
+msgstr ""
+
+#. SysConfig
+msgid "Agent Statistics."
 msgstr ""
 
 #. SysConfig
@@ -18066,7 +18119,7 @@ msgid "Communication Log GUI"
 msgstr ""
 
 #. SysConfig
-msgid "Communication log limit per page for CommunicationLog Overview"
+msgid "Communication log limit per page for Communication Log Overview."
 msgstr ""
 
 #. SysConfig
@@ -18324,6 +18377,10 @@ msgid "Custom RSS Feed"
 msgstr ""
 
 #. SysConfig
+msgid "Custom RSS feed."
+msgstr ""
+
+#. SysConfig
 msgid ""
 "Custom text for the page shown to customers that have no tickets yet (if you"
 " need those text translated add them to a custom translation module)."
@@ -18346,6 +18403,10 @@ msgid "Customer Information Center Search."
 msgstr ""
 
 #. SysConfig
+msgid "Customer Information Center search."
+msgstr ""
+
+#. SysConfig
 msgid "Customer Information Center."
 msgstr ""
 
@@ -18363,6 +18424,10 @@ msgstr ""
 
 #. SysConfig
 msgid "Customer User Information Center Search."
+msgstr ""
+
+#. SysConfig
+msgid "Customer User Information Center search."
 msgstr ""
 
 #. SysConfig
@@ -18443,6 +18508,10 @@ msgstr ""
 
 #. SysConfig
 msgid "Danish"
+msgstr ""
+
+#. SysConfig
+msgid "Dashboard overview."
 msgstr ""
 
 #. SysConfig
@@ -19005,6 +19074,15 @@ msgstr ""
 
 #. SysConfig
 msgid ""
+"Defines if the communication between this system and OTRS Group servers that"
+" provide cloud services is possible. If set to 'Disable cloud services', "
+"some functionality will be lost such as system registration, support data "
+"sending, upgrading to and use of OTRS Business Solution™, OTRS Verify™, OTRS"
+" News and product News dashboard widgets, among others."
+msgstr ""
+
+#. SysConfig
+msgid ""
 "Defines if the enhanced mode should be used (enables use of table, replace, "
 "subscript, superscript, paste from word, etc.) in customer interface."
 msgstr ""
@@ -19259,7 +19337,21 @@ msgid ""
 "if the password needs to contain at least 2 letter characters (set to 0 or "
 "1). 'PasswordNeedDigit' controls the need of at least 1 digit (set to 0 or 1"
 " to control). 'PasswordMaxLoginFailed' allows to set an agent to invalid-"
-"temporarily if max failed logins reached."
+"temporarily if max failed logins reached. Please note: setting 'Active' to 0"
+" will only prevent agents from editing settings of this group in their "
+"personal preferences, but will still allow administrators to edit the "
+"settings of another user's behalf. Use 'PreferenceGroup' to control in which"
+" area these settings should be shown in the user interface."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"Defines the config parameters of this item, to be shown in the preferences "
+"view. Please note: setting 'Active' to 0 will only prevent agents from "
+"editing settings of this group in their personal preferences, but will still"
+" allow administrators to edit the settings of another user's behalf. Use "
+"'PreferenceGroup' to control in which area these settings should be shown in"
+" the user interface."
 msgstr ""
 
 #. SysConfig
@@ -20733,7 +20825,12 @@ msgid "Defines the username to access the SOAP handle (bin/cgi-bin/rpc.pl)."
 msgstr ""
 
 #. SysConfig
-msgid "Defines the users avatar."
+msgid ""
+"Defines the users avatar. Please note: setting 'Active' to 0 will only "
+"prevent agents from editing settings of this group in their personal "
+"preferences, but will still allow administrators to edit the settings of "
+"another user's behalf. Use 'PreferenceGroup' to control in which area these "
+"settings should be shown in the user interface."
 msgstr ""
 
 #. SysConfig
@@ -20974,18 +21071,13 @@ msgid ""
 msgstr ""
 
 #. SysConfig
-msgid ""
-"Disables sending reminder notifications to the responsible agent of a ticket"
-" (Ticket::Responsible needs to be enabled)."
+msgid "Disable cloud services"
 msgstr ""
 
 #. SysConfig
 msgid ""
-"Disables the communication between this system and OTRS Group servers that "
-"provides cloud services. If enabled, some functionality will be lost such as"
-" system registration, support data sending, upgrading to and use of OTRS "
-"Business Solution™, OTRS Verify™, OTRS News and product News dashboard "
-"widgets, among others."
+"Disables sending reminder notifications to the responsible agent of a ticket"
+" (Ticket::Responsible needs to be enabled)."
 msgstr ""
 
 #. SysConfig
@@ -21085,7 +21177,7 @@ msgid ""
 msgstr ""
 
 #. SysConfig
-msgid "Dynamic fields limit per page for Dynamic Fields Overview"
+msgid "Dynamic fields limit per page for Dynamic Fields Overview."
 msgstr ""
 
 #. SysConfig
@@ -21831,7 +21923,11 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Gives end users the possibility to override the separator character for CSV "
-"files, defined in the translation files."
+"files, defined in the translation files. Please note: setting 'Active' to 0 "
+"will only prevent agents from editing settings of this group in their "
+"personal preferences, but will still allow administrators to edit the "
+"settings of another user's behalf. Use 'PreferenceGroup' to control in which"
+" area these settings should be shown in the user interface."
 msgstr ""
 
 #. SysConfig
@@ -22391,6 +22487,10 @@ msgid "Large"
 msgstr "Veľký"
 
 #. SysConfig
+msgid "Last Screen Overview"
+msgstr ""
+
+#. SysConfig
 msgid "Last customer subject"
 msgstr ""
 
@@ -22592,6 +22692,10 @@ msgstr ""
 #. SysConfig
 msgid "Locked ticket."
 msgstr "História: zamkni"
+
+#. SysConfig
+msgid "Logged in users."
+msgstr ""
 
 #. SysConfig
 msgid "Logged-In Users"
@@ -23002,6 +23106,10 @@ msgid "News about OTRS releases!"
 msgstr "Novinky o OTRS vydaniach!"
 
 #. SysConfig
+msgid "News about OTRS."
+msgstr ""
+
+#. SysConfig
 msgid ""
 "Next possible ticket states after adding a phone note in the ticket phone "
 "inbound screen of the agent interface."
@@ -23143,6 +23251,10 @@ msgid "Out Of Office Time"
 msgstr "Čas \"Neprítomnosť v kancelárii\""
 
 #. SysConfig
+msgid "Out of Office users."
+msgstr ""
+
+#. SysConfig
 msgid ""
 "Overloads (redefines) existing functions in Kernel::System::Ticket. Used to "
 "easily add customizations."
@@ -23154,6 +23266,10 @@ msgstr ""
 
 #. SysConfig
 msgid "Overview Refresh Time"
+msgstr ""
+
+#. SysConfig
+msgid "Overview of all Tickets per assigned Queue."
 msgstr ""
 
 #. SysConfig
@@ -23195,29 +23311,51 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Parameters for the CreateNextMask object in the preference view of the agent"
-" interface."
+" interface. Please note: setting 'Active' to 0 will only prevent agents from"
+" editing settings of this group in their personal preferences, but will "
+"still allow administrators to edit the settings of another user's behalf. "
+"Use 'PreferenceGroup' to control in which area these settings should be "
+"shown in the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the CustomQueue object in the preference view of the agent "
-"interface."
+"interface. Please note: setting 'Active' to 0 will only prevent agents from "
+"editing settings of this group in their personal preferences, but will still"
+" allow administrators to edit the settings of another user's behalf. Use "
+"'PreferenceGroup' to control in which area these settings should be shown in"
+" the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the CustomService object in the preference view of the agent "
-"interface."
+"interface. Please note: setting 'Active' to 0 will only prevent agents from "
+"editing settings of this group in their personal preferences, but will still"
+" allow administrators to edit the settings of another user's behalf. Use "
+"'PreferenceGroup' to control in which area these settings should be shown in"
+" the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the RefreshTime object in the preference view of the agent "
-"interface."
+"interface. Please note: setting 'Active' to 0 will only prevent agents from "
+"editing settings of this group in their personal preferences, but will still"
+" allow administrators to edit the settings of another user's behalf. Use "
+"'PreferenceGroup' to control in which area these settings should be shown in"
+" the user interface."
 msgstr ""
 
 #. SysConfig
-msgid "Parameters for the column filters of the small ticket overview."
+msgid ""
+"Parameters for the column filters of the small ticket overview. Please note:"
+" setting 'Active' to 0 will only prevent agents from editing settings of "
+"this group in their personal preferences, but will still allow "
+"administrators to edit the settings of another user's behalf. Use "
+"'PreferenceGroup' to control in which area these settings should be shown in"
+" the user interface."
 msgstr ""
 
 #. SysConfig
@@ -23490,25 +23628,41 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Parameters for the pages (in which the dynamic fields are shown) of the "
-"dynamic fields overview."
+"dynamic fields overview. Please note: setting 'Active' to 0 will only "
+"prevent agents from editing settings of this group in their personal "
+"preferences, but will still allow administrators to edit the settings of "
+"another user's behalf. Use 'PreferenceGroup' to control in which area these "
+"settings should be shown in the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the pages (in which the tickets are shown) of the medium "
-"ticket overview."
+"ticket overview. Please note: setting 'Active' to 0 will only prevent agents"
+" from editing settings of this group in their personal preferences, but will"
+" still allow administrators to edit the settings of another user's behalf. "
+"Use 'PreferenceGroup' to control in which area these settings should be "
+"shown in the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the pages (in which the tickets are shown) of the small "
-"ticket overview."
+"ticket overview. Please note: setting 'Active' to 0 will only prevent agents"
+" from editing settings of this group in their personal preferences, but will"
+" still allow administrators to edit the settings of another user's behalf. "
+"Use 'PreferenceGroup' to control in which area these settings should be "
+"shown in the user interface."
 msgstr ""
 
 #. SysConfig
 msgid ""
 "Parameters for the pages (in which the tickets are shown) of the ticket "
-"preview overview."
+"preview overview. Please note: setting 'Active' to 0 will only prevent "
+"agents from editing settings of this group in their personal preferences, "
+"but will still allow administrators to edit the settings of another user's "
+"behalf. Use 'PreferenceGroup' to control in which area these settings should"
+" be shown in the user interface."
 msgstr ""
 
 #. SysConfig
@@ -24119,7 +24273,7 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Sends the notifications which are configured in the admin interface under "
-"\"Notfication (Event)\"."
+"\"Ticket Notifications\"."
 msgstr ""
 
 #. SysConfig
@@ -24850,6 +25004,10 @@ msgid "Show article as rich text even if rich text writing is disabled."
 msgstr ""
 
 #. SysConfig
+msgid "Show command line output."
+msgstr ""
+
+#. SysConfig
 msgid "Show queues even when only locked tickets are in."
 msgstr ""
 
@@ -25280,7 +25438,13 @@ msgid ""
 msgstr ""
 
 #. SysConfig
-msgid "Shows all the articles of the ticket (expanded) in the zoom view."
+msgid ""
+"Shows all the articles of the ticket (expanded) in the agent zoom view."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"Shows all the articles of the ticket (expanded) in the customer zoom view."
 msgstr ""
 
 #. SysConfig
@@ -25749,6 +25913,14 @@ msgid "States"
 msgstr "Stavy"
 
 #. SysConfig
+msgid "Statistic Reports overview."
+msgstr ""
+
+#. SysConfig
+msgid "Statistics overview."
+msgstr ""
+
+#. SysConfig
 msgid "Status view"
 msgstr ""
 
@@ -25916,7 +26088,8 @@ msgstr ""
 #. SysConfig
 msgid ""
 "The logo shown on top of the login box of the agent interface. The URL to "
-"the image must be relative URL to the skin image directory."
+"the image can be a relative URL to the skin image directory, or a full URL "
+"to a remote web server."
 msgstr ""
 
 #. SysConfig
@@ -26155,16 +26328,16 @@ msgid "Ticket event module that triggers the escalation stop events."
 msgstr ""
 
 #. SysConfig
-msgid "Ticket limit per page for Ticket Overview \"Medium\""
-msgstr "Počet tiketov na stranu pre pohlad Ticket overview \"Medium\""
+msgid "Ticket limit per page for Ticket Overview \"Medium\"."
+msgstr ""
 
 #. SysConfig
-msgid "Ticket limit per page for Ticket Overview \"Preview\""
-msgstr "Počet tiketov na stranu pre pohľad \"Preview\""
+msgid "Ticket limit per page for Ticket Overview \"Preview\"."
+msgstr ""
 
 #. SysConfig
-msgid "Ticket limit per page for Ticket Overview \"Small\""
-msgstr "Počet tiketov na stranu pre pohlad Ticket overview \"Small\""
+msgid "Ticket limit per page for Ticket Overview \"Small\"."
+msgstr ""
 
 #. SysConfig
 msgid "Ticket notifications"
@@ -26228,11 +26401,21 @@ msgid ""
 msgstr ""
 
 #. SysConfig
-msgid "Transport selection for appointment notifications."
+msgid ""
+"Transport selection for appointment notifications. Please note: setting "
+"'Active' to 0 will only prevent agents from editing settings of this group "
+"in their personal preferences, but will still allow administrators to edit "
+"the settings of another user's behalf. Use 'PreferenceGroup' to control in "
+"which area these settings should be shown in the user interface."
 msgstr ""
 
 #. SysConfig
-msgid "Transport selection for ticket notifications."
+msgid ""
+"Transport selection for ticket notifications. Please note: setting 'Active' "
+"to 0 will only prevent agents from editing settings of this group in their "
+"personal preferences, but will still allow administrators to edit the "
+"settings of another user's behalf. Use 'PreferenceGroup' to control in which"
+" area these settings should be shown in the user interface."
 msgstr ""
 
 #. SysConfig

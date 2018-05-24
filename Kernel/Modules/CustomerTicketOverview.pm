@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -615,7 +615,8 @@ sub ShowTicketStatus {
     my %LastNonInternalArticle;
 
     my @ArticleList = $ArticleObject->ArticleList(
-        TicketID => $Param{TicketID},
+        TicketID             => $Param{TicketID},
+        IsVisibleForCustomer => 1,
     );
 
     my $CommunicationChannelPattern = qr{Internal|Chat}xms;

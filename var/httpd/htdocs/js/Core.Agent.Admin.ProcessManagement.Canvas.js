@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -708,7 +708,11 @@ Core.Agent.Admin.ProcessManagement.Canvas = (function (TargetNS) {
                 source: 'StartEvent',
                 target: EntityID,
                 anchor: 'Continuous',
-                endpoint: 'Blank',
+                endpoints: [
+                    "Blank",
+                    [ 'Dot', { radius: 7, hoverClass: 'EndpointHover' } ]
+                ],
+                endpointStyle: { fillStyle: '#000' },
                 detachable: true,
                 reattach: true
             });

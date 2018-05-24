@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -129,7 +129,7 @@ $Self->True(
 my @TicketData;
 for my $Item ( 0 .. 1 ) {
     my $TicketID = $TicketObject->TicketCreate(
-        Title => ( $Item == 0 ) ? $SLAs[0]->{SLAID} : 'test',
+        Title         => ( $Item == 0 ) ? $SLAs[0]->{SLAID} : 'test',
         QueueID       => 1,
         Lock          => 'unlock',
         Priority      => '3 normal',

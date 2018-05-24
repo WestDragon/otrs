@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -19,12 +19,13 @@ our @ObjectDependencies = (
     'Kernel::System::Priority',
     'Kernel::System::Queue',
     'Kernel::System::State',
+    'Kernel::System::SysConfig',
     'Kernel::System::Type',
 );
 
 =head1 NAME
 
-scripts::DBUpdateTo6::MigrateArticleData -  Create entries in new article table for OmniChannel base infrastructure.
+scripts::DBUpdateTo6::SysConfigCheck -  Check for correct SysConfig entities in settings.
 
 =cut
 
@@ -89,6 +90,17 @@ sub Run {
         }
     }
 
+    # Check if there are invalid settings.
+    my @InvalidSettings = $Kernel::OM->Get('Kernel::System::SysConfig')->ConfigurationInvalidList();
+
+    for my $SettingName (@InvalidSettings) {
+
+        # Add it to the list only if setting is not there already.
+        if ( !grep { $_ eq $SettingName } @InconsistentSettings ) {
+            push @InconsistentSettings, $SettingName;
+        }
+    }
+
     if (@InconsistentSettings) {
         print "\n\n    Inconsistent SysConfig settings detected, please update them manually:\n";
         print "\n    " . join "\n    ", @InconsistentSettings;
@@ -134,7 +146,7 @@ sub _EffectiveValueGet {
         }
     }
 
-    return $OldEffectiveValue
+    return $OldEffectiveValue;
 }
 
 sub _EntitySettingsGet {

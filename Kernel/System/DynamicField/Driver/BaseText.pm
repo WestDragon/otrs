@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -577,18 +577,18 @@ sub TemplateValueTypeGet {
     if ( $Param{FieldType} eq 'Edit' ) {
         return {
             $FieldName => $EditValueType,
-            }
+        };
     }
     elsif ( $Param{FieldType} eq 'Search' ) {
         return {
             'Search_' . $FieldName => $SearchValueType,
-            }
+        };
     }
     else {
         return {
             $FieldName             => $EditValueType,
             'Search_' . $FieldName => $SearchValueType,
-            }
+        };
     }
 }
 

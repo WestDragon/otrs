@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -18,6 +18,12 @@ $Kernel::OM->ObjectParamAdd(
     },
 );
 my $HelperObject = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+
+# Unregister all notification modules.
+$HelperObject->ConfigSettingChange(
+    Valid => 0,
+    Key   => 'Frontend::NotifyModule',
+);
 
 # Add test user.
 my $TestUserLogin = $HelperObject->TestUserCreate(

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -81,7 +81,7 @@ EOF
     $Self->{'DB::ShellConnect'} = 'SET standard_conforming_strings TO ON';
 
     # init sql setting on db connect
-    $Self->{'DB::Connect'} = "SET standard_conforming_strings TO ON;\n SET NAMES 'utf8';";
+    $Self->{'DB::Connect'} = "SET standard_conforming_strings TO ON;\n SET datestyle TO 'iso';\n SET NAMES 'utf8';";
     if($Kernel::OM->Get('Kernel::Config')->Get('DB::PG::Schema')){
         $Self->{'DB::Connect'} .= "\n SET search_path TO " . $Kernel::OM->Get('Kernel::Config')->Get('DB::PG::Schema') . ";";
     }

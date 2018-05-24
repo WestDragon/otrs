@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -245,20 +245,20 @@ sub SystemConfigurationUpdate {
         );
     }
 
-    my $Success = $SysConfigObject->ConfigurationDeploy(
+    my %DeploymentResult = $SysConfigObject->ConfigurationDeploy(
         Comments      => "Deployed by '$Param{ProcessName}' process setup",
         UserID        => 1,
         Force         => 1,
         DirtySettings => \@UpdatedSettings,
     );
-    if ( !$Success ) {
+    if ( !$DeploymentResult{Success} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => "System was unable to deploy settings needed for '$Param{ProcessName}' process!"
         );
     }
 
-    return $Success;
+    return $DeploymentResult{Success};
 
 }
 

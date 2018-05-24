@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1108,7 +1108,7 @@ sub _HandleLog {
         $ComputableLog{$Tag} = {
             Log => $LogDictionary->{$Tag} || $Line,
             MessageLong => $Line || $LogDictionary->{$Tag},
-            }
+        };
     }
 
     # get clean log lines
@@ -1179,11 +1179,27 @@ sub _ParseGPGKeyList {
             }
 
             # Status is good, but let's make sure the key isn't expired.
-            my $CurSysDTObject     = $Kernel::OM->Create('Kernel::System::DateTime');
+            my $CurSysDTObject = $Kernel::OM->Create('Kernel::System::DateTime');
+
+            # GnuPG 2.0 (and higher) Key Expires date is in epoch format. Appropriately modify DateTime params.
+            my %DateTimeParams = (
+                String => $Key{Expires} . ' 23:59:59',
+            );
+
+            if (
+                IsHashRefWithData( $Self->{Version} )
+                && sprintf( "%.3d%.3d", $Self->{Version}->{Major}, $Self->{Version}->{Minor} ) >= 2_000
+                )
+            {
+                %DateTimeParams = (
+                    Epoch => $Key{Expires},
+                );
+            }
+
             my $ExpiresKeyDTObject = $Kernel::OM->Create(
                 'Kernel::System::DateTime',
                 ObjectParams => {
-                    String => $Key{Expires} . ' 23:59:59',
+                    %DateTimeParams,
                 },
             );
 

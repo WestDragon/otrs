@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -189,7 +189,7 @@ sub GetSessionIDData {
         # deserialize data if needed
         if ( $Row[3] ) {
             my $Value = eval {
-                $StorableObject->Deserialize( Data => MIME::Base64::decode_base64( $Row[2] ) )
+                $StorableObject->Deserialize( Data => MIME::Base64::decode_base64( $Row[2] ) );
             };
 
             # workaround for the oracle problem with empty

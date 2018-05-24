@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -78,7 +78,7 @@ sub Run {
 
     my %Permissions;
     for my $Permission (qw(ro rw)) {
-        $Permissions{$Permission} = ( $Self->GetOption('permission') eq $Permission ) ? 1 : 0
+        $Permissions{$Permission} = ( $Self->GetOption('permission') eq $Permission ) ? 1 : 0;
     }
 
     # add user 2 group

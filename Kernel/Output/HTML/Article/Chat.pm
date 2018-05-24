@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -31,7 +31,7 @@ our @ObjectDependencies = (
 
 Returns common article fields for a Chat article.
 
-    my %ArticleFields = $ChatObject->ArticleFields(
+    my %ArticleFields = $LayoutObject->ArticleFields(
         TicketID  => 123,   # (required)
         ArticleID => 123,   # (required)
     );
@@ -137,7 +137,7 @@ sub ArticleFields {
 
 Returns article preview for a Chat article.
 
-    $ArticleBaseObject->ArticlePreview(
+    $LayoutObject->ArticlePreview(
         TicketID   => 123,     # (required)
         ArticleID  => 123,     # (required)
         ResultType => 'plain', # (optional) plain|HTML. Default HTML.

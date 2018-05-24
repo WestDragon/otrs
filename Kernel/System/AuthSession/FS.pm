@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -184,7 +184,7 @@ sub GetSessionIDData {
 
     # read data structure back from file dump, use block eval for safety reasons
     my $Session = eval {
-        $Kernel::OM->Get('Kernel::System::Storable')->Deserialize( Data => ${$Content} )
+        $Kernel::OM->Get('Kernel::System::Storable')->Deserialize( Data => ${$Content} );
     };
 
     if ( !$Session || ref $Session ne 'HASH' ) {

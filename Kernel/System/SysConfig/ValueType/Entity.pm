@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -54,7 +54,7 @@ sub new {
 
 Check if provided EffectiveValue matches structure defined in XMLContentParsed.
 
-    my %Result = $SysConfigObject->SettingEffectiveValueCheck(
+    my %Result = $ValueTypeObject->SettingEffectiveValueCheck(
         XMLContentParsed => {
             Value => [
                 {
@@ -141,7 +141,7 @@ sub SettingEffectiveValueCheck {
 
 Returns a list of valid values for provided EntityType.
 
-    my $Result = $EntityObject->EntityValueList(
+    my $Result = $ValueTypeObject->EntityValueList(
         EntityType    => 'Priority',
         EntitySubType => 'SomeSubtype',     # optional e.g. the ObjectType for DynamicField entities
     );

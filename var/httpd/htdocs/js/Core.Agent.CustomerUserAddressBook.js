@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -151,7 +151,7 @@ Core.Agent.CustomerUserAddressBook = (function (TargetNS) {
         Core.UI.InputFields.Activate($('.Dialog:visible'));
 
         // register add of attribute
-        $('.AddButton').on('click', function () {
+        $('#Attribute').on('change', function () {
             var Attribute = $('#Attribute').val();
             Core.Agent.Search.SearchAttributeAdd(Attribute);
             Core.Agent.Search.AdditionalAttributeSelectionRebuild();

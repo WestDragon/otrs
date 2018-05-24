@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -403,7 +403,9 @@ sub Run {
             # check if article is from the same TicketID as we checked permissions for.
             if ( $Article{TicketID} ne $Self->{TicketID} ) {
                 return $LayoutObject->ErrorScreen(
-                    Message => "Article does not belong to ticket $Self->{TicketID}!",
+                    Message => $LayoutObject->{LanguageObject}->Translate(
+                        'Article does not belong to ticket %s!', $Self->{TicketID}
+                    ),
                 );
             }
 
@@ -738,6 +740,17 @@ sub Run {
             'HASH'
             )
         {
+
+            # Get Queue settings if 'Dest' param was set in the URL.
+            my %GetParam;
+            $GetParam{Dest} = $ParamObject->GetParam( Param => 'Dest' );
+
+            if ( $GetParam{Dest} && $GetParam{Dest} =~ /^(\d{1,100})\|\|.+?$/ ) {
+                $GetParam{QueueID} = $1;
+                my %Queue = $QueueObject->GetSystemAddress( QueueID => $GetParam{QueueID} );
+                $GetParam{From} = $Queue{Email};
+            }
+
             my %Jobs = %{ $ConfigObject->Get('Ticket::Frontend::ArticleComposeModule') };
             for my $Job ( sort keys %Jobs ) {
 
@@ -752,7 +765,6 @@ sub Run {
                 );
 
                 # get params
-                my %GetParam;
                 PARAMETER:
                 for my $Parameter ( $Object->Option( %GetParam, Config => $Jobs{$Job} ) ) {
                     if ( $Jobs{$Job}->{ParamType} && $Jobs{$Job}->{ParamType} ne 'Single' ) {
@@ -764,7 +776,13 @@ sub Run {
                 }
 
                 # run module
-                $Object->Run( %GetParam, Config => $Jobs{$Job} );
+                my $NewParams = $Object->Run( %GetParam, Config => $Jobs{$Job} );
+
+                if ($NewParams) {
+                    for my $Parameter ( $Object->Option( %GetParam, Config => $Jobs{$Job} ) ) {
+                        $GetParam{$Parameter} = $NewParams;
+                    }
+                }
             }
         }
 
@@ -1933,7 +1951,7 @@ sub Run {
                 CustomerUserID => $CustomerUser || '',
                 Action         => $Self->{Action},
                 TicketID       => $Self->{TicketID},
-                QueueID        => $QueueID      || 0,
+                QueueID        => $QueueID || 0,
                 ReturnType     => 'Ticket',
                 ReturnSubType  => 'DynamicField_' . $DynamicFieldConfig->{Name},
                 Data           => \%AclData,
@@ -2079,7 +2097,7 @@ sub Run {
 
                 # get AJAX param values
                 if ( $Object->can('GetParamAJAX') ) {
-                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) )
+                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) );
                 }
 
                 # get options that have to be removed from the selection visible
@@ -2916,10 +2934,10 @@ sub _MaskEmailNew {
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
         $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
-            Data       => $Param{StandardTemplates}  || {},
-            Name       => 'StandardTemplateID',
-            SelectedID => $Param{StandardTemplateID} || '',
-            Class      => 'Modernize',
+            Data         => $Param{StandardTemplates} || {},
+            Name         => 'StandardTemplateID',
+            SelectedID   => $Param{StandardTemplateID} || '',
+            Class        => 'Modernize',
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 1,

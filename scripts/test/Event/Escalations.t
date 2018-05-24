@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -42,7 +42,7 @@ $HelperObject->FixedTimeSet(
         ObjectParams => {
             String => '2014-12-12 00:00:00',
         },
-        )->ToEpoch()
+    )->ToEpoch()
 );
 
 my $CheckNumEvents = sub {
@@ -514,7 +514,7 @@ $HelperObject->FixedTimeSet(
         ObjectParams => {
             String => '2017-04-26 17:50:00',
         },
-        )->ToEpoch()
+    )->ToEpoch()
 );
 
 my $RandomNumber = $HelperObject->GetRandomNumber();

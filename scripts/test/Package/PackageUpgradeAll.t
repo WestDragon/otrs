@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -84,6 +84,7 @@ my @Tests = (
             AlreadyUpdated => {},
             Failed         => {},
             Installed      => {},
+            Undeployed     => {},
             Updated        => {
                 TestGeneralCatalog                => 1,
                 TestImportExport                  => 1,
@@ -129,7 +130,8 @@ my @Tests = (
                 TestGeneralCatalog => 1,
                 TestITSMCore       => 1,
             },
-            Updated => {
+            Undeployed => {},
+            Updated    => {
                 TestImportExport                  => 1,
                 TestITSMIncidentProblemManagement => 1,
                 TestITSMConfigurationManagement   => 1,
@@ -182,8 +184,9 @@ my @Tests = (
                     TestITSMServiceLevelManagement    => 1,
                 },
             },
-            Installed => {},
-            Updated   => {
+            Installed  => {},
+            Undeployed => {},
+            Updated    => {
                 TestGeneralCatalog => 1,
                 TestImportExport   => 1,
             },

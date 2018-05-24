@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -65,7 +65,7 @@ sub PreRun {
     my $PIDObject = $Kernel::OM->Get('Kernel::System::PID');
 
     my $PIDCreated = $PIDObject->PIDCreate(
-        Name  => $Self->Name(),
+        Name  => 'MailAccountFetch',
         Force => $Self->GetOption('force-pid'),
         TTL   => 600,                             # 10 minutes
     );
@@ -263,7 +263,7 @@ sub PostRun {
         );
     }
 
-    return $Kernel::OM->Get('Kernel::System::PID')->PIDDelete( Name => $Self->Name() );
+    return $Kernel::OM->Get('Kernel::System::PID')->PIDDelete( Name => 'MailAccountFetch' );
 }
 
 1;

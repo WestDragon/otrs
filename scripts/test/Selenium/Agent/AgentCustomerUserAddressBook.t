@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -147,7 +147,7 @@ $Selenium->RunTest(
             },
         );
 
-        # Get the customer company config and customer user config to add the dynamic fields to the map.
+        # Get the customer company and customer user configs to add the dynamic fields to the map.
         my $CustomerCompanyConfig = $Kernel::OM->Get('Kernel::Config')->Get('CustomerCompany');
         my $CustomerUserConfig    = $Kernel::OM->Get('Kernel::Config')->Get('CustomerUser');
 
@@ -155,7 +155,7 @@ $Selenium->RunTest(
         my @DynamicFieldCustomerCompanySearchFields;
         my @DynamicFieldCustomerUserSearchFields;
 
-        # Create test dynamic field of type date
+        # Create test dynamic field of type date.
         for my $DynamicField (@DynamicFields) {
 
             my $DynamicFieldID = $DynamicFieldObject->DynamicFieldAdd(
@@ -389,6 +389,7 @@ $Selenium->RunTest(
             $CustomerUserMailStrings{$UserLogin} = $CustomerUserData{UserMailString};
         }
 
+        # Create test user and login.
         my $TestUserLogin = $Helper->TestUserCreate(
             Groups => [ 'admin', 'users' ],
         ) || die "Did not get test user";
@@ -403,7 +404,7 @@ $Selenium->RunTest(
 
         my @Tests = (
             [
-                # Find all customer user
+                # Find all customer user.
                 {
                     RecipientField     => 'ToCustomer',
                     CheckDefaultFields => 1,
@@ -417,7 +418,7 @@ $Selenium->RunTest(
                 },
             ],
             [
-                # Find all customer user
+                # Find all customer user.
                 {
                     RecipientField     => 'CcCustomer',
                     CheckDefaultFields => 1,
@@ -431,7 +432,7 @@ $Selenium->RunTest(
                 },
             ],
             [
-                # Find all customer user
+                # Find all customer user.
                 {
                     RecipientField     => 'BccCustomer',
                     CheckDefaultFields => 1,
@@ -585,13 +586,25 @@ $Selenium->RunTest(
 
             for my $SubTest ( @{$Test} ) {
 
-                $Selenium->find_element( "#OptionCustomerUserAddressBook" . $SubTest->{RecipientField}, 'css' )
-                    ->VerifiedClick();
-                $Selenium->switch_to_frame( $Selenium->find_element( '.CustomerUserAddressBook', 'css' ) );
+                # Reset the page load complete flag inside the frame, so following switch to frame can check if it has
+                #   been reloaded.
+                $Selenium->execute_script( '
+                    if (
+                        typeof($(".CustomerUserAddressBook").get(0)) == "object"
+                        && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core) == "object"
+                        && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core.App) == "object"
+                        )
+                    {
+                        $(".CustomerUserAddressBook").get(0).contentWindow.Core.App.PageLoadComplete = false;
+                    }
+                ' );
 
-                $Selenium->WaitFor(
-                    JavaScript =>
-                        'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                $Selenium->find_element( "#OptionCustomerUserAddressBook" . $SubTest->{RecipientField}, 'css' )
+                    ->click();
+
+                $Selenium->SwitchToFrame(
+                    FrameSelector => '.CustomerUserAddressBook',
+                    WaitForLoad   => 1,
                 );
 
                 # Check the default fields for the initial address book screen.
@@ -631,7 +644,6 @@ $Selenium->RunTest(
                         $Selenium->execute_script(
                             "\$('#Attribute').val('$FieldName').trigger('redraw.InputField').trigger('change');",
                         );
-                        $Selenium->find_element( '.AddButton', 'css' )->click();
 
                         my $Element = $Selenium->find_element( $FieldName, 'name' );
                         $Element->is_enabled();
@@ -674,14 +686,27 @@ $Selenium->RunTest(
                         $Selenium->find_element( '#SearchProfileAddAction', 'css' )->click();
                     }
 
-              # Switch to the "main" window to click the search submit button and switch back to the address book frame.
+                    # Switch to the "main" window to click the search submit button and switch back to the address book
+                    #   frame.
                     $Selenium->switch_to_frame();
-                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
-                    $Selenium->switch_to_frame( $Selenium->find_element( '.CustomerUserAddressBook', 'css' ) );
 
-                    $Selenium->WaitFor(
-                        JavaScript =>
-                            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                    # Reset the page load complete flag inside the frame, so following switch to frame can check if it
+                    #   has been reloaded.
+                    $Selenium->execute_script( '
+                        if (
+                            typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core) == "object"
+                            && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core.App) == "object"
+                            )
+                        {
+                            $(".CustomerUserAddressBook").get(0).contentWindow.Core.App.PageLoadComplete = false;
+                        }
+                    ' );
+
+                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
+
+                    $Selenium->SwitchToFrame(
+                        FrameSelector => '.CustomerUserAddressBook',
+                        WaitForLoad   => 1,
                     );
                 }
                 elsif ( $SubTest->{UseSearchProfile} ) {
@@ -690,17 +715,33 @@ $Selenium->RunTest(
                         "\$('#SearchProfile').val('$SubTest->{UseSearchProfile}').trigger('change');",
                     );
 
+                    sleep 1;
+
                     # wait until form and overlay has loaded, if neccessary
                     $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#SaveProfile').length" );
 
-              # Switch to the "main" window to click the search submit button and switch back to the address book frame.
+                    # Switch to the "main" window to click the search submit button and switch back to the address book
+                    #   frame.
                     $Selenium->switch_to_frame();
-                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
-                    $Selenium->switch_to_frame( $Selenium->find_element( '.CustomerUserAddressBook', 'css' ) );
 
-                    $Selenium->WaitFor(
-                        JavaScript =>
-                            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                    # Reset the page load complete flag inside the frame, so following switch to frame can check if it
+                    #   has been reloaded.
+                    $Selenium->execute_script( '
+                        if (
+                            typeof($(".CustomerUserAddressBook").get(0)) == "object"
+                            && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core) == "object"
+                            && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core.App) == "object"
+                            )
+                        {
+                            $(".CustomerUserAddressBook").get(0).contentWindow.Core.App.PageLoadComplete = false;
+                        }
+                    ' );
+
+                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
+
+                    $Selenium->SwitchToFrame(
+                        FrameSelector => '.CustomerUserAddressBook',
+                        WaitForLoad   => 1,
                     );
                 }
                 else {
@@ -721,11 +762,6 @@ $Selenium->RunTest(
                     $Selenium->accept_alert();
 
                     $Selenium->switch_to_frame( $Selenium->find_element( '.CustomerUserAddressBook', 'css' ) );
-
-                    $Selenium->WaitFor(
-                        JavaScript =>
-                            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
-                    );
                 }
 
                 if ( IsArrayRefWithData( $SubTest->{ExcludeSearchResultCustomerUser} ) ) {
@@ -758,9 +794,10 @@ $Selenium->RunTest(
                         $Selenium->find_element( '#ChangeSearch', 'css' )->click();
                     }
 
+                    sleep 1;
+
                     $Selenium->WaitFor(
-                        JavaScript =>
-                            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                        JavaScript => 'return $("#Attribute").length == 1'
                     );
 
                     for my $FieldName ( @{ $SubTest->{SearchFieldsChange} } ) {
@@ -768,7 +805,6 @@ $Selenium->RunTest(
                         $Selenium->execute_script(
                             "\$('#Attribute').val('$FieldName').trigger('redraw.InputField').trigger('change');",
                         );
-                        $Selenium->find_element( '.AddButton', 'css' )->click();
 
                         my $Element = $Selenium->find_element( $FieldName, 'name' );
                         $Element->is_enabled();
@@ -802,14 +838,28 @@ $Selenium->RunTest(
                         }
                     }
 
-              # Switch to the "main" window to click the search submit button and switch back to the address book frame.
+                    # Switch to the "main" window to click the search submit button and switch back to the address book
+                    #   frame.
                     $Selenium->switch_to_frame();
-                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
-                    $Selenium->switch_to_frame( $Selenium->find_element( '.CustomerUserAddressBook', 'css' ) );
 
-                    $Selenium->WaitFor(
-                        JavaScript =>
-                            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                    # Reset the page load complete flag inside the frame, so following switch to frame can check if it
+                    #   has been reloaded.
+                    $Selenium->execute_script( '
+                        if (
+                            typeof($(".CustomerUserAddressBook").get(0)) == "object"
+                            && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core) == "object"
+                            && typeof($(".CustomerUserAddressBook").get(0).contentWindow.Core.App) == "object"
+                            )
+                        {
+                            $(".CustomerUserAddressBook").get(0).contentWindow.Core.App.PageLoadComplete = false;
+                        }
+                    ' );
+
+                    $Selenium->find_element( '#SearchFormSubmit', 'css' )->click();
+
+                    $Selenium->SwitchToFrame(
+                        FrameSelector => '.CustomerUserAddressBook',
+                        WaitForLoad   => 1,
                     );
                 }
 
@@ -975,11 +1025,11 @@ $Selenium->RunTest(
             );
         }
 
+        my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
+
         # Make sure that the cache is correct, because we delete the data directly in the database.
         for my $Cache (qw (CustomerUser CustomerCompany)) {
-            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp(
-                Type => $Cache,
-            );
+            $CacheObject->CleanUp( Type => $Cache );
         }
 
     }

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -10,6 +10,7 @@ package Kernel::System::Console::Command::Admin::Package::UpgradeAll;
 
 use strict;
 use warnings;
+use utf8;
 
 use Kernel::System::VariableCheck qw(:all);
 
@@ -103,7 +104,7 @@ sub Run {
             FromCloud => $FromCloud,
         );
 
-        $Self->Print("<green>Done</green>\n")
+        $Self->Print("<green>Done</green>\n");
     }
 
     # Check again after repository refresh
@@ -137,12 +138,13 @@ sub Run {
 
     # Be sure to print any error messages in case of a failure.
     if ( IsHashRefWithData( $Result{Failed} ) ) {
-        print STDERR $ErrorMessage;
+        print STDERR $ErrorMessage if $ErrorMessage;
     }
 
     if (
         !IsHashRefWithData( $Result{Updated} )
         && !IsHashRefWithData( $Result{Installed} )
+        && !IsHashRefWithData( $Result{Undeployed} )
         && !IsHashRefWithData( $Result{Failed} )
         )
     {
@@ -154,14 +156,15 @@ sub Run {
     my %SuccessMessages = (
         Updated        => 'updated',
         Installed      => 'installed',
-        AlreadyUpdated => 'already up-to-date'
+        AlreadyUpdated => 'already up-to-date',
+        Undeployed     => 'already up-to-date but <red>not deployed correctly</red>',
     );
 
-    for my $ResultPart (qw(AlreadyUpdated Updated Installed)) {
+    for my $ResultPart (qw(AlreadyUpdated Undeployed Updated Installed)) {
         if ( IsHashRefWithData( $Result{$ResultPart} ) ) {
             $Self->Print( '  The following packages were ' . $SuccessMessages{$ResultPart} . "...\n" );
             my $Color = 'green';
-            if ( $ResultPart eq 'Installed' ) {
+            if ( $ResultPart eq 'Installed' || $ResultPart eq 'Undeployed' ) {
                 $Color = 'yellow';
             }
             for my $PackageName ( sort keys %{ $Result{$ResultPart} } ) {
@@ -194,6 +197,13 @@ sub Run {
     if ( !$Result{Success} ) {
         $Self->Print("\n<red>Fail.</red>\n");
         return $Self->ExitCodeError();
+    }
+
+    if ( IsHashRefWithData( $Result{Undeployed} ) ) {
+        my $Message = "\nPlease reinstall not correctly deployed packages using"
+            . " <yellow>Admin::Package::Reinstall</yellow>"
+            . " or <yellow>Admin::Package::ReinstallAll</yellow> console commands.\n";
+        $Self->Print($Message);
     }
 
     $Self->Print("\n<green>Done.</green>\n");

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -255,7 +255,7 @@ sub FormIDGetAllFilesData {
 
             # remove meta data in files
             if ( $FileSize > 30 ) {
-                $FileSize = $FileSize - 30
+                $FileSize = $FileSize - 30;
             }
         }
         my $Content = $MainObject->FileRead(
@@ -351,7 +351,7 @@ sub FormIDGetAllFilesMeta {
 
             # remove meta data in files
             if ( $FileSize > 30 ) {
-                $FileSize = $FileSize - 30
+                $FileSize = $FileSize - 30;
             }
         }
 
@@ -412,7 +412,7 @@ sub FormIDCleanUp {
         my $SubdirTime = $Subdir;
 
         if ( $SubdirTime =~ /^.*\/\d+\..+$/ ) {
-            $SubdirTime =~ s/^.*\/(\d+?)\..+$/$1/
+            $SubdirTime =~ s/^.*\/(\d+?)\..+$/$1/;
         }
         else {
             $Kernel::OM->Get('Kernel::System::Log')->Log(
@@ -440,7 +440,7 @@ sub FormIDCleanUp {
                     Priority => 'error',
                     Message  => "Can't remove: $Subdir: $!!",
                 );
-                return;
+                next SUBDIR;
             }
         }
     }

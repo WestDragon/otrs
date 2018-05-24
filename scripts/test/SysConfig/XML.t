@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -52,6 +52,94 @@ my @Tests = (
         ExpectedResult => [],
     },
     {
+        Description => 'Wrong version',
+        Config      => {
+            XMLInput => '<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="1.0" init="Application">
+    <Setting Name="Test1" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex=".*">123</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Test2" Required="1" Valid="1">
+        <Description Translatable="1">Test 2.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="File">/usr/bin/gpg</Item>
+        </Value>
+    </Setting>
+</otrs_config>
+            ',
+        },
+        ExpectedResult => [],
+    },
+    {
+        Description => 'Contains old ConfigItem(it should be ignored)',
+        Config      => {
+            XMLInput => '<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="2.0" init="Application">
+    <Setting Name="Test1" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex=".*">123</Item>
+        </Value>
+    </Setting>
+    <ConfigItem Name="Test2" Required="1" Valid="1">
+        <Description Translatable="1">Test 2.</Description>
+        <Group>Framework</Group>
+        <SubGroup>Core</SubGroup>
+        <Setting>
+            <String>Test</String>
+        </Setting>
+    </ConfigItem>
+</otrs_config>
+            ',
+        },
+        ExpectedResult => [
+            {
+                'XMLContentParsed' => {
+                    'Description' => [
+                        {
+                            'Content'      => 'Test 1.',
+                            'Translatable' => '1'
+                        },
+                    ],
+                    'Name'       => 'Test1',
+                    'Navigation' => [
+                        {
+                            'Content' => 'Core::Ticket'
+                        },
+                    ],
+                    'Required' => '1',
+                    'Valid'    => '1',
+                    'Value'    => [
+                        {
+                            'Item' => [
+                                {
+                                    'Content'    => '123',
+                                    'ValueRegex' => '.*',
+                                    'ValueType'  => 'String'
+                                },
+                            ],
+                        },
+                    ],
+                },
+                'XMLContentRaw' => '<Setting Name="Test1" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex=".*">123</Item>
+        </Value>
+    </Setting>',
+
+                'XMLFilename' => undef,
+            },
+        ],
+    },
+    {
         Description => 'Valid XML',
         Config      => {
             XMLInput => '<?xml version="1.0" encoding="utf-8"?>
@@ -80,13 +168,13 @@ my @Tests = (
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
+                        },
                     ],
                     'Description' => [
                         {
                             'Content'      => 'Test 1.',
                             'Translatable' => '1'
-                        }
+                        },
                     ],
                     'Name'     => 'Test1',
                     'Required' => '1',
@@ -97,10 +185,10 @@ my @Tests = (
                                     'ValueRegex' => '.*',
                                     'Content'    => '123',
                                     'ValueType'  => 'String'
-                                }
-                                ]
-                        }
-                        ]
+                                },
+                            ],
+                        },
+                    ],
                 },
                 'XMLContentRaw' => '<Setting Name="Test1" Required="1" Valid="1">
         <Description Translatable="1">Test 1.</Description>
@@ -124,7 +212,7 @@ my @Tests = (
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
+                        },
                     ],
                     'Required' => '1',
                     'Value'    => [
@@ -133,9 +221,9 @@ my @Tests = (
                                 {
                                     'ValueType' => 'File',
                                     'Content'   => '/usr/bin/gpg'
-                                }
-                                ]
-                        }
+                                },
+                            ],
+                        },
                     ],
                     'Valid' => '1'
                 },
@@ -186,13 +274,13 @@ my @Tests = (
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
+                        },
                     ],
                     'Description' => [
                         {
                             'Translatable' => '1',
                             'Content'      => 'Test 1.'
-                        }
+                        },
                     ],
                     'Required' => '1',
                     'Value'    => [
@@ -203,14 +291,14 @@ my @Tests = (
                                         "\x{e4}\x{eb}\x{ef}\x{f6}\x{fc}\x{c4}\x{cb}\x{cf}\x{d6}\x{dc}\x{e1}\x{e9}\x{ed}\x{f3}\x{fa}\x{c1}\x{c9}\x{cd}\x{d3}\x{da}\x{f1}\x{d1}\x{20ac}\x{438}\x{441}\x{df}",
                                     'ValueRegex' => '.*',
                                     'ValueType'  => 'String'
-                                }
-                                ]
-                        }
+                                },
+                            ],
+                        },
                     ],
                     'Name' =>
                         "\x{e4}\x{eb}\x{ef}\x{f6}\x{fc}\x{c4}\x{cb}\x{cf}\x{d6}\x{dc}\x{e1}\x{e9}\x{ed}\x{f3}\x{fa}\x{c1}\x{c9}\x{cd}\x{d3}\x{da}\x{f1}\x{d1}\x{20ac}\x{438}\x{441}\x{df}",
                     'Valid' => '1'
-                    }
+                },
             },
             {
                 'XMLFilename'   => undef,
@@ -228,9 +316,9 @@ my @Tests = (
                                 {
                                     'ValueType' => 'File',
                                     'Content'   => '/usr/bin/gpg'
-                                }
-                                ]
-                        }
+                                },
+                            ],
+                        },
                     ],
                     'Valid'       => '1',
                     'Name'        => 'Test2',
@@ -238,15 +326,15 @@ my @Tests = (
                         {
                             'Content'      => 'Test 2.',
                             'Translatable' => '1'
-                        }
+                        },
                     ],
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
+                        },
                     ],
                     'Required' => '1'
-                    }
+                },
             }
         ],
     },
@@ -282,7 +370,7 @@ my @Tests = (
                         {
                             'Translatable' => '1',
                             'Content'      => 'Test 1.'
-                        }
+                        },
                     ],
                     'Valid' => '1',
                     'Value' => [
@@ -292,15 +380,15 @@ my @Tests = (
                                     'Content'    => '123',
                                     'ValueType'  => 'String',
                                     'ValueRegex' => '.*'
-                                }
-                                ]
-                        }
+                                },
+                            ],
+                        },
                     ],
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
-                        ]
+                        },
+                    ],
                 },
                 'XMLContentRaw' => '<Setting Name="Test1" Required="1" Valid="1">
         <Description Translatable="1">Test 1.</Description>
@@ -316,14 +404,14 @@ my @Tests = (
                         {
                             'Content'      => 'Test 2.',
                             'Translatable' => '1'
-                        }
+                        },
                     ],
                     'Name'       => 'Test2',
                     'Required'   => '1',
                     'Navigation' => [
                         {
                             'Content' => 'Core::Ticket'
-                        }
+                        },
                     ],
                     'Value' => [
                         {
@@ -331,9 +419,9 @@ my @Tests = (
                                 {
                                     'ValueType' => 'File',
                                     'Content'   => '/usr/bin/gpg'
-                                }
-                                ]
-                        }
+                                },
+                            ],
+                        },
                     ],
                     'Valid' => '1'
                 },
@@ -368,81 +456,7 @@ my @Tests = (
 </Setting>
             ',
         },
-        ExpectedResult => [
-            {
-                'XMLContentRaw' => '<Setting Name="Test1" Required="1" Valid="1">
-    <Description Translatable="1">Test 1.</Description>
-    <Navigation>Core::Ticket</Navigation>
-    <Value>
-        <Item ValueType="String" ValueRegex=".*">123</Item>
-    </Value>
-</Setting>',
-                'XMLFilename'      => undef,
-                'XMLContentParsed' => {
-                    'Value' => [
-                        {
-                            'Item' => [
-                                {
-                                    'ValueRegex' => '.*',
-                                    'ValueType'  => 'String',
-                                    'Content'    => '123'
-                                }
-                                ]
-                        }
-                    ],
-                    'Required'    => '1',
-                    'Description' => [
-                        {
-                            'Content'      => 'Test 1.',
-                            'Translatable' => '1'
-                        }
-                    ],
-                    'Valid'      => '1',
-                    'Name'       => 'Test1',
-                    'Navigation' => [
-                        {
-                            'Content' => 'Core::Ticket'
-                        }
-                        ]
-                    }
-            },
-            {
-                'XMLContentParsed' => {
-                    'Value' => [
-                        {
-                            'Item' => [
-                                {
-                                    'ValueType' => 'File',
-                                    'Content'   => '/usr/bin/gpg'
-                                }
-                                ]
-                        }
-                    ],
-                    'Description' => [
-                        {
-                            'Content'      => 'Test 2.',
-                            'Translatable' => '1'
-                        }
-                    ],
-                    'Required'   => '1',
-                    'Valid'      => '1',
-                    'Name'       => 'Test2',
-                    'Navigation' => [
-                        {
-                            'Content' => 'Core::Ticket'
-                        }
-                        ]
-                },
-                'XMLFilename'   => undef,
-                'XMLContentRaw' => '<Setting Name="Test2" Required="1" Valid="1">
-    <Description Translatable="1">Test 2.</Description>
-    <Navigation>Core::Ticket</Navigation>
-    <Value>
-        <Item ValueType="File">/usr/bin/gpg</Item>
-    </Value>
-</Setting>'
-            }
-        ],
+        ExpectedResult => [],
     },
     {
         Description => 'No Setting elements',
@@ -491,6 +505,78 @@ my @Tests = (
             ',
         },
         ExpectedResult => [],
+    },
+    {
+        Description => 'Setting with comments',
+        Config      => {
+            XMLInput => '<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="2.0" init="Application">
+    <Setting Name="Test" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Array>
+                <Item>1</Item>
+#               <Item>2</Item>
+<!--
+                <Item>2</Item>
+                <Item>2</Item>
+-->
+                <Item>2</Item>
+            </Array>
+        </Value>
+    </Setting>
+</otrs_config>
+            ',
+        },
+        ExpectedResult => [
+            {
+                'XMLContentParsed' => {
+                    'Description' => [
+                        {
+                            'Content'      => 'Test 1.',
+                            'Translatable' => '1',
+                        },
+                    ],
+                    'Name'       => 'Test',
+                    'Navigation' => [
+                        {
+                            'Content' => 'Core::Ticket'
+                        },
+                    ],
+                    'Required' => '1',
+                    'Valid'    => '1',
+                    'Value'    => [
+                        {
+                            'Array' => [
+                                {
+                                    'Item' => [
+                                        {
+                                            'Content' => '1',
+                                        },
+                                        {
+                                            'Content' => '2',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                'XMLContentRaw' => '<Setting Name="Test" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Array>
+                <Item>1</Item>
+
+
+                <Item>2</Item>
+            </Array>
+        </Value>
+    </Setting>',
+            },
+        ],
     },
 );
 

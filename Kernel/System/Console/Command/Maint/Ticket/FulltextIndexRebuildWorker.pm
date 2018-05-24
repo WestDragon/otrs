@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -92,7 +92,7 @@ sub Run {
     my ( $Self, %Param ) = @_;
 
     my $Children = $Self->GetOption('children') // 4;
-    my $Limit    = $Self->GetOption('limit')    // 20000;
+    my $Limit    = $Self->GetOption('limit') // 20000;
 
     my %ArticleTicketIDs = $Kernel::OM->Get('Kernel::System::Ticket::Article')->ArticleSearchIndexRebuildFlagList(
         Value => 1,

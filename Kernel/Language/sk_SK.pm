@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -24,7 +24,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%D.%M.%Y';
     $Self->{DateInputFormat}     = '%D.%M.%Y';
     $Self->{DateInputFormatLong} = '%D.%M.%Y - %T';
-    $Self->{Completeness}        = 0.164042221837688;
+    $Self->{Completeness}        = 0.185421333792866;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -35,22 +35,22 @@ sub Data {
 
         # Template: AdminACL
         'ACL Management' => 'Správa ACL',
-        'Actions' => 'Akcia',
+        'Actions' => 'Akcie',
         'Create New ACL' => 'Vytvoriť nové ACL',
-        'Deploy ACLs' => '',
+        'Deploy ACLs' => 'Nasadenie ACLs',
         'Export ACLs' => 'Exportovať ACL',
         'Filter for ACLs' => 'Filter pre ACL',
-        'Just start typing to filter...' => '',
-        'Configuration Import' => '',
+        'Just start typing to filter...' => 'Začni písať pre filtrovanie...',
+        'Configuration Import' => 'Import konfigurácie',
         'Here you can upload a configuration file to import ACLs to your system. The file needs to be in .yml format as exported by the ACL editor module.' =>
-            '',
+            'Tu môžete nahrať konfiguračný súbor pre import ACLs do systému. Súbor musí byť v .yml fomáte, exportovaný z ACL editor modulu.',
         'This field is required.' => 'Toto pole je povinné.',
-        'Overwrite existing ACLs?' => '',
+        'Overwrite existing ACLs?' => 'Prepísať existujúce ACLs?',
         'Upload ACL configuration' => 'Nahrať ACL konfiguráciu',
         'Import ACL configuration(s)' => 'Importovať ACL konfiguráciu',
         'Description' => 'Popis ',
         'To create a new ACL you can either import ACLs which were exported from another system or create a complete new one.' =>
-            '',
+            'Na vytvorenie nových ACL môžete buď importovať ACLs exportované z iného systému alebo vytvoriť úplne nové.',
         'Changes to the ACLs here only affect the behavior of the system, if you deploy the ACL data afterwards. By deploying the ACL data, the newly made changes will be written to the configuration.' =>
             '',
         'ACLs' => 'ACL',
@@ -58,32 +58,32 @@ sub Data {
             '',
         'ACL name' => 'Názov ACL',
         'Comment' => 'poznámka',
-        'Validity' => '',
+        'Validity' => 'platnosť',
         'Export' => 'Export',
         'Copy' => 'Kopírovať',
         'No data found.' => 'Neboli nájdene žiadne dáta.',
-        'No matches found.' => 'Nebola nájdená zhoda',
+        'No matches found.' => 'Nebola nájdená zhoda.',
 
         # Template: AdminACLEdit
         'Edit ACL %s' => 'Upraviť ACL %',
-        'Edit ACL' => '',
+        'Edit ACL' => 'Upraviť ACL',
         'Go to overview' => 'Prejsť na prehľad',
         'Delete ACL' => 'Zmazať ACL',
         'Delete Invalid ACL' => 'Zmazať chybný ACL',
-        'Match settings' => '',
+        'Match settings' => 'Nastavenie zhody',
         'Set up matching criteria for this ACL. Use \'Properties\' to match the current screen or \'PropertiesDatabase\' to match attributes of the current ticket that are in the database.' =>
-            '',
+            'Nastav zodpovedajúce kritériá pre toto ACL. Použi "vlastnosti" pre zhodu s momentálnou obrazovkou alebo "vlastnosti databázy" pre zhodu atribútov aktuálneho tiketu, ktorý je v databáze.',
         'Change settings' => 'Zmena nastavenia',
         'Set up what you want to change if the criteria match. Keep in mind that \'Possible\' is a white list, \'PossibleNot\' a black list.' =>
-            '',
-        'Check the official' => '',
+            'Nastav, čo chceš zmeniť, ak kritériá pasujú. Mysli na to, že "možné" je "white list" a "nemožné" je "black list".',
+        'Check the official' => 'Skontoroluj oficiálne',
         'documentation' => 'dokumentácia',
-        'Show or hide the content' => '',
-        'Edit ACL Information' => '',
+        'Show or hide the content' => 'Zobraziť alebo skryť obsah',
+        'Edit ACL Information' => 'Edituj ACL informáciu',
         'Name' => 'Meno',
-        'Stop after match' => '',
-        'Edit ACL Structure' => '',
-        'Save ACL' => '',
+        'Stop after match' => 'Zastav po zhode',
+        'Edit ACL Structure' => 'Edituj ACL štruktúru',
+        'Save ACL' => 'Ulož ACL',
         'Save' => 'Uložiť',
         'or' => 'alebo',
         'Save and finish' => 'Uložiť a skončiť',
@@ -92,93 +92,93 @@ sub Data {
 
         # Template: AdminACLNew
         'Create a new ACL by submitting the form data. After creating the ACL, you will be able to add configuration items in edit mode.' =>
-            '',
+            'Vytvor nové ACL zaslaním dát z formuláru. Po vytvorení ACL, budete mať možnosť pridať configuračnú položku v editovacom móde.',
 
         # Template: AdminAppointmentCalendarManage
-        'Calendar Management' => '',
-        'Add Calendar' => '',
-        'Edit Calendar' => '',
-        'Go back' => '',
-        'Calendar Overview' => '',
-        'Add new Calendar' => '',
-        'Import Appointments' => '',
-        'Calendar Import' => '',
+        'Calendar Management' => 'Menežment kalendára',
+        'Add Calendar' => 'Pridaj kalendár',
+        'Edit Calendar' => 'Edituj kalendár',
+        'Go back' => 'Choď späť',
+        'Calendar Overview' => 'Celkový prehľad kalendára',
+        'Add new Calendar' => 'Pridaj nový kalendár',
+        'Import Appointments' => 'Import schôdzok',
+        'Calendar Import' => 'Import kalendára',
         'Here you can upload a configuration file to import a calendar to your system. The file needs to be in .yml format as exported by calendar management module.' =>
-            '',
-        'Overwrite existing entities' => '',
-        'Upload calendar configuration' => '',
-        'Import Calendar' => '',
-        'Filter for calendars' => '',
+            'Tu môžete nahrať konfiguračný súbor pre import kalendára do systému. Súbor musí byť v .yml fomáte, exportovaný z modulu menežmentu kalendára.',
+        'Overwrite existing entities' => 'Prepíš existujúce entity',
+        'Upload calendar configuration' => 'Nahraj konfiguráciu kalendára',
+        'Import Calendar' => 'Import kalendára',
+        'Filter for calendars' => 'Filter pre kalendáre',
         'Depending on the group field, the system will allow users the access to the calendar according to their permission level.' =>
-            '',
+            'V závislosti od skupinového poľa, systém umožní užívateľovi prístup do kalendára v závislosti od úrovne oprávnenia.',
         'Read only: users can see and export all appointments in the calendar.' =>
-            '',
+            'Iba na čítanie: užívateľ môže vidieť a exportovať všetky schôdzky v kalendári.',
         'Move into: users can modify appointments in the calendar, but without changing the calendar selection.' =>
-            '',
+            'Presuň do: užívateľ môže upraviť schôdzky v kalendári, ale bez zmeny výberu kalendára.',
         'Create: users can create and delete appointments in the calendar.' =>
-            '',
-        'Read/write: users can manage the calendar itself.' => '',
+            'Vytvor: užívatelia môžu vytvoriť a vymazať schôdzky v kalendári.',
+        'Read/write: users can manage the calendar itself.' => 'Čítať/Zapisovať: užívatelia môžu menežovať kalendár.',
         'Group' => 'Skupina',
         'Changed' => 'Zmenený',
         'Created' => 'Vytvorený',
-        'Download' => '',
-        'URL' => '',
-        'Export calendar' => '',
-        'Download calendar' => '',
-        'Copy public calendar URL' => '',
+        'Download' => 'Stiahnuť',
+        'URL' => 'URL',
+        'Export calendar' => 'Export kalendára',
+        'Download calendar' => 'Stiahni kalendár',
+        'Copy public calendar URL' => 'Kopíruj verejnú URL kalendára',
         'Calendar' => 'Kalendár',
-        'Calendar name' => '',
-        'Calendar with same name already exists.' => '',
-        'Color' => '',
-        'Permission group' => '',
-        'Ticket Appointments' => '',
-        'Rule' => '',
-        'Remove this entry' => '',
+        'Calendar name' => 'Názov kalendára',
+        'Calendar with same name already exists.' => 'Kalendár s rovnakým názvom už existuje.',
+        'Color' => 'Farba',
+        'Permission group' => 'Skupina oprávnení',
+        'Ticket Appointments' => 'Ticketové schôdzky',
+        'Rule' => 'Pravidlo',
+        'Remove this entry' => 'Odstrániť túto položku',
         'Remove' => 'Vymazať',
-        'Start date' => '',
-        'End date' => '',
+        'Start date' => 'Počiatočný dátum',
+        'End date' => 'Konečný dátum',
         'Use options below to narrow down for which tickets appointments will be automatically created.' =>
             '',
         'Queues' => 'Fronty',
-        'Please select a valid queue.' => '',
-        'Search attributes' => '',
-        'Add entry' => '',
+        'Please select a valid queue.' => 'Prosím zvoľte platnú frontu.',
+        'Search attributes' => 'Atribúty vyhľadávania',
+        'Add entry' => 'Pridať položku',
         'Add' => 'Pridať ',
         'Define rules for creating automatic appointments in this calendar based on ticket data.' =>
-            '',
-        'Add Rule' => '',
-        'Submit' => 'Predloženie',
+            'Definuj pravidlá pre automatické vytvorenie schôdzky v tomto kalendári na základe dát z tiketov.',
+        'Add Rule' => 'Pridaj pravidlo',
+        'Submit' => 'Odoslať',
 
         # Template: AdminAppointmentImport
-        'Appointment Import' => '',
-        'Uploaded file must be in valid iCal format (.ics).' => '',
+        'Appointment Import' => 'Import schôdzky',
+        'Uploaded file must be in valid iCal format (.ics).' => 'Nahrávaný súbor musí byť v platnom iCAL formáte (.ics).',
         'If desired Calendar is not listed here, please make sure that you have at least \'create\' permissions.' =>
-            '',
+            'Ak požadovaný kalendár tu nie je uvedený, uistite sa, že máte minimálne oprávnenie na jeho vytvorenie.',
         'Upload' => 'Nahrať',
-        'Update existing appointments?' => '',
+        'Update existing appointments?' => 'Aktualizovať existujúcu schôdzku?',
         'All existing appointments in the calendar with same UniqueID will be overwritten.' =>
-            '',
-        'Upload calendar' => '',
-        'Import appointments' => '',
+            'Všetky existujúce schôdzky v kalendári s rovnakým UniqueID budú prepísané.',
+        'Upload calendar' => 'Nahraj kalendár',
+        'Import appointments' => 'Import schôdzok',
 
         # Template: AdminAppointmentNotificationEvent
-        'Appointment Notification Management' => '',
-        'Add Notification' => '',
-        'Edit Notification' => '',
-        'Add notification' => '',
-        'Export Notifications' => '',
-        'Filter for Notifications' => '',
-        'Filter for notifications' => '',
+        'Appointment Notification Management' => 'Menežment notifikácií schôdzok',
+        'Add Notification' => 'Pridaj notifikáciu',
+        'Edit Notification' => 'Edituj notifikáciu',
+        'Add notification' => 'Pridaj notifikáciu',
+        'Export Notifications' => 'Export notifikácií',
+        'Filter for Notifications' => 'Filter pre notifikácie',
+        'Filter for notifications' => 'Filter pre notifikácie',
         'Here you can upload a configuration file to import appointment notifications to your system. The file needs to be in .yml format as exported by the appointment notification module.' =>
-            '',
-        'Overwrite existing notifications?' => '',
-        'Upload Notification configuration' => '',
-        'Import Notification configuration' => '',
+            'Tu môžete nahrať konfiguračný súbor na import notifikácií schôdzok do Vášho systému. Súbor musí byť v .yml formáte exportovaný z modulu notifikácií schôdzok.',
+        'Overwrite existing notifications?' => 'Prepísať existujúce notifikácie?',
+        'Upload Notification configuration' => 'Nahrať konfiguráciu notifikácie',
+        'Import Notification configuration' => 'Import konfigurácie notifikácie',
         'List' => 'Zoznam',
         'Delete' => 'Zmazať',
-        'Delete this notification' => '',
-        'Show in agent preferences' => '',
-        'Agent preferences tooltip' => '',
+        'Delete this notification' => 'Zmazať túto notifikáciu',
+        'Show in agent preferences' => 'Zobraz v nastaveniach agenta',
+        'Agent preferences tooltip' => 'Nástrojové tipy vlastností agenta ',
         'This message will be shown on the agent preferences screen as a tooltip for this notification.' =>
             '',
         'Toggle this widget' => '',
@@ -186,47 +186,47 @@ sub Data {
         'Event' => 'Udalosť',
         'Here you can choose which events will trigger this notification. An additional appointment filter can be applied below to only send for appointments with certain criteria.' =>
             '',
-        'Appointment Filter' => '',
+        'Appointment Filter' => 'Filter schôdzok',
         'Type' => 'Typ',
         'Title' => 'Názov',
         'Location' => 'Poloha',
-        'Team' => '',
-        'Resource' => '',
-        'Recipients' => '',
-        'Send to' => '',
-        'Send to these agents' => '',
-        'Send to all group members' => '',
-        'Send to all role members' => '',
+        'Team' => 'Team',
+        'Resource' => 'Zdroj',
+        'Recipients' => 'Príjemcovia',
+        'Send to' => 'Komu',
+        'Send to these agents' => 'Poslať týmto agentom',
+        'Send to all group members (agents only)' => '',
+        'Send to all role members' => 'Poslať všetkým členom role',
         'Send on out of office' => 'Pošli Neprítomnosť v kancelárii',
-        'Also send if the user is currently out of office.' => '',
-        'Once per day' => '',
+        'Also send if the user is currently out of office.' => 'Pošli aj v prípade, že užívateľ je mimo kanceláriu.',
+        'Once per day' => 'Jedenkrát za deň',
         'Notify user just once per day about a single appointment using a selected transport.' =>
             '',
-        'Notification Methods' => '',
+        'Notification Methods' => 'Spôsoby notifikácie',
         'These are the possible methods that can be used to send this notification to each of the recipients. Please select at least one method below.' =>
             '',
-        'Enable this notification method' => '',
+        'Enable this notification method' => 'Aktivuj túto notifikačnú metódu',
         'Transport' => '',
-        'At least one method is needed per notification.' => '',
-        'Active by default in agent preferences' => '',
+        'At least one method is needed per notification.' => 'Na notifikovanie je potrebná aspoň jedna metóda.',
+        'Active by default in agent preferences' => 'Štandartne aktívny v nastaveniach agenta',
         'This is the default value for assigned recipient agents who didn\'t make a choice for this notification in their preferences yet. If the box is enabled, the notification will be sent to such agents.' =>
             '',
-        'This feature is currently not available.' => '',
-        'Upgrade to %s' => '',
+        'This feature is currently not available.' => 'Táto funkcia momentálne nie je k dispozícii.',
+        'Upgrade to %s' => 'Aktualizované na %s',
         'Please activate this transport in order to use it.' => '',
-        'No data found' => '',
-        'No notification method found.' => '',
-        'Notification Text' => '',
+        'No data found' => 'Neboli nájdené žiadne dáta',
+        'No notification method found.' => 'Nebola nájdená notifikačná metóda.',
+        'Notification Text' => 'Text notifikácie',
         'This language is not present or enabled on the system. This notification text could be deleted if it is not needed anymore.' =>
             '',
-        'Remove Notification Language' => '',
+        'Remove Notification Language' => 'Vymaž jazyk notifikácie',
         'Subject' => 'Predmet',
         'Text' => 'Text',
-        'Message body' => '',
-        'Add new notification language' => '',
-        'Save Changes' => '',
+        'Message body' => 'Telo správy',
+        'Add new notification language' => 'Pridaj nový notifikačný jazyk',
+        'Save Changes' => 'Ulož zmeny',
         'Tag Reference' => '',
-        'Notifications are sent to an agent.' => '',
+        'Notifications are sent to an agent.' => 'Notifikácie boli poslané agentovi.',
         'You can use the following tags' => '',
         'To get the first 20 character of the appointment title.' => '',
         'To get the appointment attribute' => '',
@@ -238,14 +238,14 @@ sub Data {
 
         # Template: AdminAppointmentNotificationEventTransportEmailSettings
         'Additional recipient email addresses' => '',
-        'Article visible for customer' => '',
+        'Article visible for customer' => 'Článok viditeľný pre zákazníka',
         'An article will be created if the notification is sent to the customer or an additional email address.' =>
             '',
-        'Email template' => '',
+        'Email template' => 'Vzor emailu',
         'Use this template to generate the complete email (only for HTML emails).' =>
             '',
-        'Enable email security' => '',
-        'Email security level' => '',
+        'Enable email security' => 'Povoliť zabezpečenie e-mailu',
+        'Email security level' => 'Úroveň zabezpečenia e-mailu',
         'If signing key/certificate is missing' => '',
         'If encryption key/certificate is missing' => '',
 
@@ -253,12 +253,12 @@ sub Data {
         'Attachment Management' => 'riadenie príloh',
         'Add Attachment' => 'Pridať prílohu',
         'Edit Attachment' => 'Upraviť prílohu',
-        'Filter for Attachments' => '',
-        'Filter for attachments' => '',
+        'Filter for Attachments' => 'Filter pre prílohy',
+        'Filter for attachments' => 'Filter pre prílohy',
         'Filename' => 'Názov súboru',
         'Download file' => 'Stiahnúť prílohu',
         'Delete this attachment' => 'Vymazať túto prílohu',
-        'Do you really want to delete this attachment?' => '',
+        'Do you really want to delete this attachment?' => 'Chceš skutočne vymazať túto prílohu?',
         'Attachment' => 'Príloha',
 
         # Template: AdminAutoResponse
@@ -275,7 +275,7 @@ sub Data {
         'To get the name of the ticket\'s customer user (if given).' => '',
         'To get the article attribute' => '',
         'Options of the current customer user data' => '',
-        'Ticket owner options' => '',
+        'Ticket owner options' => 'Možnosti vlastníka tiketu',
         'Ticket responsible options' => '',
         'Options of the current user who requested this action' => '',
         'Options of the ticket data' => '',
@@ -315,8 +315,8 @@ sub Data {
         'Available Cloud Services' => '',
 
         # Template: AdminCommunicationLog
-        'Communication Log' => '',
-        'Time range' => '',
+        'Communication Log' => 'Komunikačný log',
+        'Time range' => 'Časové rozpätie',
         'Show only communication logs created in specific time range.' =>
             '',
         'Filter for communications' => '',
@@ -863,7 +863,6 @@ sub Data {
         'Invoker Details' => '',
         'The name is typically used to call up an operation of a remote web service.' =>
             '',
-        'Please provide a unique name for this web service invoker.' => '',
         'Invoker backend' => '',
         'This OTRS invoker backend module will be called to prepare the data to be sent to the remote system, and to process its response data.' =>
             '',
@@ -984,18 +983,17 @@ sub Data {
         'Operation Details' => '',
         'The name is typically used to call up this web service operation from a remote system.' =>
             '',
-        'Mapping for incoming request data' => '',
-        'The request data will be processed by this mapping, to transform it to the kind of data OTRS expects.' =>
-            '',
         'Operation backend' => '',
         'This OTRS operation backend module will be called internally to process the request, generating data for the response.' =>
+            '',
+        'Mapping for incoming request data' => '',
+        'The request data will be processed by this mapping, to transform it to the kind of data OTRS expects.' =>
             '',
         'Mapping for outgoing response data' => '',
         'The response data will be processed by this mapping, to transform it to the kind of data the remote system expects.' =>
             '',
         'Include Ticket Data' => '',
-        'Include ticket data by response. Only available for TicketCreate and TicketUpdate operations.' =>
-            '',
+        'Include ticket data in response.' => '',
 
         # Template: AdminGenericInterfaceTransportHTTPREST
         'Network Transport' => '',
@@ -1959,7 +1957,7 @@ sub Data {
 
         # Template: AdminSession
         'Session Management' => '',
-        'Detail Session View for' => '',
+        'Detail Session View for %s (%s)' => '',
         'All sessions' => '',
         'Agent sessions' => '',
         'Customer sessions' => '',
@@ -1972,7 +1970,7 @@ sub Data {
         'Session' => '',
         'User' => 'Užívateľ',
         'Kill' => '',
-        'Detail View for SessionID' => '',
+        'Detail View for SessionID: %s - %s' => '',
 
         # Template: AdminSignature
         'Signature Management' => '',
@@ -1994,6 +1992,8 @@ sub Data {
         'This state is present in a SysConfig setting, confirmation for updating settings to point to the new type is needed!' =>
             '',
         'State type' => '',
+        'It\'s not possible to invalidate this entry because there is no other merge states in system!' =>
+            '',
         'This state is used in the following config settings:' => '',
 
         # Template: AdminSupportDataCollector
@@ -2115,6 +2115,7 @@ sub Data {
         # Template: AdminSystemConfigurationView
         'View a custom List of Settings' => '',
         'View single Setting: %s' => '',
+        'Go back to Deployment Details' => '',
 
         # Template: AdminSystemMaintenance
         'System Maintenance Management' => '',
@@ -2438,7 +2439,7 @@ sub Data {
         'Edit your preferences' => 'Zmeniť nastavenia',
         'Personal preferences' => '',
         'Preferences' => 'Nastavenia',
-        'Warning! You\'re currently not editing your own preferences, but those of %s.' =>
+        'Please note: you\'re currently editing the preferences of %s.' =>
             '',
         'Go back to editing this agent' => '',
         'Set up your personal preferences. Save each setting by clicking the checkmark on the right.' =>
@@ -2627,6 +2628,7 @@ sub Data {
         'History of %s%s%s' => '',
         'Filter for history items' => '',
         'Expand/collapse all' => '',
+        'CreateTime' => '',
         'Article' => 'článok',
 
         # Template: AgentTicketMerge
@@ -2830,9 +2832,7 @@ sub Data {
         'Powered by %s™' => '',
 
         # Template: CustomerFooterJS
-        'Your browser was not able to communicate with OTRS properly, there seems to be something wrong with your network connection. You could either try reloading this page manually or wait until your browser has re-established the connection on its own.' =>
-            '',
-        'There was an error in communication with the server. Server might be experiencing some temporary problems, please reload this page to check if they have been resolved.' =>
+        '%s detected possible network issues. You could either try reloading this page manually or wait until your browser has re-established the connection on its own.' =>
             '',
         'The connection has been re-established after a temporary connection loss. Due to this, elements on this page could have stopped to work correctly. In order to be able to use all elements correctly again, it is strongly recommended to reload this page.' =>
             '',
@@ -2931,6 +2931,9 @@ sub Data {
         'Contact our service team now.' => '',
         'Send a bugreport' => 'Pošli report o chybách',
         'Expand' => 'Rozšíriť',
+
+        # Template: AttachmentList
+        'Click to delete this attachment.' => '',
 
         # Template: DraftButtons
         'Update draft' => '',
@@ -3285,6 +3288,7 @@ sub Data {
         'Loading, please wait...' => '',
 
         # JS Template: UploadContainer
+        'Click to select a file for upload.' => '',
         'Click to select files or just drop them here.' => '',
         'Click to select a file or just drop it here.' => '',
         'Uploading...' => '',
@@ -3419,7 +3423,7 @@ sub Data {
         'Auto Response added!' => '',
 
         # Perl Module: Kernel/Modules/AdminCommunicationLog.pm
-        'Invalid CommunicationID ' => '',
+        'Invalid CommunicationID!' => '',
         'All communications' => '',
         'Last 1 hour' => '',
         'Last 3 hours' => '',
@@ -3548,38 +3552,34 @@ sub Data {
         'Invoker deleted' => '',
 
         # Perl Module: Kernel/Modules/AdminGenericInterfaceErrorHandlingRequestRetry.pm
-        '0 seconds' => '',
-        '15 seconds' => '',
-        '30 seconds' => '',
-        '45 seconds' => '',
-        '1 minute' => '',
-        '2 minutes' => '',
-        '3 minutes' => '',
-        '4 minutes' => '',
-        '5 minutes' => '',
+        '0 seconds' => '0 sekúnd',
+        '15 seconds' => '15 sekúnd',
+        '30 seconds' => '30 sekúnd',
+        '45 seconds' => '45 sekúnd',
+        '1 minute' => '1 minuta',
+        '2 minutes' => '2 minuty',
+        '3 minutes' => '3 minuty',
+        '4 minutes' => '4 minuty',
+        '5 minutes' => '5 minút',
         '10 minutes' => ' 10 minút',
         '15 minutes' => ' 15 minút',
-        '30 minutes' => '',
-        '1 hour' => '',
-        '2 hours' => '',
-        '3 hours' => '',
-        '4 hours' => '',
-        '5 hours' => '',
-        '6 hours' => '',
-        '12 hours' => '',
-        '18 hours' => '',
-        '1 day' => '',
-        '2 days' => '',
-        '3 days' => '',
-        '4 days' => '',
-        '6 days' => '',
-        '1 week' => '',
+        '30 minutes' => '30 minút',
+        '1 hour' => '1 hodina',
+        '2 hours' => '2 hodiny',
+        '3 hours' => '3 hodiny',
+        '4 hours' => '4 hodiny',
+        '5 hours' => '5 hodín',
+        '6 hours' => '6 hodín',
+        '12 hours' => '12 hodín',
+        '18 hours' => '18 hodín',
+        '1 day' => '1 deň',
+        '2 days' => '2 dni',
+        '3 days' => '3 dni',
+        '4 days' => '4 dni',
+        '6 days' => '6 dní',
+        '1 week' => '1 týždeň',
 
         # Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerDefault.pm
-        'Need InvokerType' => '',
-        'InvokerType %s is not registered' => '',
-        'Need InvokerType!' => '',
-        'Need Invoker' => '',
         'Could not determine config for invoker %s' => '',
 
         # Perl Module: Kernel/Modules/AdminGenericInterfaceInvokerEvent.pm
@@ -3608,10 +3608,6 @@ sub Data {
         'Outgoing response data before mapping' => '',
 
         # Perl Module: Kernel/Modules/AdminGenericInterfaceOperationDefault.pm
-        'Need OperationType' => '',
-        'Operation %s is not registered' => '',
-        'OperationType %s is not registered' => '',
-        'Need Operation' => '',
         'Could not determine config for operation %s' => '',
 
         # Perl Module: Kernel/Modules/AdminGenericInterfaceTransportHTTPREST.pm
@@ -3645,6 +3641,8 @@ sub Data {
 
         # Perl Module: Kernel/Modules/AdminMailAccount.pm
         'Mail account added!' => 'Mailové konto pridané!',
+        'Email account fetch already fetched by another process. Please try again later!' =>
+            '',
         'Dispatching by email To: field.' => 'Posielam emailom =>  prijemca: pole',
         'Dispatching by selected Queue.' => 'Posielam vybraným queue.',
 
@@ -3694,9 +3692,11 @@ sub Data {
         'Updated' => '',
         'Already up-to-date' => '',
         'Installed' => '',
+        'Not correctly deployed' => '',
         'Package updated correctly' => '',
         'Package was already updated' => '',
         'Dependency installed correctly' => '',
+        'The package needs to be reinstalled' => '',
         'The package contains cyclic dependencies' => '',
         'Not found in on-line repositories' => '',
         'Required version is higher than available' => '',
@@ -4009,8 +4009,6 @@ sub Data {
         'Updated user preferences' => '',
         'System was unable to deploy your changes.' => '',
         'Setting not found!' => '',
-        'This feature is part of the %s Please contact us at %s for an upgrade.' =>
-            '',
         'System was unable to reset the setting!' => '',
 
         # Perl Module: Kernel/Modules/AgentSplitSelection.pm
@@ -4369,6 +4367,8 @@ sub Data {
             '',
         'Error: Please set the value for innodb_log_file_size on your database to at least %s MB (current: %s MB, recommended: %s MB). For more information, please have a look at %s.' =>
             '',
+        'Wrong database collation (%s is %s, but it needs to be utf8).' =>
+            '',
 
         # Perl Module: Kernel/Modules/PublicCalendar.pm
         'No %s!' => '',
@@ -4574,7 +4574,8 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Notification/CustomerSystemMaintenanceCheck.pm
         'System maintenance is active!' => '',
-        'A system maintenance period will start at: ' => 'Plánovaná systémová údržba začína o:',
+        'A system maintenance period will start at: %s and is expected to stop at: %s' =>
+            '',
 
         # Perl Module: Kernel/Output/HTML/Notification/DaemonCheck.pm
         'OTRS Daemon is not running.' => 'OTRS démon nebeží.',
@@ -4912,6 +4913,11 @@ sub Data {
         'InnoDB Log File Size' => '',
         'The setting innodb_log_file_size must be at least 256 MB.' => '',
 
+        # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/mysql/InvalidDefaultValues.pm
+        'Invalid Default Values' => '',
+        'Tables with invalid default values were found. In order to fix it automatically, please run: bin/otrs.Console.pl Maint::Database::Check --repair' =>
+            '',
+
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/mysql/MaxAllowedPacket.pm
         'Maximum Query Size' => '',
         'The setting \'max_allowed_packet\' must be higher than 64 MB.' =>
@@ -4939,6 +4945,11 @@ sub Data {
         'NLS_DATE_FORMAT must be set to \'YYYY-MM-DD HH24:MI:SS\'.' => '',
         'NLS_DATE_FORMAT Setting SQL Check' => '',
 
+        # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/oracle/PrimaryKeySequencesAndTriggers.pm
+        'Primary Key Sequences and Triggers' => '',
+        'The following sequences and/or triggers with possible wrong names have been found. Please rename them manually.' =>
+            '',
+
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/postgresql/Charset.pm
         'Setting client_encoding needs to be UNICODE or UTF8.' => '',
         'Setting server_encoding needs to be UNICODE or UTF8.' => '',
@@ -4946,6 +4957,11 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/postgresql/DateStyle.pm
         'Date Format' => '',
         'Setting DateStyle needs to be ISO.' => '',
+
+        # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/postgresql/PrimaryKeySequences.pm
+        'Primary Key Sequences' => '',
+        'The following sequences with possible wrong names have been found. Please rename them manually.' =>
+            '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/Database/postgresql/Version.pm
         'PostgreSQL 9.2 or higher is required.' => '',
@@ -5029,6 +5045,7 @@ sub Data {
         'Process Tickets' => '',
         'Months Between First And Last Ticket' => '',
         'Tickets Per Month (avg)' => '',
+        'Open Tickets' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/DefaultSOAPUser.pm
         'Default SOAP Username And Password' => '',
@@ -5061,6 +5078,10 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '',
         'No legacy configuration backup files found.' => '',
+        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
+            '',
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
+            '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
         'Package Installation Status' => '',
@@ -5102,7 +5123,6 @@ sub Data {
         'There are invalid users with locked tickets.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/Ticket/OpenTickets.pm
-        'Open Tickets' => '',
         'You should not have more than 8,000 open tickets in your system.' =>
             '',
 
@@ -5193,6 +5213,9 @@ sub Data {
         'Could not update modified setting!' => '',
         'Setting could not be unlocked!' => '',
         'Missing key %s!' => '',
+        'Invalid setting: %s' => '',
+        'Could not combine settings values into a perl hash.' => '',
+        'Can not lock the deployment for UserID \'%s\'!' => '',
         'All Settings' => '',
 
         # Perl Module: Kernel/System/SysConfig/BaseValueType.pm
@@ -5648,8 +5671,6 @@ sub Data {
         # JS File: Core.Agent
         'Slide the navigation bar' => 'Posuňte navigačný panel',
         'Please turn off Compatibility Mode in Internet Explorer!' => 'Prosím vypnite Compatibility Mode v Internet Exploreri',
-        'This feature is part of the %s.  Please contact us at %s for an upgrade.' =>
-            'Táto funkcionalita je častou %s. Prosím kontaktujte nás ak chcete vyššiu verziu %s',
         'Find out more' => '',
 
         # JS File: Core.App.Responsive
@@ -5657,9 +5678,8 @@ sub Data {
 
         # JS File: Core.App
         'Error: Browser Check failed!' => '',
-        'Connection error' => '',
         'Reload page' => '',
-        'Communication error' => '',
+        'Reload page (%ss)' => '',
 
         # JS File: Core.Debug
         'Namespace %s could not be initialized, because %s could not be found.' =>
@@ -5843,6 +5863,7 @@ Thanks for your help!
         'Admin Area.' => '',
         'Admin Notification' => 'Administrátorské oznamovanie',
         'Admin area navigation for the agent interface.' => '',
+        'Admin modules overview.' => '',
         'Admin.' => '',
         'Administration' => '',
         'Agent Customer Search' => '',
@@ -5850,6 +5871,7 @@ Thanks for your help!
         'Agent Name' => '',
         'Agent Name + FromSeparator + System Address Display Name' => '',
         'Agent Preferences.' => '',
+        'Agent Statistics.' => '',
         'Agent User Search' => '',
         'Agent User Search.' => '',
         'Agent interface article notification module to check PGP.' => '',
@@ -6101,7 +6123,7 @@ Thanks for your help!
         'Communication' => '',
         'Communication & Notifications' => '',
         'Communication Log GUI' => '',
-        'Communication log limit per page for CommunicationLog Overview' =>
+        'Communication log limit per page for Communication Log Overview.' =>
             '',
         'CommunicationLog Overview Limit' => '',
         'Company Status' => '',
@@ -6176,17 +6198,20 @@ Thanks for your help!
             '',
         'Croatian' => '',
         'Custom RSS Feed' => '',
+        'Custom RSS feed.' => '',
         'Custom text for the page shown to customers that have no tickets yet (if you need those text translated add them to a custom translation module).' =>
             '',
         'Customer Administration' => '',
         'Customer Companies' => 'Zákazníkove spoločnosti',
         'Customer IDs' => '',
         'Customer Information Center Search.' => '',
+        'Customer Information Center search.' => '',
         'Customer Information Center.' => '',
         'Customer Ticket Print Module.' => '',
         'Customer User Administration' => '',
         'Customer User Information' => '',
         'Customer User Information Center Search.' => '',
+        'Customer User Information Center search.' => '',
         'Customer User Information Center.' => '',
         'Customer Users ↔ Customers' => '',
         'Customer Users ↔ Groups' => '',
@@ -6208,6 +6233,7 @@ Thanks for your help!
             '',
         'Czech' => '',
         'Danish' => '',
+        'Dashboard overview.' => '',
         'Data used to export the search result in CSV format.' => '',
         'Date / Time' => '',
         'Default (Slim)' => '',
@@ -6367,6 +6393,8 @@ Thanks for your help!
             '',
         'Defines if customers should be allowed to login if they have no shared secret stored in their preferences and therefore are not using two-factor authentication.' =>
             '',
+        'Defines if the communication between this system and OTRS Group servers that provide cloud services is possible. If set to \'Disable cloud services\', some functionality will be lost such as system registration, support data sending, upgrading to and use of OTRS Business Solution™, OTRS Verify™, OTRS News and product News dashboard widgets, among others.' =>
+            '',
         'Defines if the enhanced mode should be used (enables use of table, replace, subscript, superscript, paste from word, etc.) in customer interface.' =>
             '',
         'Defines if the enhanced mode should be used (enables use of table, replace, subscript, superscript, paste from word, etc.).' =>
@@ -6445,7 +6473,9 @@ Thanks for your help!
         'Defines the config options for the autocompletion feature.' => '',
         'Defines the config parameters of this item, to be shown in the preferences view.' =>
             '',
-        'Defines the config parameters of this item, to be shown in the preferences view. \'PasswordRegExp\' allows to match passwords against a regular expression. Define the minimum number of characters using \'PasswordMinSize\'. Define if at least 2 lowercase and 2 uppercase letter characters are needed by setting the appropriate option to \'1\'. \'PasswordMin2Characters\' defines if the password needs to contain at least 2 letter characters (set to 0 or 1). \'PasswordNeedDigit\' controls the need of at least 1 digit (set to 0 or 1 to control). \'PasswordMaxLoginFailed\' allows to set an agent to invalid-temporarily if max failed logins reached.' =>
+        'Defines the config parameters of this item, to be shown in the preferences view. \'PasswordRegExp\' allows to match passwords against a regular expression. Define the minimum number of characters using \'PasswordMinSize\'. Define if at least 2 lowercase and 2 uppercase letter characters are needed by setting the appropriate option to \'1\'. \'PasswordMin2Characters\' defines if the password needs to contain at least 2 letter characters (set to 0 or 1). \'PasswordNeedDigit\' controls the need of at least 1 digit (set to 0 or 1 to control). \'PasswordMaxLoginFailed\' allows to set an agent to invalid-temporarily if max failed logins reached. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
+            '',
+        'Defines the config parameters of this item, to be shown in the preferences view. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
         'Defines the connections for http/ftp, via a proxy.' => '',
         'Defines the customer preferences key where the shared secret key is stored.' =>
@@ -6915,7 +6945,8 @@ Thanks for your help!
         'Defines the user identifier for the customer panel.' => '',
         'Defines the username to access the SOAP handle (bin/cgi-bin/rpc.pl).' =>
             '',
-        'Defines the users avatar.' => '',
+        'Defines the users avatar. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
+            '',
         'Defines the valid state types for a ticket.' => '',
         'Defines the valid states for unlocked tickets. To unlock tickets the script "bin/otrs.Console.pl Maint::Ticket::UnlockTimeout" can be used.' =>
             '',
@@ -6991,9 +7022,8 @@ Thanks for your help!
             '',
         'Disable HTTP header "X-Frame-Options: SAMEORIGIN" to allow OTRS to be included as an IFrame in other websites. Disabling this HTTP header can be a security issue! Only disable it, if you know what you are doing!' =>
             '',
+        'Disable cloud services' => '',
         'Disables sending reminder notifications to the responsible agent of a ticket (Ticket::Responsible needs to be enabled).' =>
-            '',
-        'Disables the communication between this system and OTRS Group servers that provides cloud services. If enabled, some functionality will be lost such as system registration, support data sending, upgrading to and use of OTRS Business Solution™, OTRS Verify™, OTRS News and product News dashboard widgets, among others.' =>
             '',
         'Disables the redirection to the last screen overview / dashboard after a ticket is created.' =>
             '',
@@ -7023,7 +7053,7 @@ Thanks for your help!
             '',
         'Dynamic fields groups for process widget. The key is the name of the group, the value contains the fields to be shown. Example: \'Key => My Group\', \'Content: Name_X, NameY\'.' =>
             '',
-        'Dynamic fields limit per page for Dynamic Fields Overview' => '',
+        'Dynamic fields limit per page for Dynamic Fields Overview.' => '',
         'Dynamic fields options shown in the ticket message screen of the customer interface. NOTE. If you want to display these fields also in the ticket zoom of the customer interface, you have to enable them in CustomerTicketZoom###DynamicField.' =>
             '',
         'Dynamic fields options shown in the ticket reply section in the ticket zoom screen of the customer interface.' =>
@@ -7256,7 +7286,7 @@ Thanks for your help!
             '',
         'Gives customer users group based access to tickets from customer users of the same customer (ticket CustomerID is a CustomerID of the customer user).' =>
             '',
-        'Gives end users the possibility to override the separator character for CSV files, defined in the translation files.' =>
+        'Gives end users the possibility to override the separator character for CSV files, defined in the translation files. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
         'Global Search Module.' => '',
         'Go to dashboard!' => 'Choď na dashboard!',
@@ -7422,6 +7452,7 @@ Thanks for your help!
         'JavaScript function for the search frontend.' => '',
         'Language' => 'Jazyk',
         'Large' => 'Veľký',
+        'Last Screen Overview' => '',
         'Last customer subject' => '',
         'Lastname Firstname' => '',
         'Lastname Firstname (UserLogin)' => '',
@@ -7480,6 +7511,7 @@ Thanks for your help!
         'Locked Tickets' => 'Uzamknuté tikety',
         'Locked Tickets.' => '',
         'Locked ticket.' => 'História: zamkni',
+        'Logged in users.' => '',
         'Logged-In Users' => '',
         'Logout of customer panel.' => '',
         'Look into a ticket!' => 'Vyhľadaj tiket.',
@@ -7604,6 +7636,7 @@ Thanks for your help!
         'New Year\'s Eve' => 'Nový rok',
         'New process ticket' => '',
         'News about OTRS releases!' => 'Novinky o OTRS vydaniach!',
+        'News about OTRS.' => '',
         'Next possible ticket states after adding a phone note in the ticket phone inbound screen of the agent interface.' =>
             '',
         'Next possible ticket states after adding a phone note in the ticket phone outbound screen of the agent interface.' =>
@@ -7644,10 +7677,12 @@ Thanks for your help!
         'Other Customers' => '',
         'Out Of Office' => '',
         'Out Of Office Time' => 'Čas "Neprítomnosť v kancelárii"',
+        'Out of Office users.' => '',
         'Overloads (redefines) existing functions in Kernel::System::Ticket. Used to easily add customizations.' =>
             '',
         'Overview Escalated Tickets.' => '',
         'Overview Refresh Time' => '',
+        'Overview of all Tickets per assigned Queue.' => '',
         'Overview of all appointments.' => '',
         'Overview of all escalated tickets.' => '',
         'Overview of all open Tickets.' => '',
@@ -7658,15 +7693,15 @@ Thanks for your help!
         'PGP Keys' => 'PGP kľúče',
         'Package event module file a scheduler task for update registration.' =>
             '',
-        'Parameters for the CreateNextMask object in the preference view of the agent interface.' =>
+        'Parameters for the CreateNextMask object in the preference view of the agent interface. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the CustomQueue object in the preference view of the agent interface.' =>
+        'Parameters for the CustomQueue object in the preference view of the agent interface. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the CustomService object in the preference view of the agent interface.' =>
+        'Parameters for the CustomService object in the preference view of the agent interface. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the RefreshTime object in the preference view of the agent interface.' =>
+        'Parameters for the RefreshTime object in the preference view of the agent interface. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the column filters of the small ticket overview.' =>
+        'Parameters for the column filters of the small ticket overview. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
         'Parameters for the dashboard backend of the customer company information of the agent interface. "Group" is used to restrict the access to the plugin (e. g. Group: admin;group1;group2;). "Default" determines if the plugin is enabled by default or if the user needs to enable it manually. "CacheTTLLocal" is the cache time in minutes for the plugin.' =>
             '',
@@ -7714,13 +7749,13 @@ Thanks for your help!
             '',
         'Parameters for the pages (in which the communication log entries are shown) of the communication log overview.' =>
             '',
-        'Parameters for the pages (in which the dynamic fields are shown) of the dynamic fields overview.' =>
+        'Parameters for the pages (in which the dynamic fields are shown) of the dynamic fields overview. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the pages (in which the tickets are shown) of the medium ticket overview.' =>
+        'Parameters for the pages (in which the tickets are shown) of the medium ticket overview. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the pages (in which the tickets are shown) of the small ticket overview.' =>
+        'Parameters for the pages (in which the tickets are shown) of the small ticket overview. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
-        'Parameters for the pages (in which the tickets are shown) of the ticket preview overview.' =>
+        'Parameters for the pages (in which the tickets are shown) of the ticket preview overview. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
             '',
         'Parameters of the example SLA attribute Comment2.' => '',
         'Parameters of the example queue attribute Comment2.' => '',
@@ -7895,7 +7930,7 @@ Thanks for your help!
         'Sends registration information to OTRS group.' => '',
         'Sends reminder notifications of unlocked ticket after reaching the reminder date (only sent to ticket owner).' =>
             '',
-        'Sends the notifications which are configured in the admin interface under "Notfication (Event)".' =>
+        'Sends the notifications which are configured in the admin interface under "Ticket Notifications".' =>
             '',
         'Sent "%s" notification to "%s" via "%s".' => '',
         'Sent auto follow-up to "%s".' => '',
@@ -8135,6 +8170,7 @@ Thanks for your help!
             '',
         'Show article as rich text even if rich text writing is disabled.' =>
             '',
+        'Show command line output.' => '',
         'Show queues even when only locked tickets are in.' => '',
         'Show the current owner in the customer interface.' => '',
         'Show the current queue in the customer interface.' => '',
@@ -8241,7 +8277,9 @@ Thanks for your help!
         'Shows all both ro and rw tickets in the service view.' => '',
         'Shows all open tickets (even if they are locked) in the escalation view of the agent interface.' =>
             '',
-        'Shows all the articles of the ticket (expanded) in the zoom view.' =>
+        'Shows all the articles of the ticket (expanded) in the agent zoom view.' =>
+            '',
+        'Shows all the articles of the ticket (expanded) in the customer zoom view.' =>
             '',
         'Shows all the customer identifiers in a multi-select field (not useful if you have a lot of customer identifiers).' =>
             '',
@@ -8389,6 +8427,8 @@ Thanks for your help!
             '',
         'Stat#' => '',
         'States' => 'Stavy',
+        'Statistic Reports overview.' => '',
+        'Statistics overview.' => '',
         'Status view' => '',
         'Stopped response time escalation.' => '',
         'Stopped solution time escalation.' => '',
@@ -8440,7 +8480,7 @@ Thanks for your help!
             '',
         'The logo shown in the header of the customer interface. The URL to the image can be a relative URL to the skin image directory, or a full URL to a remote web server.' =>
             '',
-        'The logo shown on top of the login box of the agent interface. The URL to the image must be relative URL to the skin image directory.' =>
+        'The logo shown on top of the login box of the agent interface. The URL to the image can be a relative URL to the skin image directory, or a full URL to a remote web server.' =>
             '',
         'The maximal number of articles expanded on a single page in AgentTicketZoom.' =>
             '',
@@ -8509,9 +8549,9 @@ Thanks for your help!
         'Ticket bulk module.' => '',
         'Ticket event module that triggers the escalation stop events.' =>
             '',
-        'Ticket limit per page for Ticket Overview "Medium"' => 'Počet tiketov na stranu pre pohlad Ticket overview "Medium"',
-        'Ticket limit per page for Ticket Overview "Preview"' => 'Počet tiketov na stranu pre pohľad "Preview"',
-        'Ticket limit per page for Ticket Overview "Small"' => 'Počet tiketov na stranu pre pohlad Ticket overview "Small"',
+        'Ticket limit per page for Ticket Overview "Medium".' => '',
+        'Ticket limit per page for Ticket Overview "Preview".' => '',
+        'Ticket limit per page for Ticket Overview "Small".' => '',
         'Ticket notifications' => '',
         'Ticket overview' => '',
         'Ticket plain view of an email.' => '',
@@ -8529,8 +8569,10 @@ Thanks for your help!
             '',
         'Toolbar Item for a shortcut. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '',
-        'Transport selection for appointment notifications.' => '',
-        'Transport selection for ticket notifications.' => '',
+        'Transport selection for appointment notifications. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
+            '',
+        'Transport selection for ticket notifications. Please note: setting \'Active\' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user\'s behalf. Use \'PreferenceGroup\' to control in which area these settings should be shown in the user interface.' =>
+            '',
         'Tree view' => '',
         'Triggers add or update of automatic calendar appointments based on certain ticket times.' =>
             '',
@@ -8677,16 +8719,16 @@ Thanks for your help!
         'Clear all',
         'Clear debug log',
         'Clear search',
+        'Click to delete this attachment.',
+        'Click to select a file for upload.',
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
         'Close',
         'Close preview',
         'Close this dialog',
-        'Communication error',
         'Complex %s with %s arguments',
         'Confirm',
-        'Connection error',
         'Could not open popup window. Please disable any popup blockers for this application.',
         'Current selection',
         'Currently not possible',
@@ -8844,6 +8886,7 @@ Thanks for your help!
         'Process state',
         'Queues',
         'Reload page',
+        'Reload page (%ss)',
         'Remove',
         'Remove Entity from canvas',
         'Remove active filters for this widget.',
@@ -8934,7 +8977,7 @@ Thanks for your help!
         'This address already exists on the address list.',
         'This element has children elements and can currently not be removed.',
         'This event is already attached to the job, Please use a different one.',
-        'This feature is part of the %s.  Please contact us at %s for an upgrade.',
+        'This feature is part of the %s. Please contact us at %s for an upgrade.',
         'This field is required.',
         'This is %s',
         'This is a repeating appointment',

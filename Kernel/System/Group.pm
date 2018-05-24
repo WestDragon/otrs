@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -494,11 +494,11 @@ sub GroupDataList {
 
 get id or name for role
 
-    my $Role = $RoleObject->RoleLookup(
+    my $Role = $GroupObject->RoleLookup(
         RoleID => $RoleID,
     );
 
-    my $RoleID = $RoleObject->RoleLookup(
+    my $RoleID = $GroupObject->RoleLookup(
         Role => $Role,
     );
 

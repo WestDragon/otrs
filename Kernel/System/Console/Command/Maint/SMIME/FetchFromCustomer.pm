@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -95,7 +95,7 @@ sub PreRun {
         $CryptObject = $Kernel::OM->Get('Kernel::System::Crypt::SMIME');
     };
     if ( !$CryptObject ) {
-        die "No S/MIME support!.\n"
+        die "No S/MIME support!.\n";
     }
 
     return;

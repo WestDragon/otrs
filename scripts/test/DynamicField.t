@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -538,11 +538,11 @@ for my $DynamicField (@Data) {
 
     if ( $DynamicField->{ObjectType} eq 'Ticket' ) {
         push @{ $SeparatedData{Ticket} }, $DynamicField;
-        push @{ $SeparatedIDs{Ticket} },  $DynamicField->{ID}
+        push @{ $SeparatedIDs{Ticket} },  $DynamicField->{ID};
     }
     elsif ( $DynamicField->{ObjectType} eq 'Article' ) {
         push @{ $SeparatedData{Article} }, $DynamicField;
-        push @{ $SeparatedIDs{Article} },  $DynamicField->{ID}
+        push @{ $SeparatedIDs{Article} },  $DynamicField->{ID};
     }
 }
 

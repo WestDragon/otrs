@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -291,6 +291,24 @@ sub GetContentType {
     return $Self->{ContentType} if $Self->{ContentType};
 
     return $Self->GetParam( WHAT => 'Content-Type' ) || 'text/plain';
+}
+
+=head2 GetContentDisposition()
+
+Returns the message body (or from the first attachment) "ContentDisposition" header.
+
+    my $ContentDisposition = $ParserObject->GetContentDisposition();
+
+    (e. g. 'Content-Disposition: attachment; filename="test-123"')
+
+=cut
+
+sub GetContentDisposition {
+    my $Self = shift;
+
+    return $Self->{ContentDisposition} if $Self->{ContentDisposition};
+
+    return $Self->GetParam( WHAT => 'Content-Disposition' );
 }
 
 =head2 GetCharset()
@@ -694,6 +712,13 @@ sub PartsAttachments {
             String => $Part->head()->recommended_filename(),
             Encode => 'utf-8',
         );
+
+        # cleanup filename
+        $PartData{Filename} = $Kernel::OM->Get('Kernel::System::Main')->FilenameCleanUp(
+            Filename => $PartData{Filename},
+            Type     => 'Local',
+        );
+
         $PartData{ContentDisposition} = $Part->head()->get('Content-Disposition');
         if ( $PartData{ContentDisposition} ) {
             my %Data = $Self->GetContentTypeParams(
@@ -723,11 +748,11 @@ sub PartsAttachments {
         my ($SubjectString) = $Part->as_string() =~ m/^Subject: ([^\n]*(\n[ \t][^\n]*)*)/m;
         my $Subject = $Self->_DecodeString( String => $SubjectString );
 
-        # trim whitespace
-        $Subject =~ s/^\s+|\n|\s+$//g;
-        if ( length($Subject) > 246 ) {
-            $Subject = substr( $Subject, 0, 246 );
-        }
+        # cleanup filename
+        $Subject = $Kernel::OM->Get('Kernel::System::Main')->FilenameCleanUp(
+            Filename => $Subject,
+            Type     => 'Local',
+        );
 
         if ( $Subject eq '' ) {
             $Self->{NoFilenamePartCounter}++;
@@ -754,7 +779,7 @@ sub PartsAttachments {
     }
     if ( $PartData{Disposition} ) {
         chomp $PartData{Disposition};
-        $PartData{Disposition} = lc $PartData{Disposition}
+        $PartData{Disposition} = lc $PartData{Disposition};
     }
 
     # get attachment size
@@ -833,7 +858,7 @@ sub PartsAttachments {
                     $PartData{Content} = $HTMLUtilsObject->DocumentComplete(
                         String  => $HTMLContent,
                         Charset => 'utf-8',
-                        )
+                    );
                 }
                 else {
                     $PartData{Content} = $HTMLUtilsObject->ToAscii(

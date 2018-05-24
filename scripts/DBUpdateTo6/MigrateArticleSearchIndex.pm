@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -46,21 +46,13 @@ sub Run {
     Kernel::Config::Backups::ZZZAutoOTRS5->Load( \%OTRS5Config );
 
     if ( $OTRS5Config{'Ticket::SearchIndexModule'} ) {
-        my $ExclusiveLockGUID = $SysConfigObject->SettingLock(
-            Name   => 'Ticket::SearchIndexModule',
-            Force  => 1,
-            UserID => 1,
+        my $Success = $Self->SettingUpdate(
+            Name           => 'Ticket::SearchIndexModule',
+            IsValid        => 1,
+            EffectiveValue => 'Kernel::System::Ticket::ArticleSearchIndex::DB',
+            Verbose        => $Verbose,
         );
-
-        my %Result = $SysConfigObject->SettingUpdate(
-            Name              => 'Ticket::SearchIndexModule',
-            IsValid           => 1,
-            EffectiveValue    => 'Kernel::System::Ticket::ArticleSearchIndex::DB',
-            ExclusiveLockGUID => $ExclusiveLockGUID,
-            UserID            => 1,
-        );
-
-        if ( !$Result{Success} ) {
+        if ( !$Success ) {
             print "\n    Error:Unable to migrate Ticket::SearchIndexModule.\n\n";
             return;
         }
@@ -68,21 +60,13 @@ sub Run {
         # Turn off filtering of stop words if previous article search index module was set to RuntimeDB. Effectively,
         #   this will mimic old search behavior.
         if ( $OTRS5Config{'Ticket::SearchIndexModule'} eq 'Kernel::System::Ticket::ArticleSearchIndex::RuntimeDB' ) {
-            my $ExclusiveLockGUID = $SysConfigObject->SettingLock(
-                Name   => 'Ticket::SearchIndex::ForceUnfilteredStorage',
-                Force  => 1,
-                UserID => 1,
+            $Success = $Self->SettingUpdate(
+                Name           => 'Ticket::SearchIndex::ForceUnfilteredStorage',
+                IsValid        => 1,
+                EffectiveValue => 1,
+                Verbose        => $Verbose,
             );
-
-            my %Result = $SysConfigObject->SettingUpdate(
-                Name              => 'Ticket::SearchIndex::ForceUnfilteredStorage',
-                IsValid           => 1,
-                EffectiveValue    => 1,
-                ExclusiveLockGUID => $ExclusiveLockGUID,
-                UserID            => 1,
-            );
-
-            if ( !$Result{Success} ) {
+            if ( !$Success ) {
                 print "\n    Error: Unable to migrate Ticket::SearchIndex::ForceUnfilteredStorage.\n\n";
                 return;
             }

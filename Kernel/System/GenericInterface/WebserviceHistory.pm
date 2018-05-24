@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -20,7 +20,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::WebserviceHistory
+Kernel::System::GenericInterface::WebserviceHistory
 
 =head1 DESCRIPTION
 
@@ -180,7 +180,7 @@ sub WebserviceHistoryGet {
 
 update WebserviceHistory attributes
 
-    my $Success = $WebserviceObject->WebserviceHistoryUpdate(
+    my $Success = $WebserviceHistoryObject->WebserviceHistoryUpdate(
         ID           => 123,
         WebserviceID => 123
         Config       => $ConfigHashRef,

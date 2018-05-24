@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -725,7 +725,7 @@ sub NotificationEventCheck {
 
 import an Notification YAML file/content
 
-    my $NotificationImport = $NotificationObject->NotificationImport(
+    my $NotificationImport = $NotificationEventObject->NotificationImport(
         Content                   => $YAMLContent, # mandatory, YAML format
         OverwriteExistingNotifications => 0,            # 0 || 1
         UserID                    => 1,            # mandatory

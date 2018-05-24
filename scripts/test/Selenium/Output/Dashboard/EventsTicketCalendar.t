@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -131,7 +131,7 @@ $Selenium->RunTest(
                 ObjectParams => {
                     Epoch => $DateTimeObject->ToEpoch() + 60 * 60,
                     }
-                )->ToString(),
+            )->ToString(),
         );
 
         # set value of ticket's dynamic fields

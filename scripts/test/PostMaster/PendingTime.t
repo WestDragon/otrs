@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -80,7 +80,7 @@ my @Tests = (
                 ObjectParams => {
                     String => '2021-01-01 00:00:00',
                     }
-                )->ToEpoch(),
+            )->ToEpoch(),
         },
         CheckFollowUp => {
             RealTillTimeNotUsed => $Kernel::OM->Create(
@@ -88,7 +88,7 @@ my @Tests = (
                 ObjectParams => {
                     String => '2022-01-01 00:00:00',
                     }
-                )->ToEpoch(),
+            )->ToEpoch(),
         },
     },
     {

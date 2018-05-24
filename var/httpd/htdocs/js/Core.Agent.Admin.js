@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -84,7 +84,10 @@ Core.Agent.Admin = (function (TargetNS) {
                     FavouriteRows.push($(this).find('td:first a').html());
                 });
 
-                FavouriteRows.sort();
+                FavouriteRows.sort(function (a, b) {
+                  return a.localeCompare(b);
+                });
+
                 RowIndex = FavouriteRows.indexOf(ModuleName);
                 if (RowIndex < 0) {
                     $('.DataTable.Favourites').append($(FavouriteHTML));

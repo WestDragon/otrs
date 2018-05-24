@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -310,7 +310,7 @@ sub _SerializeConfig {
         @ConfigContainer = sort keys %{ $Param{Data} };
     }
     else {
-        @ConfigContainer = sort @{ $Param{Data} };
+        @ConfigContainer = @{ $Param{Data} };
         $DataType        = 'Array';
     }
 
@@ -844,7 +844,7 @@ sub _ConditionCheck {
                     for my $ArrayField (@ArrayFields) {
                         next ARRAYFIELD if ref $Param{Data}->{$ArrayField} ne '';
                         if ( $Param{Data}->{$ArrayField} !~ $ActualCondition->{Fields}->{$FieldName}->{Match} ) {
-                            next ARRAYFIELD
+                            next ARRAYFIELD;
                         }
 
                         $FieldSuccess++;

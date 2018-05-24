@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -29,6 +29,13 @@ $Selenium->RunTest(
     sub {
 
         my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+
+        # make sure to enable cloud services
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'CloudServices::Disabled',
+            Value => 0,
+        );
 
         # Get needed variables.
         my $Daemon   = $ConfigObject->Get('Home') . '/bin/otrs.Daemon.pl';

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -830,7 +830,7 @@ sub ConvertCertFormat {
         );
         return;
     }
-    my $String = $Param{String};
+    my $String     = $Param{String};
     my $PassPhrase = $Param{Passphrase} // '';
 
     my $FileTempObject = $Kernel::OM->Get('Kernel::System::FileTemp');

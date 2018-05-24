@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -36,6 +36,13 @@ $Selenium->RunTest(
         $Helper->ConfigSettingChange(
             Valid => 1,
             Key   => 'Ticket::Service',
+            Value => 1,
+        );
+
+        # Simulate that we have overridden setting in the .pm file.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::ZoomTimeDisplay',
             Value => 1,
         );
 
@@ -224,7 +231,7 @@ $Selenium->RunTest(
             index(
                 $Selenium->get_page_source(),
                 "Avatars have been disabled by the system administrator. You'll see your initials instead."
-                ) > -1,
+            ) > -1,
             "Avatars disabled message found"
         );
 
@@ -239,7 +246,7 @@ $Selenium->RunTest(
             index(
                 $Selenium->get_page_source(),
                 "You can change your avatar image by registering with your email address"
-                ) > -1,
+            ) > -1,
             "Gravatar message found"
         );
 
@@ -451,6 +458,56 @@ JAVASCRIPT
 
         if ( $Kernel::OM->Get('Kernel::System::OTRSBusiness')->OTRSBusinessIsInstalled() ) {
 
+            # Open advanced preferences screen.
+            $Selenium->VerifiedGet(
+                "${ScriptAlias}index.pl?Action=AgentPreferences;Subaction=Group;Group=Advanced;RootNavigation=Frontend::Agent::View::TicketZoom"
+            );
+
+            # Check setting value.
+            my $CheckboxState = $Selenium->execute_script(
+                'return $("#Ticket\\\\:\\\\:ZoomTimeDisplay").val()'
+            );
+            $Self->True(
+                $CheckboxState,
+                'Checkbox is checked',    # Default value is overridden!
+            );
+
+            # Click on checkbox.
+            $Selenium->find_element( '.CheckboxLabel:nth-of-type(1)', 'css' )->click();
+
+            # Save.
+            $Selenium->find_element( 'li:nth-of-type(2) .Update:nth-of-type(1)', 'css' )->click();
+
+            # Wait and make sure that setting value is 0.
+            $Selenium->WaitFor(
+                JavaScript =>
+                    'return $("#Ticket\\\\:\\\\:ZoomTimeDisplay").val() == 0'
+            ) || die 'Ticket::ZoomTimeDisplay should be 0';
+
+            # Modify specific SysConfig values to allow or forbid settings change by user.
+            my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
+            $SysConfigObject->SettingsSet(
+                UserID   => 1,
+                Settings => [
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketEmail###Body',
+                        IsValid                => 1,
+                        UserModificationActive => 1,
+                    },
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketQueue###Order::Default',
+                        IsValid                => 1,
+                        UserModificationActive => 0,
+                        EffectiveValue         => 'Up',
+                    },
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketQueue###Blink',
+                        IsValid                => 0,
+                        UserModificationActive => 1,
+                    },
+                ],
+            );
+
             # Create non-admin user.
             my $TestUserLogin2 = $Helper->TestUserCreate(
                 Groups   => ['users'],
@@ -466,8 +523,9 @@ JAVASCRIPT
             # Open advanced preferences screen.
             $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentPreferences;Subaction=Group;Group=Advanced");
 
-            # Change category only if the dropdown is present.
-            my $CategoriesVisible = $Selenium->execute_script("return \$('#Category').length;");
+            # Change category only if the dropdown is present (if additional packages are installed).
+            my $CategoriesVisible = $Selenium->execute_script("return \$('#Category:visible').length;");
+
             if ($CategoriesVisible) {
                 $Selenium->execute_script(
                     "\$('#Category').val('OTRSFree').trigger('redraw.InputField').trigger('change');"
@@ -485,6 +543,65 @@ JAVASCRIPT
                 $NavigationItems,
                 1,
                 'Make sure there is one navigation item'
+            );
+
+            # Test AgentPreference preference navigation.
+            $Selenium->WaitFor(
+                JavaScript => 'return $("#ConfigTree li#Frontend > i").length;',
+            );
+            $Selenium->execute_script("\$('#ConfigTree li#Frontend > i').trigger('click')");
+
+            $Selenium->WaitFor(
+                JavaScript =>
+                    'return $("#ConfigTree li#Frontend\\\\:\\\\:Agent > i").length;',
+            );
+            $Selenium->execute_script("\$('#ConfigTree li#Frontend\\\\:\\\\:Agent > i').trigger('click')");
+
+            $Selenium->WaitFor(
+                JavaScript =>
+                    'return $("#ConfigTree li#Frontend\\\\:\\\\:Agent\\\\:\\\\:View > i").length;',
+            );
+            $Selenium->execute_script(
+                "\$('#ConfigTree li#Frontend\\\\:\\\\:Agent\\\\:\\\\:View > i').trigger('click')"
+            );
+
+            # Verify count of possible configurations for user.
+            $Self->Is(
+                $Selenium->execute_script(
+                    "return \$('#Frontend\\\\:\\\\:Agent\\\\:\\\\:View\\\\:\\\\:TicketQueue_anchor').text().trim()"
+                ),
+                'TicketQueue (2)',
+                "Navigation count for TicketQueue is correct"
+            );
+            $Self->Is(
+                $Selenium->execute_script(
+                    "return \$('#Frontend\\\\:\\\\:Agent\\\\:\\\\:View\\\\:\\\\:TicketEmailNew_anchor').text().trim()"
+                ),
+                'TicketEmailNew (1)',
+                "Navigation count for TicketEmailNew is correct"
+            );
+
+            # Restore modified SysConfigs.
+            $SysConfigObject->SettingsSet(
+                UserID   => 1,
+                Settings => [
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketEmail###Body',
+                        IsValid                => 1,
+                        UserModificationActive => 0
+                    },
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketQueue###Order::Default',
+                        IsValid                => 1,
+                        UserModificationActive => 1,
+                        EffectiveValue         => 'Up'
+                    },
+                    {
+                        Name                   => 'Ticket::Frontend::AgentTicketQueue###Blink',
+                        IsValid                => 1,
+                        UserModificationActive => 1
+                    }
+                ],
             );
         }
     }

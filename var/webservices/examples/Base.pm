@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -24,7 +24,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-var::websertvices::examples::Base - base class for Ready2Adopt web services examples
+var::webservices::examples::Base - base class for Ready2Adopt web services examples
 
 =head1 DESCRIPTION
 
@@ -236,20 +236,20 @@ sub SystemConfigurationUpdate {
         );
     }
 
-    my $Success = $SysConfigObject->ConfigurationDeploy(
+    my %DeploymentResult = $SysConfigObject->ConfigurationDeploy(
         Comments      => "Deployed by '$Param{WebServiceName}' web service setup",
         UserID        => 1,
         Force         => 1,
         DirtySettings => \@UpdatedSettings,
     );
-    if ( !$Success ) {
+    if ( !$DeploymentResult{Success} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => "System was unable to deploy settings needed for '$Param{WebServiceName}' web service!"
         );
     }
 
-    return $Success;
+    return $DeploymentResult{Success};
 }
 
 1;

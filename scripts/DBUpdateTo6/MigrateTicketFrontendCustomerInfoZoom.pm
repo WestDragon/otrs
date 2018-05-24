@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -38,8 +38,6 @@ sub Run {
         return 1;
     }
 
-    my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
-
     my %OTRS5Config;
     $Kernel::OM->Get('Kernel::System::Main')->Require(
         'Kernel::Config::Backups::ZZZAutoOTRS5'
@@ -54,20 +52,13 @@ sub Run {
         return 1;
     }
 
-    my $ExclusiveLockGUID = $SysConfigObject->SettingLock(
-        Name   => 'Ticket::Frontend::AgentTicketZoom###Widgets###0200-CustomerInformation',
-        Force  => 1,
-        UserID => 1,
+    my $Result = $Self->SettingUpdate(
+        Name    => 'Ticket::Frontend::AgentTicketZoom###Widgets###0200-CustomerInformation',
+        IsValid => 0,
+        UserID  => 1,
     );
 
-    my %Result = $SysConfigObject->SettingUpdate(
-        Name              => 'Ticket::Frontend::AgentTicketZoom###Widgets###0200-CustomerInformation',
-        IsValid           => 0,
-        ExclusiveLockGUID => $ExclusiveLockGUID,
-        UserID            => 1,
-    );
-
-    if ( !$Result{Success} ) {
+    if ( !$Result ) {
         print "\n    Error: Unable to migrate Ticket::Frontend::CustomerInfoZoom.\n";
         return;
     }

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -285,7 +285,7 @@ $Selenium->RunTest(
         );
 
         # Check for existence of resend action.
-        $Selenium->find_element("//a[text()='Resend']")->VerifiedClick();
+        $Selenium->find_element("//a[text()='Resend']")->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();
@@ -345,7 +345,7 @@ $Selenium->RunTest(
         $Selenium->find_element( '#ToCustomer', 'css' )->send_keys($ToCustomer);
         $Selenium->find_element( 'body',        'css' )->click();
 
-        $Selenium->find_element( '#submitRichText', 'css' )->click();
+        $Selenium->execute_script("\$('#submitRichText').click();");
 
         $Selenium->WaitFor( WindowCount => 1 );
         $Selenium->switch_to_window( $Handles->[0] );
@@ -373,7 +373,7 @@ $Selenium->RunTest(
         # Expand sub-menus in order to be able to click one of the links.
         $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
 
-        $Selenium->find_element("//*[text()='History']")->VerifiedClick();
+        $Selenium->find_element("//*[text()='History']")->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();

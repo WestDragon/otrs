@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -940,7 +940,7 @@ for my $TicketID (@CreatedTicketIds) {
         $DateCounter = '0' . $Counter;
     }
     elsif ( $Counter > 59 ) {
-        $DateCounter = '59'
+        $DateCounter = '59';
     }
     else {
         $DateCounter = $Counter;

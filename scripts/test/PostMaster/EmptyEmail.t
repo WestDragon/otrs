@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -109,7 +109,7 @@ for my $Backend (qw(DB FS)) {
             'ContentID'          => '',
             'ContentType'        => 'application/x-download; name="=?UTF-8?Q?=C5=81atwa_sprawa.txt?="',
             'Disposition'        => 'attachment',
-            'Filename'           => 'Łatwa sprawa.txt',
+            'Filename'           => 'Łatwa_sprawa.txt',
             'FilesizeRaw'        => 0
         },
         "$Backend - Attachment filename"

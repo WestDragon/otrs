@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -74,7 +74,7 @@ $HelperObject->FixedTimeSet(
         ObjectParams => {
             String => '2016-02-01 10:10:00',
         },
-        )->ToEpoch()
+    )->ToEpoch()
 );
 
 # test FormDraftAdd and FormDraftListGet functions
@@ -107,7 +107,7 @@ for ( 1 .. 3 ) {
             ObjectParams => {
                 String => '2016-01-15 10:10:00',
             },
-            )->ToEpoch()
+        )->ToEpoch()
     );
 }
 
@@ -117,7 +117,7 @@ $HelperObject->FixedTimeSet(
         ObjectParams => {
             String => '2016-02-01 10:10:00',
         },
-        )->ToEpoch()
+    )->ToEpoch()
 );
 
 # execute command with --object-type option with velue ticket and --expired option

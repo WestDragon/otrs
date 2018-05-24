@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -34,7 +34,7 @@ in F<Kernel/Output/HTML/Layout/CustomerUser.pm>.
         View            => $Self->{View},                            # optional, the default value is 'AddressBook'
         Filter          => 'All',
         Filters         => \%NavBarFilter,
-        FilterLink      => $LinkFilter,
+        LinkFilter      => $LinkFilter,
         TitleName       => 'Overview: CustomerUsers',
         TitleValue      => $Self->{Filter},
         Env             => $Self,

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -326,7 +326,7 @@ sub Run {
         $ArticleSenderType = $Param{Data}->{ArticleSenderType};
     }
     elsif ( IsStringWithData( $Param{Data}->{ArticleSenderType} ) ) {
-        $ArticleSenderType = [ $Param{Data}->{ArticleSenderType} ]
+        $ArticleSenderType = [ $Param{Data}->{ArticleSenderType} ];
     }
 
     # By default, do not include HTML body as attachment, unless it is explicitly requested.

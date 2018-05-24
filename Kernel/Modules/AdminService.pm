@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -323,9 +323,10 @@ sub _MaskNew {
     my $ListType = $ConfigObject->Get('Ticket::Frontend::ListType');
 
     # generate ParentOptionStrg
-    my %ServiceList = $ServiceObject->ServiceList(
-        Valid        => 1,
-        KeepChildren => $ConfigObject->Get('Ticket::Service::KeepChildren') // 0,
+    my $KeepChildren = $ConfigObject->Get('Ticket::Service::KeepChildren') // 0;
+    my %ServiceList  = $ServiceObject->ServiceList(
+        Valid        => !$KeepChildren,
+        KeepChildren => $KeepChildren,
         UserID       => $Self->{UserID},
     );
     $ServiceData{ParentOptionStrg} = $LayoutObject->BuildSelection(

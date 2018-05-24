@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -298,7 +298,7 @@ for my $Test (@Tests) {
                 "$Test->{Name}: PackageUninstall() - Package:'$Package' with True",
             );
             for my $File (@FilesToDelete) {
-                unlink $File . '.custom_backup'
+                unlink $File . '.custom_backup';
             }
         }
     }
@@ -377,7 +377,7 @@ for my $Test (@Tests) {
             ],
         );
 
-        push @PackageList, @PackageData,
+        push @PackageList, @PackageData;
     }
 
     my $RefArray = $CSVObject->CSV2Array(

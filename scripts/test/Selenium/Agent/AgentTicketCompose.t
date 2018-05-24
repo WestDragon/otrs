@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,7 +14,6 @@ use vars (qw($Self));
 
 use Kernel::Language;
 
-# Get Selenium object.
 my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
@@ -362,7 +361,6 @@ $Selenium->RunTest(
             Password => $TestUserLogin,
         );
 
-        # Get script alias.
         my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
         # Navigate to created test ticket in AgentTicketZoom page.
@@ -381,22 +379,52 @@ $Selenium->RunTest(
         # Wait without jQuery because it might not be loaded yet.
         $Selenium->WaitFor( JavaScript => 'return document.getElementById("ToCustomer");' );
 
+        # Check duplication of customer user who doesn't exist in the system (see bug#13784).
+        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( 'Test', "\N{U+E007}" );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#RemoveCustomerTicket_2").length' );
+        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( 'Test', "\N{U+E007}" );
+
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $(".Dialog.Modal.Alert:visible").length'
+        );
+        $Self->Is(
+            $Selenium->execute_script('return $(".Dialog.Modal.Alert").length'),
+            1,
+            "Alert dialog is found.",
+        );
+
+        $Selenium->find_element( "#DialogButton1", 'css' )->click();
+
+        $Selenium->WaitFor(
+            JavaScript => 'return !$(".Dialog.Modal").length'
+        );
+
+        # Remove entered 'Test' for customer user.
+        $Selenium->find_element( "#RemoveCustomerTicket_2", 'css' )->click();
+        $Selenium->WaitFor( JavaScript => 'return !$("#RemoveCustomerTicket_2").length' );
+
         # Input required field and select customer.
         $Selenium->find_element( "#ToCustomer", 'css' )->send_keys($TestCustomer);
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
         $Selenium->execute_script("\$('li.ui-menu-item:contains($TestCustomer)').click()");
 
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $(".Dialog.Modal.Alert:visible").length'
+        );
+
         $Self->Is(
-            $Selenium->execute_script('return $(".Dialog.Modal.Alert") > -1'),
-            0,
+            $Selenium->execute_script('return $(".Dialog.Modal.Alert").length'),
+            1,
             "Error message found.",
         );
 
-        $Selenium->WaitFor(
-            JavaScript => 'return typeof($) === "function" && $(".Dialog.Modal.Alert:visible").length'
-        );
+        $Selenium->find_element( "#DialogButton1", 'css' )->click();
 
-        $Selenium->find_element( "#DialogButton1", 'css' )->VerifiedClick();
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && !$(".Dialog.Modal").length'
+        );
 
         # Check AgentTicketCompose page.
         for my $ID (
@@ -404,6 +432,7 @@ $Selenium->RunTest(
             FileUpload StateID IsVisibleForCustomer submitRichText)
             )
         {
+            $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#$ID').length" );
             my $Element = $Selenium->find_element( "#$ID", 'css' );
             $Element->is_enabled();
         }
@@ -507,7 +536,7 @@ $Selenium->RunTest(
         # Force sub menus to be visible in order to be able to click one of the links.
         $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
 
-        $Selenium->find_element("//*[text()='History']")->VerifiedClick();
+        $Selenium->find_element("//*[text()='History']")->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();
@@ -583,7 +612,6 @@ $Selenium->RunTest(
                 Type => $Cache,
             );
         }
-
     }
 );
 

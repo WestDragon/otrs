@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -71,13 +71,6 @@ Parses XML files into a list of perl structures and meta data.
         XMLFilename => 'Test.xml'
     );
 
-    push @ParsedSettings, {
-        SettingName      => $SettingName,
-        XMLContentParsed => $PerlStructure->{Setting}->[0],
-        XMLContentRaw    => $RawSetting,
-        XMLFilename      => $Param{XMLFilename},
-    };
-
 Returns:
 
     [
@@ -135,12 +128,42 @@ sub SettingListParse {
 
     my $XMLSimpleObject = $Kernel::OM->Get('Kernel::System::XML::Simple');
 
+    my $XMLContent = $Param{XMLInput};
+
+    # Remove all lines that starts with comment (#).
+    $XMLContent =~ s{^#.*?$}{}gm;
+
+    # Remove comments <!-- ... -->.
+    $XMLContent =~ s{<!--.*?-->}{}gsm;
+
+    $XMLContent =~ m{otrs_config.*?version="(.*?)"};
+    my $ConfigVersion = $1;
+
+    if ( $ConfigVersion ne '2.0' ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Invalid XML format found in $Param{XMLFilename} (version must be 2.0)! File skipped.",
+        );
+        return;
+    }
+
+    while ( $XMLContent =~ m{<ConfigItem.*?Name="(.*?)"}smxg ) {
+
+        # Old style ConfigItem detected.
+        my $SettingName = $1;
+
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Old ConfigItem $SettingName detected in $Param{XMLFilename}!"
+        );
+    }
+
     # Fetch XML of Setting elements.
     my @ParsedSettings;
 
     SETTING:
     while (
-        $Param{XMLInput} =~ m{(?<RawSetting> <Setting[ ]+ .*? Name="(?<SettingName> .*? )" .*? > .*? </Setting> )}smxg
+        $XMLContent =~ m{(?<RawSetting> <Setting[ ]+ .*? Name="(?<SettingName> .*? )" .*? > .*? </Setting> )}smxg
         )
     {
 

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -18,7 +18,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::Ticket::Event::NotificationEvent::Transport::Base - common notification event transport functions
+Kernel::System::Calendar::Event::Transport::Base - common notification event transport functions
 
 =head1 PUBLIC INTERFACE
 

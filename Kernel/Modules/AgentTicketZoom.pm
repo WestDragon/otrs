@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -54,7 +54,7 @@ sub new {
             && !defined $Self->{ZoomTimeline}
             )
         {
-            $Self->{ZoomExpand} = $ConfigObject->Get('Ticket::Frontend::ZoomExpand');
+            $Self->{ZoomExpand} = $ConfigObject->Get('Ticket::Frontend::AgentZoomExpand');
             if ( $UserPreferences{UserLastUsedZoomViewType} ) {
                 if ( $UserPreferences{UserLastUsedZoomViewType} eq 'Expand' ) {
                     $Self->{ZoomExpand} = 1;
@@ -89,7 +89,7 @@ sub new {
                     $Self->{ZoomTimeline} = 1;
                 }
                 else {
-                    $LastUsedZoomViewType = $ConfigObject->Get('Ticket::Frontend::ZoomExpand')
+                    $LastUsedZoomViewType = $ConfigObject->Get('Ticket::Frontend::AgentZoomExpand')
                         ? 'Expand'
                         : 'Collapse';
                 }
@@ -767,6 +767,16 @@ sub Run {
         # do not use defaults for this ticket if filter was explicitly turned off
         elsif ( $EventTypeFilterSessionString eq 'off' ) {
             $EventTypeFilterSessionString = '';
+        }
+
+        # Set article filter with value if it exists.
+        elsif (
+            $EventTypeFilterSessionString
+            && $EventTypeFilterSessionString =~ m{ EventTypeFilter < ( [^<>]+ ) > }xms
+            )
+        {
+            my @IDs = split /,/, $1;
+            $Self->{EventTypeFilter}->{EventTypeID} = \@IDs;
         }
     }
 
@@ -1479,7 +1489,7 @@ sub MaskAgentZoom {
             Name => 'FormDraftTable',
             Data => {
                 FormDrafts => \@FormDrafts,
-                TicketID   => $Param{TicketID},
+                TicketID   => $Self->{TicketID},
             },
         );
     }
@@ -1606,7 +1616,7 @@ sub MaskAgentZoom {
             );
 
             if ($ACL) {
-                %{$NextActivityDialogs} = $TicketObject->TicketAclData()
+                %{$NextActivityDialogs} = $TicketObject->TicketAclData();
             }
 
             $LayoutObject->Block(
@@ -1906,7 +1916,7 @@ sub MaskAgentZoom {
                     1 => Translatable('Visible only'),
                     2 => Translatable('Visible and invisible'),
                 },
-                SelectedID => $Self->{ArticleFilter}->{CustomerVisibility} // 2,
+                SelectedID  => $Self->{ArticleFilter}->{CustomerVisibility} // 2,
                 Translation => 1,
                 Sort        => 'NumericKey',
                 Name        => 'CustomerVisibilityFilter',
@@ -2518,36 +2528,8 @@ sub _ArticleTree {
         HISTORYITEM:
         for my $Item ( reverse @HistoryLines ) {
 
-            if ( grep { $_ eq $Item->{HistoryType} } @TypesDodge ) {
-                next HISTORYITEM;
-            }
-
-            $Item->{Counter} = $ItemCounter++;
-
-            # check which color the item should have
-            if ( $Item->{HistoryType} eq 'NewTicket' ) {
-
-                # if the 'NewTicket' item has an article, display this "creation article" event separately
-                if ( $Item->{ArticleID} ) {
-                    push @{ $Param{Items} }, {
-                        %{$Item},
-                        Counter             => $Item->{Counter}++,
-                        Class               => 'NewTicket',
-                        Name                => '',
-                        ArticleID           => '',
-                        HistoryTypeReadable => Translatable('Ticket Created'),
-                        Orientation         => 'Right',
-                    };
-                }
-                else {
-                    $Item->{Class} = 'NewTicket';
-                    delete $Item->{ArticleID};
-                    delete $Item->{Name};
-                }
-            }
-
             # special treatment for certain types, e.g. external notes from customers
-            elsif (
+            if (
                 $Item->{ArticleID}
                 && $Item->{HistoryType} eq 'AddNote'
                 && IsHashRefWithData( $ArticlesByArticleID->{ $Item->{ArticleID} } )
@@ -2639,6 +2621,33 @@ sub _ArticleTree {
                 $Item->{Class} = 'TypeOutgoing';
             }
 
+            if ( grep { $_ eq $Item->{HistoryType} } @TypesDodge ) {
+                next HISTORYITEM;
+            }
+
+            $Item->{Counter} = $ItemCounter++;
+
+            if ( $Item->{HistoryType} eq 'NewTicket' ) {
+
+                # if the 'NewTicket' item has an article, display this "creation article" event separately
+                if ( $Item->{ArticleID} ) {
+                    push @{ $Param{Items} }, {
+                        %{$Item},
+                        Counter             => $Item->{Counter}++,
+                        Class               => 'NewTicket',
+                        Name                => '',
+                        ArticleID           => '',
+                        HistoryTypeReadable => Translatable('Ticket Created'),
+                        Orientation         => 'Right',
+                    };
+                }
+                else {
+                    $Item->{Class} = 'NewTicket';
+                    delete $Item->{ArticleID};
+                    delete $Item->{Name};
+                }
+            }
+
             # remove article information from types which should not display articles
             if ( !grep { $_ eq $Item->{HistoryType} } @TypesWithArticles ) {
                 delete $Item->{ArticleID};
@@ -2705,8 +2714,18 @@ sub _ArticleTree {
             else {
 
                 if ( $Item->{Name} && $Item->{Name} =~ m/^%%/x ) {
+
                     $Item->{Name} =~ s/^%%//xg;
                     my @Values = split( /%%/x, $Item->{Name} );
+
+                    # See documentation in AgentTicketHistory.pm, line 141+
+                    if ( $Item->{HistoryType} eq 'TicketDynamicFieldUpdate' ) {
+                        @Values = ( $Values[1], $Values[5] // '', $Values[3] // '' );
+                    }
+                    elsif ( $Item->{HistoryType} eq 'TypeUpdate' ) {
+                        @Values = ( $Values[2], $Values[3], $Values[0], $Values[1] );
+                    }
+
                     $Item->{Name} = $LayoutObject->{LanguageObject}->Translate(
                         $HistoryTypes{ $Item->{HistoryType} },
                         @Values,
@@ -2714,11 +2733,6 @@ sub _ArticleTree {
 
                     # remove not needed place holder
                     $Item->{Name} =~ s/\%s//xg;
-
-                    # remove IDs
-                    $Item->{Name} =~ s/\s+\(\d\)//xg;
-                    $Item->{Name} =~ s/\s+\(ID=\d\)//xg;
-                    $Item->{Name} =~ s/\s+\(ID=\)//xg;
                 }
             }
 
@@ -2912,6 +2926,7 @@ sub _ArticleItem {
 
     # show article actions
     my @MenuItems = $LayoutObject->ArticleActions(
+        %Param,
         TicketID  => $Param{Ticket}->{TicketID},
         ArticleID => $Param{Article}->{ArticleID},
         Type      => $Param{Type},

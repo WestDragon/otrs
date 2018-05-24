@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU AFFERO General Public License as published by
@@ -27,8 +27,8 @@ use lib "$Bin/../..";
 use lib "$Bin/../../Kernel/cpan-lib";
 use lib "$Bin/../../Custom";
 
-# Imports the library; required line
 use CGI::Fast;
+use Module::Refresh;
 
 # load agent web interface
 use Kernel::System::Web::InterfaceAgent();
@@ -41,6 +41,11 @@ my $Debug = 0;
 
 # Response loop
 while ( my $WebRequest = CGI::Fast->new() ) {
+
+    # Reload files in @INC that have changed since the last request.
+    eval {
+        Module::Refresh->refresh();
+    };
 
     local $Kernel::OM = Kernel::System::ObjectManager->new();
     my $Interface = Kernel::System::Web::InterfaceAgent->new(

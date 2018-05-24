@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -557,6 +557,7 @@ Message
         InReplyTo            => $GetParam{'In-Reply-To'},
         References           => $GetParam{'References'},
         ContentType          => $GetParam{'Content-Type'},
+        ContentDisposition   => $GetParam{'Content-Disposition'},
         Body                 => $GetParam{Body},
         UserID               => $Param{InmailUserID},
         HistoryType          => 'EmailCustomer',

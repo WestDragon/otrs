@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1156,9 +1156,9 @@ sub _MaskUpdate {
 
         # paint each selector
         my $EventStrg = $LayoutObject->BuildSelection(
-            Data => $RegisteredEvents{$Type} || [],
-            Name => $Type . 'Event',
-            Sort => 'AlphanumericValue',
+            Data         => $RegisteredEvents{$Type} || [],
+            Name         => $Type . 'Event',
+            Sort         => 'AlphanumericValue',
             PossibleNone => 0,
             Class        => 'Modernize EventList GenericInterfaceSpacing',
             Title        => $LayoutObject->{LanguageObject}->Translate('Event'),

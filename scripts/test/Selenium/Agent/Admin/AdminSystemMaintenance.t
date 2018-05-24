@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -39,17 +39,39 @@ $Selenium->RunTest(
         # get helper object
         my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
+        # Make sure system is based on UTC.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'OTRSTimeZone',
+            Value => 'UTC',
+        );
+
         # get DB object
         my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
 
         # get SystemMaintenance object
         my $SystemMaintenanceObject = $Kernel::OM->Get('Kernel::System::SystemMaintenance');
 
-        # create test user and login
+        # Create test user.
         my $TestUserLogin = $Helper->TestUserCreate(
             Groups => ['admin'],
         ) || die "Did not get test user";
 
+        # Get UserID for later manipulation of preferences.
+        my $UserObject = $Kernel::OM->Get('Kernel::System::User');
+        my $UserID     = $UserObject->UserLookup(
+            UserLogin => $TestUserLogin,
+        );
+
+        # Set user's time zone.
+        my $UserTimeZone = 'UTC';
+        $UserObject->SetPreferences(
+            Key    => 'UserTimeZone',
+            Value  => $UserTimeZone,
+            UserID => $UserID,
+        );
+
+        # Login test user
         $Selenium->Login(
             Type     => 'Agent',
             User     => $TestUserLogin,
@@ -205,6 +227,47 @@ $Selenium->RunTest(
         $Self->True(
             $Selenium->execute_script("return \$('.MessageBox.Notice p:contains($Notification)').length"),
             "$Notification - notification is found."
+        );
+
+        # Get test system maintenance start and end time as formated string.
+        my $LayoutObject = Kernel::Output::HTML::Layout->new( UserTimeZone => $UserTimeZone );
+        my $StartTimeString = $LayoutObject->{LanguageObject}->FormatTimeString(
+            $DTStartObj->ToString(),
+            'DateFormat',
+            1,
+        );
+
+        my $EndTimeString = $LayoutObject->{LanguageObject}->FormatTimeString(
+            $DTEndObj->ToString(),
+            'DateFormat',
+            1,
+        );
+
+        # Check for upcoming System Maintenance notification.
+        my $UpcomingSysMaintenanceNotif
+            = "A system maintenance period will start at: $StartTimeString and is expected to stop at: $EndTimeString";
+        $Self->False(
+            $Selenium->execute_script(
+                "return \$('.MessageBox.Notice p:contains(\"$UpcomingSysMaintenanceNotif\")').length"
+            ),
+            "$UpcomingSysMaintenanceNotif - notification is not found."
+        );
+
+        # Update TimeNotifyUpcomingMaintenance config.
+        $Helper->ConfigSettingChange(
+            Key   => "SystemMaintenance::TimeNotifyUpcomingMaintenance",
+            Value => 61,
+        );
+
+        # Refresh screen.
+        $Selenium->VerifiedRefresh();
+
+        # Check for upcoming System Maintenance notification after config update.
+        $Self->True(
+            $Selenium->execute_script(
+                "return \$('.MessageBox.Notice p:contains(\"$UpcomingSysMaintenanceNotif\")').length"
+            ),
+            "$UpcomingSysMaintenanceNotif - notification is found."
         );
 
         # check for created test SystemMaintenance

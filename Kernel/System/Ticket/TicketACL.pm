@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1531,7 +1531,7 @@ sub _GetChecks {
 
         # use priority data (if given)
         if ( $Param{NewPriorityID} && !$Param{PriorityID} ) {
-            $Param{PriorityID} = $Param{NewPriorityID}
+            $Param{PriorityID} = $Param{NewPriorityID};
         }
 
         if ( $Param{PriorityID} ) {

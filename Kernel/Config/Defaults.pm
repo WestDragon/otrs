@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1751,7 +1751,7 @@ via the Preferences button after logging in.
             GroupRo     => [],
             AccessKey   => 'a',
             Block       => 'ItemArea',
-            Description => '',
+            Description => 'Admin modules overview.',
             Link        => 'Action=Admin',
             LinkOption  => '',
             Name        => 'Admin',
@@ -1766,7 +1766,7 @@ via the Preferences button after logging in.
         ],
         GroupRo     => [],
         Module => 'Kernel::Output::HTML::NavBar::ModuleAdmin',
-        Description => '',
+        Description => 'Admin modules overview.',
         IconBig => '',
         IconSmall => '',
         Name => '',

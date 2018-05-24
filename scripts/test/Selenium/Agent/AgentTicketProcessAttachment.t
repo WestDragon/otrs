@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -12,7 +12,6 @@ use utf8;
 
 use vars (qw($Self));
 
-# Get Selenium object.
 my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
@@ -87,7 +86,11 @@ $Selenium->RunTest(
             $Location = $ConfigObject->Get('Home')
                 . "/scripts/test/sample/ProcessManagement/TestProcess.yml";
             $Selenium->find_element( "#FileUpload",                      'css' )->send_keys($Location);
-            $Selenium->find_element( "#OverwriteExistingEntitiesImport", 'css' )->VerifiedClick();
+            $Selenium->find_element( "#OverwriteExistingEntitiesImport", 'css' )->click();
+            $Selenium->WaitFor(
+                JavaScript =>
+                    "return typeof(\$) === 'function' && !\$('#OverwriteExistingEntitiesImport:checked').length"
+            );
             $Selenium->find_element("//button[\@value='Upload process configuration'][\@type='submit']")
                 ->VerifiedClick();
             $Selenium->find_element("//a[contains(\@href, \'Subaction=ProcessSync' )]")->VerifiedClick();

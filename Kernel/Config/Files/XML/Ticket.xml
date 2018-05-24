@@ -317,7 +317,7 @@
         </Value>
     </Setting>
     <Setting Name="Ticket::EventModulePost###7000-NotificationEvent" Required="0" Valid="1">
-        <Description Translatable="1">Sends the notifications which are configured in the admin interface under "Notfication (Event)".</Description>
+        <Description Translatable="1">Sends the notifications which are configured in the admin interface under "Ticket Notifications".</Description>
         <Navigation>Core::Event::Ticket</Navigation>
         <Value>
             <Hash>
@@ -1408,16 +1408,6 @@
             </Array>
         </Value>
     </Setting>
-    <Setting Name="Ticket::EventModulePost###2000-ArticleSearchIndex" Required="0" Valid="1">
-        <Description Translatable="1">Marks articles for index rebuild right after the article's update.</Description>
-        <Navigation>Core::Event::Ticket</Navigation>
-        <Value>
-            <Hash>
-                <Item Key="Module">Kernel::System::Ticket::Event::ArticleSearchIndex</Item>
-                <Item Key="Event">(ArticleUpdate)</Item>
-            </Hash>
-        </Value>
-    </Setting>
     <Setting Name="Ticket::Frontend::Overview###Small" Required="0" Valid="1">
         <Description Translatable="1">Allows having a small format ticket overview (CustomerInfo =&gt; 1 - shows also the customer information).</Description>
         <Navigation>Frontend::Agent::TicketOverview</Navigation>
@@ -1562,8 +1552,8 @@
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::ZoomExpand" Required="1" Valid="1">
-        <Description Translatable="1">Shows all the articles of the ticket (expanded) in the zoom view.</Description>
+    <Setting Name="Ticket::Frontend::AgentZoomExpand" Required="1" Valid="1">
+        <Description Translatable="1">Shows all the articles of the ticket (expanded) in the agent zoom view.</Description>
         <Navigation>Frontend::Agent::View::TicketZoom</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
@@ -4665,7 +4655,7 @@
         <Description Translatable="1">Defines if the message in the email outbound screen of the agent interface is visible for the customer by default.</Description>
         <Navigation>Frontend::Agent::View::TicketEmailOutbound</Navigation>
         <Value>
-            <Item ValueType="Checkbox">1</Item>
+            <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="Ticket::Frontend::AgentTicketEmailResend###Permission" Required="1" Valid="1">
@@ -4951,7 +4941,7 @@
                 <Item Key="Action">AgentTicketProcess</Item>
                 <Item Key="AccessKey"></Item>
                 <Item Key="CssClass">ProcessTicket</Item>
-                <Item Key="Icon">fa fa-th-large</Item>
+                <Item Key="Icon">fa fa-sitemap</Item>
                 <Item Key="Priority">1020030</Item>
             </Hash>
         </Value>
@@ -6226,7 +6216,7 @@
                 <Item Key="Group"></Item>
                 <Item Key="Default">1</Item>
                 <Item Key="Sort">SortBy=Age;OrderBy=Up</Item>
-                <Item Key="CacheTTLLocal">0.5</Item>
+                <Item Key="CacheTTLLocal">2</Item>
                 <Item Key="States">
                     <Hash>
                         <Item Key="1">new</Item>
@@ -6597,29 +6587,34 @@
                 <Item Key="CacheTTLLocal">0.5</Item>
                 <Item Key="DefaultColumns">
                     <Hash>
-                        <Item Key="Age">2</Item>
-                        <Item Key="Changed">1</Item>
-                        <Item Key="Created">1</Item>
-                        <Item Key="CustomerCompanyName">1</Item>
-                        <Item Key="CustomerID">1</Item>
-                        <Item Key="CustomerName">1</Item>
-                        <Item Key="CustomerUserID">1</Item>
-                        <Item Key="EscalationResponseTime">1</Item>
-                        <Item Key="EscalationSolutionTime">1</Item>
-                        <Item Key="EscalationTime">1</Item>
-                        <Item Key="EscalationUpdateTime">1</Item>
-                        <Item Key="TicketNumber">2</Item>
-                        <Item Key="Lock">1</Item>
-                        <Item Key="Owner">1</Item>
-                        <Item Key="PendingTime">1</Item>
-                        <Item Key="Queue">1</Item>
-                        <Item Key="Responsible">1</Item>
-                        <Item Key="Priority">1</Item>
-                        <Item Key="Service">1</Item>
-                        <Item Key="State">1</Item>
-                        <Item Key="SLA">1</Item>
-                        <Item Key="Title">2</Item>
-                        <Item Key="Type">1</Item>
+                        <DefaultItem ValueType="Select">
+                            <Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>
+                            <Item ValueType="Option" Value="1" Translatable="1">1 - Available</Item>
+                            <Item ValueType="Option" Value="2" Translatable="1">2 - Enabled by default</Item>
+                        </DefaultItem>
+                        <Item Key="Age" SelectedID="2"></Item>
+                        <Item Key="Changed" SelectedID="1"></Item>
+                        <Item Key="Created" SelectedID="1"></Item>
+                        <Item Key="CustomerCompanyName" SelectedID="1"></Item>
+                        <Item Key="CustomerID" SelectedID="1"></Item>
+                        <Item Key="CustomerName" SelectedID="1"></Item>
+                        <Item Key="CustomerUserID" SelectedID="1"></Item>
+                        <Item Key="EscalationResponseTime" SelectedID="1"></Item>
+                        <Item Key="EscalationSolutionTime" SelectedID="1"></Item>
+                        <Item Key="EscalationTime" SelectedID="1"></Item>
+                        <Item Key="EscalationUpdateTime" SelectedID="1"></Item>
+                        <Item Key="TicketNumber" SelectedID="2"></Item>
+                        <Item Key="Lock" SelectedID="1"></Item>
+                        <Item Key="Owner" SelectedID="1"></Item>
+                        <Item Key="PendingTime" SelectedID="1"></Item>
+                        <Item Key="Queue" SelectedID="1"></Item>
+                        <Item Key="Responsible" SelectedID="1"></Item>
+                        <Item Key="Priority" SelectedID="1"></Item>
+                        <Item Key="Service" SelectedID="1"></Item>
+                        <Item Key="State" SelectedID="1"></Item>
+                        <Item Key="SLA" SelectedID="1"></Item>
+                        <Item Key="Title" SelectedID="2"></Item>
+                        <Item Key="Type" SelectedID="1"></Item>
                     </Hash>
                 </Item>
             </Hash>
@@ -6644,29 +6639,34 @@
                 <Item Key="CacheTTLLocal">0.5</Item>
                 <Item Key="DefaultColumns">
                     <Hash>
-                        <Item Key="Age">2</Item>
-                        <Item Key="Changed">1</Item>
-                        <Item Key="Created">1</Item>
-                        <Item Key="CustomerCompanyName">1</Item>
-                        <Item Key="CustomerID">1</Item>
-                        <Item Key="CustomerName">1</Item>
-                        <Item Key="CustomerUserID">1</Item>
-                        <Item Key="EscalationResponseTime">1</Item>
-                        <Item Key="EscalationSolutionTime">1</Item>
-                        <Item Key="EscalationTime">1</Item>
-                        <Item Key="EscalationUpdateTime">1</Item>
-                        <Item Key="TicketNumber">2</Item>
-                        <Item Key="Lock">1</Item>
-                        <Item Key="Owner">1</Item>
-                        <Item Key="PendingTime">1</Item>
-                        <Item Key="Queue">1</Item>
-                        <Item Key="Responsible">1</Item>
-                        <Item Key="Priority">1</Item>
-                        <Item Key="Service">1</Item>
-                        <Item Key="State">1</Item>
-                        <Item Key="SLA">1</Item>
-                        <Item Key="Title">2</Item>
-                        <Item Key="Type">1</Item>
+                        <DefaultItem ValueType="Select">
+                            <Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>
+                            <Item ValueType="Option" Value="1" Translatable="1">1 - Available</Item>
+                            <Item ValueType="Option" Value="2" Translatable="1">2 - Enabled by default</Item>
+                        </DefaultItem>
+                        <Item Key="Age" SelectedID="2"></Item>
+                        <Item Key="Changed" SelectedID="1"></Item>
+                        <Item Key="Created" SelectedID="1"></Item>
+                        <Item Key="CustomerCompanyName" SelectedID="1"></Item>
+                        <Item Key="CustomerID" SelectedID="1"></Item>
+                        <Item Key="CustomerName" SelectedID="1"></Item>
+                        <Item Key="CustomerUserID" SelectedID="1"></Item>
+                        <Item Key="EscalationResponseTime" SelectedID="1"></Item>
+                        <Item Key="EscalationSolutionTime" SelectedID="1"></Item>
+                        <Item Key="EscalationTime" SelectedID="1"></Item>
+                        <Item Key="EscalationUpdateTime" SelectedID="1"></Item>
+                        <Item Key="TicketNumber" SelectedID="2"></Item>
+                        <Item Key="Lock" SelectedID="1"></Item>
+                        <Item Key="Owner" SelectedID="1"></Item>
+                        <Item Key="PendingTime" SelectedID="1"></Item>
+                        <Item Key="Queue" SelectedID="1"></Item>
+                        <Item Key="Responsible" SelectedID="1"></Item>
+                        <Item Key="Priority" SelectedID="1"></Item>
+                        <Item Key="Service" SelectedID="1"></Item>
+                        <Item Key="State" SelectedID="1"></Item>
+                        <Item Key="SLA" SelectedID="1"></Item>
+                        <Item Key="Title" SelectedID="2"></Item>
+                        <Item Key="Type" SelectedID="1"></Item>
                     </Hash>
                 </Item>
             </Hash>
@@ -6691,29 +6691,34 @@
                 <Item Key="CacheTTLLocal">0.5</Item>
                 <Item Key="DefaultColumns">
                     <Hash>
-                        <Item Key="Age">2</Item>
-                        <Item Key="Changed">1</Item>
-                        <Item Key="Created">1</Item>
-                        <Item Key="CustomerCompanyName">1</Item>
-                        <Item Key="CustomerID">1</Item>
-                        <Item Key="CustomerName">1</Item>
-                        <Item Key="CustomerUserID">1</Item>
-                        <Item Key="EscalationResponseTime">1</Item>
-                        <Item Key="EscalationSolutionTime">1</Item>
-                        <Item Key="EscalationTime">1</Item>
-                        <Item Key="EscalationUpdateTime">1</Item>
-                        <Item Key="TicketNumber">2</Item>
-                        <Item Key="Lock">1</Item>
-                        <Item Key="Owner">1</Item>
-                        <Item Key="PendingTime">1</Item>
-                        <Item Key="Queue">1</Item>
-                        <Item Key="Responsible">1</Item>
-                        <Item Key="Priority">1</Item>
-                        <Item Key="Service">1</Item>
-                        <Item Key="State">1</Item>
-                        <Item Key="SLA">1</Item>
-                        <Item Key="Title">2</Item>
-                        <Item Key="Type">1</Item>
+                        <DefaultItem ValueType="Select">
+                            <Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>
+                            <Item ValueType="Option" Value="1" Translatable="1">1 - Available</Item>
+                            <Item ValueType="Option" Value="2" Translatable="1">2 - Enabled by default</Item>
+                        </DefaultItem>
+                        <Item Key="Age" SelectedID="2"></Item>
+                        <Item Key="Changed" SelectedID="1"></Item>
+                        <Item Key="Created" SelectedID="1"></Item>
+                        <Item Key="CustomerCompanyName" SelectedID="1"></Item>
+                        <Item Key="CustomerID" SelectedID="1"></Item>
+                        <Item Key="CustomerName" SelectedID="1"></Item>
+                        <Item Key="CustomerUserID" SelectedID="1"></Item>
+                        <Item Key="EscalationResponseTime" SelectedID="1"></Item>
+                        <Item Key="EscalationSolutionTime" SelectedID="1"></Item>
+                        <Item Key="EscalationTime" SelectedID="1"></Item>
+                        <Item Key="EscalationUpdateTime" SelectedID="1"></Item>
+                        <Item Key="TicketNumber" SelectedID="2"></Item>
+                        <Item Key="Lock" SelectedID="1"></Item>
+                        <Item Key="Owner" SelectedID="1"></Item>
+                        <Item Key="PendingTime" SelectedID="1"></Item>
+                        <Item Key="Queue" SelectedID="1"></Item>
+                        <Item Key="Responsible" SelectedID="1"></Item>
+                        <Item Key="Priority" SelectedID="1"></Item>
+                        <Item Key="Service" SelectedID="1"></Item>
+                        <Item Key="State" SelectedID="1"></Item>
+                        <Item Key="SLA" SelectedID="1"></Item>
+                        <Item Key="Title" SelectedID="2"></Item>
+                        <Item Key="Type" SelectedID="1"></Item>
                     </Hash>
                 </Item>
             </Hash>
@@ -6738,36 +6743,41 @@
                 <Item Key="CacheTTLLocal">0.5</Item>
                 <Item Key="DefaultColumns">
                     <Hash>
-                        <Item Key="Age">2</Item>
-                        <Item Key="Changed">1</Item>
-                        <Item Key="Created">1</Item>
-                        <Item Key="CustomerCompanyName">1</Item>
-                        <Item Key="CustomerID">1</Item>
-                        <Item Key="CustomerName">1</Item>
-                        <Item Key="CustomerUserID">1</Item>
-                        <Item Key="EscalationResponseTime">1</Item>
-                        <Item Key="EscalationSolutionTime">1</Item>
-                        <Item Key="EscalationTime">1</Item>
-                        <Item Key="EscalationUpdateTime">1</Item>
-                        <Item Key="TicketNumber">2</Item>
-                        <Item Key="Lock">1</Item>
-                        <Item Key="Owner">1</Item>
-                        <Item Key="PendingTime">1</Item>
-                        <Item Key="Queue">1</Item>
-                        <Item Key="Responsible">1</Item>
-                        <Item Key="Priority">1</Item>
-                        <Item Key="Service">1</Item>
-                        <Item Key="State">1</Item>
-                        <Item Key="SLA">1</Item>
-                        <Item Key="Title">2</Item>
-                        <Item Key="Type">1</Item>
+                        <DefaultItem ValueType="Select">
+                            <Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>
+                            <Item ValueType="Option" Value="1" Translatable="1">1 - Available</Item>
+                            <Item ValueType="Option" Value="2" Translatable="1">2 - Enabled by default</Item>
+                        </DefaultItem>
+                        <Item Key="Age" SelectedID="2"></Item>
+                        <Item Key="Changed" SelectedID="1"></Item>
+                        <Item Key="Created" SelectedID="1"></Item>
+                        <Item Key="CustomerCompanyName" SelectedID="1"></Item>
+                        <Item Key="CustomerID" SelectedID="1"></Item>
+                        <Item Key="CustomerName" SelectedID="1"></Item>
+                        <Item Key="CustomerUserID" SelectedID="1"></Item>
+                        <Item Key="EscalationResponseTime" SelectedID="1"></Item>
+                        <Item Key="EscalationSolutionTime" SelectedID="1"></Item>
+                        <Item Key="EscalationTime" SelectedID="1"></Item>
+                        <Item Key="EscalationUpdateTime" SelectedID="1"></Item>
+                        <Item Key="TicketNumber" SelectedID="2"></Item>
+                        <Item Key="Lock" SelectedID="1"></Item>
+                        <Item Key="Owner" SelectedID="1"></Item>
+                        <Item Key="PendingTime" SelectedID="1"></Item>
+                        <Item Key="Queue" SelectedID="1"></Item>
+                        <Item Key="Responsible" SelectedID="1"></Item>
+                        <Item Key="Priority" SelectedID="1"></Item>
+                        <Item Key="Service" SelectedID="1"></Item>
+                        <Item Key="State" SelectedID="1"></Item>
+                        <Item Key="SLA" SelectedID="1"></Item>
+                        <Item Key="Title" SelectedID="2"></Item>
+                        <Item Key="Type" SelectedID="1"></Item>
                     </Hash>
                 </Item>
             </Hash>
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###CustomQueue" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the CustomQueue object in the preference view of the agent interface.</Description>
+        <Description Translatable="1">Parameters for the CustomQueue object in the preference view of the agent interface. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
@@ -6783,7 +6793,7 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###CustomService" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the CustomService object in the preference view of the agent interface.</Description>
+        <Description Translatable="1">Parameters for the CustomService object in the preference view of the agent interface. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
@@ -6798,7 +6808,7 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###RefreshTime" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the RefreshTime object in the preference view of the agent interface.</Description>
+        <Description Translatable="1">Parameters for the RefreshTime object in the preference view of the agent interface. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
@@ -6825,14 +6835,15 @@
         </Value>
     </Setting>
     <!--<Setting Name="PreferencesGroups###TicketOverviewSmallPageShown" Required="0" Valid="1">-->
-        <!--<Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview.</Description>-->
+        <!--<Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>-->
         <!--<Navigation>Frontend::Agent::View::Preferences</Navigation>-->
         <!--<Value>-->
             <!--<Hash>-->
                 <!--<Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>-->
                 <!--<Item Key="PreferenceGroup">Miscellaneous</Item>-->
                 <!--<Item Key="Label" Translatable="1">Ticket Overview "Small" Limit</Item>-->
-                <!--<Item Key="Key" Translatable="1">Ticket limit per page for Ticket Overview "Small"</Item>-->
+                <!--<Item Key="Desc" Translatable="1">Ticket limit per page for Ticket Overview "Small"</Item>-->
+                <!--<Item Key="Key" Translatable="1"></Item>-->
                 <!--<Item Key="Data">-->
                     <!--<Hash>-->
                         <!--<Item Key="10">10</Item>-->
@@ -6851,14 +6862,15 @@
         <!--</Value>-->
     <!--</Setting>-->
     <Setting Name="PreferencesGroups###TicketOverviewFilterSettings" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the column filters of the small ticket overview.</Description>
+        <Description Translatable="1">Parameters for the column filters of the small ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Preferences::ColumnFilters</Item>
                 <Item Key="PreferenceGroup">Miscellaneous</Item>
                 <Item Key="Label" Translatable="1">Enabled filters.</Item>
-                <Item Key="Key" Translatable="1">Column ticket filters for Ticket Overviews type "Small".</Item>
+                <Item Key="Desc" Translatable="1">Column ticket filters for Ticket Overviews type "Small".</Item>
+                <Item Key="Key" Translatable="1"></Item>
                 <Item Key="PrefKey">UserFilterColumnsEnabled</Item>
                 <Item Key="Prio">8100</Item>
                 <Item Key="Active">0</Item>
@@ -6866,14 +6878,15 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###TicketOverviewMediumPageShown" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the medium ticket overview.</Description>
+        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the medium ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
                 <Item Key="PreferenceGroup">Miscellaneous</Item>
                 <Item Key="Label" Translatable="1">Ticket Overview "Medium" Limit</Item>
-                <Item Key="Key" Translatable="1">Ticket limit per page for Ticket Overview "Medium"</Item>
+                <Item Key="Desc" Translatable="1">Ticket limit per page for Ticket Overview "Medium".</Item>
+                <Item Key="Key" Translatable="1"></Item>
                 <Item Key="Data">
                     <Hash>
                         <Item Key="10">10</Item>
@@ -6895,14 +6908,15 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###TicketOverviewPreviewPageShown" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the ticket preview overview.</Description>
+        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the ticket preview overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
                 <Item Key="PreferenceGroup">Miscellaneous</Item>
                 <Item Key="Label" Translatable="1">Ticket Overview "Preview" Limit</Item>
-                <Item Key="Key" Translatable="1">Ticket limit per page for Ticket Overview "Preview"</Item>
+                <Item Key="Desc" Translatable="1">Ticket limit per page for Ticket Overview "Preview".</Item>
+                <Item Key="Key" Translatable="1"></Item>
                 <Item Key="Data">
                     <Hash>
                         <Item Key="10">10</Item>
@@ -6924,7 +6938,7 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###CreateNextMask" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the CreateNextMask object in the preference view of the agent interface.</Description>
+        <Description Translatable="1">Parameters for the CreateNextMask object in the preference view of the agent interface. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
@@ -7239,6 +7253,13 @@
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
+    <Setting Name="Ticket::Frontend::CustomerTicketZoom###CustomerZoomExpand" Required="1" Valid="1">
+        <Description Translatable="1">Shows all the articles of the ticket (expanded) in the customer zoom view.</Description>
+        <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
     <Setting Name="Ticket::CustomerTicketSearch::SearchLimit" Required="1" Valid="1">
         <Description Translatable="1">Maximum number of tickets to be displayed in the result of a search in the customer interface.</Description>
         <Navigation>Frontend::Customer::View::TicketSearch</Navigation>
@@ -7476,7 +7497,7 @@
                             <Array>
                             </Array>
                         </Item>
-                        <Item Key="Description" Translatable="1">Overview of all open Tickets.</Item>
+                        <Item Key="Description" Translatable="1">Overview of all Tickets per assigned Queue.</Item>
                         <Item Key="Name" Translatable="1">Queue view</Item>
                         <Item Key="Link">Action=AgentTicketQueue</Item>
                         <Item Key="LinkOption"></Item>
@@ -7497,7 +7518,7 @@
                             <Array>
                             </Array>
                         </Item>
-                        <Item Key="Description"></Item>
+                        <Item Key="Description" Translatable="1">Overview of all Tickets per assigned Queue.</Item>
                         <Item Key="Name" Translatable="1">Tickets</Item>
                         <Item Key="Link">Action=AgentTicketQueue</Item>
                         <Item Key="LinkOption"></Item>
@@ -8589,8 +8610,8 @@
         <Navigation>Frontend::Agent::View::TicketMove</Navigation>
         <Value>
             <Item ValueType="Select" SelectedID="TicketZoom">
-                <Item ValueType="Option" Value="TicketZoom">TicketZoom</Item>
-                <Item ValueType="Option" Value="LastScreenOverview">LastScreenOverview</Item>
+                <Item ValueType="Option" Value="TicketZoom" Translatable="1">Ticket Zoom</Item>
+                <Item ValueType="Option" Value="LastScreenOverview" Translatable="1">Last Screen Overview</Item>
             </Item>
         </Value>
     </Setting>
@@ -10555,7 +10576,7 @@
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###NotificationEvent" Required="0" Valid="1">
-        <Description Translatable="1">Transport selection for ticket notifications.</Description>
+        <Description Translatable="1">Transport selection for ticket notifications. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
@@ -11834,14 +11855,15 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="PreferencesGroups###DynamicFieldsOverviewPageShown" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the pages (in which the dynamic fields are shown) of the dynamic fields overview.</Description>
+        <Description Translatable="1">Parameters for the pages (in which the dynamic fields are shown) of the dynamic fields overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
                 <Item Key="PreferenceGroup">Miscellaneous</Item>
                 <Item Key="Label" Translatable="1">Dynamic Fields Overview Limit</Item>
-                <Item Key="Key" Translatable="1">Dynamic fields limit per page for Dynamic Fields Overview</Item>
+                <Item Key="Desc" Translatable="1">Dynamic fields limit per page for Dynamic Fields Overview.</Item>
+                <Item Key="Key" Translatable="1"></Item>
                 <Item Key="Data">
                     <Hash>
                         <Item Key="10">10</Item>

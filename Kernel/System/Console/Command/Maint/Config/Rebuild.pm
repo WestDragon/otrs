@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -66,13 +66,13 @@ sub Run {
         return $Self->ExitCodeError();
     }
 
-    my $DeploySuccess = $SysConfigObject->ConfigurationDeploy(
+    my %DeploymentResult = $SysConfigObject->ConfigurationDeploy(
         Comments    => "Configuration Rebuild",
         AllSettings => 1,
         UserID      => 1,
         Force       => 1,
     );
-    if ( !$DeploySuccess ) {
+    if ( !$DeploymentResult{Success} ) {
 
         # Disable in memory cache.
         $CacheObject->Configure(

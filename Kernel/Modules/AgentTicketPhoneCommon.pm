@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1306,13 +1306,13 @@ sub _MaskPhone {
 
     # customer info string
     if ( $ConfigObject->Get('Ticket::Frontend::CustomerInfoCompose') ) {
+        my %TicketData = $Kernel::OM->Get('Kernel::System::Ticket')->TicketGet( TicketID => $Self->{TicketID} );
         $Param{CustomerTable} = $LayoutObject->AgentCustomerViewTable(
-            Data => {
-                %{ $Param{CustomerData} },
-                TicketID => $Self->{TicketID},
-            },
-            Max => $ConfigObject->Get('Ticket::Frontend::CustomerInfoComposeMaxSize'),
+            Data   => $Param{CustomerData},
+            Ticket => \%TicketData,
+            Max    => $ConfigObject->Get('Ticket::Frontend::CustomerInfoComposeMaxSize'),
         );
+
         $LayoutObject->Block(
             Name => 'CustomerTable',
             Data => \%Param,
@@ -1328,9 +1328,9 @@ sub _MaskPhone {
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
         $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
-            Data       => $Param{StandardTemplates}  || {},
-            Name       => 'StandardTemplateID',
-            SelectedID => $Param{StandardTemplateID} || '',
+            Data         => $Param{StandardTemplates} || {},
+            Name         => 'StandardTemplateID',
+            SelectedID   => $Param{StandardTemplateID} || '',
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 0,

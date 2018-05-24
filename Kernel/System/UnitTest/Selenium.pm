@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -389,7 +389,7 @@ sub WaitFor {
 
     while ( $WaitedSeconds <= $Param{Time} ) {
         if ( $Param{JavaScript} ) {
-            return 1 if $Self->execute_script( $Param{JavaScript} )
+            return 1 if $Self->execute_script( $Param{JavaScript} );
         }
         elsif ( $Param{WindowCount} ) {
             return 1 if scalar( @{ $Self->get_window_handles() } ) == $Param{WindowCount};
@@ -414,6 +414,40 @@ sub WaitFor {
     $Argument = "Callback" if $Param{Callback};
 
     die "WaitFor($Argument) failed.";
+}
+
+=head2 SwitchToFrame()
+
+Change focus to another frame on the page. If C<WaitForLoad> is passed, it will wait until the frame has loaded the
+page completely.
+
+    my $Success = $SeleniumObject->SwitchToFrame(
+        FrameSelector => '.Iframe',     # (required) CSS selector of the frame element
+        WaitForLoad   => 1,             # (optional) Wait until the frame has loaded, if necessary
+        Time          => 20,            # (optional) Wait time in seconds (default 20)
+    );
+
+=cut
+
+sub SwitchToFrame {
+    my ( $Self, %Param ) = @_;
+
+    if ( !$Param{FrameSelector} ) {
+        die 'Need FrameSelector.';
+    }
+
+    if ( $Param{WaitForLoad} ) {
+        $Self->WaitFor(
+            JavaScript => "return typeof(\$('$Param{FrameSelector}').get(0).contentWindow.Core) == 'object'
+                && typeof(\$('$Param{FrameSelector}').get(0).contentWindow.Core.App) == 'object'
+                && \$('$Param{FrameSelector}').get(0).contentWindow.Core.App.PageLoadComplete;",
+            Time => $Param{Time},
+        );
+    }
+
+    $Self->switch_to_frame( $Self->find_element( $Param{FrameSelector}, 'css' ) );
+
+    return 1;
 }
 
 =head2 DragAndDrop()

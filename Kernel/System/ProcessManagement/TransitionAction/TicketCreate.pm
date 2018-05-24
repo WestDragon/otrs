@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -35,7 +35,7 @@ Kernel::System::ProcessManagement::TransitionAction::TicketCreate - A module to 
 
 =head1 DESCRIPTION
 
-All TicketArticleCreate functions.
+All TicketCreate functions.
 
 =head1 PUBLIC INTERFACE
 
@@ -61,7 +61,7 @@ sub new {
 
     Run Data
 
-    my $TicketArticleCreateResult = $TicketArticleCreateActionObject->Run(
+    my $TicketCreateResult = $TicketCreateActionObject->Run(
         UserID                   => 123,
         Ticket                   => \%Ticket,   # required
         ProcessEntityID          => 'P123',
@@ -161,7 +161,7 @@ sub Run {
         )
     {
         if ( defined $Param{Config}->{$Attribute} ) {
-            $TicketParam{$Attribute} = $Param{Config}->{$Attribute}
+            $TicketParam{$Attribute} = $Param{Config}->{$Attribute};
         }
     }
 

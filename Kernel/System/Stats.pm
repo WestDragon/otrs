@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1121,7 +1121,7 @@ sub GetObjectBehaviours {
 
     # check if it is cached
     if ( $Self->{'Cache::ObjectBehaviours'}->{$Module} ) {
-        return $Self->{'Cache::ObjectBehaviours'}->{$Module}
+        return $Self->{'Cache::ObjectBehaviours'}->{$Module};
     }
 
     # load module, return if module does not exist
@@ -2565,7 +2565,7 @@ sub _GenerateDynamicStats {
             $Second = 0;
             $Minute = 0;
             $Hour   = 0;
-            ( $Year, $Month, $Day ) = $Self->_MondayOfWeek( $Year, $Month, $Day )
+            ( $Year, $Month, $Day ) = $Self->_MondayOfWeek( $Year, $Month, $Day );
         }
         elsif ( $Element->{SelectedValues}[0] eq 'Month' ) {
             $Second = 0;
@@ -3426,7 +3426,7 @@ sub _GenerateDynamicStats {
     my @StatArray = ( [$Title], \@HeaderLine, @DataArray );
 
     if ( !$Param{Cache} || $Preview ) {
-        return @StatArray
+        return @StatArray;
     }
 
     # check if we should cache this result

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -239,7 +239,7 @@ sub Map {
         # check if we have a value mapping for the specific key
         my $ValueMap;
         if ( $Config->{ValueMap} && $Config->{ValueMap}->{$NewKey} ) {
-            $ValueMap = $Config->{ValueMap}->{$NewKey}
+            $ValueMap = $Config->{ValueMap}->{$NewKey};
         }
 
         if ($ValueMap) {

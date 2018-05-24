@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -269,7 +269,7 @@ sub _Edit {
         Name        => 'AddressID',
         SelectedID  => $Param{AddressID},
         Translation => 0,
-        Class => 'Modernize Validate_Required ' . ( $Param{Errors}->{'AddressIDInvalid'} || '' ),
+        Class       => 'Modernize Validate_Required ' . ( $Param{Errors}->{'AddressIDInvalid'} || '' ),
     );
 
     my $HTMLUtilsObject = $Kernel::OM->Get('Kernel::System::HTMLUtils');

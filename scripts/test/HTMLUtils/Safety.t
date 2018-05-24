@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -804,6 +804,15 @@ You should be able to continue reading these lessons, however.
         Config => {},
         Result => {
             Output  => '<a href="http://localhost/online/foo/bar.html">www</a>',
+            Replace => 0,
+        },
+    },
+    {
+        Name   => 'Safety - bug 13561 - Handling empty strings',
+        Input  => '',
+        Config => {},
+        Result => {
+            Output  => '',
             Replace => 0,
         },
     },

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -52,6 +52,8 @@ click an element that causes a page get/reload/submit and wait for the page to b
 
 sub VerifiedClick {    ## no critic
     my $Self = shift;
+
+    $Self->driver()->execute_script('window.Core.App.PageLoadComplete = false;');
 
     $Self->SUPER::click(@_);
 

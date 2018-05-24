@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -306,8 +306,9 @@ sub Run {
 
         # login is successful
         my %UserData = $UserObject->GetUserData(
-            User  => $User,
-            Valid => 1
+            User          => $User,
+            Valid         => 1,
+            NoOutOfOffice => 1,
         );
 
         # check if the browser supports cookies
@@ -1021,17 +1022,30 @@ sub Run {
         my $Home = $ConfigObject->Get('Home');
         my $File = "$Home/Kernel/Config/Files/User/$UserData{UserID}.pm";
         if ( -e $File ) {
-            if ( !require $File ) {
-                die "ERROR: $!\n";
-            }
+            eval {
+                if ( require $File ) {
 
-            # prepare file
-            $File =~ s/\Q$Home\E//g;
-            $File =~ s/^\///g;
-            $File =~ s/\/\//\//g;
-            $File =~ s/\//::/g;
-            $File =~ s/\.pm$//g;
-            $File->Load($ConfigObject);
+                    # Prepare file.
+                    $File =~ s/\Q$Home\E//g;
+                    $File =~ s/^\///g;
+                    $File =~ s/\/\//\//g;
+                    $File =~ s/\//::/g;
+                    $File =~ s/\.pm$//g;
+                    $File->Load($ConfigObject);
+                }
+                else {
+                    die "Cannot load file $File: $!\n";
+                }
+            };
+
+            # Log error and continue.
+            if ($@) {
+                my $ErrorMessage = $@;
+                $Kernel::OM->Get('Kernel::System::Log')->Log(
+                    Priority => 'error',
+                    Message  => $ErrorMessage,
+                );
+            }
         }
 
         # pre application module

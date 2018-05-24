@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -241,8 +241,12 @@ sub Run {
             );
         }
 
-        # Save and finish button: go to web service.
-        if ( $ParamObject->GetParam( Param => 'ReturnToAction' ) ) {
+        # If the user would like to finish editing the filter config, just redirect to the invoker edit screen.
+        if (
+            !IsInteger( $ParamObject->GetParam( Param => 'ContinueAfterSave' ) )
+            || $ParamObject->GetParam( Param => 'ContinueAfterSave' ) != 1
+            )
+        {
             my $RedirectURL = "Action=$InvokerTypeFrontendModule;Subaction=Change;Invoker=$Invoker;"
                 . "WebserviceID=$WebserviceID;";
 

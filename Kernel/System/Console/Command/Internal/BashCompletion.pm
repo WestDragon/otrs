@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -69,7 +69,7 @@ sub Run {
         # We need to extract the command name from the command line if present.
         my $CompLine = $ENV{COMP_LINE};
         if ( !$CompLine || !$CompLine =~ m/otrs\.Console\.pl/ ) {
-            $Self->ExitCodeError()
+            $Self->ExitCodeError();
         }
         $CompLine =~ s/.*otrs\.Console\.pl\s*//xms;
         my @Elements = split( m/\s+/, $CompLine );

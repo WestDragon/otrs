@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -25,7 +25,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::SystemMaintenance.pm
+Kernel::System::SystemMaintenance
 
 =head1 DESCRIPTION
 
@@ -512,13 +512,16 @@ sub SystemMaintenanceIsActive {
 
 =head2 SystemMaintenanceIsComing()
 
-get a SystemMaintenance flag
+Get a upcoming SystemMaintenance start and stop date.
 
-    my $SystemMaintenanceIsComing = $SystemMaintenanceObject->SystemMaintenanceIsComing();
+    my %SystemMaintenanceIsComing = $SystemMaintenanceObject->SystemMaintenanceIsComing();
 
 Returns:
 
-    $SystemMaintenanceIsComing = 1 # 1 or 0
+    %SystemMaintenanceIsComing = {
+        StartDate => 1515614400,
+        StopDate  => 1515607200
+    };
 
 =cut
 
@@ -531,14 +534,14 @@ sub SystemMaintenanceIsComing {
     my $NotifiBeforeTime =
         $Kernel::OM->Get('Kernel::Config')->Get('SystemMaintenance::TimeNotifyUpcomingMaintenance')
         || 30;
-    $DateTimeObject->Add( Minutes => $NotifiBeforeTime * 60 );
+    $DateTimeObject->Add( Minutes => $NotifiBeforeTime );
     my $TargetTime = $DateTimeObject->ToEpoch();
 
     # get database object
     my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
 
     my $SQL = "
-            SELECT start_date
+            SELECT start_date, stop_date
             FROM system_maintenance
             WHERE start_date > $SystemTime and start_date <= $TargetTime
     ";
@@ -554,16 +557,17 @@ sub SystemMaintenanceIsComing {
 
     return if !$DBObject->Prepare( SQL => $SQL );
 
-    my $Result;
+    my %Result;
     RESULT:
     while ( my @Row = $DBObject->FetchrowArray() ) {
-        $Result = $Row[0];
+        $Result{StartDate} = $Row[0];
+        $Result{StopDate}  = $Row[1];
         last RESULT;
     }
 
-    return if !$Result;
+    return if !%Result;
 
-    return $Result;
+    return %Result;
 }
 
 1;

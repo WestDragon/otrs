@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1181,7 +1181,7 @@ my @Tests = (
         ExpectedResults => [
             {
                 ToArray => [ 'foo@bar.com', 'test@otrsexample.com' ],
-                Body => "JobName $TicketID Kernel::System::Email::Test $UserData{UserFirstname}=\n",
+                Body    => "JobName $TicketID Kernel::System::Email::Test $UserData{UserFirstname}=\n",
             },
         ],
         Success => 1,
@@ -1346,7 +1346,7 @@ my @Tests = (
             },
             {
                 ToArray => [ 'test3@otrsexample.com', 'test4@otrsexample.com' ],
-                Body => "JobName $TicketID Kernel::System::Email::Test $UserData{UserFirstname}=\n",
+                Body    => "JobName $TicketID Kernel::System::Email::Test $UserData{UserFirstname}=\n",
             },
         ],
         Success => 1,

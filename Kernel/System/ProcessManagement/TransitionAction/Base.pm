@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -88,9 +88,11 @@ sub _ReplaceTicketAttributes {
 
     for my $Attribute ( sort keys %{ $Param{Config} } ) {
 
-        # replace ticket attributes such as <OTRS_Ticket_DynamicField_Name1> or
-        # <OTRS_TICKET_DynamicField_Name1>
-        # <OTRS_Ticket_*> is deprecated and should be removed in further versions of OTRS
+        # Replace ticket attributes such as
+        # <OTRS_Ticket_DynamicField_Name1> or <OTRS_TICKET_DynamicField_Name1>
+        # or
+        # <OTRS_TICKET_DynamicField_Name1_Value> or <OTRS_Ticket_DynamicField_Name1_Value>.
+        # <OTRS_Ticket_*> is deprecated and should be removed in further versions of OTRS.
         my $Count = 0;
         REPLACEMENT:
         while (
@@ -109,7 +111,7 @@ sub _ReplaceTicketAttributes {
                 );
                 next REPLACEMENT if !$DynamicFieldConfig;
 
-                # get the display value for each dynamic field
+                # Get the display value for each dynamic field.
                 my $DisplayValue = $DynamicFieldBackendObject->ValueLookup(
                     DynamicFieldConfig => $DynamicFieldConfig,
                     Key                => $Param{Ticket}->{"DynamicField_$DynamicFieldName"},
@@ -122,6 +124,25 @@ sub _ReplaceTicketAttributes {
 
                 $Param{Config}->{$Attribute}
                     =~ s{<OTRS_TICKET_$TicketAttribute>}{$DisplayValueStrg->{Value} // ''}ige;
+
+                next REPLACEMENT;
+            }
+            elsif ( $TicketAttribute =~ m{DynamicField_(\S+)} ) {
+                my $DynamicFieldName = $1;
+
+                my $DynamicFieldConfig = $DynamicFieldObject->DynamicFieldGet(
+                    Name => $DynamicFieldName,
+                );
+                next REPLACEMENT if !$DynamicFieldConfig;
+
+                # Get the readable value (key) for each dynamic field.
+                my $ValueStrg = $DynamicFieldBackendObject->ReadableValueRender(
+                    DynamicFieldConfig => $DynamicFieldConfig,
+                    Value              => $Param{Ticket}->{"DynamicField_$DynamicFieldName"},
+                );
+
+                $Param{Config}->{$Attribute}
+                    =~ s{<OTRS_TICKET_$TicketAttribute>}{$ValueStrg->{Value} // ''}ige;
 
                 next REPLACEMENT;
             }
@@ -161,6 +182,20 @@ sub _ReplaceAdditionalAttributes {
 
     # get and store richtext information
     my $RichText = $ConfigObject->Get('Frontend::RichText');
+
+    # Determine if RichText (text/html) is used in the config as well.
+    #   If not, we have to deactivate it, otherwise HTML content and plain text are mixed up (see bug#13764).
+    if ($RichText) {
+
+        # Check for ContentType or MimeType.
+        if (
+            ( IsStringWithData( $Param{Config}->{ContentType} ) && $Param{Config}->{ContentType} !~ m{text/html}i )
+            || ( IsStringWithData( $Param{Config}->{MimeType} ) && $Param{Config}->{MimeType} !~ m{text/html}i )
+            )
+        {
+            $RichText = 0;
+        }
+    }
 
     my $ArticleObject = $Kernel::OM->Get('Kernel::System::Ticket::Article');
 
@@ -277,7 +312,7 @@ sub _ReplaceAdditionalAttributes {
 
         my $ConfigValue = $Param{Config}->{$Attribute};
 
-        if ( $ConfigValue && $ConfigValue =~ m{<OTRS_[A-Za-z0-9_]+>}smxi ) {
+        if ( $ConfigValue && $ConfigValue =~ m{<OTRS_[A-Za-z0-9_]+(?:\[(?:.+?)\])?>}smxi ) {
 
             if ($RichText) {
                 $ConfigValue = $HTMLUtilsObject->ToHTML(

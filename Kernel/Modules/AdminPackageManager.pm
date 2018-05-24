@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1373,12 +1373,14 @@ sub Run {
                 Updated        => $LayoutObject->{LanguageObject}->Translate('Updated'),
                 AlreadyUpdated => $LayoutObject->{LanguageObject}->Translate('Already up-to-date'),
                 Installed      => $LayoutObject->{LanguageObject}->Translate('Installed'),
+                Undeployed     => $LayoutObject->{LanguageObject}->Translate('Not correctly deployed'),
                 Failed         => $LayoutObject->{LanguageObject}->Translate('Failed'),
             );
             my %StatusMessages = (
                 Updated        => $LayoutObject->{LanguageObject}->Translate('Package updated correctly'),
                 AlreadyUpdated => $LayoutObject->{LanguageObject}->Translate('Package was already updated'),
                 Installed      => $LayoutObject->{LanguageObject}->Translate('Dependency installed correctly'),
+                Undeployed     => $LayoutObject->{LanguageObject}->Translate('The package needs to be reinstalled'),
                 Cyclic       => $LayoutObject->{LanguageObject}->Translate('The package contains cyclic dependencies'),
                 NotFound     => $LayoutObject->{LanguageObject}->Translate('Not found in on-line repositories'),
                 WrongVersion => $LayoutObject->{LanguageObject}->Translate('Required version is higher than available'),
@@ -1388,14 +1390,18 @@ sub Run {
             );
 
             if ( IsHashRefWithData($UpgradeResult) ) {
-                for my $StatusType (qw(Updated Installed AlreadyUpdated)) {
+                for my $StatusType (qw(Updated Installed AlreadyUpdated Undeployed)) {
                     for my $PackageName ( sort keys %{ $UpgradeResult->{$StatusType} } ) {
+                        my $Class = 'Success';
+                        if ( $StatusType eq 'Installed' || $StatusType eq 'Undeployed' ) {
+                            $Class = 'Warning';
+                        }
                         $PackageList{$PackageName} = {
                             Name          => $PackageName,
                             Status        => $StatusType,
                             StatusDisplay => $StatusStings{$StatusType},
                             StatusMessage => $StatusMessages{$StatusType},
-                            Class         => $StatusType eq 'Installed' ? 'Warning' : 'Success',
+                            Class         => $Class,
                         };
                     }
                 }
@@ -1814,7 +1820,7 @@ sub Run {
         );
         $TargetDateTimeObject->Add( Days => 1 );
         if ( $CurrentDateTimeObject > $TargetDateTimeObject ) {
-            $PackageObject->PackageUpgradeAllDataDelete()
+            $PackageObject->PackageUpgradeAllDataDelete();
         }
     }
 

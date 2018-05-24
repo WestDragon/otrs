@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -142,10 +142,9 @@ Core.Agent.Preferences = (function (TargetNS) {
                         Core.UI.WidgetOverlayHide($WidgetObj);
                     }
 
-                    // clear up password fields
-                    if ($WidgetObj.find('input[type=password]').length) {
-                        $WidgetObj.find('input[type=password]').val('');
-                    }
+                    // Clear up password and two factor token fields.
+                    $WidgetObj.find('input[type=password]').val('');
+                    $WidgetObj.find('input[name=TwoFactorToken]').val('');
 
                     $ButtonObj.blur();
                 }

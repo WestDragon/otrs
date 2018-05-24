@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -744,7 +744,7 @@ sub _Edit {
     my $CalendarObject = $Kernel::OM->Get('Kernel::System::Calendar');
 
     my @CalendarList = $CalendarObject->CalendarList(
-        UserID     => 4,
+        UserID     => 1,
         Permission => 'ro',
         ValidID    => 0,
     );
@@ -1101,7 +1101,7 @@ sub _Edit {
 
                     # set Email transport selected on add screen
                     if ( $Transport eq 'Email' && !$Param{ID} ) {
-                        $TransportChecked = 'checked="checked"'
+                        $TransportChecked = 'checked="checked"';
                     }
 
                     # get transport settings string from transport object

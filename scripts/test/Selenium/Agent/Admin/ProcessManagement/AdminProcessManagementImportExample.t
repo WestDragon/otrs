@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -69,7 +69,7 @@ $Selenium->RunTest(
             index(
                 $Selenium->get_page_source(),
                 "Dynamic field PreProcApplicationRecorded already exists, but definition is wrong."
-                ) > -1,
+            ) > -1,
             "Error message is shown.",
         );
 
@@ -215,13 +215,13 @@ $Selenium->RunTest(
             push @UpdatedSettings, $Value->{$Key}->{Name};
         }
 
-        $Success = $SysConfigObject->ConfigurationDeploy(
+        my %DeploymentResult = $SysConfigObject->ConfigurationDeploy(
             Comments      => "Deployed by Selenium test",
             UserID        => 1,
             Force         => 1,
             DirtySettings => \@UpdatedSettings,
         );
-        if ( !$Success ) {
+        if ( !$DeploymentResult{Success} ) {
             $Kernel::OM->Get('Kernel::System::Log')->Log(
                 Priority => 'error',
                 Message  => "System was unable to deploy settings needed for Application for leave process!"

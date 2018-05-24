@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -231,7 +231,7 @@ sub ArticleDelete {
 
 Get article attachment index as hash.
 
-    my %Index = $BackendObject->BackendSearchableFieldsGet();
+    my %Index = $ArticleBackendObject->BackendSearchableFieldsGet();
 
 Returns:
 
@@ -253,7 +253,7 @@ sub BackendSearchableFieldsGet {
 
 Get article attachment index as hash.
 
-    my %Index = $BackendObject->ArticleSearchableContentGet(
+    my %Index = $ArticleBackendObject->ArticleSearchableContentGet(
         TicketID       => 123,   # (required)
         ArticleID      => 123,   # (required)
         DynamicFields  => 1,     # (optional) To include the dynamic field values for this article on the return structure.

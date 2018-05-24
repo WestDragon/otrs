@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -466,6 +466,16 @@ $Selenium->RunTest(
             1,
             'Error log filtered correctly'
         );
+
+        # Try to navigate to invalid Communication ID,
+        #   see bug#13523 (https://bugs.otrs.org/show_bug.cgi?id=13523).
+        my $RandomNumber = $Helper->GetRandomNumber();
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AdminCommunicationLog;Subaction=Zoom;CommunicationID=$RandomNumber"
+        );
+
+        # Verify error screen.
+        $Selenium->find_element( 'div.ErrorScreen', 'css' );
 
         # Clean up all communications created by the test.
         $Self->True(

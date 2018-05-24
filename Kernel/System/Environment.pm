@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -125,7 +125,7 @@ sub OSInfoGet {
 
         $OSName = 'MacOSX ' . $MacVersion;
     }
-    elsif ( $^O eq 'freebsd' ) {
+    elsif ( $^O eq 'freebsd' || $^O eq 'openbsd' ) {
         $OSName = `uname -r`;
     }
     else {
@@ -135,6 +135,7 @@ sub OSInfoGet {
     my %OSMap = (
         linux   => 'Linux',
         freebsd => 'FreeBSD',
+        openbsd => 'OpenBSD',
         darwin  => 'MacOSX',
     );
 

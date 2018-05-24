@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -928,7 +928,7 @@ sub Run {
         # There is no need to unlock the setting as it was already unlocked in the update.
 
         # 'Rebuild' the configuration.
-        my $Success = $SysConfigObject->ConfigurationDeploy(
+        $SysConfigObject->ConfigurationDeploy(
             Comments    => "Installer deployment",
             AllSettings => 1,
             Force       => 1,
@@ -1251,6 +1251,26 @@ sub CheckDBRequirements {
                     'http://dev.mysql.com/doc/refman/5.6/en/innodb-data-log-reconfiguration.html',
                 );
             }
+        }
+
+        # Check character_set_database value.
+        my $Charset = $Result{DBH}->selectall_arrayref("SHOW variables LIKE 'character_set_database'");
+
+        if ( $Charset->[0]->[1] =~ /utf8mb4/i ) {
+            $Result{Successful} = 0;
+            $Result{Message}    = $LayoutObject->{LanguageObject}->Translate(
+                "Wrong database collation (%s is %s, but it needs to be utf8).",
+                'character_set_database',
+                $Charset->[0]->[1],
+            );
+        }
+        elsif ( $Charset->[0]->[1] !~ /utf8/i ) {
+            $Result{Successful} = 0;
+            $Result{Message}    = $LayoutObject->{LanguageObject}->Translate(
+                "Wrong database collation (%s is %s, but it needs to be utf8).",
+                'character_set_database',
+                $Charset->[0]->[1],
+            );
         }
     }
 

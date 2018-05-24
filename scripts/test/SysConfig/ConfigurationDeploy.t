@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -15,19 +15,39 @@ use utf8;
 use vars (qw($Self));
 
 # Get needed objects
-$Kernel::OM->ObjectParamAdd(
-    'Kernel::System::UnitTest::Helper' => {
-        RestoreDatabase => 1,
-    },
-);
-my $HelperObject = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+my $HelperObject    = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+my $DBObject        = $Kernel::OM->Get('Kernel::System::DB');
+my $MainObject      = $Kernel::OM->Get('Kernel::System::Main');
+my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
+
+# NOTE: This test removes all settings from SysConfig tables and creates
+# own deployments, therefore we must handle DB Restore on our own
+# (we need to do a deployment after DB is restored).
+my $StartedTransaction = $HelperObject->BeginWork();
+$Self->True(
+    $StartedTransaction,
+    'Started database transaction.',
+);
+
+my $Home = $ConfigObject->Get('Home') . '/';
 
 my $SettingName1 = 'ProductName ' . $HelperObject->GetRandomNumber() . 1;
 my $SettingName2 = 'ProductName ' . $HelperObject->GetRandomNumber() . 2;
 my $SettingName3 = 'ProductName ' . $HelperObject->GetRandomNumber() . 3;
 my $SettingName4 = 'ProductName ' . $HelperObject->GetRandomNumber() . 4;
+my $SettingName5 = 'File' . $HelperObject->GetRandomNumber() . 5;
+
+my $FileLocation = $MainObject->FileWrite(
+    Location => "$Home/Kernel/Config/Files/TempFile.txt",
+    Content  => \'Some content',
+);
+$Self->True(
+    $FileLocation,
+    'Temp file created.'
+);
+my $FileLocation2 = "$Home/Kernel/Config/Files/TempFile2.txt";
 
 my $TestUserLogin = $HelperObject->TestUserCreate();
 my $UserID        = $Kernel::OM->Get('Kernel::System::User')->UserLookup(
@@ -70,20 +90,23 @@ my $CleanUp = sub {
     # Prepare valid config XML and Perl
     #
     my $ValidSettingXML = <<'EOF',
-<Setting Name="Test1" Required="1" Valid="1">
-    <Description Translatable="1">Test 1.</Description>
-    <Navigation>Core::Ticket</Navigation>
-    <Value>
-        <Item ValueType="String" ValueRegex=".*">Test setting 1</Item>
-    </Value>
-</Setting>
-<Setting Name="Test2" Required="1" Valid="1">
-    <Description Translatable="1">Test 2.</Description>
-    <Navigation>Core::Ticket</Navigation>
-    <Value>
-        <Item ValueType="File">/usr/bin/gpg</Item>
-    </Value>
-</Setting>
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_config version="2.0" init="Framework">
+    <Setting Name="Test1" Required="1" Valid="1">
+        <Description Translatable="1">Test 1.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex=".*">Test setting 1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Test2" Required="1" Valid="1">
+        <Description Translatable="1">Test 2.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="File">/usr/bin/gpg</Item>
+        </Value>
+    </Setting>
+</otrs_config>
 EOF
 
         my $SysConfigXMLObject = $Kernel::OM->Get('Kernel::System::SysConfig::XML');
@@ -94,7 +117,7 @@ EOF
 
     my $SysConfigDBObject = $Kernel::OM->Get('Kernel::System::SysConfig::DB');
 
-    # Add default setting s
+    # Add default settings.
     my $DefaultSettingID1 = $SysConfigDBObject->DefaultSettingAdd(
         Name                     => $SettingName1,
         Description              => 'Defines the name of the application ...',
@@ -181,6 +204,28 @@ EOF
     $Self->True(
         $DefaultSettingID4,
         "Default setting added - $SettingName4",
+    );
+
+    my $DefaultSettingID5 = $SysConfigDBObject->DefaultSettingAdd(
+        Name                     => $SettingName5,
+        Description              => 'Defines the name of the application ...',
+        Navigation               => 'ASimple::Path::Structure',
+        IsInvisible              => 1,
+        IsReadonly               => 0,
+        IsRequired               => 1,
+        IsValid                  => 1,
+        HasConfigLevel           => 200,
+        UserModificationPossible => 1,
+        UserModificationActive   => 1,
+        XMLContentRaw            => $DefaultSettingAddParams[1]->{XMLContentRaw},
+        XMLContentParsed         => $DefaultSettingAddParams[1]->{XMLContentParsed},
+        XMLFilename              => 'UnitTest.xml',
+        EffectiveValue           => $FileLocation,
+        UserID                   => 1,
+    );
+    $Self->True(
+        $DefaultSettingID5,
+        "Default setting added - $SettingName5",
     );
 
     my $ExclusiveLockGUID = $SysConfigDBObject->DefaultSettingLock(
@@ -330,6 +375,7 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Test setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
     {
@@ -344,6 +390,7 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Modified setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
     {
@@ -358,6 +405,7 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Test setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
     {
@@ -372,6 +420,7 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Modified setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
     {
@@ -386,6 +435,7 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Test setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
     {
@@ -399,14 +449,10 @@ my @Tests = (
             $SettingName2 => 'Modified setting 2',
             $SettingName3 => 'Test setting 3',
             $SettingName4 => 'Test setting 4',
+            $SettingName5 => $FileLocation,
         },
     },
 );
-
-my $Home = $Kernel::OM->Get('Kernel::Config')->Get('Home') . '/';
-
-my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
-my $MainObject      = $Kernel::OM->Get('Kernel::System::Main');
 
 TEST:
 for my $Test (@Tests) {
@@ -427,7 +473,7 @@ for my $Test (@Tests) {
         next TEST;
     }
 
-    my $Success = $SysConfigObject->ConfigurationDeploy(
+    $SysConfigObject->ConfigurationDeploy(
         %{ $Test->{Config} },
         Force    => 1,
         Comments => "Some comments",
@@ -463,6 +509,66 @@ for my $Test (@Tests) {
     );
 }
 
+$CleanUp->();
+
+# Set effective value to the existing file.
+my $SettingUpdated = $SysConfigObject->SettingsSet(
+    UserID   => 1,
+    Comments => 'Unit test deployment',
+    Settings => [
+        {
+            Name           => $SettingName5,
+            EffectiveValue => $FileLocation,
+        },
+    ],
+);
+
+$Self->True(
+    $SettingUpdated,
+    'Settings deployed properly.'
+);
+
+# Move file to another localtion. At this point $SettingName5 is invalid, make sure deployment fails.
+`mv $FileLocation $FileLocation2`;
+
+my %Result = $SysConfigObject->ConfigurationDeploy(
+    Comments    => "Unit test deployment",
+    UserID      => 1,
+    AllSettings => 1,
+    Force       => 1,
+);
+
+$Self->IsDeeply(
+    \%Result,
+    {
+        'Error'   => "Invalid setting: $SettingName5",
+        'Success' => 0,
+    },
+    'Make sure that deployment fails for invalid settings.',
+);
+
+# Simulate that setting is overridden in the perl file to the proper value.
+$HelperObject->ConfigSettingChange(
+    Valid => 1,
+    Key   => $SettingName5,
+    Value => $FileLocation2,
+);
+
+%Result = $SysConfigObject->ConfigurationDeploy(
+    Comments    => "Unit test deployment",
+    UserID      => 1,
+    AllSettings => 1,
+    Force       => 1,
+);
+
+$Self->IsDeeply(
+    \%Result,
+    {
+        'Success' => 1,
+    },
+    'Make sure that deployment passed for invalid settings overridden in perl file.',
+);
+
 @Tests = (
     {
         Name         => 'AddInvalid Without Validation',
@@ -495,7 +601,7 @@ for my $Test (@Tests) {
         }
     }
 
-    my $Success = $SysConfigObject->ConfigurationDeploy(
+    my %DeployResult = $SysConfigObject->ConfigurationDeploy(
         AllSettings  => 1,
         Force        => 1,
         Comments     => "Some comments",
@@ -504,7 +610,7 @@ for my $Test (@Tests) {
     );
 
     $Self->Is(
-        $Success // 0,
+        $DeployResult{Success} // 0,
         $Test->{Success},
         "$Test->{Name} ConfigurationDeploy()",
     );
@@ -519,5 +625,32 @@ for my $Test (@Tests) {
         }
     }
 }
+
+my $TempFileDeleted = $MainObject->FileDelete(
+    Location => $FileLocation2,
+);
+$Self->True(
+    $TempFileDeleted,
+    'Temp file deleted.',
+);
+
+my $RollbackSuccess = $HelperObject->Rollback();
+$Kernel::OM->Get('Kernel::System::Cache')->CleanUp();
+$Self->True(
+    $RollbackSuccess,
+    'Rolled back all database changes and cleaned up the cache.',
+);
+
+%Result = $SysConfigObject->ConfigurationDeploy(
+    Comments    => "Revert changes.",
+    UserID      => 1,
+    Force       => 1,
+    AllSettings => 1,
+);
+
+$Self->True(
+    $Result{Success},
+    'Configuration restored.',
+);
 
 1;

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -124,12 +124,12 @@ EOF
                 Default => 1,
             );
 
-            my $IsReadOnly                 = $DefaultSetting{IsReadOnly}               // 0;
-            my $IsValid                    = $DefaultSetting{IsValid}                  // 1;
-            my $IsRequired                 = $DefaultSetting{IsRequired}               // 0;
-            my $IsInvisible                = $DefaultSetting{IsInvisible}              // 0;
+            my $IsReadOnly                 = $DefaultSetting{IsReadOnly} // 0;
+            my $IsValid                    = $DefaultSetting{IsValid} // 1;
+            my $IsRequired                 = $DefaultSetting{IsRequired} // 0;
+            my $IsInvisible                = $DefaultSetting{IsInvisible} // 0;
             my $IsUserModificationPossible = $DefaultSetting{UserModificationPossible} // 0;
-            my $IsUserModificationActive   = $DefaultSetting{UserModificationActive}   // 0;
+            my $IsUserModificationActive   = $DefaultSetting{UserModificationActive} // 0;
 
             my $EffectiveValueStrg = $YAMLObject->Dump(
                 Data => $DefaultSetting{EffectiveValue},
@@ -173,7 +173,7 @@ EOF
             }
 
             my $DefaultValueText = $LanguageObject->Translate('Default value');
-            print <<"EOF"
+            print <<"EOF";
                     <para>$DefaultValueText:
                         <programlisting><![CDATA[$EffectiveValueStrg]]></programlisting>
                     </para>

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -38,7 +38,7 @@ $Self->Is(
 
 $Self->Is(
     $Attachments[2]->{Filename} || '',
-    '[Presse-Greenpeace] Morgen wird Greenpeace-Einspruch gegenEmbryonen-Patent verhandelt - NeueDokumentation ueber Patente auf Leben.eml',
+    '_Presse-Greenpeace__Morgen_wird_Greenpeace-Einspruch_gegenEmbryonen-Patent_verhandelt_-_NeueDokumentation_ueber_Patente_auf_Leben.eml',
     "Nested message filename",
 );
 

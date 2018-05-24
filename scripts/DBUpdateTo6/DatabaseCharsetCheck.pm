@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -49,7 +49,7 @@ sub CheckPreviousRequirement {
 
     my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
 
-    # This check makes sense only for MySQL, so skip it in case of other backends.
+    # This check makes sense only for MySQL, so skip it in case of other back-ends.
     if ( $DBObject->GetDatabaseFunction('Type') ne 'mysql' ) {
         if ($Verbose) {
             print "    Database backend is not MySQL, skipping...\n";

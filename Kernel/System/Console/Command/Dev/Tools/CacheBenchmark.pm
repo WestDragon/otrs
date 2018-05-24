@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -90,8 +90,8 @@ sub Run {
         my $Content1kB = '.' x 1024;
         for ( my $i = 0; $i < 100000; $i++ ) {
             $Result = $CacheObject->Set(
-                Type => 'CacheTestInitContent' . $SID . ( $i % 10 ),
-                Key => 'Test' . $i,
+                Type  => 'CacheTestInitContent' . $SID . ( $i % 10 ),
+                Key   => 'Test' . $i,
                 Value => $Content1kB,
                 TTL   => 60 * 24 * 60 * 60,
             );
@@ -114,8 +114,8 @@ sub Run {
             $SetOK = 0;
             for ( my $i = 0; $i < $OpCount; $i++ ) {
                 $Result = $CacheObject->Set(
-                    Type => 'CacheTest' . $SID . ( $i % 10 ),
-                    Key => 'Test' . $i,
+                    Type  => 'CacheTest' . $SID . ( $i % 10 ),
+                    Key   => 'Test' . $i,
                     Value => $Content,
                     TTL   => 60 * 24,
                 );

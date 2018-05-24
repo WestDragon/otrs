@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,6 +14,8 @@ use warnings;
 use File::stat;
 use Storable();
 use Term::ANSIColor();
+
+use Kernel::System::VariableCheck qw(IsHashRefWithData IsArrayRefWithData);
 
 our @ObjectDependencies = (
     'Kernel::Config',
@@ -94,6 +96,28 @@ sub Run {
 
     my @TestsToExecute = @{ $Param{Tests} // [] };
 
+    my $UnitTestBlacklist = $ConfigObject->Get('UnitTest::Blacklist');
+    my @BlacklistedTests;
+    my @SkippedTests;
+    if ( IsHashRefWithData($UnitTestBlacklist) ) {
+
+        CONFIGKEY:
+        for my $ConfigKey ( sort keys %{$UnitTestBlacklist} ) {
+
+            next CONFIGKEY if !$ConfigKey;
+            next CONFIGKEY
+                if !$UnitTestBlacklist->{$ConfigKey} || !IsArrayRefWithData( $UnitTestBlacklist->{$ConfigKey} );
+
+            TEST:
+            for my $Test ( @{ $UnitTestBlacklist->{$ConfigKey} } ) {
+
+                next TEST if !$Test;
+
+                push @BlacklistedTests, $Test;
+            }
+        }
+    }
+
     # Use non-overridden time() function.
     my $StartTime = CORE::time;    ## no critic;
 
@@ -111,6 +135,18 @@ sub Run {
             next FILE;
         }
 
+        # Check blacklisted files.
+        if ( @BlacklistedTests && grep { $File =~ m{\Q$Directory/$_\E$}smx } @BlacklistedTests ) {
+            push @SkippedTests, $File;
+            next FILE;
+        }
+
+        # Check if a file with the same path and name exists in the Custom folder.
+        my $CustomFile = $File =~ s{ \A $Home }{$Home/Custom}xmsr;
+        if ( -e $CustomFile ) {
+            $File = $CustomFile;
+        }
+
         $Self->_HandleFile(
             PostTestScripts => $Param{PostTestScripts},
             File            => $File,
@@ -123,6 +159,14 @@ sub Run {
     my $Host = $ConfigObject->Get('FQDN');
 
     print "=====================================================================\n";
+
+    if (@SkippedTests) {
+        print "Following blacklisted tests were skipped:\n";
+        for my $SkippedTest (@SkippedTests) {
+            print '  ' . $Self->_Color( 'yellow', $SkippedTest ) . "\n";
+        }
+    }
+
     print $Self->_Color( 'yellow', $Host ) . " ran tests in " . $Self->_Color( 'yellow', "${Duration}s" );
     print " for " . $Self->_Color( 'yellow', $Product ) . "\n";
 
@@ -204,14 +248,15 @@ sub _HandleFile {
     # Wait for child process to finish.
     waitpid( $PID, 0 );
 
-    my $ResultData = Storable::retrieve($ResultDataFile);
+    my $ResultData = eval { Storable::retrieve($ResultDataFile) };
 
     if ( !$ResultData ) {
+        print $Self->_Color( 'red', "Could not read result data for $Param{File}.\n" );
         $ResultData->{TestNotOk}++;
     }
 
     $Self->{ResultData}->{ $Param{File} } = $ResultData;
-    $Self->{TestCountOk}    += $ResultData->{TestOk}    // 0;
+    $Self->{TestCountOk}    += $ResultData->{TestOk} // 0;
     $Self->{TestCountNotOk} += $ResultData->{TestNotOk} // 0;
 
     $Self->{NotOkInfo} //= [];
@@ -238,10 +283,57 @@ sub _SubmitResults {
     my %SupportData = $Kernel::OM->Get('Kernel::System::SupportDataCollector')->Collect();
     die "Could not collect SupportData.\n" if !$SupportData{Success};
 
+    # Limit number of screenshots in the result data, since it can grow very large.
+    #   Allow only up to 25 screenshots per submission (average size of 80kb per screenshot for a total of 2MB).
+    my $ScreenshotCountLimit = 25;
+    my $ScreenshotCount      = 0;
+
+    RESULT:
+    for my $Result ( sort keys %{ $Self->{ResultData} } ) {
+        next RESULT if !IsHashRefWithData( $Self->{ResultData}->{$Result}->{Results} );
+
+        TEST:
+        for my $Test ( sort keys %{ $Self->{ResultData}->{$Result}->{Results} } ) {
+            next TEST if !IsArrayRefWithData( $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Screenshots} );
+
+            # Get number of screenshots in this test. Note that this key is an array, and we support multiple
+            #   screenshots per one test.
+            my $TestScreenshotCount = scalar @{ $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Screenshots} };
+
+            # Check if number of screenshots for this result breaks the limit.
+            if ( $ScreenshotCount + $TestScreenshotCount > $ScreenshotCountLimit ) {
+                my $ScreenshotCountRemaining = $ScreenshotCountLimit - $ScreenshotCount;
+
+                # Allow only remaining number of screenshots.
+                if ( $ScreenshotCountRemaining > 0 ) {
+                    @{ $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Screenshots} }
+                        = @{ $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Screenshots} }[
+                        0,
+                        $ScreenshotCountRemaining
+                        ];
+                    $ScreenshotCount = $ScreenshotCountLimit;
+                }
+
+                # Remove all screenshots.
+                else {
+                    delete $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Screenshots};
+                }
+
+                # Include message about removal of screenshots.
+                $Self->{ResultData}->{$Result}->{Results}->{$Test}->{Message}
+                    .= ' (Additional screenshots have been omitted from the report because of size constraint.)';
+
+                next TEST;
+            }
+
+            $ScreenshotCount += $TestScreenshotCount;
+        }
+    }
+
     my %SubmitData = (
         Auth     => $Param{SubmitAuth} // '',
-        JobID    => $Param{JobID}      // '',
-        Scenario => $Param{Scenario}   // '',
+        JobID    => $Param{JobID} // '',
+        Scenario => $Param{Scenario} // '',
         Meta     => {
             StartTime => $Param{StartTime},
             Duration  => $Param{Duration},

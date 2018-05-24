@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -90,7 +90,7 @@ sub Run {
 
     my @DatabaseType = ( $Self->GetOption('database-type') );
     if ( $Self->GetOption('database-type') eq 'all' ) {
-        @DatabaseType = qw(mysql postgresql oracle)
+        @DatabaseType = qw(mysql postgresql oracle);
     }
 
     my $SourceFilename = $Self->GetOption('source-path');

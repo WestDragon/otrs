@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -711,7 +711,7 @@ sub Run {
 
                 # Get AJAX param values.
                 if ( $Object->can('GetParamAJAX') ) {
-                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) )
+                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) );
                 }
 
                 # Get options that have to be removed from the selection visible to the agent. These options will be
@@ -825,7 +825,7 @@ sub Run {
             next LINE if !$Data{$Line};
             for my $Email ( Mail::Address->parse( $Data{$Line} ) ) {
                 if ( !$CheckItemObject->CheckEmail( Address => $Email->address() ) ) {
-                    $Error{ $Line . "Invalid" } = " ServerError"
+                    $Error{ $Line . "Invalid" } = " ServerError";
                 }
             }
         }
@@ -839,6 +839,9 @@ sub Run {
 
         # Run compose modules.
         if ( ref $ConfigObject->Get('Ticket::Frontend::ArticleComposeModule') eq 'HASH' ) {
+
+            # use ticket QueueID in compose modules
+            $GetParam{QueueID} = $Ticket{QueueID};
 
             my %Jobs = %{ $ConfigObject->Get('Ticket::Frontend::ArticleComposeModule') };
             for my $Job ( sort keys %Jobs ) {
@@ -860,7 +863,13 @@ sub Run {
                 }
 
                 # Run module.
-                $Object->Run( %GetParam, Config => $Jobs{$Job} );
+                my $NewParams = $Object->Run( %GetParam, Config => $Jobs{$Job} );
+
+                if ($NewParams) {
+                    for my $Parameter ( $Object->Option( %GetParam, Config => $Jobs{$Job} ) ) {
+                        $GetParam{$Parameter} = $NewParams;
+                    }
+                }
 
                 # Get errors.
                 %Error = (
@@ -922,15 +931,15 @@ sub _Mask {
     # Handle multiple autocomplete in recipient fields.
     $Param{To} = ( scalar @{ $Param{MultipleCustomer} } ? '' : $Param{To} );
     if ( defined $Param{To} && $Param{To} ne '' ) {
-        $Param{ToInvalid} = ''
+        $Param{ToInvalid} = '';
     }
     $Param{Cc} = ( scalar @{ $Param{MultipleCustomerCc} } ? '' : $Param{Cc} );
     if ( defined $Param{Cc} && $Param{Cc} ne '' ) {
-        $Param{CcInvalid} = ''
+        $Param{CcInvalid} = '';
     }
     $Param{Bcc} = ( scalar @{ $Param{MultipleCustomerBcc} } ? '' : $Param{Bcc} );
     if ( defined $Param{Bcc} && $Param{Bcc} ne '' ) {
-        $Param{BccInvalid} = ''
+        $Param{BccInvalid} = '';
     }
 
     # Process the 'Cc' field.
@@ -1064,7 +1073,7 @@ sub _Mask {
                 push @EmailAddressesBcc, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 
@@ -1100,7 +1109,7 @@ sub _Mask {
                 push @EmailAddressesCc, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 
@@ -1136,7 +1145,7 @@ sub _Mask {
                 push @EmailAddressesTo, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 

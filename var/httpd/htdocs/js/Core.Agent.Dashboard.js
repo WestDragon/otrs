@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (AGPL). If you
@@ -739,7 +739,7 @@ Core.Agent.Dashboard = (function (TargetNS) {
                     'svg.GraphWidget' + StatsData.Name,
                     {
                         PreferencesKey: 'GraphWidget' + StatsData.Name,
-                        PreferencesData: StatsData.Preferences,
+                        PreferencesData: Core.JSON.Parse(StatsData.Preferences),
                         Duration: 250
                     }
                 );
@@ -1369,14 +1369,14 @@ Core.Agent.Dashboard = (function (TargetNS) {
                     OrderBy          = '';
 
                 if ($OrderByObj && $OrderByObj.hasClass('SortDescendingLarge')) {
-                    OrderBy = 'Up';
+                    OrderBy = 'Down';
                 }
                 else if ($OrderByObj && $OrderByObj.hasClass('SortAscendingLarge')) {
-                    OrderBy = 'Down';
+                    OrderBy = 'Up';
                 }
 
                 $('#Dashboard' + Core.App.EscapeSelector(WidgetRefreshData.Name) + '-box').addClass('Loading');
-                Core.AJAX.ContentUpdate($('#Dashboard' + Core.App.EscapeSelector(WidgetRefreshData.Name)), Core.Config.Get('Baselink') + 'Action=' + Core.Config.Get('Action') + ';Subaction=Element;Name=' + WidgetRefreshData.Name + ';AdditionalFilter=' + AdditionalFilter + ';Filter=' + Filter + ';CustomerID=' + WidgetRefreshData.CustomerID + ';SortBy=' + SortBy + ';OrderBy=' + OrderBy, function () {
+                Core.AJAX.ContentUpdate($('#Dashboard' + Core.App.EscapeSelector(WidgetRefreshData.Name)), Core.Config.Get('Baselink') + 'Action=' + Core.Config.Get('Action') + ';Subaction=Element;Name=' + WidgetRefreshData.Name + ';AdditionalFilter=' + AdditionalFilter + ';Filter=' + Filter + ';CustomerID=' + WidgetRefreshData.CustomerID + ';CustomerUserID=' + WidgetRefreshData.CustomerUserID + ';SortBy=' + SortBy + ';OrderBy=' + OrderBy, function () {
                     $('#Dashboard' + Core.App.EscapeSelector(WidgetRefreshData.Name) + '-box').removeClass('Loading');
                 });
                 clearTimeout(Core.Config.Get('Timer_' + WidgetRefreshData.NameHTML));
