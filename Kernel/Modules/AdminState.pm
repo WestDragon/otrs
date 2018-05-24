@@ -107,6 +107,24 @@ sub Run {
                 $Errors{NameInvalid}              = 'ServerError';
                 $Errors{InSettingNameServerError} = 'InSetting';
             }
+
+            # Check if it has at least one valid state.
+        }
+        else {
+            my @MergeStateList = $StateObject->StateGetStatesByType(
+                StateType => ['merged'],
+                Result    => 'Name',
+            );
+
+            if (
+                scalar @MergeStateList == 1
+                && $MergeStateList[0] eq $GetParam{Name}
+                && $Kernel::OM->Get('Kernel::System::Valid')->ValidLookup( ValidID => $GetParam{ValidID} ) ne 'valid'
+                )
+            {
+                $Errors{ValidIDInvalid}         = 'ServerError';
+                $Errors{ValidOptionServerError} = 'MergeError';
+            }
         }
 
         # if no errors occurred
@@ -232,6 +250,20 @@ sub Run {
             }
         }
 
+        my @MergeStateList = $StateObject->StateGetStatesByType(
+            StateType => ['merged'],
+            Result    => 'Name',
+        );
+        if (
+            !@MergeStateList
+            && $Kernel::OM->Get('Kernel::System::Valid')->ValidLookup( ValidID => $GetParam{ValidID} ) ne 'valid'
+            && $StateObject->StateTypeLookup( StateTypeID => $GetParam{TypeID} ) eq 'merged'
+            )
+        {
+            $Errors{ValidIDInvalid}         = 'ServerError';
+            $Errors{ValidOptionServerError} = 'MergeError';
+        }
+
         # if no errors occurred
         if ( !%Errors ) {
 
@@ -316,7 +348,7 @@ sub _Edit {
         Data       => { $StateObject->StateTypeList( UserID => 1 ), },
         Name       => 'TypeID',
         SelectedID => $Param{TypeID},
-        Class => 'Modernize Validate_Required ' . ( $Param{Errors}->{'TypeIDInvalid'} || '' ),
+        Class      => 'Modernize Validate_Required ' . ( $Param{Errors}->{'TypeIDInvalid'} || '' ),
     );
     $LayoutObject->Block(
         Name => 'OverviewUpdate',

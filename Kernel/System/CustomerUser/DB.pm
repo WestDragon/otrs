@@ -617,7 +617,7 @@ sub CustomerSearchDetail {
         }
     }
 
-    my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+    my $DBObject = $Self->{DBObject};
 
     # Assemble the conditions used in the WHERE clause.
     my @SQLWhere;
@@ -801,7 +801,7 @@ sub CustomerSearchDetail {
         #   or skip the search and return a emptry array ref, if no user logins exists from the dynamic field search.
         if (@DynamicFieldUserLogins) {
 
-            my $SQLQueryInCondition = $Kernel::OM->Get('Kernel::System::DB')->QueryInCondition(
+            my $SQLQueryInCondition = $DBObject->QueryInCondition(
                 Key      => $Self->{CustomerKey},
                 Values   => \@DynamicFieldUserLogins,
                 BindMode => 0,
@@ -819,7 +819,7 @@ sub CustomerSearchDetail {
 
         next FIELD if !@{ $Param{ $Field->{Name} } };
 
-        my $SQLQueryInCondition = $Kernel::OM->Get('Kernel::System::DB')->QueryInCondition(
+        my $SQLQueryInCondition = $DBObject->QueryInCondition(
             Key      => $Field->{DatabaseField},
             Values   => $Param{ $Field->{Name} },
             BindMode => 0,
@@ -831,7 +831,7 @@ sub CustomerSearchDetail {
     # Special parameter for CustomerIDs from a customer company search result.
     if ( IsArrayRefWithData( $Param{CustomerCompanySearchCustomerIDs} ) ) {
 
-        my $SQLQueryInCondition = $Kernel::OM->Get('Kernel::System::DB')->QueryInCondition(
+        my $SQLQueryInCondition = $DBObject->QueryInCondition(
             Key      => $Self->{CustomerID},
             Values   => $Param{CustomerCompanySearchCustomerIDs},
             BindMode => 0,
@@ -843,7 +843,7 @@ sub CustomerSearchDetail {
     # Special parameter to exclude some user logins from the search result.
     if ( IsArrayRefWithData( $Param{ExcludeUserLogins} ) ) {
 
-        my $SQLQueryInCondition = $Kernel::OM->Get('Kernel::System::DB')->QueryInCondition(
+        my $SQLQueryInCondition = $DBObject->QueryInCondition(
             Key      => $Self->{CustomerKey},
             Values   => $Param{ExcludeUserLogins},
             BindMode => 0,
@@ -1264,10 +1264,12 @@ sub CustomerUserDataGet {
         $CustomerUserListFieldsMap = [ 'first_name', 'last_name', 'email', ];
     }
 
-    # to build the UserMailString
-    my %LookupCustomerUserListFields = map { $_ => 1 } @{$CustomerUserListFieldsMap};
-    my @CustomerUserListFields
-        = map { $_->[0] } grep { $LookupCustomerUserListFields{ $_->[2] } } @{ $Self->{CustomerUserMap}->{Map} };
+    # Order fields by CustomerUserListFields (see bug#13821).
+    my @CustomerUserListFields;
+    for my $Field ( @{$CustomerUserListFieldsMap} ) {
+        my @FieldNames = map { $_->[0] } grep { $_->[2] eq $Field } @{ $Self->{CustomerUserMap}->{Map} };
+        push @CustomerUserListFields, $FieldNames[0];
+    }
 
     my $UserMailString = '';
     my @UserMailStringParts;

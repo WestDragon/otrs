@@ -1603,7 +1603,7 @@ sub Footer {
                 $ConfigObject->Get('Ticket::SearchIndexModule')
                 eq 'Kernel::System::Ticket::ArticleSearchIndex::DB'
                 )
-            ) ? 1 : 0,
+        ) ? 1 : 0,
         SearchFrontend => $JSCall,
         Autocomplete   => $AutocompleteConfig,
     );
@@ -2680,13 +2680,12 @@ sub PageNavBar {
             my $BaselinkAll = $Baselink
                 . "StartWindow=$WindowStart;StartHit="
                 . ( ( ( $i - 1 ) * $Param{PageShown} ) + 1 );
-            my $SelectedPage = "";
+            my $SelectedPage = '';
             my $PageNumber   = $i;
 
             if ( $Page == $i ) {
-                $SelectedPage = " class=\"Selected\"";
+                $SelectedPage = 'Selected';
             }
-
             if ( $Param{AJAXReplace} ) {
 
                 $PaginationData{$PageNumber} = {
@@ -3677,7 +3676,7 @@ sub BuildDateSelection {
 
 Produces human readable data size.
 
-    my $SizeStr = $MainObject->HumanReadableDataSize(
+    my $SizeStr = $LayoutObject->HumanReadableDataSize(
         Size => 123,  # size in bytes
     );
 
@@ -3724,7 +3723,7 @@ sub HumanReadableDataSize {
         return;
     }
 
-    if ( !IsPositiveInteger( $Param{Size} ) ) {
+    if ( !IsInteger( $Param{Size} ) ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => 'Size must be integer!',
@@ -4151,10 +4150,6 @@ sub CustomerFooter {
             = $Self->{LanguageObject}->Translate( $AutocompleteConfig->{$ConfigElement}{ButtonText} );
     }
 
-    my $AutocompleteConfigJSON = $Self->JSONEncode(
-        Data => $AutocompleteConfig,
-    );
-
     # add JS data
     my %JSConfig = (
         Baselink                 => $Self->{Baselink},
@@ -4172,7 +4167,7 @@ sub CustomerFooter {
         OTRSBusinessIsInstalled  => $Param{OTRSBusinessIsInstalled},
         OTRSSTORMIsInstalled     => $Param{OTRSSTORMIsInstalled},
         InputFieldsActivated     => $ConfigObject->Get('ModernizeCustomerFormFields'),
-        Autocomplete             => $AutocompleteConfigJSON,
+        Autocomplete             => $AutocompleteConfig,
         VideoChatEnabled         => $Param{VideoChatEnabled},
         WebMaxFileUpload         => $ConfigObject->Get('WebMaxFileUpload'),
     );
@@ -5275,7 +5270,11 @@ sub _BuildSelectionDataRefCreate {
 
         # get missing parents and mark them for disable later
         if ( $OptionRef->{Sort} eq 'TreeView' ) {
-            my %List = reverse %{ $DataLocal || {} };
+
+            # Delete entries in hash with value = undef,
+            #   because otherwise the reverse statement will cause warnings.
+            # Reverse hash, skipping undefined values.
+            my %List = map { $DataLocal->{$_} => $_ } grep { defined $DataLocal->{$_} } keys %{$DataLocal};
 
             # get each data value
             for my $Key ( sort keys %List ) {
@@ -5964,8 +5963,8 @@ sub SetRichTextParameters {
     my $ScreenRichTextWidth  = $Param{Data}->{RichTextWidth}  || $ConfigObject->Get("Frontend::RichTextWidth");
     my $RichTextType         = $Param{Data}->{RichTextType}   || '';
     my $PictureUploadAction = $Param{Data}->{RichTextPictureUploadAction} || '';
-    my $TextDir = $Self->{TextDirection} || '';
-    my $EditingAreaCSS = 'body.cke_editable { ' . $ConfigObject->Get("Frontend::RichText::DefaultCSS") . ' }';
+    my $TextDir             = $Self->{TextDirection}                      || '';
+    my $EditingAreaCSS      = 'body.cke_editable { ' . $ConfigObject->Get("Frontend::RichText::DefaultCSS") . ' }';
 
     # decide if we need to use the enhanced mode (with tables)
     my @Toolbar;

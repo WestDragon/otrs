@@ -330,7 +330,7 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="RecipientGroups">[% Translate("Send to all group members") | html %]: </label>
+                        <label for="RecipientGroups">[% Translate("Send to all group members (agents only)") | html %]: </label>
                         <div class="Field">
                             [% Data.RecipientGroupsStrg %]
                         </div>
@@ -376,7 +376,7 @@
                     </fieldset>
 [% RenderBlockStart("TransportRow") %]
                     <fieldset class="TableLike FixedLabel SpacingTop">
-                        <legend><span>[% Data.TransportName | html %]</span></legend>
+                        <legend><span>[% Translate(Data.TransportName) | html %]</span></legend>
 [% RenderBlockStart("TransportRowEnabled") %]
                         <label for="Transport[% Data.Transport | html %]">
                             [% Translate("Enable this notification method") | html %]:

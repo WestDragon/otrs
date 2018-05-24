@@ -20,7 +20,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::System::WebserviceHistory
+Kernel::System::GenericInterface::WebserviceHistory
 
 =head1 DESCRIPTION
 
@@ -180,7 +180,7 @@ sub WebserviceHistoryGet {
 
 update WebserviceHistory attributes
 
-    my $Success = $WebserviceObject->WebserviceHistoryUpdate(
+    my $Success = $WebserviceHistoryObject->WebserviceHistoryUpdate(
         ID           => 123,
         WebserviceID => 123
         Config       => $ConfigHashRef,

@@ -48,7 +48,7 @@ $Selenium->RunTest(
             "Core.AJAX.FunctionCall(Core.Config.Get('CGIHandle') + ':12345', null, function () {});"
         );
 
-        $Selenium->WaitFor( JavaScript => "return \$('.CommunicationError:visible').length" );
+        $Selenium->WaitFor( JavaScript => "return \$('.NoConnection:visible').length" );
 
         my $LanguageObject = Kernel::Language->new(
             UserLanguage => $Language,
@@ -56,9 +56,9 @@ $Selenium->RunTest(
 
         # Another alert dialog opens with the detail message.
         $Self->Is(
-            $Selenium->execute_script("return \$('#AjaxErrorDialogInner .CommunicationError p').text().trim()"),
+            $Selenium->execute_script("return \$('#AjaxErrorDialogInner .NoConnection p').text().trim()"),
             $LanguageObject->Translate(
-                'There was an error in communication with the server. Server might be experiencing some temporary problems, please reload this page to check if they have been resolved.'
+                'OTRS detected possible network issues. You could either try reloading this page manually or wait until your browser has re-established the connection on its own.'
             ),
             'Check for opened alert text',
         );

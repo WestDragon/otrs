@@ -682,6 +682,10 @@ h2.SearchResults {
     width: 100%;
 }
 
+.Deployment .WidgetSimple.Setting:not(.IsLockedByMe):not(.MenuExpanded) .SettingContainer > fieldset:before {
+    display: none;
+}
+
 .WidgetSimple.Setting.IsLockedByMe .SettingContainer,
 .Compare .WidgetSimple.Setting .SettingContainer {
     max-height: none;
@@ -926,10 +930,6 @@ h2.SearchResults {
     content: "-";
 }
 
-.Array > .ArrayItem {
-    display: inline-block;
-}
-
 .IsLockedByMe .ArrayItem > .SettingContent {
     width: calc(100% - 16px); /* 100% minus the width of the button on the right minus the padding of combined 6px */
     max-width: none !important;
@@ -1110,6 +1110,12 @@ h2.SearchResults {
 
 .ArrayItem .SettingContent {
     padding: 3px;
+    margin-left: 0px !important;
+    margin-bottom: 5px;
+}
+
+.Array > div:last-of-type .SettingContent {
+    margin-bottom: 0px;
 }
 
 .ArrayItem .SettingContent textarea {
@@ -1313,18 +1319,16 @@ h2.SearchResults {
     padding: 0px;
     display: inline-block;
     margin-left: 5px;
-    max-width: calc(100% - 220px); /* full width minus key + arrow width */
+    min-width: calc(100% - 220px); /* full width minus key + arrow width */
 }
 
 .IsLockedByMe .HashItem .SettingContent {
     min-width: calc(100% - 220px); /* full width minus key + arrow width */
-    max-width: none;
 }
 
 .ArrayItem .HashItem .SettingContent,
 .HashItem .HashItem .SettingContent {
     min-width: calc(100% - 220px); /* full width minus key + arrow width */
-    max-width: none;
 }
 
 .HashItem .HashItem .SettingContent {
@@ -1461,6 +1465,10 @@ h2.SearchResults {
     margin-left: -10px;
     margin-right: 5px;
     cursor: help;
+}
+
+.Icon .fa + .fa {
+    margin-left: 0px;
 }
 
 .RTL .Icon .fa {

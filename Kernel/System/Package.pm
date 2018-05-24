@@ -94,9 +94,10 @@ sub new {
         PackageMerge    => 'ARRAY',
 
         # package flags
-        PackageIsVisible      => 'SCALAR',
-        PackageIsDownloadable => 'SCALAR',
-        PackageIsRemovable    => 'SCALAR',
+        PackageIsVisible         => 'SCALAR',
+        PackageIsDownloadable    => 'SCALAR',
+        PackageIsRemovable       => 'SCALAR',
+        PackageAllowDirectUpdate => 'SCALAR',
 
         # *(Pre|Post) - just for compat. to 2.2
         IntroInstallPre    => 'ARRAY',
@@ -2192,7 +2193,7 @@ sub PackageBuild {
     for my $Tag (
         qw(Name Version Vendor URL License ChangeLog Description Framework OS
         IntroInstall IntroUninstall IntroReinstall IntroUpgrade
-        PackageIsVisible PackageIsDownloadable PackageIsRemovable PackageMerge
+        PackageIsVisible PackageIsDownloadable PackageIsRemovable PackageAllowDirectUpdate PackageMerge
         PackageRequired ModuleRequired CodeInstall CodeUpgrade CodeUninstall CodeReinstall)
         )
     {
@@ -3472,8 +3473,8 @@ sub PackageUpgradeAllIsRunning {
     }
 
     return (
-        IsRunning => $IsRunning // 0,
-        UpgradeStatus  => $SystemData{Status}  || '',
+        IsRunning      => $IsRunning // 0,
+        UpgradeStatus  => $SystemData{Status} || '',
         UpgradeSuccess => $SystemData{Success} || '',
     );
 }
@@ -5087,7 +5088,7 @@ sub _PackageInstallOrderListGet {
         $Param{InstallOrder}->{$PackageName} = $InitialValue;
     }
 
-    return $Success
+    return $Success;
 }
 
 =head2 _PackageOnlineListGet()

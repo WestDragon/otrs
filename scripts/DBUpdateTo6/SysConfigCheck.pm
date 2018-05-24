@@ -25,7 +25,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-scripts::DBUpdateTo6::MigrateArticleData -  Create entries in new article table for OmniChannel base infrastructure.
+scripts::DBUpdateTo6::SysConfigCheck -  Check for correct SysConfig entities in settings.
 
 =cut
 
@@ -146,7 +146,7 @@ sub _EffectiveValueGet {
         }
     }
 
-    return $OldEffectiveValue
+    return $OldEffectiveValue;
 }
 
 sub _EntitySettingsGet {

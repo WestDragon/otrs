@@ -24,10 +24,6 @@ our @ObjectDependencies = (
 sub CheckPreviousRequirement {
     my ( $Self, %Param ) = @_;
 
-    if ( $Param{CommandlineOptions}->{NonInteractive} || !is_interactive() ) {
-        return 1;
-    }
-
     # Check if following table already exists. In this case, time zone configuration is already done.
     my $TableExists = $Self->TableExists(
         Table => 'ticket_number_counter',
@@ -35,16 +31,14 @@ sub CheckPreviousRequirement {
 
     return 1 if $TableExists;
 
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+
     # Check if configuration was already made.
-    my $OTRSTimeZone        = $Kernel::OM->Get('Kernel::Config')->Get('OTRSTimeZone')        // 'UTC';
-    my $UserDefaultTimeZone = $Kernel::OM->Get('Kernel::Config')->Get('UserDefaultTimeZone') // 'UTC';
-    if ( $OTRSTimeZone ne 'UTC' || $UserDefaultTimeZone ne 'UTC' ) {
+    my $OTRSTimeZone        = $ConfigObject->Get('OTRSTimeZone') // '';
+    my $UserDefaultTimeZone = $ConfigObject->Get('UserDefaultTimeZone') // '';
+    if ( $OTRSTimeZone && $UserDefaultTimeZone ) {
         return 1;
     }
-
-    #
-    # OTRSTimeZone
-    #
 
     # Get system time zone
     my $DateTimeObject = $Kernel::OM->Create(
@@ -56,13 +50,27 @@ sub CheckPreviousRequirement {
     my $SystemTimeZone = $DateTimeObject->SystemTimeZoneGet() || 'UTC';
     $DateTimeObject->ToTimeZone( TimeZone => $SystemTimeZone );
 
-    # Get configured deprecated time zone offset
-    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+    # Get configured deprecated time zone offset.
     my $TimeOffset = int( $ConfigObject->Get('TimeZone') || 0 );
 
-    # Calculate complete time offset (server time zone + OTRS time offset)
+    # Calculate complete time offset (server time zone + OTRS time offset).
     my $SuggestedTimeZone = $TimeOffset ? '' : $SystemTimeZone;
     $TimeOffset += $DateTimeObject->Format( Format => '%{offset}' ) / 60 / 60;
+
+    if ( ( $Param{CommandlineOptions}->{NonInteractive} || !is_interactive() ) && $TimeOffset != 0 ) {
+        print
+            "\n\n      Error: The currently time offset is $TimeOffset hours, in this case you can not run the script in non-interactive mode. \n"
+            . "        Please execute the script in interactive mode and select the correct timezone. \n\n";
+        return;
+    }
+
+    if ( $Param{CommandlineOptions}->{NonInteractive} || !is_interactive() ) {
+        return 1;
+    }
+
+    #
+    # OTRSTimeZone
+    #
 
     # Show suggestions for time zone
     my %TimeZones = map { $_ => 1 } @{ $DateTimeObject->TimeZoneList() };
@@ -145,24 +153,16 @@ sub Run {
         return 1;
     }
 
-    my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
-
     for my $ConfigKey ( sort keys %{ $Self->{TargetTimeZones} // {} } ) {
-        my $ExclusiveLockGUID = $SysConfigObject->SettingLock(
-            Name   => $ConfigKey,
-            Force  => 1,
-            UserID => 1,
+
+        my $Result = $Self->SettingUpdate(
+            Name           => $ConfigKey,
+            IsValid        => 1,
+            EffectiveValue => $Self->{TargetTimeZones}->{$ConfigKey},
+            UserID         => 1,
         );
 
-        my %Result = $SysConfigObject->SettingUpdate(
-            Name              => $ConfigKey,
-            IsValid           => 1,
-            EffectiveValue    => $Self->{TargetTimeZones}->{$ConfigKey},
-            ExclusiveLockGUID => $ExclusiveLockGUID,
-            UserID            => 1,
-        );
-
-        return if !$Result{Success};
+        return if !$Result;
     }
 
     return 1;

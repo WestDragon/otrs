@@ -96,6 +96,28 @@ sub Run {
 
     my @TestsToExecute = @{ $Param{Tests} // [] };
 
+    my $UnitTestBlacklist = $ConfigObject->Get('UnitTest::Blacklist');
+    my @BlacklistedTests;
+    my @SkippedTests;
+    if ( IsHashRefWithData($UnitTestBlacklist) ) {
+
+        CONFIGKEY:
+        for my $ConfigKey ( sort keys %{$UnitTestBlacklist} ) {
+
+            next CONFIGKEY if !$ConfigKey;
+            next CONFIGKEY
+                if !$UnitTestBlacklist->{$ConfigKey} || !IsArrayRefWithData( $UnitTestBlacklist->{$ConfigKey} );
+
+            TEST:
+            for my $Test ( @{ $UnitTestBlacklist->{$ConfigKey} } ) {
+
+                next TEST if !$Test;
+
+                push @BlacklistedTests, $Test;
+            }
+        }
+    }
+
     # Use non-overridden time() function.
     my $StartTime = CORE::time;    ## no critic;
 
@@ -113,6 +135,18 @@ sub Run {
             next FILE;
         }
 
+        # Check blacklisted files.
+        if ( @BlacklistedTests && grep { $File =~ m{\Q$Directory/$_\E$}smx } @BlacklistedTests ) {
+            push @SkippedTests, $File;
+            next FILE;
+        }
+
+        # Check if a file with the same path and name exists in the Custom folder.
+        my $CustomFile = $File =~ s{ \A $Home }{$Home/Custom}xmsr;
+        if ( -e $CustomFile ) {
+            $File = $CustomFile;
+        }
+
         $Self->_HandleFile(
             PostTestScripts => $Param{PostTestScripts},
             File            => $File,
@@ -125,6 +159,14 @@ sub Run {
     my $Host = $ConfigObject->Get('FQDN');
 
     print "=====================================================================\n";
+
+    if (@SkippedTests) {
+        print "Following blacklisted tests were skipped:\n";
+        for my $SkippedTest (@SkippedTests) {
+            print '  ' . $Self->_Color( 'yellow', $SkippedTest ) . "\n";
+        }
+    }
+
     print $Self->_Color( 'yellow', $Host ) . " ran tests in " . $Self->_Color( 'yellow', "${Duration}s" );
     print " for " . $Self->_Color( 'yellow', $Product ) . "\n";
 
@@ -206,14 +248,15 @@ sub _HandleFile {
     # Wait for child process to finish.
     waitpid( $PID, 0 );
 
-    my $ResultData = Storable::retrieve($ResultDataFile);
+    my $ResultData = eval { Storable::retrieve($ResultDataFile) };
 
     if ( !$ResultData ) {
+        print $Self->_Color( 'red', "Could not read result data for $Param{File}.\n" );
         $ResultData->{TestNotOk}++;
     }
 
     $Self->{ResultData}->{ $Param{File} } = $ResultData;
-    $Self->{TestCountOk}    += $ResultData->{TestOk}    // 0;
+    $Self->{TestCountOk}    += $ResultData->{TestOk} // 0;
     $Self->{TestCountNotOk} += $ResultData->{TestNotOk} // 0;
 
     $Self->{NotOkInfo} //= [];
@@ -289,8 +332,8 @@ sub _SubmitResults {
 
     my %SubmitData = (
         Auth     => $Param{SubmitAuth} // '',
-        JobID    => $Param{JobID}      // '',
-        Scenario => $Param{Scenario}   // '',
+        JobID    => $Param{JobID} // '',
+        Scenario => $Param{Scenario} // '',
         Meta     => {
             StartTime => $Param{StartTime},
             Duration  => $Param{Duration},

@@ -64,7 +64,7 @@ $Selenium->RunTest(
         );
 
         # Set user's time zone.
-        my $UserTimeZone = 'Europe/Berlin';
+        my $UserTimeZone = 'UTC';
         $UserObject->SetPreferences(
             Key    => 'UserTimeZone',
             Value  => $UserTimeZone,
@@ -159,14 +159,14 @@ $Selenium->RunTest(
             "Error message correctly displayed"
         ) || die "Did not get notification message";
 
-        # get test start time + 2 hour of system time
+        # get test start time + 1 hour of system time
         my $DTStartObj = $DTObj->Clone();
-        $DTStartObj->Add( Hours => 2 );
+        $DTStartObj->Add( Hours => 1 );
         my $DTStart = $DTStartObj->Get();
 
-        # get test end time + 3 hour of system time
+        # get test end time + 2 hour of system time
         my $DTEndObj = $DTObj->Clone();
-        $DTEndObj->Add( Hours => 3 );
+        $DTEndObj->Add( Hours => 2 );
         my $DTEnd = $DTEndObj->Get();
 
         # create real test SystemMaintenance
@@ -229,21 +229,16 @@ $Selenium->RunTest(
             "$Notification - notification is found."
         );
 
-        # Get test start time + 1 hour of system.
+        # Get test system maintenance start and end time as formated string.
         my $LayoutObject = Kernel::Output::HTML::Layout->new( UserTimeZone => $UserTimeZone );
-        my $DTStartObjStr = $DTObj->Clone();
-        $DTStartObjStr->Add( Hours => 1 );
         my $StartTimeString = $LayoutObject->{LanguageObject}->FormatTimeString(
-            $DTStartObjStr->ToString(),
+            $DTStartObj->ToString(),
             'DateFormat',
             1,
         );
 
-        # Get test end time + 2 hour of system.
-        my $DTEndObjStr = $DTObj->Clone();
-        $DTEndObjStr->Add( Hours => 2 );
         my $EndTimeString = $LayoutObject->{LanguageObject}->FormatTimeString(
-            $DTEndObjStr->ToString(),
+            $DTEndObj->ToString(),
             'DateFormat',
             1,
         );
@@ -251,6 +246,23 @@ $Selenium->RunTest(
         # Check for upcoming System Maintenance notification.
         my $UpcomingSysMaintenanceNotif
             = "A system maintenance period will start at: $StartTimeString and is expected to stop at: $EndTimeString";
+        $Self->False(
+            $Selenium->execute_script(
+                "return \$('.MessageBox.Notice p:contains(\"$UpcomingSysMaintenanceNotif\")').length"
+            ),
+            "$UpcomingSysMaintenanceNotif - notification is not found."
+        );
+
+        # Update TimeNotifyUpcomingMaintenance config.
+        $Helper->ConfigSettingChange(
+            Key   => "SystemMaintenance::TimeNotifyUpcomingMaintenance",
+            Value => 61,
+        );
+
+        # Refresh screen.
+        $Selenium->VerifiedRefresh();
+
+        # Check for upcoming System Maintenance notification after config update.
         $Self->True(
             $Selenium->execute_script(
                 "return \$('.MessageBox.Notice p:contains(\"$UpcomingSysMaintenanceNotif\")').length"

@@ -711,7 +711,7 @@ sub Run {
 
                 # Get AJAX param values.
                 if ( $Object->can('GetParamAJAX') ) {
-                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) )
+                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) );
                 }
 
                 # Get options that have to be removed from the selection visible to the agent. These options will be
@@ -825,7 +825,7 @@ sub Run {
             next LINE if !$Data{$Line};
             for my $Email ( Mail::Address->parse( $Data{$Line} ) ) {
                 if ( !$CheckItemObject->CheckEmail( Address => $Email->address() ) ) {
-                    $Error{ $Line . "Invalid" } = " ServerError"
+                    $Error{ $Line . "Invalid" } = " ServerError";
                 }
             }
         }
@@ -931,15 +931,15 @@ sub _Mask {
     # Handle multiple autocomplete in recipient fields.
     $Param{To} = ( scalar @{ $Param{MultipleCustomer} } ? '' : $Param{To} );
     if ( defined $Param{To} && $Param{To} ne '' ) {
-        $Param{ToInvalid} = ''
+        $Param{ToInvalid} = '';
     }
     $Param{Cc} = ( scalar @{ $Param{MultipleCustomerCc} } ? '' : $Param{Cc} );
     if ( defined $Param{Cc} && $Param{Cc} ne '' ) {
-        $Param{CcInvalid} = ''
+        $Param{CcInvalid} = '';
     }
     $Param{Bcc} = ( scalar @{ $Param{MultipleCustomerBcc} } ? '' : $Param{Bcc} );
     if ( defined $Param{Bcc} && $Param{Bcc} ne '' ) {
-        $Param{BccInvalid} = ''
+        $Param{BccInvalid} = '';
     }
 
     # Process the 'Cc' field.
@@ -1073,7 +1073,7 @@ sub _Mask {
                 push @EmailAddressesBcc, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 
@@ -1109,7 +1109,7 @@ sub _Mask {
                 push @EmailAddressesCc, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 
@@ -1145,7 +1145,7 @@ sub _Mask {
                 push @EmailAddressesTo, {
                     CustomerKey        => '',
                     CustomerTicketText => $Email->[0] ? "$Email->[0] <$Email->[1]>" : "$Email->[1]",
-                    },
+                };
             }
         }
 

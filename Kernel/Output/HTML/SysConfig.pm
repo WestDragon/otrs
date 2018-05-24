@@ -25,7 +25,7 @@ our @ObjectDependencies = (
 
 =head1 NAME
 
-Kernel::Output::HTML::SysConfig:: - Manage HTML representation of SysConfig settings.
+Kernel::Output::HTML::SysConfig - Manage HTML representation of SysConfig settings.
 
 =head1 PUBLIC INTERFACE
 
@@ -639,6 +639,7 @@ sub _SettingRender {
             }
 
             my $DefaultValueType;
+
             if ( $Param{Value}->[0]->{Hash}->[0]->{DefaultItem} ) {
                 $DefaultValueType = $Param{Value}->[0]->{Hash}->[0]->{DefaultItem}->[0]->{ValueType};
             }

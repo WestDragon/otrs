@@ -127,7 +127,7 @@ Create a MIME article.
 
 Example with "Charset & MimeType" and no "ContentType".
 
-    my $ArticleID = $ArticleObject->ArticleCreate(
+    my $ArticleID = $ArticleBackendObject->ArticleCreate(
         TicketID             => 123,                                 # (required)
         SenderType           => 'agent',                             # (required) agent|system|customer
         IsVisibleForCustomer => 1,                                   # (required) Is article visible for customer?
@@ -272,9 +272,17 @@ sub ArticleCreate {
     # if body isn't text, attach body as attachment (mostly done by OE) :-/
     elsif ( $Param{MimeType} && $Param{MimeType} !~ /\btext\b/i ) {
 
-        # add non text as attachment
+        # Add non-text as an attachment. Try to deduce the filename from ContentType or ContentDisposition headers.
+        #   Please see bug#13644 for more information.
         my $FileName = 'unknown';
-        if ( $Param{ContentType} =~ /name="(.+?)"/i ) {
+        if (
+            $Param{ContentType} =~ /name="(.+?)"/i
+            || (
+                defined $Param{ContentDisposition}
+                && $Param{ContentDisposition} =~ /name="(.+?)"/i
+            )
+            )
+        {
             $FileName = $1;
         }
         my $Attach = {
@@ -502,6 +510,12 @@ sub ArticleCreate {
             );
         }
     }
+
+    $ArticleObject->ArticleSearchIndexBuild(
+        TicketID  => $Param{TicketID},
+        ArticleID => $ArticleID,
+        UserID    => 1,
+    );
 
     # event
     $Self->EventHandler(
@@ -968,6 +982,12 @@ sub ArticleUpdate {
         TicketID => $Param{TicketID},
     );
 
+    $ArticleObject->ArticleSearchIndexBuild(
+        TicketID  => $Param{TicketID},
+        ArticleID => $Param{ArticleID},
+        UserID    => $Param{UserID},
+    );
+
     $Self->EventHandler(
         Event => 'ArticleUpdate',
         Data  => {
@@ -1162,7 +1182,7 @@ sub ArticleDeleteAttachment {    ## no critic;
 
 Get article attachment index as hash.
 
-    my %Index = $BackendObject->ArticleAttachmentIndex(
+    my %Index = $ArticleBackendObject->ArticleAttachmentIndex(
         ArticleID        => 123,
         ExcludePlainText => 1,       # (optional) Exclude plain text attachment
         ExcludeHTMLBody  => 1,       # (optional) Exclude HTML body attachment
@@ -1202,7 +1222,7 @@ sub ArticleAttachmentIndex {    ## no critic
 
 Get the definition of the searchable fields as a hash.
 
-    my %SearchableFields = $BackendObject->BackendSearchableFieldsGet();
+    my %SearchableFields = $ArticleBackendObject->BackendSearchableFieldsGet();
 
 Returns:
 
@@ -1312,7 +1332,7 @@ sub BackendSearchableFieldsGet {
 
 Get article attachment index as hash.
 
-    my %Index = $BackendObject->ArticleSearchableContentGet(
+    my %Index = $ArticleBackendObject->ArticleSearchableContentGet(
         TicketID       => 123,   # (required)
         ArticleID      => 123,   # (required)
         DynamicFields  => 1,     # (optional) To include the dynamic field values for this article on the return structure.

@@ -581,7 +581,7 @@ sub Run {
                 # Get ticket data.
                 my %Ticket = $TicketObject->TicketGet(
                     TicketID      => $TicketID,
-                    DynamicFields => 0,
+                    DynamicFields => 1,
                     Extended      => 1,
                     UserID        => $Self->{UserID},
                 );
@@ -1149,7 +1149,7 @@ sub Run {
                     # Get ticket data.
                     my %Ticket = $TicketObject->TicketGet(
                         TicketID      => $TicketID,
-                        DynamicFields => 0,
+                        DynamicFields => 1,
                         Extended      => 1,
                         UserID        => $Self->{UserID},
                     );
@@ -1577,7 +1577,7 @@ sub Run {
                     if ( IsHashRefWithData($HistoricalValues) ) {
                         for my $Key ( sort keys %{$HistoricalValues} ) {
                             if ( !$Data->{$Key} ) {
-                                $Data->{$Key} = $HistoricalValues->{$Key}
+                                $Data->{$Key} = $HistoricalValues->{$Key};
                             }
                         }
                     }

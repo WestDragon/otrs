@@ -58,9 +58,9 @@ sub Run {
     # Create navigation tree
     if ( $Self->{Subaction} eq 'AJAXNavigationTree' ) {
 
-        my $Category = $ParamObject->GetParam( Param => 'Category' ) || '';
+        my $Category               = $ParamObject->GetParam( Param => 'Category' )               || '';
         my $UserModificationActive = $ParamObject->GetParam( Param => 'UserModificationActive' ) || '0';
-        my $IsValid = $ParamObject->GetParam( Param => 'IsValid' ) // undef;
+        my $IsValid                = $ParamObject->GetParam( Param => 'IsValid' ) // undef;
 
         my %Tree = $Kernel::OM->Get('Kernel::System::SysConfig')->ConfigurationNavigationTree(
             Category               => $Category,
@@ -412,11 +412,15 @@ sub Run {
 
         my $Output = $LayoutObject->Header();
         $Output .= $LayoutObject->NavigationBar();
+
+        my $DeploymentID = $ParamObject->GetParam( Param => 'DeploymentID' );
+
         $Output .= $LayoutObject->Output(
             TemplateFile => 'AdminSystemConfigurationView',
             Data         => {
-                View        => $SettingName,
-                SettingList => \@SettingList,
+                DeploymentID => $DeploymentID,
+                View         => $SettingName,
+                SettingList  => \@SettingList,
                 %OutputData,
                 OTRSBusinessIsInstalled => $Kernel::OM->Get('Kernel::System::OTRSBusiness')->OTRSBusinessIsInstalled(),
             },
@@ -653,7 +657,7 @@ sub _GetCategoriesStrg {
     my $CategoriesStrg = $Kernel::OM->Get('Kernel::Output::HTML::Layout')->BuildSelection(
         Data         => \%CategoryData,
         Name         => 'Category',
-        SelectedID   => $Category || 'All',
+        SelectedID   => $Category || Translatable('All'),
         PossibleNone => 0,
         Translation  => 1,
         Sort         => 'AlphaNumericKey',

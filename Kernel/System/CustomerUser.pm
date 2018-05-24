@@ -1225,7 +1225,7 @@ sub SearchPreferences {
 
 generate a random token
 
-    my $Token = $UserObject->TokenGenerate(
+    my $Token = $CustomerUserObject->TokenGenerate(
         UserID => 123,
     );
 
@@ -1261,7 +1261,7 @@ sub TokenGenerate {
 
 check password token
 
-    my $Valid = $UserObject->TokenCheck(
+    my $Valid = $CustomerUserObject>TokenCheck(
         Token  => $Token,
         UserID => 123,
     );
@@ -1343,15 +1343,10 @@ can be configured.
 sub _CustomerUserFullname {
     my ( $Self, %Param ) = @_;
 
-    for my $Needed (qw(UserFirstname UserLastname UserLogin)) {
-        if ( !defined $Param{$Needed} ) {
-            $Kernel::OM->Get('Kernel::System::Log')->Log(
-                Priority => 'error',
-                Message  => "Need $Needed!",
-            );
-
-            return;
-        }
+    # For databases which do not have configured CustomerUser information use empty string
+    #   for full name creation. See bug#13587 for more information.
+    for my $Data (qw(UserFirstname UserLastname UserLogin)) {
+        $Param{$Data} //= '';
     }
 
     my $FirstnameLastNameOrder = $Param{NameOrder} || 0;

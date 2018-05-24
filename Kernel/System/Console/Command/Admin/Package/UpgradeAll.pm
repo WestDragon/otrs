@@ -104,7 +104,7 @@ sub Run {
             FromCloud => $FromCloud,
         );
 
-        $Self->Print("<green>Done</green>\n")
+        $Self->Print("<green>Done</green>\n");
     }
 
     # Check again after repository refresh
@@ -138,7 +138,7 @@ sub Run {
 
     # Be sure to print any error messages in case of a failure.
     if ( IsHashRefWithData( $Result{Failed} ) ) {
-        print STDERR $ErrorMessage;
+        print STDERR $ErrorMessage if $ErrorMessage;
     }
 
     if (
