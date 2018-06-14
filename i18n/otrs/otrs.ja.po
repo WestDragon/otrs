@@ -3,7 +3,7 @@
 # Hisatoshi Onishi <hisatoshi.onishi@gmail.com>, 2015-2018
 # Tomy1984, 2015
 # Kentaro Matsuzaki <kentaro0919@gmail.com>, 2014-2017
-# Kozo Sakurai <sakurai@io-architect.com>, 2014,2017
+# Kozo Sakurai <sakurai@io-architect.com>, 2014,2017-2018
 # Makoto Miida, 2014
 # Makoto Miida, 2014
 # Norihiro Tanaka <noritnk@kcn.ne.jp>, 2014-2017
@@ -13,9 +13,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OTRS\n"
-"POT-Creation-Date: 2018-04-23 17:42+0000\n"
-"PO-Revision-Date: 2018-04-23 17:46+0000\n"
-"Last-Translator: Carlos Rodríguez <carlos.rodriguez@otrs.com>\n"
+"POT-Creation-Date: 2018-06-08 07:43+0000\n"
+"PO-Revision-Date: 2018-06-08 07:45+0000\n"
+"Last-Translator: Udo Bretz\n"
 "Language-Team: Japanese (http://www.transifex.com/otrs/OTRS/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2286,7 +2286,7 @@ msgstr "チケット解決期限がこの期間内"
 
 #. Template: AdminGenericAgent
 msgid "Archive search option"
-msgstr "書庫検索オプション"
+msgstr "アーカイブ検索オプション"
 
 #. Template: AdminGenericAgent
 msgid "Update/Add Ticket Attributes"
@@ -2354,7 +2354,7 @@ msgstr "ダイナミック・フィールドの値を設定"
 
 #. Template: AdminGenericAgent
 msgid "Archive selected tickets"
-msgstr "書庫の選択済みチケット"
+msgstr "選択されたアーカイブ・チケット"
 
 #. Template: AdminGenericAgent
 msgid "Add Note"
@@ -2600,7 +2600,7 @@ msgstr ""
 
 #. Template: AdminGenericInterfaceErrorHandlingDefault
 msgid ""
-"Example: Enter '^.*401 Unauthorized.*\\$' to handle only authentication "
+"Example: Enter '^.*401 Unauthorized.*\\\\$' to handle only authentication "
 "related errors."
 msgstr ""
 
@@ -3174,9 +3174,10 @@ msgstr "例2:  Search = '^' / Replace = '_' turns '16x16' into '_16x16'."
 
 #. Template: AdminGenericInterfaceMappingXSLT
 msgid ""
-"Example 3: Search = '^(?<number>\\d+) (?<text>.+?)\\$' / Replace = "
-"'_\\$+{text}_\\$+{number}' turns '16 elementname' into '_elementname_16'."
-msgstr "例3: Search = '^(?1\\d+) (?2.+?)\\$' / Replace = '_\\$+{text}_\\$+{number}' turns '16 elementname' into '_elementname_16'."
+"Example 3: Search = '^(?<number>\\\\d+) (?<text>.+?)\\\\$' / Replace = "
+"'_\\\\$+{text}_\\\\$+{number}' turns '16 elementname' into "
+"'_elementname_16'."
+msgstr ""
 
 #. Template: AdminGenericInterfaceMappingXSLT
 msgid "For information about regular expressions in Perl please see here:"
@@ -4227,8 +4228,8 @@ msgid "Manage %s"
 msgstr "%s を管理"
 
 #. Template: AdminOTRSBusinessInstalled
-msgid "Downgrade to OTRS Free"
-msgstr "フリー版OTRSへのダウングレード"
+msgid "Downgrade to ((OTRS)) Community Edition"
+msgstr ""
 
 #. Template: AdminOTRSBusinessInstalled
 msgid "Read documentation"
@@ -4317,9 +4318,9 @@ msgstr "詳細については%sを参照してください。"
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
-"Your OTRS Free is the base for all future actions. Please register first "
-"before you continue with the upgrade process of %s!"
-msgstr "もし%sのすべての機能を使用したいのであれば契約をアップグレードする必要があります！ 現在の契約: %s"
+"Your ((OTRS)) Community Edition is the base for all future actions. Please "
+"register first before you continue with the upgrade process of %s!"
+msgstr ""
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
@@ -4407,9 +4408,9 @@ msgstr "パッケージマネージャでパッケージを削除して再度実
 
 #. Template: AdminOTRSBusinessUninstall
 msgid ""
-"You are about to downgrade to OTRS Free and will lose the following features"
-" and all data related to these:"
-msgstr "OTRS Freeにダウングレードすることで以下の機能と関連するデータは使用できなくなります:"
+"You are about to downgrade to ((OTRS)) Community Edition and will lose the "
+"following features and all data related to these:"
+msgstr ""
 
 #. Template: AdminOTRSBusinessUninstall
 msgid "Chat"
@@ -4548,8 +4549,8 @@ msgid ""
 msgstr "このパッケージを本当に再インストールしますか？ 全ての手動変更点は失われます。"
 
 #. Template: AdminPackageManager
-msgid "Go to upgrading instructions"
-msgstr "アップグレード詳細に移動"
+msgid "Go to updating instructions"
+msgstr ""
 
 #. Template: AdminPackageManager
 msgid "package information"
@@ -4596,9 +4597,8 @@ msgstr ""
 
 #. Template: AdminPackageManager
 msgid ""
-"Please find all relevant information within the upgrading instructions at "
-"%s."
-msgstr "アップグレード手順の関連情報は全て%sにあります。"
+"Please find all relevant information within the updating instructions at %s."
+msgstr ""
 
 #. Template: AdminPackageManager
 msgid ""
@@ -7775,8 +7775,8 @@ msgstr ""
 
 #. Template: AgentOTRSBusinessBlockScreen
 msgid ""
-"If you decide to downgrade to OTRS Free, you will lose all database tables "
-"and data related to %s."
+"If you decide to downgrade to ((OTRS)) Community Edition, you will lose all "
+"database tables and data related to %s."
 msgstr ""
 
 #. Template: AgentPreferences
@@ -8637,7 +8637,7 @@ msgstr "チケットエスカレーション日時 (期間指定)"
 
 #. Template: AgentTicketSearch
 msgid "Archive Search"
-msgstr "書庫検索"
+msgstr "アーカイブ検索"
 
 #. Template: AgentTicketZoom
 msgid "Sender Type"
@@ -10906,11 +10906,11 @@ msgstr "アーカイブされていないチケット"
 
 #. Perl Module: Kernel/Modules/AdminGenericAgent.pm
 msgid "archive tickets"
-msgstr "チケットをアーカイブする"
+msgstr "アーカイブ・チケット"
 
 #. Perl Module: Kernel/Modules/AdminGenericAgent.pm
 msgid "restore tickets from archive"
-msgstr ""
+msgstr "アーカイブからチケットを復元する"
 
 #. Perl Module: Kernel/Modules/AdminGenericAgent.pm
 msgid "Need Profile!"
@@ -13876,6 +13876,14 @@ msgid "You have Out of Office enabled, would you like to disable it?"
 msgstr "外出中が有効になっています。無効にしますか？"
 
 #. Perl Module:
+#. Kernel/Output/HTML/Notification/PackageManagerCheckNotVerifiedPackages.pm
+msgid ""
+"The installation of packages which are not verified by the OTRS Group is "
+"activated. These packages could threaten your whole system! It is "
+"recommended not to use unverified packages."
+msgstr ""
+
+#. Perl Module:
 #. Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
 msgid ""
 "You have %s invalid setting(s) deployed. Click here to show invalid "
@@ -14347,6 +14355,19 @@ msgid ""
 "problems</li><li>Performance problems</li></ul><p>Please note that issues "
 "that are caused by working with this package are not covered by OTRS service"
 " contracts.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>The installation of packages which are not verified by the OTRS Group is "
+"not possible by default.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>You can activate the installation of not verified packages in the <a "
+"href=\"%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages\""
+" target=\"_blank\">System Configuration</a>.</p>"
 msgstr ""
 
 #. Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -15101,14 +15122,6 @@ msgstr "Eメール送信キュー"
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/EmailQueue.pm
 msgid "Emails queued for sending"
 msgstr "送信待ちのEメール"
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "Error Log"
-msgstr "エラーログ"
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "There are error reports in your system log."
-msgstr "システムログにエラーが出力されています。"
 
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/FQDN.pm
 msgid "FQDN (domain name)"
@@ -16153,6 +16166,11 @@ msgid "Delete error handling module"
 msgstr ""
 
 #. JS File: Core.Agent.Admin.GenericInterfaceInvoker
+msgid ""
+"It is not possible to add a new event trigger because the event is not set."
+msgstr ""
+
+#. JS File: Core.Agent.Admin.GenericInterfaceInvoker
 msgid "Delete this Invoker"
 msgstr "このAPI実行元を削除"
 
@@ -17136,7 +17154,7 @@ msgstr "システムで利用可能なテーマをアクティベートします
 
 #. SysConfig
 msgid "Activates the ticket archive system search in the customer interface."
-msgstr ""
+msgstr "カスタマー・インターフェースでチケット・アーカイブ・システムの検索を有効化します。"
 
 #. SysConfig
 msgid ""
@@ -18667,6 +18685,13 @@ msgstr ""
 #. SysConfig
 msgid "Define the start day of the week for the date picker."
 msgstr "日付ピッカーにおける週の開始曜日を設定します。"
+
+#. SysConfig
+msgid ""
+"Define which avatar default image should be used for the article view if no "
+"gravatar is assigned to the mail address. Check "
+"http://gravatar.com/site/implement/images/ for further information."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -20290,6 +20315,12 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Defines the module to display a notification in the agent interface, if the "
+"installation of not verified packages is activated (only shown to admins)."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"Defines the module to display a notification in the agent interface, if the "
 "system is used by the admin user (normally you shouldn't work as admin)."
 msgstr "もし、システムがアドミン・ユーザによって使用されている場合、担当者インタフェースにおいて通知を表示させるモジュールを定義します（通常はアドミンとして行動する必要はありません）。"
 
@@ -21817,6 +21848,10 @@ msgid "Frontend module registration for the customer interface."
 msgstr "担当者インタフェースに関するフロントエンド・モジュールの登録です。"
 
 #. SysConfig
+msgid "Frontend module registration for the public interface."
+msgstr "公開画面のフロントエンドモジュールの定義"
+
+#. SysConfig
 msgid "Full value"
 msgstr ""
 
@@ -22065,8 +22100,8 @@ msgstr "Customer::AuthModuleに関して\"HTTPBasicAuth\"が選択されてい�
 msgid ""
 "If \"HTTPBasicAuth\" was selected for Customer::AuthModule, you can specify "
 "to strip leading parts of user names (e. g. for domains like "
-"example_domain\\user to user)."
-msgstr "Customer::AuthModuleに関して\"HTTPBasicAuth\"が選択されていた場合、ユーザ名の始まりの部分を削除することができます（例：ドメインにおいて、example_domain\\userをuserに変える）。"
+"example_domain\\\\user to user)."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -22346,6 +22381,12 @@ msgstr ""
 #. SysConfig
 msgid "If this regex matches, no message will be send by the autoresponder."
 msgstr "ここで指定した文言（正規表現）にマッチした場合、オート・レスポンダーによりメッセージは送られません。"
+
+#. SysConfig
+msgid ""
+"If this setting is enabled, it is possible to install packages which are not"
+" verified by OTRS Group. These packages could threaten your whole system!"
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -22802,10 +22843,6 @@ msgstr "迷惑メールにする"
 
 #. SysConfig
 msgid "Mark this ticket as junk!"
-msgstr ""
-
-#. SysConfig
-msgid "Marks articles for index rebuild right after the article's update."
 msgstr ""
 
 #. SysConfig
@@ -23897,7 +23934,7 @@ msgid "Removes old system configuration deployments (Sunday mornings)."
 msgstr "古いシステム設定のデプロイを削除します。（日曜の朝）"
 
 #. SysConfig
-msgid "Removes old ticket number counters (Sunday mornings)."
+msgid "Removes old ticket number counters (each 10 minutes)."
 msgstr ""
 
 #. SysConfig
@@ -26052,6 +26089,12 @@ msgid ""
 "The identifier for a ticket, e.g. Ticket#, Call#, MyTicket#. The default is "
 "Ticket#."
 msgstr "例えばTicket#, Call#, MyTicket#などのチケットの識別子です。デフォルトはTicket#です。"
+
+#. SysConfig
+msgid ""
+"The logo shown in the header of the agent interface for the skin \"High "
+"Contrast\". See \"AgentLogo\" for further description."
+msgstr ""
 
 #. SysConfig
 msgid ""

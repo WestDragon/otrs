@@ -1,4 +1,31 @@
-#6.0.8 2018-??-??
+#6.0.9 2018-??-??
+ - 2018-06-14 Fixed bug#[13913](https://bugs.otrs.org/show_bug.cgi?id=13913)(PR#1936) - Searchable Article Fields not translated in AgentTicketSearch. Thanks to Robin.
+ - 2018-06-14 Fixed bug#[13838](https://bugs.otrs.org/show_bug.cgi?id=13838) - WarnOnStopWordUsage not working for subject, body, from, to, cc.
+ - 2018-06-14 Fixed bug#[13893](https://bugs.otrs.org/show_bug.cgi?id=13893) - Wrong descriptions for some system configurations.
+ - 2018-06-14 Fixed bug#[12479](https://bugs.otrs.org/show_bug.cgi?id=12479) - Reply to a ticket locks the ticket and cancel unlocks it but does not reset owner.
+ - 2018-06-12 Fixed bug#[13902](https://bugs.otrs.org/show_bug.cgi?id=13902) - Dialog submit is not possible for an appointment created by rule based on pending time.
+ - 2018-06-12 Fixed bug#[13888](https://bugs.otrs.org/show_bug.cgi?id=13888) - Wrong charset in output while upgrading packages.
+ - 2018-06-07 Enhanced package manager:
+   - Not verified packages can't be installed by default (via GUI + OTRS console).
+   - Added sysconfig setting 'Package::AllowNotVerifiedPackages' to allow installation of not verified packages (disabled by default).
+   - Display a notification if setting 'Package::AllowNotVerifiedPackages' is active.
+ - 2018-06-07 Fixed bug#[13842](https://bugs.otrs.org/show_bug.cgi?id=13842) - When splitting a ticket, the picture embedded in the letter body is not displayed in the child ticket.
+ - 2018-06-07 Added improvements to the support data collector plugins.
+ - 2018-06-06 Fixed bug#[13873](https://bugs.otrs.org/show_bug.cgi?id=13873) - Wrong descripton for TicketNumberCounterCleanup setting in System Configuration.
+ - 2018-06-05 Fixed bug#[13900](https://bugs.otrs.org/show_bug.cgi?id=13900) - Password authentication issue in Fedora 28 operating system.
+
+#6.0.8 2018-06-12
+ - 2018-06-04 Updated translations, thanks to all translators.
+ - 2018-06-02 Fixed bug#[13728](https://bugs.otrs.org/show_bug.cgi?id=13728) - Processes need to be deployed after update to Version 6.
+ - 2018-06-01 Fixed bug#[13824](https://bugs.otrs.org/show_bug.cgi?id=13824) - Search conditions in AdminProcessManagement are resetted.
+ - 2018-06-01 Fixed bug#[13880](https://bugs.otrs.org/show_bug.cgi?id=13880) - "Customer user" field is cleared once the focus is lost in AgentTicketCustomer.
+ - 2018-06-01 Fixed bug#[13889](https://bugs.otrs.org/show_bug.cgi?id=13889) - Postmaster filter value limit is 100 characters in frontend.
+ - 2018-06-01 Renamed 'OTRS Free' to '((OTRS)) Community Edition'.
+ - 2018-05-30 Fixed bug#[13868](https://bugs.otrs.org/show_bug.cgi?id=13868) - Customer User Title is not translated.
+ - 2018-05-28 Fixed bug#[13870](https://bugs.otrs.org/show_bug.cgi?id=13870) - Content of Title and Subject columns are the same in Excel/CSV output of search.
+ - 2018-05-28 Fixed bug#[13819](https://bugs.otrs.org/show_bug.cgi?id=13819) - ACL's CompareMatchWithData floods the log when service is not in relation with customer user.
+ - 2018-05-25 Fixed bug#[13883](https://bugs.otrs.org/show_bug.cgi?id=13883) - Several display issues in Admin Screen "Ticket Notification Management".
+ - 2018-05-25 Fixed bug#[13826](https://bugs.otrs.org/show_bug.cgi?id=13142) - Error The given param 'QueueIDs' is invalid or an empty array reference.
  - 2018-05-23 Fixed bug#[13826](https://bugs.otrs.org/show_bug.cgi?id=13826) - Queue Names are translated (but should not).
  - 2018-05-18 Fixed bug#[13869](https://bugs.otrs.org/show_bug.cgi?id=13869) - Unexpected shadow in long Sysconfig entry.
  - 2018-05-16 Fixed bug#[13820](https://bugs.otrs.org/show_bug.cgi?id=13820) - Wrong UserID argument in AdminAppointmentNotificationEvent.

@@ -24,7 +24,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%D.%M.%Y';
     $Self->{DateInputFormat}     = '%D.%M.%Y';
     $Self->{DateInputFormatLong} = '%D.%M.%Y - %T';
-    $Self->{Completeness}        = 0.999138376701706;
+    $Self->{Completeness}        = 0.997589946634533;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -195,7 +195,7 @@ sub Data {
         'Recipients' => 'Примаоци',
         'Send to' => 'Пошаљи за ',
         'Send to these agents' => 'Пошаљи овим оператерима',
-        'Send to all group members (agents only)' => '',
+        'Send to all group members (agents only)' => 'Пошаљи свим члановима групе (само оператерима)',
         'Send to all role members' => 'Пошаљи свим припадницима улоге',
         'Send on out of office' => 'Пошаљи и кад је ван канцеларије',
         'Also send if the user is currently out of office.' => 'Такође пошаљи и када је корисник ван канцеларије.',
@@ -993,7 +993,7 @@ sub Data {
         'The response data will be processed by this mapping, to transform it to the kind of data the remote system expects.' =>
             'Подаци одговора ће бити обрађени кроз ово мапирање, ради трансформације у облик који удаљени систем очекује.',
         'Include Ticket Data' => 'Укључи податке тикета',
-        'Include ticket data in response.' => '',
+        'Include ticket data in response.' => 'Укључи податке тикета у одговору.',
 
         # Template: AdminGenericInterfaceTransportHTTPREST
         'Network Transport' => 'Мрежни транспорт',
@@ -1295,7 +1295,7 @@ sub Data {
 
         # Template: AdminOTRSBusinessInstalled
         'Manage %s' => 'Управљај са %s',
-        'Downgrade to OTRS Free' => 'Повратак на бесплатну верзију OTRS',
+        'Downgrade to ((OTRS)) Community Edition' => '',
         'Read documentation' => 'Прочитај документацију',
         '%s makes contact regularly with cloud.otrs.com to check on available updates and the validity of the underlying contract.' =>
             '%s редовно се повезује са cloud.otrs.com за проверу доступних ажурирања и исправности интерних уговора.',
@@ -1325,8 +1325,8 @@ sub Data {
         '%s will be available soon. Please check again in a few days.' =>
             '%s ће бити доступна ускоро. Молимо, проверите поново за неколико дана.',
         'Please have a look at %s for more information.' => 'Молимо да погледате  %s за више информација.',
-        'Your OTRS Free is the base for all future actions. Please register first before you continue with the upgrade process of %s!' =>
-            'Ваш \'OTRS Free\' је основа за све будуће активности. Молимо вас да се региструјете пре него што наставите са процесом ажурирања %s!',
+        'Your ((OTRS)) Community Edition is the base for all future actions. Please register first before you continue with the upgrade process of %s!' =>
+            '',
         'Before you can benefit from %s, please contact %s to get your %s contract.' =>
             'Пре него вам %s буде користан, молимо да контактирате %s да бисте добили %s уговор.',
         'Connection to cloud.otrs.com via HTTPS couldn\'t be established. Please make sure that your OTRS can connect to cloud.otrs.com via port 443.' =>
@@ -1356,8 +1356,8 @@ sub Data {
         'Vendor' => 'Продавац',
         'Please uninstall the packages first using the package manager and try again.' =>
             'Молимо вас да прво деинсталирате пакете кроз управљач пакетима па да покушате поново. ',
-        'You are about to downgrade to OTRS Free and will lose the following features and all data related to these:' =>
-            'Вратићете се на стару верзију бесплатног OTRS и изгубићете следећа својства и податке повезане са:',
+        'You are about to downgrade to ((OTRS)) Community Edition and will lose the following features and all data related to these:' =>
+            '',
         'Chat' => 'Ћаскање',
         'Report Generator' => 'Генератор извештаја',
         'Timeline view in ticket zoom' => 'Детаљни приказ тикета на временској линији',
@@ -1398,7 +1398,7 @@ sub Data {
         'Reinstall package' => 'Инсталирај поново пакет',
         'Do you really want to reinstall this package? Any manual changes will be lost.' =>
             'Да ли стварно желите да поново инсталирате овај пакет? Све ручне промене ће бити изгубљене.',
-        'Go to upgrading instructions' => 'Иди на упутство за ажурирање',
+        'Go to updating instructions' => '',
         'package information' => 'Информације о пакету',
         'Package installation requires a patch level update of OTRS.' => 'Инсталација пакета захтева ажурирану верзију OTRS.',
         'Package update requires a patch level update of OTRS.' => 'Ажурирање пакета захтева ажурирану верзију OTRS.',
@@ -1415,8 +1415,8 @@ sub Data {
             'Добићете ажурирања свих других релевантних OTRS издања.',
         'How can I do a patch level update if I don’t have a contract?' =>
             'Како могу да ажурирам верзију OTRS уколико немам уговор?',
-        'Please find all relevant information within the upgrading instructions at %s.' =>
-            'Молимо пронађите све релевантне информације у оквиру инструкција за ажурирање на %s.',
+        'Please find all relevant information within the updating instructions at %s.' =>
+            '',
         'In case you would have further questions we would be glad to answer them.' =>
             'У случају да имате додтана питања, биће нам задовољство да одговоримо на њих.',
         'Install Package' => 'Инсталирај пакет',
@@ -1993,7 +1993,7 @@ sub Data {
             'Ово стање се користи у системској конфигурацији, неопходна је додатна потврда за промену подешавања на нову вредност! ',
         'State type' => 'Тип статуса',
         'It\'s not possible to invalidate this entry because there is no other merge states in system!' =>
-            '',
+            'Није могуће обележити ову ставку као неважећу јер не постоји више статуса спојених тикета у систему!',
         'This state is used in the following config settings:' => 'Ово стање се користи у следећим системским подешавањима: ',
 
         # Template: AdminSupportDataCollector
@@ -2432,8 +2432,8 @@ sub Data {
 
         # Template: AgentOTRSBusinessBlockScreen
         'Unauthorized usage of %s detected' => 'Детектована неовлаштена употреба %s',
-        'If you decide to downgrade to OTRS Free, you will lose all database tables and data related to %s.' =>
-            'Ако одлучите да се вратите на верзију бесплатног OTRS, изгубићете све табеле у бази података и податке повезане са %s.',
+        'If you decide to downgrade to ((OTRS)) Community Edition, you will lose all database tables and data related to %s.' =>
+            '',
 
         # Template: AgentPreferences
         'Edit your preferences' => 'Уреди личне поставке',
@@ -2833,7 +2833,7 @@ sub Data {
 
         # Template: CustomerFooterJS
         '%s detected possible network issues. You could either try reloading this page manually or wait until your browser has re-established the connection on its own.' =>
-            '',
+            '%s је детектовао могуће проблеме са вашом мрежном везом. Можете покушати да ручно освежите ову страницу или да сачекате да ваш прегледач сам поново успостави везу.',
         'The connection has been re-established after a temporary connection loss. Due to this, elements on this page could have stopped to work correctly. In order to be able to use all elements correctly again, it is strongly recommended to reload this page.' =>
             'Веза је поново успостављена након привременог прекида. Због тога, елементи на овој страници су могли да престану да коректно функционишу. Да би све елементе могли поново нормално да користите, препоручујемо обавезно освежавање ове странице. ',
 
@@ -4584,6 +4584,10 @@ sub Data {
         'You have Out of Office enabled, would you like to disable it?' =>
             'Активирана је опција ван канцеларије, желите ли да је искључите?',
 
+        # Perl Module: Kernel/Output/HTML/Notification/PackageManagerCheckNotVerifiedPackages.pm
+        'The installation of packages which are not verified by the OTRS Group is activated. These packages could threaten your whole system! It is recommended not to use unverified packages.' =>
+            '',
+
         # Perl Module: Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
         'You have %s invalid setting(s) deployed. Click here to show invalid settings.' =>
             'Имате %s распоређено(а) неважеће(а) подешавање(а). Кликните овде за приказ неважећих подешавања.',
@@ -4784,6 +4788,10 @@ sub Data {
         'Can\'t read file!' => 'Немогуће читање датотеке!',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '<p>Ако наставите са инсталацијом овог пакета, могу се јавити следећи проблеми:</p><ul><li>Безбедносни проблеми</li><li>Проблеми стабилности</li><li>Проблеми у перформансама</li></ul><p>Напомињемо да проблеми настали услед рада са овим пакетом нису покривени OTRS сервисним уговором.</p>',
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
+            '',
+        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+            '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
         'The process "%s" and all of its data has been imported successfully.' =>
@@ -5060,10 +5068,6 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/EmailQueue.pm
         'Email Sending Queue' => 'Ред за слање имејлова',
         'Emails queued for sending' => 'Број имејлова заказаних за слање',
-
-        # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-        'Error Log' => 'Грешка у пријави',
-        'There are error reports in your system log.' => 'Постоје извештаји о грешкама у вашем приступном систему.',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/FQDN.pm
         'FQDN (domain name)' => 'FQDN (назив домена)',
@@ -5435,6 +5439,8 @@ sub Data {
         'Delete error handling module' => 'Обриши модул за обраду грешке',
 
         # JS File: Core.Agent.Admin.GenericInterfaceInvoker
+        'It is not possible to add a new event trigger because the event is not set.' =>
+            '',
         'Delete this Invoker' => 'Обриши овог позиваоца',
 
         # JS File: Core.Agent.Admin.GenericInterfaceInvokerEvent
@@ -5679,7 +5685,7 @@ sub Data {
         # JS File: Core.App
         'Error: Browser Check failed!' => 'Грешка: провера претраживача није успела!',
         'Reload page' => 'Освежи страницу',
-        'Reload page (%ss)' => '',
+        'Reload page (%ss)' => 'Освежи страницу (%sс)',
 
         # JS File: Core.Debug
         'Namespace %s could not be initialized, because %s could not be found.' =>
@@ -6286,6 +6292,8 @@ Thanks for your help!
         'Define the start day of the week for the date picker for the indicated calendar.' =>
             'Дефиниши први дан у недељи за избор датума за наведени календар.',
         'Define the start day of the week for the date picker.' => 'Дефиниши први дан у недељи за избор датума.',
+        'Define which avatar default image should be used for the article view if no gravatar is assigned to the mail address. Check http://gravatar.com/site/implement/images/ for further information.' =>
+            '',
         'Define which avatar default image should be used for the current agent if no gravatar is assigned to the mail address of the agent. Check http://gravatar.com/site/implement/images/ for further information.' =>
             'Дефинише која сличица ће бити приказана као подразумевана уколико оператер нема одговарајућу повезану са имејл адресом. Погледајте http://gravatar.com/site/implement/images/ за више информација.',
         'Define which avatar engine should be used for the agent avatar on the header and the sender images in AgentTicketZoom. If \'None\' is selected, initials will be displayed instead. Please note that selecting anything other than \'None\' will transfer the encrypted email address of the particular user to an external service.' =>
@@ -6788,6 +6796,8 @@ Thanks for your help!
             'Одређује модул за приказ обавештења у интерфејсу оператера, ако је оператер пријављен на систем док је активно одржавање система.',
         'Defines the module to display a notification in the agent interface, if the agent session limit prior warning is reached.' =>
             'Одређује модул за приказ обавештења у интерфејсу оператера ако .је достигнут лимит сесија оператера.',
+        'Defines the module to display a notification in the agent interface, if the installation of not verified packages is activated (only shown to admins).' =>
+            '',
         'Defines the module to display a notification in the agent interface, if the system is used by the admin user (normally you shouldn\'t work as admin).' =>
             'Дефинише модул за приказивање обавештења у интерфејсу оператера ако се систем користи од стране админ корисника (нормално не треба да раде као администратор).',
         'Defines the module to display a notification in the agent interface, if there are invalid sysconfig settings deployed.' =>
@@ -7265,6 +7275,7 @@ Thanks for your help!
             'Регистрација модула интерфејса (приказ личних омиљених као поднавигација администраторског менија).',
         'Frontend module registration for the agent interface.' => 'Регистрација модула приступа за интерфејс оператера.',
         'Frontend module registration for the customer interface.' => 'Регистрација модула приступа за интерфејс клијента.',
+        'Frontend module registration for the public interface.' => 'Регистрација приступног модула за јавни интерфејс.',
         'Full value' => 'Цела вредност',
         'Fulltext index regex filters to remove parts of the text.' => 'Текст индекс филтери (регуларни изрази) за уклањање делова текста.',
         'Fulltext search' => 'Текст за претрагу',
@@ -7336,7 +7347,7 @@ Thanks for your help!
         'If "HTTPBasicAuth" was selected for Customer::AuthModule, you can specify (by using a RegExp) to strip parts of REMOTE_USER (e. g. for to remove trailing domains). RegExp-Note, $1 will be the new Login.' =>
             'Уколико је подешен HTTPBasicAuth за Customer::AuthModule, можете подесити (путем RegExp) уклањање делова REMOTE_USER вредности (нпр. ради уклањања додатних домена). Напомена: $1 ће бити нови Login.',
         'If "HTTPBasicAuth" was selected for Customer::AuthModule, you can specify to strip leading parts of user names (e. g. for domains like example_domain\user to user).' =>
-            'Уколико је „HTTPBasicAuth” изабран за „Customer::AuthModule”, можете подесити уклањање почетних делова корисничких имена (нпр. за домене као „example_domain\\user” у „user”).',
+            'Уколико је подешен HTTPBasicAuth за Customer::AuthModule, можете подесити уклањање делова корисничких имена (нпр. за домене као example_domain\user у user).',
         'If "LDAP" was selected for Customer::AuthModule and if you want to add a suffix to every customer login name, specifiy it here, e. g. you just want to write the username user but in your LDAP directory exists user@domain.' =>
             'Уколико је подешен LDAP за Customer::AuthModule и желите да додате суфикс сваком корисничком имену, дефинишите га овде, нпр. желите само user за корисничко име, али у вашем LDAP директоријуму постоји user@domain.',
         'If "LDAP" was selected for Customer::AuthModule and special paramaters are needed for the Net::LDAP perl module, you can specify them here. See "perldoc Net::LDAP" for more information about the parameters.' =>
@@ -7425,6 +7436,8 @@ Thanks for your help!
             'Уколико је ова опција укључена, тикети креирани преко веб интерфејса од стране клијената или оператера, ће добити аутоматски одговор уколико је подешен. Ако је ова опција искључена, аутоматски одговори неће бити слати.',
         'If this regex matches, no message will be send by the autoresponder.' =>
             'Ако се овај израз поклапа, аутоматски одговарач неће послати ниједну поруку.',
+        'If this setting is enabled, it is possible to install packages which are not verified by OTRS Group. These packages could threaten your whole system!' =>
+            '',
         'If this setting is enabled, local modifications will not be highlighted as errors in the package manager and support data collector.' =>
             'Уколико је ово подешавање укључено, локалне измене неће бити приказане као грешке у управљачу пакетима и сакупљачу података подршке.',
         'If you\'re going to be out of office, you may wish to let other users know by setting the exact dates of your absence.' =>
@@ -7549,8 +7562,6 @@ Thanks for your help!
         'Manage tasks triggered by event or time based execution.' => 'Управља задацима покренутим од догађаја или на основу временског извршавања.',
         'Mark as Spam!' => 'Означи као Спам!',
         'Mark this ticket as junk!' => 'Означи овај тикет као бесмислен junk!',
-        'Marks articles for index rebuild right after the article\'s update.' =>
-            'Означава чланке за регенерацију индекса претраге одмах по освежавању чланка.',
         'Max size (in characters) of the customer information table (phone and email) in the compose screen.' =>
             'Максимална дужина (у знацима) клијентске инфо табеле (телефон и имејл) на екрану писања имејла.',
         'Max size (in rows) of the informed agents box in the agent interface.' =>
@@ -7829,7 +7840,7 @@ Thanks for your help!
         'Removed subscription for user "%s".' => 'Претплата за корисника "%s" je искључена.',
         'Removes old system configuration deployments (Sunday mornings).' =>
             'Уклања старе распореде системске конфигурације (недељом ујутру).',
-        'Removes old ticket number counters (Sunday mornings).' => 'Уклања старе бројаче тикета (недељом ујутру).',
+        'Removes old ticket number counters (each 10 minutes).' => '',
         'Removes the ticket watcher information when a ticket is archived.' =>
             'Уклања информације посматрача тикета када се тикет архивира.',
         'Renew existing SMIME certificates from customer backend. Note: SMIME and SMIME::FetchFromCustomer needs to be enabled in SysConfig and customer backend needs to be configured to fetch UserSMIMECertificate attribute.' =>
@@ -8479,6 +8490,8 @@ Thanks for your help!
         'The headline shown in the customer interface.' => 'Наслов приказан у клијентском интерфејсу.',
         'The identifier for a ticket, e.g. Ticket#, Call#, MyTicket#. The default is Ticket#.' =>
             'Идентификатор тикета, нпр. Ticket#, Call#, MyTicket#. Подразумевано је Ticket#.',
+        'The logo shown in the header of the agent interface for the skin "High Contrast". See "AgentLogo" for further description.' =>
+            'Лого приказан у заглављу интерфејса оператера за изглед "High Contrast". Погледајте "AgentLogo" за детаљнији опис.',
         'The logo shown in the header of the agent interface for the skin "default". See "AgentLogo" for further description.' =>
             'Лого приказан у заглављу интерфејса оператера за изглед "подразумевани". Погледајте "AgentLogo" за детаљнији опис.',
         'The logo shown in the header of the agent interface for the skin "ivory". See "AgentLogo" for further description.' =>
@@ -8690,6 +8703,7 @@ Thanks for your help!
         'A popup of this screen is already open. Do you want to close it and load this one instead?',
         'A preview of this website can\'t be provided because it didn\'t allow to be embedded.',
         'Add',
+        'Add Event Trigger',
         'Add all',
         'Add entry',
         'Add key',
@@ -8827,6 +8841,7 @@ Thanks for your help!
         'Invalid date (need a past date)!',
         'Invalid date!',
         'It is going to be deleted from the field, please try again.',
+        'It is not possible to add a new event trigger because the event is not set.',
         'It is not possible to set this entry to invalid. All affected configuration settings have to be changed beforehand.',
         'It was not possible to delete this draft.',
         'It was not possible to generate the Support Bundle.',

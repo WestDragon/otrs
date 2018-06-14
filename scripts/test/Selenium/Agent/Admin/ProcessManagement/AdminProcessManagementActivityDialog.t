@@ -197,6 +197,7 @@ $Selenium->RunTest(
                 "return typeof(\$) === 'function' && \$('a.AsBlock:contains(\"Activity Dialogs\")').closest('.AccordionElement').hasClass('Active') === true"
         );
 
+        $Selenium->find_element( "#ActivityDialogFilter", 'css' )->clear();
         $Selenium->find_element( "#ActivityDialogFilter", 'css' )->send_keys($ActivityDialogRandomEdit);
 
         $Selenium->WaitFor(
@@ -241,8 +242,26 @@ $Selenium->RunTest(
         );
 
         # Return to main window.
-        $Selenium->close();
+        $Selenium->find_element( ".ClosePopup", 'css' )->click();
+        $Selenium->WaitFor( WindowCount => 1 );
         $Selenium->switch_to_window( $Handles->[0] );
+
+        # Verify ActivityDialog filter remains same after popup close, see bug#13824.
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('#ActivityDialogs li:visible').length === 1 && \$.active == 0"
+        );
+
+        $Self->Is(
+            $Selenium->find_element( "#ActivityDialogFilter", 'css' )->get_value(),
+            $ActivityDialogRandomEdit,
+            "ActivityDialog filter has correct value - $ActivityDialogRandomEdit",
+        );
+        $Self->Is(
+            $Selenium->execute_script("return \$('#ActivityDialogs li:visible').length"),
+            1,
+            "ActivityDialog filter filtered correctly after popup closing",
+        );
 
         # Get process id and return to overview afterwards.
         my $ProcessID = $Selenium->execute_script('return $("#ProcessDelete").data("id")') || undef;

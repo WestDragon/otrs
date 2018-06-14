@@ -13,7 +13,7 @@
 # Deiver Kiel <deikiel@gmail.com>, 2015,2017
 # Diego Schneider <diegoschneider.96@gmail.com>, 2016
 # Duilio Poggi Oneto <duiliopoggio@gmail.com>, 2015
-# Emmanuel <emmanuel.arias@ya.ru>, 2015
+# Emir Nunes, 2015
 # Fernando Casal <fernando.casal@serviciomovil.com>, 2017-2018
 # Galo Izquierdo <gizquier@hotmail.com>, 2015
 # Gonzalo Moreu, 2016
@@ -33,9 +33,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OTRS\n"
-"POT-Creation-Date: 2018-04-23 17:42+0000\n"
-"PO-Revision-Date: 2018-04-23 17:46+0000\n"
-"Last-Translator: Carlos Rodríguez <carlos.rodriguez@otrs.com>\n"
+"POT-Creation-Date: 2018-06-08 07:43+0000\n"
+"PO-Revision-Date: 2018-06-08 07:45+0000\n"
+"Last-Translator: Udo Bretz\n"
 "Language-Team: Spanish (http://www.transifex.com/otrs/OTRS/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2620,9 +2620,9 @@ msgstr "El asunto y los datos del mensaje de error (como se ve en la entrada de 
 
 #. Template: AdminGenericInterfaceErrorHandlingDefault
 msgid ""
-"Example: Enter '^.*401 Unauthorized.*\\$' to handle only authentication "
+"Example: Enter '^.*401 Unauthorized.*\\\\$' to handle only authentication "
 "related errors."
-msgstr "Ejemplo: Ingrese '^. * 401 No autorizado. * \\ $' para manejar solo errores relacionados con la autenticación."
+msgstr ""
 
 #. Template: AdminGenericInterfaceErrorHandlingDefault
 msgid "Error stage filter"
@@ -3194,8 +3194,9 @@ msgstr ""
 
 #. Template: AdminGenericInterfaceMappingXSLT
 msgid ""
-"Example 3: Search = '^(?<number>\\d+) (?<text>.+?)\\$' / Replace = "
-"'_\\$+{text}_\\$+{number}' turns '16 elementname' into '_elementname_16'."
+"Example 3: Search = '^(?<number>\\\\d+) (?<text>.+?)\\\\$' / Replace = "
+"'_\\\\$+{text}_\\\\$+{number}' turns '16 elementname' into "
+"'_elementname_16'."
 msgstr ""
 
 #. Template: AdminGenericInterfaceMappingXSLT
@@ -4247,8 +4248,8 @@ msgid "Manage %s"
 msgstr "Administrar %s"
 
 #. Template: AdminOTRSBusinessInstalled
-msgid "Downgrade to OTRS Free"
-msgstr "Degradar a OTRS Gratis"
+msgid "Downgrade to ((OTRS)) Community Edition"
+msgstr ""
 
 #. Template: AdminOTRSBusinessInstalled
 msgid "Read documentation"
@@ -4337,9 +4338,9 @@ msgstr "Por favor, eche un vistazo a %s para más información."
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
-"Your OTRS Free is the base for all future actions. Please register first "
-"before you continue with the upgrade process of %s!"
-msgstr "Su OTRS libre es la base para todas las acciones futuras. Por favor regístrese primero antes de continuar con el proceso de mejora de %s!"
+"Your ((OTRS)) Community Edition is the base for all future actions. Please "
+"register first before you continue with the upgrade process of %s!"
+msgstr ""
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
@@ -4427,9 +4428,9 @@ msgstr "Por favor, desinstale los paquetes primero utilizando el gestor de paque
 
 #. Template: AdminOTRSBusinessUninstall
 msgid ""
-"You are about to downgrade to OTRS Free and will lose the following features"
-" and all data related to these:"
-msgstr "Vas a degradar a OTRS gratuito y perderá las siguientes características y todos los datos relacionados con los siguientes:"
+"You are about to downgrade to ((OTRS)) Community Edition and will lose the "
+"following features and all data related to these:"
+msgstr ""
 
 #. Template: AdminOTRSBusinessUninstall
 msgid "Chat"
@@ -4568,8 +4569,8 @@ msgid ""
 msgstr "¿Realmente desea reinstalar este paquete? Se perderá cualquier cambio manual."
 
 #. Template: AdminPackageManager
-msgid "Go to upgrading instructions"
-msgstr "Ir a las instrucciones de actualización."
+msgid "Go to updating instructions"
+msgstr ""
 
 #. Template: AdminPackageManager
 msgid "package information"
@@ -4616,8 +4617,7 @@ msgstr ""
 
 #. Template: AdminPackageManager
 msgid ""
-"Please find all relevant information within the upgrading instructions at "
-"%s."
+"Please find all relevant information within the updating instructions at %s."
 msgstr ""
 
 #. Template: AdminPackageManager
@@ -7795,9 +7795,9 @@ msgstr "Uso no autorizado de %s detectado"
 
 #. Template: AgentOTRSBusinessBlockScreen
 msgid ""
-"If you decide to downgrade to OTRS Free, you will lose all database tables "
-"and data related to %s."
-msgstr "Si va a volver a OTRS Free, perderá todas las tablas y datos relacionadas con %s."
+"If you decide to downgrade to ((OTRS)) Community Edition, you will lose all "
+"database tables and data related to %s."
+msgstr ""
 
 #. Template: AgentPreferences
 msgid "Edit your preferences"
@@ -13896,6 +13896,14 @@ msgid "You have Out of Office enabled, would you like to disable it?"
 msgstr "Tiene habilitado «Fuera de la oficina», ¿desea inhabilitarlo?"
 
 #. Perl Module:
+#. Kernel/Output/HTML/Notification/PackageManagerCheckNotVerifiedPackages.pm
+msgid ""
+"The installation of packages which are not verified by the OTRS Group is "
+"activated. These packages could threaten your whole system! It is "
+"recommended not to use unverified packages."
+msgstr ""
+
+#. Perl Module:
 #. Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
 msgid ""
 "You have %s invalid setting(s) deployed. Click here to show invalid "
@@ -14367,6 +14375,19 @@ msgid ""
 "problems</li><li>Performance problems</li></ul><p>Please note that issues "
 "that are caused by working with this package are not covered by OTRS service"
 " contracts.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>The installation of packages which are not verified by the OTRS Group is "
+"not possible by default.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>You can activate the installation of not verified packages in the <a "
+"href=\"%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages\""
+" target=\"_blank\">System Configuration</a>.</p>"
 msgstr ""
 
 #. Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -15121,14 +15142,6 @@ msgstr ""
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/EmailQueue.pm
 msgid "Emails queued for sending"
 msgstr ""
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "Error Log"
-msgstr "Registro de Errores"
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "There are error reports in your system log."
-msgstr "Existen reportes de error en el registro del sistema."
 
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/FQDN.pm
 msgid "FQDN (domain name)"
@@ -16170,6 +16183,11 @@ msgstr "Limpiar el registro de depuración"
 
 #. JS File: Core.Agent.Admin.GenericInterfaceErrorHandling
 msgid "Delete error handling module"
+msgstr ""
+
+#. JS File: Core.Agent.Admin.GenericInterfaceInvoker
+msgid ""
+"It is not possible to add a new event trigger because the event is not set."
 msgstr ""
 
 #. JS File: Core.Agent.Admin.GenericInterfaceInvoker
@@ -17272,7 +17290,7 @@ msgstr ""
 
 #. SysConfig
 msgid "Admin modules overview."
-msgstr ""
+msgstr "Visión general de los módulos de administración."
 
 #. SysConfig
 msgid "Admin."
@@ -17304,7 +17322,7 @@ msgstr "Preferencias del Agente."
 
 #. SysConfig
 msgid "Agent Statistics."
-msgstr ""
+msgstr "Estadísticas de agente."
 
 #. SysConfig
 msgid "Agent User Search"
@@ -18404,7 +18422,7 @@ msgstr "RSS Feed Personalizado"
 
 #. SysConfig
 msgid "Custom RSS feed."
-msgstr ""
+msgstr "RSS feed personalizada."
 
 #. SysConfig
 msgid ""
@@ -18430,7 +18448,7 @@ msgstr "Buscar en Centro de información al cliente."
 
 #. SysConfig
 msgid "Customer Information Center search."
-msgstr ""
+msgstr "Búsqueda en el Centro de información al cliente."
 
 #. SysConfig
 msgid "Customer Information Center."
@@ -18454,7 +18472,7 @@ msgstr ""
 
 #. SysConfig
 msgid "Customer User Information Center search."
-msgstr ""
+msgstr "Búsqueda en el Centro de información del usuario del cliente."
 
 #. SysConfig
 msgid "Customer User Information Center."
@@ -18538,7 +18556,7 @@ msgstr "Danes"
 
 #. SysConfig
 msgid "Dashboard overview."
-msgstr ""
+msgstr "Visión general del panel principal."
 
 #. SysConfig
 msgid "Data used to export the search result in CSV format."
@@ -18687,6 +18705,13 @@ msgstr "Definir el día de inicio de la semana para el selector de fecha para el
 #. SysConfig
 msgid "Define the start day of the week for the date picker."
 msgstr "Definir el día de inicio de la semana para el selector de fecha."
+
+#. SysConfig
+msgid ""
+"Define which avatar default image should be used for the article view if no "
+"gravatar is assigned to the mail address. Check "
+"http://gravatar.com/site/implement/images/ for further information."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -19105,7 +19130,7 @@ msgid ""
 "some functionality will be lost such as system registration, support data "
 "sending, upgrading to and use of OTRS Business Solution™, OTRS Verify™, OTRS"
 " News and product News dashboard widgets, among others."
-msgstr ""
+msgstr "Define si es posible la comunicación entre este sistema y los servidores del Grupo OTRS que brindan servicios en la nube. Si se establece en 'Deshabilitar servicios en la nube', se perderá alguna funcionalidad como registro del sistema, envío de datos de soporte, actualización y uso de OTRS Business Solution ™, OTRS Verify ™, novedades de OTRS y widgets del panel de noticias de productos, entre otros."
 
 #. SysConfig
 msgid ""
@@ -20310,6 +20335,12 @@ msgstr ""
 #. SysConfig
 msgid ""
 "Defines the module to display a notification in the agent interface, if the "
+"installation of not verified packages is activated (only shown to admins)."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"Defines the module to display a notification in the agent interface, if the "
 "system is used by the admin user (normally you shouldn't work as admin)."
 msgstr ""
 
@@ -21098,7 +21129,7 @@ msgstr ""
 
 #. SysConfig
 msgid "Disable cloud services"
-msgstr ""
+msgstr "Deshabilitar servicios en la nube"
 
 #. SysConfig
 msgid ""
@@ -21837,6 +21868,10 @@ msgid "Frontend module registration for the customer interface."
 msgstr ""
 
 #. SysConfig
+msgid "Frontend module registration for the public interface."
+msgstr "Registro de módulo \"Frontend\" en la interfaz pública."
+
+#. SysConfig
 msgid "Full value"
 msgstr "Valor completo"
 
@@ -22085,7 +22120,7 @@ msgstr ""
 msgid ""
 "If \"HTTPBasicAuth\" was selected for Customer::AuthModule, you can specify "
 "to strip leading parts of user names (e. g. for domains like "
-"example_domain\\user to user)."
+"example_domain\\\\user to user)."
 msgstr ""
 
 #. SysConfig
@@ -22365,6 +22400,12 @@ msgstr ""
 
 #. SysConfig
 msgid "If this regex matches, no message will be send by the autoresponder."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"If this setting is enabled, it is possible to install packages which are not"
+" verified by OTRS Group. These packages could threaten your whole system!"
 msgstr ""
 
 #. SysConfig
@@ -22721,7 +22762,7 @@ msgstr "Ticket bloqueado."
 
 #. SysConfig
 msgid "Logged in users."
-msgstr ""
+msgstr "Usuarios conectados."
 
 #. SysConfig
 msgid "Logged-In Users"
@@ -22823,10 +22864,6 @@ msgstr "¡Marcar como spam!"
 #. SysConfig
 msgid "Mark this ticket as junk!"
 msgstr "¡Marcar este ticket como basura!"
-
-#. SysConfig
-msgid "Marks articles for index rebuild right after the article's update."
-msgstr ""
 
 #. SysConfig
 msgid ""
@@ -23133,7 +23170,7 @@ msgstr "¡Noticias acerca de lanzamientos de OTRS!"
 
 #. SysConfig
 msgid "News about OTRS."
-msgstr ""
+msgstr "Noticias sobre OTRS."
 
 #. SysConfig
 msgid ""
@@ -23278,7 +23315,7 @@ msgstr "Tiempo de ausencia de la oficina"
 
 #. SysConfig
 msgid "Out of Office users."
-msgstr ""
+msgstr "Usuarios Fuera de la Oficina."
 
 #. SysConfig
 msgid ""
@@ -23296,7 +23333,7 @@ msgstr "Tiempo de actualización de la vista general"
 
 #. SysConfig
 msgid "Overview of all Tickets per assigned Queue."
-msgstr ""
+msgstr "Visión general de todos los Tiques por Cola asignada"
 
 #. SysConfig
 msgid "Overview of all appointments."
@@ -23917,7 +23954,7 @@ msgid "Removes old system configuration deployments (Sunday mornings)."
 msgstr ""
 
 #. SysConfig
-msgid "Removes old ticket number counters (Sunday mornings)."
+msgid "Removes old ticket number counters (each 10 minutes)."
 msgstr ""
 
 #. SysConfig
@@ -24300,7 +24337,7 @@ msgstr ""
 msgid ""
 "Sends the notifications which are configured in the admin interface under "
 "\"Ticket Notifications\"."
-msgstr ""
+msgstr "Envía las notificaciones que está configuradas en la interfaz de administrador en \"Notificaciones de ticket\""
 
 #. SysConfig
 msgid "Sent \"%s\" notification to \"%s\" via \"%s\"."
@@ -25031,7 +25068,7 @@ msgstr "Mostrar artículo como texto enriquecido incluso si el texto enriquecido
 
 #. SysConfig
 msgid "Show command line output."
-msgstr ""
+msgstr "Mostrar salida de línea de comando."
 
 #. SysConfig
 msgid "Show queues even when only locked tickets are in."
@@ -25940,11 +25977,11 @@ msgstr "Estados"
 
 #. SysConfig
 msgid "Statistic Reports overview."
-msgstr ""
+msgstr "Visión general informe estadísticas"
 
 #. SysConfig
 msgid "Statistics overview."
-msgstr ""
+msgstr "Visión general de estadísticas."
 
 #. SysConfig
 msgid "Status view"
@@ -26075,6 +26112,12 @@ msgstr ""
 
 #. SysConfig
 msgid ""
+"The logo shown in the header of the agent interface for the skin \"High "
+"Contrast\". See \"AgentLogo\" for further description."
+msgstr "El logo que se muestra en la cabecera de la interfaz del agente para el tema \"Contraste alto\". Ver \"AgentLogo\" para una mayor descripción."
+
+#. SysConfig
+msgid ""
 "The logo shown in the header of the agent interface for the skin "
 "\"default\". See \"AgentLogo\" for further description."
 msgstr ""
@@ -26116,7 +26159,7 @@ msgid ""
 "The logo shown on top of the login box of the agent interface. The URL to "
 "the image can be a relative URL to the skin image directory, or a full URL "
 "to a remote web server."
-msgstr ""
+msgstr "El logo que se muestra en la parte superior del cuadro de inicio de sesión de la interfaz del agente. La URL de la imagen puede ser una UTL relativa al directorio de la imagen del tema, o una URL completa de un servidor web remoto."
 
 #. SysConfig
 msgid ""

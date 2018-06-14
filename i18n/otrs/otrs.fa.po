@@ -7,15 +7,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OTRS\n"
-"POT-Creation-Date: 2018-04-23 17:42+0000\n"
-"PO-Revision-Date: 2018-04-23 17:46+0000\n"
-"Last-Translator: Carlos Rodríguez <carlos.rodriguez@otrs.com>\n"
+"POT-Creation-Date: 2018-06-08 07:43+0000\n"
+"PO-Revision-Date: 2018-06-08 07:45+0000\n"
+"Last-Translator: Udo Bretz\n"
 "Language-Team: Persian (http://www.transifex.com/otrs/OTRS/language/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fa\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. Template: AdminACL
 msgid "ACL Management"
@@ -2594,7 +2594,7 @@ msgstr ""
 
 #. Template: AdminGenericInterfaceErrorHandlingDefault
 msgid ""
-"Example: Enter '^.*401 Unauthorized.*\\$' to handle only authentication "
+"Example: Enter '^.*401 Unauthorized.*\\\\$' to handle only authentication "
 "related errors."
 msgstr ""
 
@@ -3168,8 +3168,9 @@ msgstr ""
 
 #. Template: AdminGenericInterfaceMappingXSLT
 msgid ""
-"Example 3: Search = '^(?<number>\\d+) (?<text>.+?)\\$' / Replace = "
-"'_\\$+{text}_\\$+{number}' turns '16 elementname' into '_elementname_16'."
+"Example 3: Search = '^(?<number>\\\\d+) (?<text>.+?)\\\\$' / Replace = "
+"'_\\\\$+{text}_\\\\$+{number}' turns '16 elementname' into "
+"'_elementname_16'."
 msgstr ""
 
 #. Template: AdminGenericInterfaceMappingXSLT
@@ -4221,8 +4222,8 @@ msgid "Manage %s"
 msgstr "مدیریت %s"
 
 #. Template: AdminOTRSBusinessInstalled
-msgid "Downgrade to OTRS Free"
-msgstr "کاهش دادن به OTRS رایگان"
+msgid "Downgrade to ((OTRS)) Community Edition"
+msgstr ""
 
 #. Template: AdminOTRSBusinessInstalled
 msgid "Read documentation"
@@ -4311,9 +4312,9 @@ msgstr "لطفا نگاهی داشته باشید به  %s برای اطلاعا
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
-"Your OTRS Free is the base for all future actions. Please register first "
-"before you continue with the upgrade process of %s!"
-msgstr "OTRS رایگان خود را پایه ای برای تمام اقدامات آینده است. لطفا ابتدا ثبت نام کنید تا با روند ارتقاء ادامه %s !"
+"Your ((OTRS)) Community Edition is the base for all future actions. Please "
+"register first before you continue with the upgrade process of %s!"
+msgstr ""
 
 #. Template: AdminOTRSBusinessNotInstalled
 msgid ""
@@ -4401,9 +4402,9 @@ msgstr "لطفا ابتدا با استفاده از بسته های مدیر ب
 
 #. Template: AdminOTRSBusinessUninstall
 msgid ""
-"You are about to downgrade to OTRS Free and will lose the following features"
-" and all data related to these:"
-msgstr "شما در حال جمع و جور کردن به OTRS رایگان هستند و ویژگی های زیر است و تمام اطلاعات مربوط به این از دست دادن:"
+"You are about to downgrade to ((OTRS)) Community Edition and will lose the "
+"following features and all data related to these:"
+msgstr ""
 
 #. Template: AdminOTRSBusinessUninstall
 msgid "Chat"
@@ -4542,7 +4543,7 @@ msgid ""
 msgstr "آیا واقعا می‌خواهید این بسته را مجددا نصب نمایید؟ تمام تغییرات دستی از بین خواهد رفت."
 
 #. Template: AdminPackageManager
-msgid "Go to upgrading instructions"
+msgid "Go to updating instructions"
 msgstr ""
 
 #. Template: AdminPackageManager
@@ -4590,8 +4591,7 @@ msgstr ""
 
 #. Template: AdminPackageManager
 msgid ""
-"Please find all relevant information within the upgrading instructions at "
-"%s."
+"Please find all relevant information within the updating instructions at %s."
 msgstr ""
 
 #. Template: AdminPackageManager
@@ -7769,9 +7769,9 @@ msgstr "استفاده غیر مجاز از %s شناسایی"
 
 #. Template: AgentOTRSBusinessBlockScreen
 msgid ""
-"If you decide to downgrade to OTRS Free, you will lose all database tables "
-"and data related to %s."
-msgstr "اگر شما تصمیم به جمع و جور کردن به OTRS رایگان، شما تمام جداول پایگاه داده و داده های مربوط به از دست دادن %s ."
+"If you decide to downgrade to ((OTRS)) Community Edition, you will lose all "
+"database tables and data related to %s."
+msgstr ""
 
 #. Template: AgentPreferences
 msgid "Edit your preferences"
@@ -13870,6 +13870,14 @@ msgid "You have Out of Office enabled, would you like to disable it?"
 msgstr "شما گزینه خارج از دفتردارید،می خواهید غیرفعالش کنید؟ "
 
 #. Perl Module:
+#. Kernel/Output/HTML/Notification/PackageManagerCheckNotVerifiedPackages.pm
+msgid ""
+"The installation of packages which are not verified by the OTRS Group is "
+"activated. These packages could threaten your whole system! It is "
+"recommended not to use unverified packages."
+msgstr ""
+
+#. Perl Module:
 #. Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
 msgid ""
 "You have %s invalid setting(s) deployed. Click here to show invalid "
@@ -14341,6 +14349,19 @@ msgid ""
 "problems</li><li>Performance problems</li></ul><p>Please note that issues "
 "that are caused by working with this package are not covered by OTRS service"
 " contracts.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>The installation of packages which are not verified by the OTRS Group is "
+"not possible by default.</p>"
+msgstr ""
+
+#. Perl Module: Kernel/System/Package.pm
+msgid ""
+"<p>You can activate the installation of not verified packages in the <a "
+"href=\"%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages\""
+" target=\"_blank\">System Configuration</a>.</p>"
 msgstr ""
 
 #. Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -15095,14 +15116,6 @@ msgstr ""
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/EmailQueue.pm
 msgid "Emails queued for sending"
 msgstr ""
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "Error Log"
-msgstr "ورود به خطا"
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-msgid "There are error reports in your system log."
-msgstr "گزارش خطا در ورود به سیستم شما وجود دارد."
 
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/FQDN.pm
 msgid "FQDN (domain name)"
@@ -16144,6 +16157,11 @@ msgstr "پاک کردن گزارش اشکال زدایی"
 
 #. JS File: Core.Agent.Admin.GenericInterfaceErrorHandling
 msgid "Delete error handling module"
+msgstr ""
+
+#. JS File: Core.Agent.Admin.GenericInterfaceInvoker
+msgid ""
+"It is not possible to add a new event trigger because the event is not set."
 msgstr ""
 
 #. JS File: Core.Agent.Admin.GenericInterfaceInvoker
@@ -18664,6 +18682,13 @@ msgstr "تعریف روز شروع هفته برای جمع کننده اطلا�
 
 #. SysConfig
 msgid ""
+"Define which avatar default image should be used for the article view if no "
+"gravatar is assigned to the mail address. Check "
+"http://gravatar.com/site/implement/images/ for further information."
+msgstr ""
+
+#. SysConfig
+msgid ""
 "Define which avatar default image should be used for the current agent if no"
 " gravatar is assigned to the mail address of the agent. Check "
 "http://gravatar.com/site/implement/images/ for further information."
@@ -20284,6 +20309,12 @@ msgstr "تعریف می کند که ماژول برای نمایش اطلاع ر
 #. SysConfig
 msgid ""
 "Defines the module to display a notification in the agent interface, if the "
+"installation of not verified packages is activated (only shown to admins)."
+msgstr ""
+
+#. SysConfig
+msgid ""
+"Defines the module to display a notification in the agent interface, if the "
 "system is used by the admin user (normally you shouldn't work as admin)."
 msgstr "ماژول برای نمایش اطلاع رسانی در رابط عامل، در صورتی که سیستم توسط کاربر مدیریت استفاده را تعریف می کند (به طور معمول شما باید به عنوان مدیر کار نمی کند)."
 
@@ -21811,6 +21842,10 @@ msgid "Frontend module registration for the customer interface."
 msgstr "ظاهر ثبت نام ماژول برای رابط مشتری."
 
 #. SysConfig
+msgid "Frontend module registration for the public interface."
+msgstr ""
+
+#. SysConfig
 msgid "Full value"
 msgstr "ارزش کامل"
 
@@ -22059,8 +22094,8 @@ msgstr "اگر \\ \"HTTPBasicAuth \" برای ضوابط انتخاب شد :: Au
 msgid ""
 "If \"HTTPBasicAuth\" was selected for Customer::AuthModule, you can specify "
 "to strip leading parts of user names (e. g. for domains like "
-"example_domain\\user to user)."
-msgstr "اگر \\ \"HTTPBasicAuth \" برای ضوابط انتخاب شد :: AuthModule، شما می توانید مشخص به نوار قطعات منجر از نام کاربر (به عنوان مثال برای دامنه های مانند example_domain \\ کاربر به کاربر)."
+"example_domain\\\\user to user)."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -22340,6 +22375,12 @@ msgstr ""
 #. SysConfig
 msgid "If this regex matches, no message will be send by the autoresponder."
 msgstr "اگر این عبارت منظم مسابقات، هیچ پیام خواهد شد توسط پاسخگوی خودکار ارسال می کند."
+
+#. SysConfig
+msgid ""
+"If this setting is enabled, it is possible to install packages which are not"
+" verified by OTRS Group. These packages could threaten your whole system!"
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -22797,10 +22838,6 @@ msgstr "به‌عنوان هرزنامه علامت بزن"
 #. SysConfig
 msgid "Mark this ticket as junk!"
 msgstr "علامت گذاری به عنوان این درخواست به عنوان آشغال!"
-
-#. SysConfig
-msgid "Marks articles for index rebuild right after the article's update."
-msgstr ""
 
 #. SysConfig
 msgid ""
@@ -23891,7 +23928,7 @@ msgid "Removes old system configuration deployments (Sunday mornings)."
 msgstr ""
 
 #. SysConfig
-msgid "Removes old ticket number counters (Sunday mornings)."
+msgid "Removes old ticket number counters (each 10 minutes)."
 msgstr ""
 
 #. SysConfig
@@ -26046,6 +26083,12 @@ msgid ""
 "The identifier for a ticket, e.g. Ticket#, Call#, MyTicket#. The default is "
 "Ticket#."
 msgstr "شناسه یک بلیط برای، به عنوان مثال بلیط #، تماس #، MyTicket #. به طور پیش فرض بلیط # است."
+
+#. SysConfig
+msgid ""
+"The logo shown in the header of the agent interface for the skin \"High "
+"Contrast\". See \"AgentLogo\" for further description."
+msgstr ""
 
 #. SysConfig
 msgid ""

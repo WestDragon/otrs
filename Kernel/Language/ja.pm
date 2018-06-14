@@ -27,7 +27,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%Y/%M/%D';
     $Self->{DateInputFormat}     = '%Y/%M/%D';
     $Self->{DateInputFormatLong} = '%Y/%M/%D - %T';
-    $Self->{Completeness}        = 0.749439944856109;
+    $Self->{Completeness}        = 0.747977276639697;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -703,7 +703,7 @@ sub Data {
         'Escalation - solution time' => 'エスカレーション - 解決期限',
         'Ticket solution time reached' => 'チケット解決期限が',
         'Ticket solution time reached between' => 'チケット解決期限がこの期間内',
-        'Archive search option' => '書庫検索オプション',
+        'Archive search option' => 'アーカイブ検索オプション',
         'Update/Add Ticket Attributes' => 'チケット属性の更新/追加',
         'Set new service' => '新しいサービスを設定',
         'Set new Service Level Agreement' => '新しいサービスレベル契約（SLA）を設定',
@@ -720,7 +720,7 @@ sub Data {
         'New title' => '新しいタイトル',
         'New type' => '新しいタイプ',
         'New Dynamic Field Values' => 'ダイナミック・フィールドの値を設定',
-        'Archive selected tickets' => '書庫の選択済みチケット',
+        'Archive selected tickets' => '選択されたアーカイブ・チケット',
         'Add Note' => 'メモを追加',
         'Visible for customer' => '顧客が閲覧可能な記事',
         'Time units' => '時間の単位',
@@ -1298,7 +1298,7 @@ sub Data {
 
         # Template: AdminOTRSBusinessInstalled
         'Manage %s' => '%s を管理',
-        'Downgrade to OTRS Free' => 'フリー版OTRSへのダウングレード',
+        'Downgrade to ((OTRS)) Community Edition' => '',
         'Read documentation' => 'ドキュメントを参照',
         '%s makes contact regularly with cloud.otrs.com to check on available updates and the validity of the underlying contract.' =>
             '',
@@ -1328,8 +1328,8 @@ sub Data {
         '%s will be available soon. Please check again in a few days.' =>
             '%sはもうすぐ有効になります。数日後に確認してください。',
         'Please have a look at %s for more information.' => '詳細については%sを参照してください。',
-        'Your OTRS Free is the base for all future actions. Please register first before you continue with the upgrade process of %s!' =>
-            'もし%sのすべての機能を使用したいのであれば契約をアップグレードする必要があります！ 現在の契約: %s',
+        'Your ((OTRS)) Community Edition is the base for all future actions. Please register first before you continue with the upgrade process of %s!' =>
+            '',
         'Before you can benefit from %s, please contact %s to get your %s contract.' =>
             '',
         'Connection to cloud.otrs.com via HTTPS couldn\'t be established. Please make sure that your OTRS can connect to cloud.otrs.com via port 443.' =>
@@ -1360,8 +1360,8 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'Vendor' => 'ベンダー',
         'Please uninstall the packages first using the package manager and try again.' =>
             'パッケージマネージャでパッケージを削除して再度実行して下さい。',
-        'You are about to downgrade to OTRS Free and will lose the following features and all data related to these:' =>
-            'OTRS Freeにダウングレードすることで以下の機能と関連するデータは使用できなくなります:',
+        'You are about to downgrade to ((OTRS)) Community Edition and will lose the following features and all data related to these:' =>
+            '',
         'Chat' => 'チャット',
         'Report Generator' => 'レポート・ジェネレーター',
         'Timeline view in ticket zoom' => 'チケット・ズームにおけるタイムライン',
@@ -1402,7 +1402,7 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'Reinstall package' => 'パッケージを再インストール',
         'Do you really want to reinstall this package? Any manual changes will be lost.' =>
             'このパッケージを本当に再インストールしますか？ 全ての手動変更点は失われます。',
-        'Go to upgrading instructions' => 'アップグレード詳細に移動',
+        'Go to updating instructions' => '',
         'package information' => 'パッケージ情報',
         'Package installation requires a patch level update of OTRS.' => '',
         'Package update requires a patch level update of OTRS.' => '',
@@ -1419,8 +1419,8 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
             '',
         'How can I do a patch level update if I don’t have a contract?' =>
             '',
-        'Please find all relevant information within the upgrading instructions at %s.' =>
-            'アップグレード手順の関連情報は全て%sにあります。',
+        'Please find all relevant information within the updating instructions at %s.' =>
+            '',
         'In case you would have further questions we would be glad to answer them.' =>
             '',
         'Install Package' => 'パッケージをインストール',
@@ -2436,7 +2436,7 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
 
         # Template: AgentOTRSBusinessBlockScreen
         'Unauthorized usage of %s detected' => '',
-        'If you decide to downgrade to OTRS Free, you will lose all database tables and data related to %s.' =>
+        'If you decide to downgrade to ((OTRS)) Community Edition, you will lose all database tables and data related to %s.' =>
             '',
 
         # Template: AgentPreferences
@@ -2726,7 +2726,7 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'Ticket Close Time (between)' => 'チケットのクローズ日時 (期間指定)',
         'Ticket Escalation Time (before/after)' => 'チケットエスカレーション時間 (以前/以後)',
         'Ticket Escalation Time (between)' => 'チケットエスカレーション日時 (期間指定)',
-        'Archive Search' => '書庫検索',
+        'Archive Search' => 'アーカイブ検索',
 
         # Template: AgentTicketZoom
         'Sender Type' => '送信者タイプ',
@@ -3532,8 +3532,8 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'within the next ...' => '以内(後)',
         'more than ... ago' => '... 以前',
         'Unarchived tickets' => 'アーカイブされていないチケット',
-        'archive tickets' => 'チケットをアーカイブする',
-        'restore tickets from archive' => '',
+        'archive tickets' => 'アーカイブ・チケット',
+        'restore tickets from archive' => 'アーカイブからチケットを復元する',
         'Need Profile!' => 'プロファイルの入力が必要です！',
         'Got no values to check.' => '',
         'Please remove the following words because they cannot be used for the ticket selection:' =>
@@ -4589,6 +4589,10 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'You have Out of Office enabled, would you like to disable it?' =>
             '外出中が有効になっています。無効にしますか？',
 
+        # Perl Module: Kernel/Output/HTML/Notification/PackageManagerCheckNotVerifiedPackages.pm
+        'The installation of packages which are not verified by the OTRS Group is activated. These packages could threaten your whole system! It is recommended not to use unverified packages.' =>
+            '',
+
         # Perl Module: Kernel/Output/HTML/Notification/SystemConfigurationInvalidCheck.pm
         'You have %s invalid setting(s) deployed. Click here to show invalid settings.' =>
             '',
@@ -4788,6 +4792,10 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'File is different!' => '',
         'Can\'t read file!' => 'ファイルを読み込めません！',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
+            '',
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
+            '',
+        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -5065,10 +5073,6 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/EmailQueue.pm
         'Email Sending Queue' => 'Eメール送信キュー',
         'Emails queued for sending' => '送信待ちのEメール',
-
-        # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/ErrorLog.pm
-        'Error Log' => 'エラーログ',
-        'There are error reports in your system log.' => 'システムログにエラーが出力されています。',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/FQDN.pm
         'FQDN (domain name)' => 'FQDN (ドメインネーム)',
@@ -5440,6 +5444,8 @@ OTRSが443ポートを用いてcloud.otrs.comに接続できることを確認�
         'Delete error handling module' => '',
 
         # JS File: Core.Agent.Admin.GenericInterfaceInvoker
+        'It is not possible to add a new event trigger because the event is not set.' =>
+            '',
         'Delete this Invoker' => 'このAPI実行元を削除',
 
         # JS File: Core.Agent.Admin.GenericInterfaceInvokerEvent
@@ -5846,7 +5852,7 @@ Thanks for your help!
         'Activates the available themes on the system. Value 1 means active, 0 means inactive.' =>
             'システムで利用可能なテーマをアクティベートします。値1がアクティブ、0が非アクティブを意味します。',
         'Activates the ticket archive system search in the customer interface.' =>
-            '',
+            'カスタマー・インターフェースでチケット・アーカイブ・システムの検索を有効化します。',
         'Activates the ticket archive system to have a faster system by moving some tickets out of the daily scope. To search for these tickets, the archive flag has to be enabled in the ticket search.' =>
             'チケット・アーカイブ・システムを有効にすることで、チケットの一部をデイリーの範囲から外し、システムのスピードを速くします。これらのチケットを検索する際には、チケット検索においてアーカイブ・フラッグを有効にする必要があります。',
         'Activates time accounting.' => 'タイム・アカウンティングを有効にします。',
@@ -6289,6 +6295,8 @@ Thanks for your help!
         'Define the start day of the week for the date picker for the indicated calendar.' =>
             '',
         'Define the start day of the week for the date picker.' => '日付ピッカーにおける週の開始曜日を設定します。',
+        'Define which avatar default image should be used for the article view if no gravatar is assigned to the mail address. Check http://gravatar.com/site/implement/images/ for further information.' =>
+            '',
         'Define which avatar default image should be used for the current agent if no gravatar is assigned to the mail address of the agent. Check http://gravatar.com/site/implement/images/ for further information.' =>
             '',
         'Define which avatar engine should be used for the agent avatar on the header and the sender images in AgentTicketZoom. If \'None\' is selected, initials will be displayed instead. Please note that selecting anything other than \'None\' will transfer the encrypted email address of the particular user to an external service.' =>
@@ -6800,6 +6808,8 @@ Contentはダイナミック・フィールドの形式によって設定内容�
             '',
         'Defines the module to display a notification in the agent interface, if the agent session limit prior warning is reached.' =>
             '',
+        'Defines the module to display a notification in the agent interface, if the installation of not verified packages is activated (only shown to admins).' =>
+            '',
         'Defines the module to display a notification in the agent interface, if the system is used by the admin user (normally you shouldn\'t work as admin).' =>
             'もし、システムがアドミン・ユーザによって使用されている場合、担当者インタフェースにおいて通知を表示させるモジュールを定義します（通常はアドミンとして行動する必要はありません）。',
         'Defines the module to display a notification in the agent interface, if there are invalid sysconfig settings deployed.' =>
@@ -7277,6 +7287,7 @@ Contentはダイナミック・フィールドの形式によって設定内容�
             'フロントエンドモジュールを登録（個人用のお気に入りを「管理」のサブナビゲーション項目として表示）',
         'Frontend module registration for the agent interface.' => '担当者インタフェースに関するフロントエンド・モジュールの登録です。',
         'Frontend module registration for the customer interface.' => '担当者インタフェースに関するフロントエンド・モジュールの登録です。',
+        'Frontend module registration for the public interface.' => '公開画面のフロントエンドモジュールの定義',
         'Full value' => '',
         'Fulltext index regex filters to remove parts of the text.' => '',
         'Fulltext search' => '全文検索',
@@ -7437,6 +7448,8 @@ Contentはダイナミック・フィールドの形式によって設定内容�
             '',
         'If this regex matches, no message will be send by the autoresponder.' =>
             'ここで指定した文言（正規表現）にマッチした場合、オート・レスポンダーによりメッセージは送られません。',
+        'If this setting is enabled, it is possible to install packages which are not verified by OTRS Group. These packages could threaten your whole system!' =>
+            '',
         'If this setting is enabled, local modifications will not be highlighted as errors in the package manager and support data collector.' =>
             '',
         'If you\'re going to be out of office, you may wish to let other users know by setting the exact dates of your absence.' =>
@@ -7561,8 +7574,6 @@ Contentはダイナミック・フィールドの形式によって設定内容�
         'Manage tasks triggered by event or time based execution.' => 'イベントトリガーまたは時間ベースで実行されるタスクの管理',
         'Mark as Spam!' => '迷惑メールにする',
         'Mark this ticket as junk!' => '',
-        'Marks articles for index rebuild right after the article\'s update.' =>
-            '',
         'Max size (in characters) of the customer information table (phone and email) in the compose screen.' =>
             '',
         'Max size (in rows) of the informed agents box in the agent interface.' =>
@@ -7842,7 +7853,7 @@ Contentはダイナミック・フィールドの形式によって設定内容�
         'Removed subscription for user "%s".' => 'Removed subscription for user "%s".',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '古いシステム設定のデプロイを削除します。（日曜の朝）',
-        'Removes old ticket number counters (Sunday mornings).' => '',
+        'Removes old ticket number counters (each 10 minutes).' => '',
         'Removes the ticket watcher information when a ticket is archived.' =>
             'チケットがアーカイブされるとき、チケット監視者の情報を削除する。',
         'Renew existing SMIME certificates from customer backend. Note: SMIME and SMIME::FetchFromCustomer needs to be enabled in SysConfig and customer backend needs to be configured to fetch UserSMIMECertificate attribute.' =>
@@ -8492,6 +8503,8 @@ Contentはダイナミック・フィールドの形式によって設定内容�
         'The headline shown in the customer interface.' => '顧客インターフェイスの見出し',
         'The identifier for a ticket, e.g. Ticket#, Call#, MyTicket#. The default is Ticket#.' =>
             '例えばTicket#, Call#, MyTicket#などのチケットの識別子です。デフォルトはTicket#です。',
+        'The logo shown in the header of the agent interface for the skin "High Contrast". See "AgentLogo" for further description.' =>
+            '',
         'The logo shown in the header of the agent interface for the skin "default". See "AgentLogo" for further description.' =>
             'スキン"デフォルト"時に担当者インターフェイスで表示されるロゴ。詳細は"AgentLogo"を参照してください。',
         'The logo shown in the header of the agent interface for the skin "ivory". See "AgentLogo" for further description.' =>
@@ -8703,6 +8716,7 @@ Contentはダイナミック・フィールドの形式によって設定内容�
         'A popup of this screen is already open. Do you want to close it and load this one instead?',
         'A preview of this website can\'t be provided because it didn\'t allow to be embedded.',
         'Add',
+        'Add Event Trigger',
         'Add all',
         'Add entry',
         'Add key',
@@ -8840,6 +8854,7 @@ Contentはダイナミック・フィールドの形式によって設定内容�
         'Invalid date (need a past date)!',
         'Invalid date!',
         'It is going to be deleted from the field, please try again.',
+        'It is not possible to add a new event trigger because the event is not set.',
         'It is not possible to set this entry to invalid. All affected configuration settings have to be changed beforehand.',
         'It was not possible to delete this draft.',
         'It was not possible to generate the Support Bundle.',
