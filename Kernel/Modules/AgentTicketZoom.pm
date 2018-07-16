@@ -2291,17 +2291,15 @@ sub _ArticleTree {
                 );
             }
 
-            # Determine communication direction
-            if ( !$Article{IsVisibleForCustomer} ) {
+            # Determine communication direction.
+            if ( $Article{ChannelName} eq 'Internal' ) {
                 $LayoutObject->Block( Name => 'TreeItemDirectionInternal' );
             }
+            elsif ( $ArticleSenderTypeList{ $Article{SenderTypeID} } eq 'customer' ) {
+                $LayoutObject->Block( Name => 'TreeItemDirectionIncoming' );
+            }
             else {
-                if ( $ArticleSenderTypeList{ $Article{SenderTypeID} } eq 'customer' ) {
-                    $LayoutObject->Block( Name => 'TreeItemDirectionIncoming' );
-                }
-                else {
-                    $LayoutObject->Block( Name => 'TreeItemDirectionOutgoing' );
-                }
+                $LayoutObject->Block( Name => 'TreeItemDirectionOutgoing' );
             }
 
             # Get attachment index (excluding body attachments).

@@ -31,6 +31,7 @@ our @ObjectDependencies = (
     'Kernel::System::Log',
     'Kernel::System::Main',
     'Kernel::System::OTRSBusiness',
+    'Kernel::System::State',
     'Kernel::System::Storable',
     'Kernel::System::SystemMaintenance',
     'Kernel::System::User',
@@ -1421,6 +1422,15 @@ sub Header {
             MODULE:
             for my $Key ( sort keys %Modules ) {
                 next MODULE if !%{ $Modules{$Key} };
+
+                # For ToolBarSearchFulltext module take into consideration SearchInArchive settings.
+                # See bug#13790 (https://bugs.otrs.org/show_bug.cgi?id=13790).
+                if ( $ConfigObject->Get('Ticket::ArchiveSystem') && $Modules{$Key}->{Block} eq 'ToolBarSearchFulltext' )
+                {
+                    $Modules{$Key}->{SearchInArchive}
+                        = $ConfigObject->Get('Ticket::Frontend::AgentTicketSearch')->{Defaults}->{SearchInArchive};
+                }
+
                 $Self->Block(
                     Name => $Modules{$Key}->{Block},
                     Data => {
@@ -1573,6 +1583,12 @@ sub Footer {
             || $Kernel::OM->Get('Kernel::System::Web::Request')->GetParam( Param => 'UnitTestMode' ) // 0;
     }
 
+    # Set an array with pending states.
+    my @PendingStateIDs = $Kernel::OM->Get('Kernel::System::State')->StateGetStatesByType(
+        StateType => [ 'pending reminder', 'pending auto' ],
+        Result    => 'ID',
+    );
+
     # add JS data
     my %JSConfig = (
         Baselink                       => $Self->{Baselink},
@@ -1596,6 +1612,7 @@ sub Footer {
         InputFieldsActivated           => $ConfigObject->Get('ModernizeFormFields'),
         OTRSBusinessIsInstalled        => $Param{OTRSBusinessIsInstalled},
         VideoChatEnabled               => $Param{VideoChatEnabled},
+        PendingStateIDs                => \@PendingStateIDs,
         CheckSearchStringsForStopWords => (
             $ConfigObject->Get('Ticket::SearchIndex::WarnOnStopWordUsage')
                 &&
@@ -4135,6 +4152,24 @@ sub CustomerFooter {
             || $Kernel::OM->Get('Kernel::System::Web::Request')->GetParam( Param => 'UnitTestMode' ) // 0;
     }
 
+    # Check if customer user has permission for chat.
+    my $CustomerChatPermission;
+    if ( $Kernel::OM->Get('Kernel::System::Main')->Require( 'Kernel::System::Chat', Silent => 1 ) ) {
+
+        my $CustomerChatConfig  = $ConfigObject->Get('CustomerFrontend::Module')->{'CustomerChat'};
+        my $CustomerGroupObject = $Kernel::OM->Get('Kernel::System::CustomerGroup');
+
+        GROUP:
+        for my $GroupName ( @{ $CustomerChatConfig->{GroupRo} }, @{ $CustomerChatConfig->{Group} } ) {
+            $CustomerChatPermission = $CustomerGroupObject->PermissionCheck(
+                UserID    => $Self->{UserID},
+                GroupName => $GroupName,
+                Type      => 'ro',
+            );
+            last GROUP if $CustomerChatPermission;
+        }
+    }
+
     # don't check for business package if the database was not yet configured (in the installer)
     if ( $ConfigObject->Get('SecureMode') ) {
         my $OTRSBusinessObject = $Kernel::OM->Get('Kernel::System::OTRSBusiness');
@@ -4170,6 +4205,7 @@ sub CustomerFooter {
         Autocomplete             => $AutocompleteConfig,
         VideoChatEnabled         => $Param{VideoChatEnabled},
         WebMaxFileUpload         => $ConfigObject->Get('WebMaxFileUpload'),
+        CustomerChatPermission   => $CustomerChatPermission,
     );
 
     for my $Config ( sort keys %JSConfig ) {

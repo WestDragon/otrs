@@ -1,4 +1,34 @@
 #6.0.9 2018-??-??
+ - 2018-07-11 Fixed bug#[13952](https://bugs.otrs.org/show_bug.cgi?id=13952) - Internal server error in AdminSystemConfiguration if you remove frontend registration and navigation modules.
+ - 2018-07-10 Fixed bug#[13947](https://bugs.otrs.org/show_bug.cgi?id=13947) - Split selection dialog does not honor ACL restrictions.
+ - 2018-07-06 Fixed bug#[13928](https://bugs.otrs.org/show_bug.cgi?id=13928) - Assigning customer group to chat modules results in constant connection error messages.
+ - 2018-07-06 Fixed bug#[13948](https://bugs.otrs.org/show_bug.cgi?id=13948) - Some labels are not translated in ticket search screen.
+ - 2018-07-06 Fixed bug#[13940](https://bugs.otrs.org/show_bug.cgi?id=13940) - Index missing on table article_data_mime.
+ - 2018-07-06 Fixed bug#[13936](https://bugs.otrs.org/show_bug.cgi?id=13936) - Notification looses text for 'Additional recipient email addresses' when sizelimit 200 characters is exceeded.
+ - 2018-07-05 Fixed bug#[13837](https://bugs.otrs.org/show_bug.cgi?id=13837) - Open and new tickets always at the end of the list when sorting by pending time since OTRS 6.
+ - 2018-07-05 Fixed bug#[13943](https://bugs.otrs.org/show_bug.cgi?id=13943) - Untranslated word "last-search" in ticket search result screen.
+ - 2018-07-05 Fixed bug#[13945](https://bugs.otrs.org/show_bug.cgi?id=13945) - Archived tickets won't be moved with StorageSwitch command.
+ - 2018-07-04 Fixed bug#[13938](https://bugs.otrs.org/show_bug.cgi?id=13938) - Statistic: Internal Server Error when invalid date is set for x axis.
+ - 2018-07-04 Fixed bug#[13937](https://bugs.otrs.org/show_bug.cgi?id=13937) - Default value for title is not displayed as default in Process Activity Dialog if field is shown.
+ - 2018-07-02 Fixed bug#[13942](https://bugs.otrs.org/show_bug.cgi?id=13942) - Wrong title in browser window in statistics screens.
+ - 2018-07-02 Fixed bug#[13901](https://bugs.otrs.org/show_bug.cgi?id=13901) - Error messages during RPM upgrade.
+ - 2018-07-02 Fixed bug#[13790](https://bugs.otrs.org/show_bug.cgi?id=13790) - Toolbar Fulltext Search will not care for archiving settings.
+ - 2018-06-27 Fixed bug#[13927](https://bugs.otrs.org/show_bug.cgi?id=13927) - Ticket Merge: "No merge state found! Please add a valid merge state" - Articles are invisible till next action.
+ - 2018-06-27 Fixed bug#[13922](https://bugs.otrs.org/show_bug.cgi?id=13922) - SearchIndexModule misleading config description.
+ - 2018-06-27 Fixed bug#[13700](https://bugs.otrs.org/show_bug.cgi?id=13700) - Layout issue with ticket split.
+ - 2018-06-27 Fixed bug#[13839](https://bugs.otrs.org/show_bug.cgi?id=13839) - When doing a search from change management the results window does not expand.
+ - 2018-06-27 Fixed bug#[13672](https://bugs.otrs.org/show_bug.cgi?id=13672) - Auto response names are not translated in Auto Responses screen of the Admin interface.
+ - 2018-06-25 Fixed bug#[13919](https://bugs.otrs.org/show_bug.cgi?id=13919) - Adding a new favorite setting overwrites the existing favorite settings.
+ - 2018-06-25 Fixed bug#[13923](https://bugs.otrs.org/show_bug.cgi?id=13923) - Sender name in article created by queue move "window" only shows FirstName.
+ - 2018-06-20 Follow-up fix for bug#[13734](https://bugs.otrs.org/show_bug.cgi?id=13734) - Set the last valid Status Merge to invalid is allowed.
+ - 2018-06-19 Fixed bug#[13408](https://bugs.otrs.org/show_bug.cgi?id=13408) - Setting for showing default fields in the search mask not working partially.
+ - 2018-06-19 Fixed bug#[13906](https://bugs.otrs.org/show_bug.cgi?id=13906) - Validation for Pending date is active for non pending states.
+ - 2018-06-18 Fixed bug#[13778](https://bugs.otrs.org/show_bug.cgi?id=13778) - otrs.Console.pl Admin::Package::UpgradeAll fails at installed ITSM package.
+ - 2018-06-18 Fixed bug#[13894](https://bugs.otrs.org/show_bug.cgi?id=13894) - System log does not present timezone information.
+ - 2018-06-18 Fixed bug#[13752](https://bugs.otrs.org/show_bug.cgi?id=13752) - Missing direction arrow for AgentTicketEmailOutbound.
+ - 2018-06-15 Fixed bug#[13912](https://bugs.otrs.org/show_bug.cgi?id=13912) - Generic Agents looses text for notes when sizelimit 200 characters is exceeded.
+ - 2018-06-15 Fixed bug#[13775](https://bugs.otrs.org/show_bug.cgi?id=13775) - ArticleLimit is not integrated for GenericInterface TicketGet.
+ - 2018-06-15 Fixed bug#[13910](https://bugs.otrs.org/show_bug.cgi?id=13910) - LinkObject events are not working in web services due to missing LinkObject::EventModulePost configuration.
  - 2018-06-14 Fixed bug#[13913](https://bugs.otrs.org/show_bug.cgi?id=13913)(PR#1936) - Searchable Article Fields not translated in AgentTicketSearch. Thanks to Robin.
  - 2018-06-14 Fixed bug#[13838](https://bugs.otrs.org/show_bug.cgi?id=13838) - WarnOnStopWordUsage not working for subject, body, from, to, cc.
  - 2018-06-14 Fixed bug#[13893](https://bugs.otrs.org/show_bug.cgi?id=13893) - Wrong descriptions for some system configurations.
@@ -22,6 +52,7 @@
  - 2018-06-01 Fixed bug#[13889](https://bugs.otrs.org/show_bug.cgi?id=13889) - Postmaster filter value limit is 100 characters in frontend.
  - 2018-06-01 Renamed 'OTRS Free' to '((OTRS)) Community Edition'.
  - 2018-05-30 Fixed bug#[13868](https://bugs.otrs.org/show_bug.cgi?id=13868) - Customer User Title is not translated.
+ - 2018-05-29 Fixed bug#[13879](https://bugs.otrs.org/show_bug.cgi?id=13879) - IFRAME in customer ticket zoom loading the content outside of itself.
  - 2018-05-28 Fixed bug#[13870](https://bugs.otrs.org/show_bug.cgi?id=13870) - Content of Title and Subject columns are the same in Excel/CSV output of search.
  - 2018-05-28 Fixed bug#[13819](https://bugs.otrs.org/show_bug.cgi?id=13819) - ACL's CompareMatchWithData floods the log when service is not in relation with customer user.
  - 2018-05-25 Fixed bug#[13883](https://bugs.otrs.org/show_bug.cgi?id=13883) - Several display issues in Admin Screen "Ticket Notification Management".
