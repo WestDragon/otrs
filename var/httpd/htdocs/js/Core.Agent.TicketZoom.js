@@ -1,9 +1,9 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
-// the enclosed file COPYING for license information (AGPL). If you
-// did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+// the enclosed file COPYING for license information (GPL). If you
+// did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 // --
 
 "use strict";
@@ -565,15 +565,25 @@ Core.Agent.TicketZoom = (function (TargetNS) {
 
         // Toggle article details.
         $('.WidgetAction.Expand').off('click').on('click', function() {
-            var $WidgetObj = $(this).closest('.WidgetSimple');
+            var $WidgetObj = $(this).closest('.WidgetSimple'),
+                $WidgetMenu = $WidgetObj.find('.WidgetMenu'),
+                $WidgetMessage = $WidgetObj.find('.WidgetMessage');
 
             if ($WidgetObj.hasClass('MenuExpanded')) {
-                $WidgetObj.find('.WidgetMenu').slideUp('fast')
+                $WidgetMenu.slideUp('fast');
                 $WidgetObj.removeClass('MenuExpanded');
+
+                if ($WidgetMessage.length === 1) {
+                    $WidgetMenu.removeClass('SpacingBottom');
+                }
             }
             else {
-                $WidgetObj.find('.WidgetMenu').slideDown('fast');
+                $WidgetMenu.slideDown('fast');
                 $WidgetObj.addClass('MenuExpanded');
+
+                if ($WidgetMessage.length === 1) {
+                    $WidgetMenu.addClass('SpacingBottom');
+                }
             }
             return false;
         });

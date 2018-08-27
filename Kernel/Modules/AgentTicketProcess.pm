@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package Kernel::Modules::AgentTicketProcess;
@@ -2860,6 +2860,12 @@ sub _RenderArticle {
         # Get TimeUnits value.
         $Param{TimeUnits} = $Param{GetParam}{TimeUnits};
 
+        if ( !defined $Param{TimeUnits} && $Self->{ArticleID} ) {
+            $Param{TimeUnits} = $Self->_GetTimeUnits(
+                ArticleID => $Self->{ArticleID},
+            );
+        }
+
         $LayoutObject->Block(
             Name => 'TimeUnits',
             Data => \%Param,
@@ -2870,6 +2876,21 @@ sub _RenderArticle {
         Success => 1,
         HTML    => $LayoutObject->Output( TemplateFile => 'ProcessManagement/Article' ),
     };
+}
+
+sub _GetTimeUnits {
+    my ( $Self, %Param ) = @_;
+
+    my $AccountedTime = '';
+
+    # Get accounted time if AccountTime config item is enabled.
+    if ( $Kernel::OM->Get('Kernel::Config')->Get('Ticket::Frontend::AccountTime') && defined $Param{ArticleID} ) {
+        $AccountedTime = $Kernel::OM->Get('Kernel::System::Ticket::Article')->ArticleAccountedTimeGet(
+            ArticleID => $Param{ArticleID},
+        );
+    }
+
+    return $AccountedTime ? $AccountedTime : '';
 }
 
 sub _RenderCustomer {
@@ -4765,8 +4786,10 @@ sub _StoreActivityDialog {
             if ( !$TicketParam{Title} ) {
 
                 # get the current server Time-stamp
-                my $CurrentTimeStamp = $Kernel::OM->Create('Kernel::System::DateTime')->ToString();
-                $TicketParam{Title} = "$Param{ProcessName} - $CurrentTimeStamp";
+                my $DateTimeObject   = $Kernel::OM->Create('Kernel::System::DateTime');
+                my $CurrentTimeStamp = $DateTimeObject->ToString();
+                my $OTRSTimeZone     = $DateTimeObject->OTRSTimeZoneGet();
+                $TicketParam{Title} = "$Param{ProcessName} - $CurrentTimeStamp ($OTRSTimeZone)";
 
                 # use article subject from the web request if any
                 if ( IsStringWithData( $Param{GetParam}->{Subject} ) ) {
@@ -5164,10 +5187,10 @@ sub _StoreActivityDialog {
                             {
                                 next ATTACHMENT;
                             }
-
-                            # remember inline images and normal attachments
-                            push @NewAttachmentData, \%{$Attachment};
                         }
+
+                        # Remember inline images and normal attachments.
+                        push @NewAttachmentData, \%{$Attachment};
                     }
 
                     @Attachments = @NewAttachmentData;
@@ -5214,9 +5237,6 @@ sub _StoreActivityDialog {
                     return $LayoutObject->ErrorScreen();
                 }
 
-                # remove pre submitted attachments
-                $UploadCacheObject->FormIDRemove( FormID => $Self->{FormID} );
-
                 # write attachments
                 for my $Attachment (@Attachments) {
                     $ArticleBackendObject->ArticleWriteAttachment(
@@ -5225,6 +5245,9 @@ sub _StoreActivityDialog {
                         UserID    => $Self->{UserID},
                     );
                 }
+
+                # Remove pre submitted attachments.
+                $UploadCacheObject->FormIDRemove( FormID => $Self->{FormID} );
 
                 # get the link ticket id if given
                 my $LinkTicketID = $ParamObject->GetParam( Param => 'LinkTicketID' ) || '';

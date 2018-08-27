@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package Kernel::System::Group;
@@ -931,7 +931,7 @@ Check if a user has a certain permission for a certain group.
     my $HasPermission = $GroupObject->PermissionCheck(
         UserID    => $UserID,
         GroupName => $GroupName,
-        Type      => 'move_into',
+        Type      => 'move_into', # ro|move_into|create|note|owner|priority|rw
     );
 
 =cut
@@ -960,7 +960,7 @@ returns a list of users with the given permissions
 
     my %Users = $GroupObject->PermissionUserInvolvedGet(
         UserID => $ID,
-        Type   => 'move_into',
+        Type   => 'move_into', # ro|move_into|create|note|owner|priority|rw
     );
 
 =cut
@@ -1006,7 +1006,7 @@ Get groups of the given user.
 
     my %Groups = $GroupObject->PermissionUserGet(
         UserID => $ID,
-        Type   => 'move_into',
+        Type   => 'move_into', # ro|move_into|create|note|owner|priority|rw
     );
 
 =cut
@@ -1081,7 +1081,7 @@ Get users of the given group.
 
     my %Users = $GroupObject->PermissionGroupGet(
         GroupID => $ID,
-        Type    => 'move_into',
+        Type    => 'move_into', # ro|move_into|create|note|owner|priority|rw
     );
 
 =cut
@@ -1161,6 +1161,7 @@ add new permissions or update existing one to the given group of a given user
             ro        => 1,
             move_into => 1,
             create    => 1,
+            note      => 1,
             owner     => 1,
             priority  => 0,
             rw        => 0,
@@ -1289,7 +1290,7 @@ returns a list with all users of a group
 
     my %UserList = $GroupObject->PermissionGroupUserGet(
         GroupID => $GroupID,
-        Type    => 'move_into',  # ro|move_into|priority|create|rw
+        Type    => 'move_into',  # ro|move_into|create|note|owner|priority|rw
     );
 
     %UserList = (
@@ -1372,7 +1373,7 @@ returns a list of groups a user is member of
 
     my %GroupList = $GroupObject->PermissionUserGroupGet(
         UserID => 123,
-        Type   => 'move_into',  # ro|move_into|priority|create|rw
+        Type   => 'move_into',  # ro|move_into|create|note|owner|priority|rw
     );
 
     %GroupList = (
@@ -1459,6 +1460,7 @@ add new permissions or update existing one to the given group of a given role
             ro        => 1,
             move_into => 1,
             create    => 1,
+            note      =  1,
             owner     => 1,
             priority  => 0,
             rw        => 0,
@@ -1590,7 +1592,7 @@ returns a list with all roles of a group
 
     my %RoleList = $GroupObject->PermissionGroupRoleGet(
         GroupID => $GroupID,
-        Type    => 'move_into',  # ro|move_into|priority|create|rw
+        Type    => 'move_into',  # ro|move_into|create|note|owner|priority|rw
     );
 
     %RoleList = (
@@ -1671,7 +1673,7 @@ returns a list with all groups of a role
 
     my %GroupList = $GroupObject->PermissionRoleGroupGet(
         RoleID => 12,
-        Type   => 'move_into',  # ro|move_into|priority|create|rw
+        Type   => 'move_into',  # ro|move_into|create|note|owner|priority|rw
     );
 
     %GroupList = (
@@ -2891,10 +2893,10 @@ sub _PermissionTypeList {
 
 =head1 TERMS AND CONDITIONS
 
-This software is part of the OTRS project (L<http://otrs.org/>).
+This software is part of the OTRS project (L<https://otrs.org/>).
 
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
-the enclosed file COPYING for license information (AGPL). If you
-did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
+the enclosed file COPYING for license information (GPL). If you
+did not receive this file, see L<https://www.gnu.org/licenses/gpl-3.0.txt>.
 
 =cut

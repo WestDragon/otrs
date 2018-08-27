@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package Kernel::Modules::CustomerTicketOverview;
@@ -610,56 +610,20 @@ sub ShowTicketStatus {
     my $CommunicationChannelObject = $Kernel::OM->Get('Kernel::System::CommunicationChannel');
     my $TicketID                   = $Param{TicketID} || return;
 
-    # contains last article (non-internal)
-    my %Article;
-    my %LastNonInternalArticle;
-
+    # Get last customer article.
     my @ArticleList = $ArticleObject->ArticleList(
         TicketID             => $Param{TicketID},
         IsVisibleForCustomer => 1,
+        OnlyLast             => 1,
     );
 
-    my $CommunicationChannelPattern = qr{Internal|Chat}xms;
-
-    ARTICLEMETADATA:
-    for my $ArticleMetaData (@ArticleList) {
-
-        next ARTICLEMETADATA if !$ArticleMetaData;
-        next ARTICLEMETADATA if !IsHashRefWithData($ArticleMetaData);
-
-        my %CommunicationChannelData = $CommunicationChannelObject->ChannelGet(
-            ChannelID => $ArticleMetaData->{CommunicationChannelID},
-        );
-
-        # check for non-internal and non-chat article
-        next ARTICLEMETADATA if $CommunicationChannelData{ChannelName} =~ m{$CommunicationChannelPattern}xms;
-
-        my $ArticleBackendObject = $ArticleObject->BackendForArticle( %{$ArticleMetaData} );
-
-        my %CurrentArticle = $ArticleBackendObject->ArticleGet(
+    my %Article;
+    if ( $ArticleList[0] && IsHashRefWithData( $ArticleList[0] ) ) {
+        my $ArticleBackendObject = $ArticleObject->BackendForArticle( %{ $ArticleList[0] } );
+        %Article = $ArticleBackendObject->ArticleGet(
             TicketID  => $Param{TicketID},
-            ArticleID => $ArticleMetaData->{ArticleID},
+            ArticleID => $ArticleList[0]->{ArticleID},
         );
-
-        # check for customer article
-        if ( $ArticleMetaData->{IsVisibleForCustomer} ) {
-            %Article = %CurrentArticle;
-            last ARTICLEMETADATA;
-        }
-
-        # check for last non-internal article (sender type does not matter)
-        if ( !%LastNonInternalArticle ) {
-            %LastNonInternalArticle = %CurrentArticle;
-        }
-    }
-
-    if ( !IsHashRefWithData( \%Article ) && IsHashRefWithData( \%LastNonInternalArticle ) ) {
-        %Article = %LastNonInternalArticle;
-    }
-
-    my $NoArticle;
-    if ( !IsHashRefWithData( \%Article ) ) {
-        $NoArticle = 1;
     }
 
     # get ticket info
@@ -672,13 +636,25 @@ sub ShowTicketStatus {
     my $ConfigObject          = $Kernel::OM->Get('Kernel::Config');
     my $SmallViewColumnHeader = $ConfigObject->Get('Ticket::Frontend::CustomerTicketOverview')->{ColumnHeader};
 
-    # check if last customer subject or ticket title should be shown
+    # Check if the last customer subject or ticket title should be shown.
+    # If ticket title should be shown, check if there are articles, because ticket title
+    # could be related with a subject of an article which does not visible for customer (see bug#13614).
+    # If there is no subject, set to 'Untitled'.
     if ( $SmallViewColumnHeader eq 'LastCustomerSubject' ) {
         $Subject = $Article{Subject} || '';
     }
-    elsif ( $SmallViewColumnHeader eq 'TicketTitle' ) {
+    elsif ( $SmallViewColumnHeader eq 'TicketTitle' && $ArticleList[0] ) {
         $Subject = $Ticket{Title};
     }
+    else {
+        $Subject = Translatable('Untitled!');
+    }
+
+    # Condense down the subject.
+    $Subject = $TicketObject->TicketSubjectClean(
+        TicketNumber => $Ticket{TicketNumber},
+        Subject      => $Subject,
+    );
 
     # Age design.
     $Ticket{CustomerAge} = $LayoutObject->CustomerAge(
@@ -687,7 +663,7 @@ sub ShowTicketStatus {
     ) || 0;
 
     # return ticket information if there is no article
-    if ($NoArticle) {
+    if ( !IsHashRefWithData( \%Article ) ) {
         $Article{State}        = $Ticket{State};
         $Article{TicketNumber} = $Ticket{TicketNumber};
         $Article{Body}         = $LayoutObject->{LanguageObject}->Translate('This item has no articles yet.');
@@ -700,17 +676,6 @@ sub ShowTicketStatus {
         );
         $Param{CustomerName} = '(' . $Param{CustomerName} . ')' if ( $Param{CustomerName} );
     }
-
-    # if there is no subject try with Ticket title or set to Untitled
-    if ( !$Subject ) {
-        $Subject = $Ticket{Title} || Translatable('Untitled!');
-    }
-
-    # condense down the subject
-    $Subject = $TicketObject->TicketSubjectClean(
-        TicketNumber => $Ticket{TicketNumber},
-        Subject      => $Subject,
-    );
 
     # add block
     $LayoutObject->Block(

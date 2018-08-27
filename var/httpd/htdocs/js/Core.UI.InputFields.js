@@ -1,9 +1,9 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
-// the enclosed file COPYING for license information (AGPL). If you
-// did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+// the enclosed file COPYING for license information (GPL). If you
+// did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 // --
 
 "use strict";
@@ -1623,7 +1623,16 @@ Core.UI.InputFields = (function (TargetNS) {
                     .on('focus.jstree', '.jstree-anchor', function () {
                         if (!SkipFocus) {
                             Focused = this;
+
+                            // In modernize field selection disable 'backspace' key functionality.
+                            // See bug#14011 (https://bugs.otrs.org/show_bug.cgi?id=14011).
+                            $('.jstree .jstree-anchor').on('keydown', function (e) {
+                                if (e.which === 8 && !$(e.target).is('input')) {
+                                    return false;
+                                }
+                            });
                         } else {
+
                             SkipFocus = false;
                         }
                     })

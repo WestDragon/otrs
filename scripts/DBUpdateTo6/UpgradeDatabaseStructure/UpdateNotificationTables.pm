@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package scripts::DBUpdateTo6::UpgradeDatabaseStructure::UpdateNotificationTables;    ## no critic
@@ -154,7 +154,7 @@ sub Run {
             '<Insert Table="notification_event_message">
                 <Data Key="id" Type="AutoIncrement">110</Data>
                 <Data Key="notification_id">' . $NotificationID . '</Data>
-                <Data Key="content_type" Type="Quote">text/html</Data>
+                <Data Key="content_type" Type="Quote">text/plain</Data>
                 <Data Key="language" Type="Quote">en</Data>
                 <Data Key="subject" Type="Quote"><![CDATA[Email Delivery Failure]]></Data>
                 <Data Key="text" Type="Quote"><![CDATA[Hi <OTRS_NOTIFICATION_RECIPIENT_UserFirstname>,
@@ -172,7 +172,7 @@ Error Message:
             '<Insert Table="notification_event_message">
                 <Data Key="id" Type="AutoIncrement">111</Data>
                 <Data Key="notification_id">' . $NotificationID . '</Data>
-                <Data Key="content_type" Type="Quote">text/html</Data>
+                <Data Key="content_type" Type="Quote">text/plain</Data>
                 <Data Key="language" Type="Quote">hu</Data>
                 <Data Key="subject" Type="Quote"><![CDATA[E-mail kézbesítési hiba]]></Data>
                 <Data Key="text" Type="Quote"><![CDATA[Kedves <OTRS_NOTIFICATION_RECIPIENT_UserFirstname>!
@@ -200,10 +200,10 @@ Hibaüzenet:
 
 =head1 TERMS AND CONDITIONS
 
-This software is part of the OTRS project (L<http://otrs.org/>).
+This software is part of the OTRS project (L<https://otrs.org/>).
 
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
-the enclosed file COPYING for license information (AGPL). If you
-did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
+the enclosed file COPYING for license information (GPL). If you
+did not receive this file, see L<https://www.gnu.org/licenses/gpl-3.0.txt>.
 
 =cut

@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 use strict;
@@ -300,6 +300,32 @@ Some Content in Body Incident#/' . $ExternalTicketID,
             NumberRegExp         => '\\s*Incident\#\/(\\d.*)\\s*',
             SearchInBody         => '1',
             SearchInSubject      => '1',
+            SenderType           => 'system',
+            IsVisibleForCustomer => 1,
+            TicketStateTypes     => 'new;open',
+        },
+        NewTicket => 2,
+    },
+    {
+        Name =>
+            '#8 - Bug#13961 - Using white space in regex',
+        Email => 'From: Sender <sender@example.com>
+To: Some Name <recipient@example.com>
+Subject: An incident subject
+
+This is an update to incident ' . $ExternalTicketID . ' by mail',
+        Check => {
+            "DynamicField_$FieldName" => $ExternalTicketID,
+        },
+        JobConfig => {
+            DynamicFieldName  => $FieldName,
+            FromAddressRegExp => '\\s*@example.com',
+            Module            => 'Kernel::System::PostMaster::Filter::ExternalTicketNumberRecognition',
+            Name              => 'Some Description',
+
+            NumberRegExp         => 'update to incident (\\d.*) by mail',
+            SearchInBody         => '1',
+            SearchInSubject      => '0',
             SenderType           => 'system',
             IsVisibleForCustomer => 1,
             TicketStateTypes     => 'new;open',

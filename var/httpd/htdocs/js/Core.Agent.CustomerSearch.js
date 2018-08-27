@@ -1,9 +1,9 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
-// the enclosed file COPYING for license information (AGPL). If you
-// did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+// the enclosed file COPYING for license information (GPL). If you
+// did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 // --
 
 "use strict";
@@ -507,10 +507,39 @@ Core.Agent.CustomerSearch = (function (TargetNS) {
                 }
             }, 'CustomerSearch');
 
-            // Remember if autocomplete item was focused (i.e. by keyboard navigation).
+            // Remember if autocomplete item was focused (by keyboard navigation or mouse).
             $Element.on('autocompletefocus', function() {
                 AutocompleteFocus = true;
             });
+
+            // Remember if the autocomplete widget is left by mouse.
+            $($Element.data("ui-autocomplete").menu.element).on('mouseleave', function() {
+                AutocompleteFocus = false;
+            });
+
+            // Remember if the autocomplete widget is left by keyboard navigation.
+            // This is done by override the _move method because there is no opposite event of autocompletefocus.
+            $Element.data("ui-autocomplete")._move = function(direction, event) {
+
+                if (!this.menu.element.is(":visible")) {
+                    this.search(null, event);
+                    return;
+                }
+
+                if (this.menu.isFirstItem() && /^previous/.test(direction) ||
+                    this.menu.isLastItem() && /^next/.test(direction)
+                ) {
+                    this._value(this.term);
+
+                    // Trigger mouseleave for removing selection of autocomplete widget.
+                    $(this.menu.element).trigger('mouseleave');
+
+                    AutocompleteFocus = false;
+                    return;
+                }
+
+                this.menu[ direction ](event);
+            };
 
             // If autocomplete was focused, but then closed by a blur, clear the search field since this value was
             //   never explicitly confirmed. Do this also when user decides to click outside the autocomplete list,
@@ -527,9 +556,10 @@ Core.Agent.CustomerSearch = (function (TargetNS) {
                     )
                     )
                 {
-                    AutocompleteFocus = true;
                     $Element.val('');
                 }
+
+                AutocompleteFocus = false;
             });
 
             if (

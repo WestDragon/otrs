@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 use strict;
@@ -93,6 +93,7 @@ $Selenium->RunTest(
         );
 
         # create test articles for test ticket
+        my $AccountedTime = 123;
         my @ArticleIDs;
         for my $TestArticle (@TestArticles) {
             my $ArticleID = $ArticleBackendObject->ArticleCreate(
@@ -114,6 +115,18 @@ $Selenium->RunTest(
                 "ArticleID $ArticleID - created",
             );
             push @ArticleIDs, $ArticleID;
+
+            # Add accounted time to the ticket.
+            my $Success = $TicketObject->TicketAccountTime(
+                TicketID  => $TicketID,
+                ArticleID => $ArticleID,
+                TimeUnit  => $AccountedTime,
+                UserID    => 1,
+            );
+            $Self->True(
+                $Success,
+                "Accounted Time $AccountedTime added to ticket"
+            );
         }
 
         # create and login test user
@@ -238,6 +251,16 @@ $Selenium->RunTest(
                     "Check Subject field for ArticleID = $ArticleIDs[0] in $Screen split screen",
                 );
 
+                # Check accounted time on creation screen.
+                my $TestAccountedTime = $Selenium->execute_script(
+                    "return \$('#TimeUnits').val();"
+                );
+                $Self->Is(
+                    $TestAccountedTime,
+                    $AccountedTime,
+                    "Check AccountedTime field for ArticleID = $ArticleIDs[0] in $Screen split screen",
+                );
+
                 # Submit form.
                 $Selenium->find_element( '#submitRichText', 'css' )->VerifiedClick();
 
@@ -267,6 +290,9 @@ $Selenium->RunTest(
                     UserID   => 1,
                 );
 
+                $Kernel::OM->Get('Kernel::System::Log')
+                    ->Dumper( 'Debug - ModuleName', 'VariableName', \%SplitTicketData );
+
                 # Check if customer is present.
                 $Self->Is(
                     $SplitTicketData{CustomerID},
@@ -279,6 +305,21 @@ $Selenium->RunTest(
                     $SplitTicketData{CustomerUserID},
                     $CustomerUser,
                     'Check if CustomerUserID is present.'
+                );
+
+                $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketZoom;' )]")->VerifiedClick();
+                $Selenium->WaitFor(
+                    JavaScript => "return \$('.TableLike label:contains(Accounted time:)').next().length;"
+                );
+
+                # Check accounted time on zoom screen.
+                $TestAccountedTime = $Selenium->execute_script(
+                    "return \$('.TableLike label:contains(Accounted time:)').next().text().trim();"
+                );
+                $Self->Is(
+                    $TestAccountedTime,
+                    $AccountedTime,
+                    "Check AccountedTime field for ArticleID = $ArticleIDs[0] in $Screen split screen",
                 );
             }
         }

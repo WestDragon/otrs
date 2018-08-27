@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package Kernel::System::SupportDataCollector::Plugin::OS::DiskSpacePartitions;
@@ -67,7 +67,7 @@ sub Run {
         }
 
         # if line starts with just spaces and have a percent number
-        elsif ( $Line =~ m{\A \s+ (:? \d+ | \s+)+ \d+ % .+? \z}msx ) {
+        elsif ( $Line =~ m{\A \s+ (?: \d+ | \s+)+ \d+ % .+? \z}msx ) {
 
             # concatenate previous line and store it
             push @CleanLines, $PreviousLine . $Line;
@@ -89,7 +89,7 @@ sub Run {
 
         if ( $Line =~ m{\A .+? \s .* \s \d+ % .+? \z}msx ) {
             my ( $Partition, $Size, $UsedPercent, $MountPoint )
-                = $Line =~ m{\A (.+?) \s (\d+[KGMT]) \s .*? \s (\d+)%.+? (/.*) \z}msx;
+                = $Line =~ m{\A (.+?) \s+ ([\d\.KGMT]*) \s+ .*? \s+ (\d+)%.+? (\/.*) \z}msx;
 
             $MountPoint //= '';
 

@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 use strict;
@@ -56,7 +56,7 @@ my @Tests = (
     {
         Name         => 'FilenameCleanUp() - Attachment',
         FilenameOrig => 'me_to/a+la l.xml',
-        FilenameNew  => 'me_to_a+la_l.xml',
+        FilenameNew  => 'me_to_a+la l.xml',
         Type         => 'Attachment',
     },
     {
@@ -82,7 +82,7 @@ my @Tests = (
         FilenameOrig =>
             'me_to/a+lal123456789012345678901234567890Liebe Grüße aus Straubing123456789012345678901234567890123456789012345678901234567890.xml',
         FilenameNew =>
-            'me_to_a+lal123456789012345678901234567890Liebe_Gruesse_aus_Straubing123456789012345678901234567890123456789012345678901234567890.xml',
+            'me_to_a+lal123456789012345678901234567890Liebe Gruesse aus Straubing123456789012345678901234567890123456789012345678901234567890.xml',
         Type => 'Attachment',
     },
     {

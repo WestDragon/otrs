@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package scripts::DBUpdateTo6::PostArticleTableStructureChanges;    ## no critic
@@ -222,14 +222,29 @@ Returns 1 on success
 sub _UpdateArticleDataMimeTable {
     my ( $Self, %Param ) = @_;
 
-    # copy values from id column to article_id column
-    # so they are the same as the id in article table.
-    return if !$Kernel::OM->Get('Kernel::System::DB')->Do(
-        SQL => '
-            UPDATE article_data_mime
-            SET article_id = id
-            WHERE id IS NOT NULL',
-    );
+    # Copy values from id column to article_id column
+    #   so they are the same as the id in article table.
+    my $SQL = 'UPDATE article_data_mime
+                SET article_id = id
+                WHERE id IS NOT NULL
+                AND article_id = 0
+                OR article_id IS NULL';
+
+    # For mysql type DB, set limit on update, see bug#13971.
+    my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+    if ( $DBObject->GetDatabaseFunction('Type') eq 'mysql' ) {
+        $SQL .= " LIMIT 250000";
+        while ( $Self->_CountRows() > 0 ) {
+            return if !$DBObject->Do(
+                SQL => $SQL,
+            );
+        }
+    }
+    else {
+        return if !$DBObject->Do(
+            SQL => $SQL,
+        );
+    }
 
     # recreate indexes and foreign keys, and drop no longer used columns
     # split each unique drop / column drop into separate statements
@@ -422,14 +437,36 @@ sub _DropArticleTypeTable {
     return 1;
 }
 
+sub _CountRows {
+    my ( $Self, %Param ) = @_;
+
+    my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+
+    $DBObject->Prepare(
+        SQL => '
+            SELECT count(*) FROM article_data_mime
+            WHERE id IS NOT NULL
+            AND article_id = 0
+            OR article_id IS NULL',
+        Limit => 1,
+    );
+
+    my $CountRow;
+    while ( my @Row = $DBObject->FetchrowArray() ) {
+        $CountRow = $Row[0];
+    }
+
+    return $CountRow;
+}
+
 1;
 
 =head1 TERMS AND CONDITIONS
 
-This software is part of the OTRS project (L<http://otrs.org/>).
+This software is part of the OTRS project (L<https://otrs.org/>).
 
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
-the enclosed file COPYING for license information (AGPL). If you
-did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
+the enclosed file COPYING for license information (GPL). If you
+did not receive this file, see L<https://www.gnu.org/licenses/gpl-3.0.txt>.
 
 =cut

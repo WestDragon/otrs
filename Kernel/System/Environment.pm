@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 package Kernel::System::Environment;
@@ -83,6 +83,13 @@ sub OSInfoGet {
     # get main object
     my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
 
+    my %OSMap = (
+        linux   => 'Linux',
+        freebsd => 'FreeBSD',
+        openbsd => 'OpenBSD',
+        darwin  => 'MacOSX',
+    );
+
     # If used OS is a linux system
     my $OSName;
     my $Distribution;
@@ -126,18 +133,15 @@ sub OSInfoGet {
         $OSName = 'MacOSX ' . $MacVersion;
     }
     elsif ( $^O eq 'freebsd' || $^O eq 'openbsd' ) {
-        $OSName = `uname -r`;
+
+        my $BSDVersion = `uname -r` || '';
+        chomp $BSDVersion;
+
+        $OSName = "$OSMap{$^O} $BSDVersion";
     }
     else {
         $OSName = "Unknown";
     }
-
-    my %OSMap = (
-        linux   => 'Linux',
-        freebsd => 'FreeBSD',
-        openbsd => 'OpenBSD',
-        darwin  => 'MacOSX',
-    );
 
     # collect OS data
     my %EnvOS = (
@@ -368,10 +372,10 @@ sub OTRSInfoGet {
 
 =head1 TERMS AND CONDITIONS
 
-This software is part of the OTRS project (L<http://otrs.org/>).
+This software is part of the OTRS project (L<https://otrs.org/>).
 
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
-the enclosed file COPYING for license information (AGPL). If you
-did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
+the enclosed file COPYING for license information (GPL). If you
+did not receive this file, see L<https://www.gnu.org/licenses/gpl-3.0.txt>.
 
 =cut

@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 use strict;
@@ -13,9 +13,6 @@ use utf8;
 use vars (qw($Self));
 
 use Kernel::System::VariableCheck qw(:all);
-
-# get needed objects
-my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
 # standard variables
 my $ExpectedTestResults = {};
@@ -58,7 +55,7 @@ my @CommonVariables = (
     ArrayRefEmpty => [],
     HashRef       => { 0 => 0 },
     HashRefEmpty  => {},
-    ObjectRef     => $ConfigObject,
+    ObjectRef     => $Kernel::OM->Get('Kernel::Config'),
     RefRef        => \\0,
     ScalarRef     => \0,
     String        => 0,
@@ -954,6 +951,93 @@ for my $Value1 ( \%Hash1, \%Hash2, \@List1, \@List2, \$Scalar1, \$Scalar2 ) {
             'DataIsDifferent() - Test ' . $Count . ':' . $Count2,
         );
     }
+}
+
+# Test DataIsDifferent() when parameters are undef (see bug#14008).
+my @Tests = (
+    {
+        Description => 'DataIsDifferent() - Data1 is undef, Data2 is scalar',
+        Data1       => undef,
+        Data2       => $Scalar1,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is scalar, Data2 is undef',
+        Data1       => $Scalar1,
+        Data2       => undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - both Data1 and Data2 are undef',
+        Data1       => undef,
+        Data2       => undef,
+        Result      => undef,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef ref, Data2 is scalar ref',
+        Data1       => \undef,
+        Data2       => \$Scalar1,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is scalar ref, Data2 is undef ref',
+        Data1       => \$Scalar1,
+        Data2       => \undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - both Data1 and Data2 are undef refs',
+        Data1       => \undef,
+        Data2       => \undef,
+        Result      => undef,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef ref, Data2 is scalar',
+        Data1       => \undef,
+        Data2       => $Scalar1,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is scalar, Data2 is undef ref',
+        Data1       => $Scalar1,
+        Data2       => \undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef and Data2 is undef ref',
+        Data1       => undef,
+        Data2       => \undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef ref and Data2 is undef',
+        Data1       => \undef,
+        Data2       => undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef ref ref and Data2 is undef',
+        Data1       => \\undef,
+        Data2       => \undef,
+        Result      => 1,
+    },
+    {
+        Description => 'DataIsDifferent() - Data1 is undef ref ref and Data2 is undef ref ref',
+        Data1       => \\undef,
+        Data2       => \\undef,
+        Result      => undef,
+    },
+);
+
+for my $Test (@Tests) {
+    $Self->Is(
+        scalar DataIsDifferent(
+            Data1 => $Test->{Data1},
+            Data2 => $Test->{Data2},
+        ),
+        scalar $Test->{Result},
+        $Test->{Description},
+    );
 }
 
 1;

@@ -1,9 +1,9 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
-# the enclosed file COPYING for license information (AGPL). If you
-# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 # --
 
 =cut
@@ -157,6 +157,24 @@ for my $BaseURL ( sort keys %Frontends ) {
                 scalar $Response->content() =~ m{<body|<div|<script}xms,
                 "Module $Frontend returned HTML ($URL)",
             );
+
+            # Inspect all full HTML responses for robots information.
+            if ( $Response->content() =~ m{<head>} ) {
+
+                # Check robots information.
+                if ( $BaseURL !~ m{public\.pl} ) {
+                    $Self->True(
+                        index( $Response->content(), '<meta name="robots" content="noindex,nofollow" />' ) > 0,
+                        "Module $Frontend sends 'noindex' robots information.",
+                    );
+                }
+                else {
+                    $Self->True(
+                        index( $Response->content(), '<meta name="robots" content="index,follow" />' ) > 0,
+                        "Module $Frontend sends 'index' robots information.",
+                    );
+                }
+            }
         }
         elsif ( $Response->header('Content-type') =~ 'json' ) {
 
