@@ -39,6 +39,7 @@ my $Home = $ConfigObject->Get('Home');
     );
 
     $ExpectedCSS = ${$ExpectedCSS};
+    chomp $ExpectedCSS;
 
     my $MinifiedCSS = $LoaderObject->MinifyCSS( Code => $CSS );
 
@@ -93,6 +94,8 @@ my $Home = $ConfigObject->Get('Home');
     $ExpectedJS = ${$ExpectedJS};
     $ExpectedJS =~ s{\r\n}{\n}xmsg;
 
+    #chomp $ExpectedJS;
+
     $Self->Is(
         $MinifiedJS || '',
         $ExpectedJS,
@@ -140,6 +143,7 @@ my $Home = $ConfigObject->Get('Home');
     );
     $MinifiedJS = ${$MinifiedJS};
     $MinifiedJS =~ s{\r\n}{\n}xmsg;
+    chomp $MinifiedJS;
 
     my $Expected = $MainObject->FileRead(
         Location => $Home . '/scripts/test/sample/Loader/CombinedJavaScript.min.js',

@@ -8,7 +8,7 @@
 
 package Kernel::Output::Template::Provider;
 ## no critic(Perl::Critic::Policy::OTRS::RequireCamelCase)
-## nofilter(TidyAll::Plugin::OTRS::Perl::SyntaxCheck) # bails on TT Constants
+## nofilter(TidyAll::Plugin::OTRS::Perl::SyntaxCheck)
 
 use strict;
 use warnings;
@@ -345,7 +345,7 @@ sub _PreProcessTemplateContent {
     #
     # Remove DTL-style comments (lines starting with #)
     #
-    $Content =~ s/^#.*\n//gm;
+    $Content =~ s/^#.*\n//gm if !$ENV{TEMPLATE_KEEP_COMMENTS};
 
     #
     # Insert a BLOCK call into the template.

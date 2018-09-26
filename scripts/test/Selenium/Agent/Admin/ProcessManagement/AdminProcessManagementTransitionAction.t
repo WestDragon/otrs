@@ -53,8 +53,8 @@ $Selenium->RunTest(
         $Selenium->find_element( "#Submit",      'css' )->VerifiedClick();
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#Canvas").length' );
 
-        # Click on Transition Actions dropdown.
-        $Selenium->find_element( "Transition Actions", 'link_text' )->click();
+        # Click on Transition Actions accordion element.
+        $Selenium->execute_script('$("#ProcessElements .AccordionElement:eq(3) a.AsBlock").click();');
         $Selenium->WaitFor(
             JavaScript =>
                 'return typeof($) === "function" && $("a[href*=\'Subaction=TransitionActionNew\']:visible").length'
@@ -105,7 +105,9 @@ $Selenium->RunTest(
             JavaScript =>
                 "return typeof(\$) === 'function' && \$('ul#TransitionActions li:contains($TransitionActionRandom)').length"
         );
-        $Selenium->find_element( "Transition Actions", 'link_text' )->click();
+
+        # Click on Transition Actions accordion element.
+        $Selenium->execute_script('$("#ProcessElements .AccordionElement:eq(3) a.AsBlock").click();');
         $Selenium->WaitFor(
             JavaScript => 'return typeof($) === "function" && $("#TransitionActionFilter:visible").length'
         );
@@ -191,14 +193,14 @@ $Selenium->RunTest(
             "New Config value field is added - JS is success"
         );
 
-        $Selenium->execute_script("\$('.RemoveButton:eq(1)').click()");
+        $Selenium->execute_script("\$('.RemoveButton:eq(1)').click();");
         $Selenium->WaitFor(
             JavaScript => "return typeof(\$) === 'function' && \$('.RemoveButton:visible').length === 1"
         );
 
         # Verify new Config key and value fields is removed.
         $Self->True(
-            $Selenium->execute_script('return $(".RemoveButton:visible").length === 1'),
+            $Selenium->execute_script('return $(".RemoveButton:visible").length === 1;'),
             "New Config key and value fields are removed - JS is success"
         );
 
@@ -218,23 +220,31 @@ $Selenium->RunTest(
 
         $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#TransitionActionFilter').length" );
 
-        # Check for edited test TransitionAction using filter on AdminProcessManagement screen
-        my $TransitionActionRandomEdit = $TransitionActionRandom . "edit";
-        $Selenium->find_element( "Transition Actions", 'link_text' )->click();
+        # Click on Transition Actions accordion element.
+        $Selenium->execute_script('$("#ProcessElements .AccordionElement:eq(3) a.AsBlock").click();');
         $Selenium->WaitFor(
             JavaScript => 'return typeof($) === "function" && $("#TransitionActionFilter:visible").length'
         );
+        sleep 1;
+
+        # Check for edited test TransitionAction using filter on AdminProcessManagement screen
+        my $TransitionActionRandomEdit = $TransitionActionRandom . "edit";
         $Selenium->find_element( "#TransitionActionFilter", 'css' )->clear();
         $Selenium->find_element( "#TransitionActionFilter", 'css' )->send_keys($TransitionActionRandomEdit);
 
         # Wait for filter to kick in.
         $Selenium->WaitFor(
             JavaScript =>
-                'return typeof($) === "function" && $(".OneRow[data-entity*=\'TransitionAction\']:visible").length === 1 && $.active == 0'
+                'return typeof($) === "function" && $(".OneRow[data-entity*=\'TransitionAction\']:visible").length === 1 && $.active == 0;',
+        );
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return  \$('#TransitionActions li:visible div').length === 1;",
         );
 
-        $Self->True(
-            $Selenium->find_element("//*[text()=\"$TransitionActionRandomEdit\"]")->is_displayed(),
+        $Self->Is(
+            $Selenium->execute_script("return  \$('#TransitionActions li:visible div').text();"),
+            $TransitionActionRandomEdit,
             "Edited $TransitionActionRandomEdit transition action dialog found on page",
         );
 

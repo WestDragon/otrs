@@ -63,6 +63,13 @@ $Selenium->RunTest(
             },
         );
 
+        # Enable ticket type feature.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Type',
+            Value => 1,
+        );
+
         my $RandomNumber = $Helper->GetRandomNumber();
         my $Success;
 
@@ -87,9 +94,13 @@ $Selenium->RunTest(
             push @GroupNames, $GroupName;
         }
 
-        # Create test user for login.
+        # Defined user language for testing if message is being translated correctly.
+        my $Language = "de";
+
+        # create test user and login
         my $TestUserLogin = $Helper->TestUserCreate(
-            Groups => [ 'admin', 'users', @GroupNames ],
+            Groups   => [ 'admin', 'users', @GroupNames ],
+            Language => $Language,
         ) || die "Did not get test user";
 
         # Get test user ID.
@@ -301,7 +312,7 @@ $Selenium->RunTest(
         $Selenium->find_element("//input[\@value='$Tickets[0]->{TicketID}']")->click();
         $Selenium->find_element("//input[\@value='$Tickets[1]->{TicketID}']")->click();
         $Selenium->find_element("//input[\@value='$Tickets[2]->{TicketID}']")->click();
-        $Selenium->find_element( "Bulk", 'link_text' )->click();
+        $Selenium->find_element( "#BulkAction", 'css' )->click();
 
         # Switch to bulk window.
         $Selenium->WaitFor( WindowCount => 2 );
@@ -321,6 +332,23 @@ $Selenium->RunTest(
             $Element->is_enabled();
             $Element->is_displayed();
         }
+
+        # Check if ticket type is not translated.
+        # For more information see bug #14030.
+        $Self->Is(
+            $Selenium->execute_script("return \$('#TypeID option[value=1]').text();"),
+            "Unclassified",
+            "On load - Ticket type is not translated",
+        );
+
+        $Selenium->execute_script("\$('#PriorityID').val('4').trigger('redraw.InputField').trigger('change');");
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length;' );
+
+        $Self->Is(
+            $Selenium->execute_script("return \$('#TypeID option[value=1]').text();"),
+            "Unclassified",
+            "After change - Ticket type is not translated",
+        );
 
         # Click on 'Undo & close' link.
         $Selenium->find_element( ".UndoClosePopup", 'css' )->click();
@@ -342,6 +370,7 @@ $Selenium->RunTest(
             1,
             "Ticket remind locked after undo in bulk feature - $Tickets[0]->{TicketNumber}"
         );
+        $Selenium->VerifiedRefresh();
 
         # Select test tickets and click on "bulk".
         $Selenium->find_element("//input[\@value='$Tickets[0]->{TicketID}']")->click();
@@ -349,7 +378,7 @@ $Selenium->RunTest(
         $Selenium->find_element("//input[\@value='$Tickets[2]->{TicketID}']")->click();
         $Selenium->find_element("//input[\@value='$Tickets[6]->{TicketID}']")->click();
 
-        $Selenium->find_element( "Bulk", 'link_text' )->click();
+        $Selenium->find_element( "#BulkAction", 'css' )->click();
 
         # Switch to bulk window.
         $Selenium->WaitFor( WindowCount => 2 );
@@ -359,15 +388,25 @@ $Selenium->RunTest(
         # Wait until page has loaded, if necessary.
         $Selenium->WaitFor(
             JavaScript =>
-                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete;'
+        );
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return $(".MessageBox p").length == 2;'
+        );
+
+        my $LanguageObject = Kernel::Language->new(
+            UserLanguage => $Language,
         );
 
         # Check data.
         my @ExpectedMessages = (
-            "The following tickets were ignored because they are locked by another agent or you don't have write access to these tickets: "
-                . $Tickets[2]->{TicketNumber} . ", "
-                . $Tickets[6]->{TicketNumber} . ".",
-            "The following tickets were locked: " . $Tickets[1]->{TicketNumber} . ".",
+            $LanguageObject->Translate(
+                "The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.",
+                $Tickets[2]->{TicketNumber} . ", "
+                    . $Tickets[6]->{TicketNumber}
+            ),
+            $LanguageObject->Translate( "The following tickets were locked: %s.", $Tickets[1]->{TicketNumber} ),
         );
         for my $ExpectedMessage (@ExpectedMessages) {
             $Self->True(
@@ -392,10 +431,11 @@ $Selenium->RunTest(
 
         # Change state and priority in bulk action for test tickets.
         $Selenium->execute_script("\$('#PriorityID').val('4').trigger('redraw.InputField').trigger('change');");
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length;' );
         $Selenium->execute_script("\$('#StateID').val('2').trigger('redraw.InputField').trigger('change');");
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
-        $Selenium->find_element( '#submitRichText', 'css' )->click();
+
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length;' );
+        $Selenium->find_element( "#submitRichText", 'css' )->click();
 
         # Return to status view.
         $Selenium->WaitFor( WindowCount => 1 );
@@ -406,20 +446,23 @@ $Selenium->RunTest(
 
         # Select closed view to verify ticket bulk functionality.
         $Selenium->find_element("//a[contains(\@href, \'Filter=Closed' )]")->VerifiedClick();
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && $(".ControlRow li:eq(1).Active").length;'
+        );
 
         # Verify which tickets are shown in ticket closed view.
         for my $Ticket (@Tickets) {
             if ( $Ticket->{OwnerID} != 1 && $Ticket->{Title} !~ m/-Four|-Five|-Six$/ ) {
                 $Self->True(
-                    $Selenium->execute_script("return \$('#TicketID_$Ticket->{TicketID}').length"),
-                    "Closed ticket $Ticket->{TicketNumber} is found on page",
+                    $Selenium->execute_script("return \$('#TicketID_$Ticket->{TicketID}').length;"),
+                    "Closed ticket $Ticket->{TicketNumber} is found on page -- $Ticket->{Title}, $Ticket->{TicketID}",
                 ) || die;
             }
             else {
 
                 # Ticket is locked by another agent and it was ignored in bulk feature.
                 $Self->True(
-                    $Selenium->execute_script("return !\$('#TicketID_$Ticket->{TicketID}').length"),
+                    $Selenium->execute_script("return !\$('#TicketID_$Ticket->{TicketID}').length;"),
                     "Closed ticket $Ticket->{TicketNumber} is not found on page",
                 ) || die;
             }
@@ -433,7 +476,7 @@ $Selenium->RunTest(
         $Selenium->find_element("//input[\@value='$Tickets[3]->{TicketID}']")->click();
         $Selenium->find_element("//input[\@value='$Tickets[4]->{TicketID}']")->click();
         $Selenium->find_element("//input[\@value='$Tickets[5]->{TicketID}']")->click();
-        $Selenium->find_element( "Bulk", 'link_text' )->click();
+        $Selenium->find_element( "#BulkAction", 'css' )->click();
 
         # Switch to bulk window.
         $Selenium->WaitFor( WindowCount => 2 );
@@ -441,7 +484,7 @@ $Selenium->RunTest(
         $Selenium->switch_to_window( $Handles->[1] );
 
         # Wait until page has loaded, if necessary.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#QueueID").length' );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#QueueID").length;' );
 
         @Tests = (
             {
@@ -471,6 +514,8 @@ $Selenium->RunTest(
                 Value => $ConfigValue,
             );
 
+            sleep 2;
+
             for my $Test (@Tests) {
 
                 # Select queue.
@@ -480,7 +525,7 @@ $Selenium->RunTest(
 
                 # Wait for AJAX finish.
                 $Selenium->WaitFor(
-                    JavaScript => 'return typeof($) === "function" && !$("#AJAXLoaderOwnerID:visible").length'
+                    JavaScript => 'return typeof($) === "function" && !$("#AJAXLoaderOwnerID:visible").length;'
                 );
 
                 # Check for existence.
