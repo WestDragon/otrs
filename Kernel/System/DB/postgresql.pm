@@ -82,6 +82,9 @@ EOF
 
     # init sql setting on db connect
     $Self->{'DB::Connect'} = "SET standard_conforming_strings TO ON;\n SET datestyle TO 'iso';\n SET NAMES 'utf8';";
+    if($Kernel::OM->Get('Kernel::Config')->Get('DB::PG::Schema')){
+        $Self->{'DB::Connect'} .= "\n SET search_path TO " . $Kernel::OM->Get('Kernel::Config')->Get('DB::PG::Schema') . ";";
+    }
     return 1;
 }
 

@@ -106,27 +106,27 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Type" Required="1" Valid="1">
-        <Description Translatable="1">Enables ticket type feature.</Description>
-        <Navigation>Core::Ticket</Navigation>
-        <Value>
-            <Item ValueType="Checkbox">0</Item>
-        </Value>
-    </Setting>
-    <Setting Name="Ticket::Type::Default" Required="1" Valid="1">
-        <Description Translatable="1">Defines the default ticket type.</Description>
-        <Navigation>Core::Ticket</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Type" Translatable="1">Unclassified</Item>
-        </Value>
-    </Setting>
-    <Setting Name="Ticket::Service" Required="1" Valid="1">
-        <Description Translatable="1">Allows defining services and SLAs for tickets (e. g. email, desktop, network, ...), and escalation attributes for SLAs (if ticket service/SLA feature is enabled).</Description>
-        <Navigation>Core::Ticket</Navigation>
-        <Value>
-            <Item ValueType="Checkbox">0</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Type" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Enables ticket type feature.</Description>-->
+        <!--<Navigation>Core::Ticket</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Checkbox">0</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
+    <!--<Setting Name="Ticket::Type::Default" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Defines the default ticket type.</Description>-->
+        <!--<Navigation>Core::Ticket</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Type" Translatable="1">Unclassified</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
+    <!--<Setting Name="Ticket::Service" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Allows defining services and SLAs for tickets (e. g. email, desktop, network, ...), and escalation attributes for SLAs (if ticket service/SLA feature is enabled).</Description>-->
+        <!--<Navigation>Core::Ticket</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Checkbox">0</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Service::KeepChildren" Required="1" Valid="1">
         <Description Translatable="1">Retains all services in listings even if they are children of invalid elements.</Description>
         <Navigation>Core::Ticket</Navigation>
@@ -2852,13 +2852,13 @@
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::AgentTicketPhone###Priority" Required="1" Valid="1">
-        <Description Translatable="1">Sets the default priority for new phone tickets in the agent interface.</Description>
-        <Navigation>Frontend::Agent::View::TicketPhoneNew</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Frontend::AgentTicketPhone###Priority" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Sets the default priority for new phone tickets in the agent interface.</Description>-->
+        <!--<Navigation>Frontend::Agent::View::TicketPhoneNew</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::AgentTicketPhone###SenderType" Required="1" Valid="1">
         <Description Translatable="1">Sets the default sender type for new phone ticket in the agent interface.</Description>
         <Navigation>Frontend::Agent::View::TicketPhoneNew</Navigation>
@@ -2958,13 +2958,13 @@
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::AgentTicketEmail###Priority" UserPreferencesGroup="Advanced" UserModificationPossible="1" Required="1" Valid="1">
-        <Description Translatable="1">Sets the default priority for new email tickets in the agent interface.</Description>
-        <Navigation>Frontend::Agent::View::TicketEmailNew</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Frontend::AgentTicketEmail###Priority" UserPreferencesGroup="Advanced" UserModificationPossible="1" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Sets the default priority for new email tickets in the agent interface.</Description>-->
+        <!--<Navigation>Frontend::Agent::View::TicketEmailNew</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::AgentTicketEmail###IsVisibleForCustomer" Required="1" Valid="1">
         <Description Translatable="1">Sets the default article customer visibility for new email tickets in the agent interface.</Description>
         <Navigation>Frontend::Agent::View::TicketEmailNew</Navigation>
@@ -5309,7 +5309,7 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::MenuModule###999-TeaserAttachmentView" Required="0" Valid="1">
+    <Setting Name="Ticket::Frontend::MenuModule###999-TeaserAttachmentView" Required="0" Valid="0">
         <Description Translatable="1">Shows a teaser link in the menu for the ticket attachment view of OTRS Business Solution™.</Description>
         <Navigation>Frontend::Agent::View::TicketZoom::MenuModule</Navigation>
         <Value>
@@ -6834,33 +6834,33 @@
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="PreferencesGroups###TicketOverviewSmallPageShown" Required="0" Valid="1">
-        <Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
-        <Navigation>Frontend::Agent::View::Preferences</Navigation>
-        <Value>
-            <Hash>
-                <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
-                <Item Key="PreferenceGroup">Miscellaneous</Item>
-                <Item Key="Label" Translatable="1">Ticket Overview "Small" Limit</Item>
-                <Item Key="Desc" Translatable="1">Ticket limit per page for Ticket Overview "Small".</Item>
-                <Item Key="Key" Translatable="1"></Item>
-                <Item Key="Data">
-                    <Hash>
-                        <Item Key="10">10</Item>
-                        <Item Key="15">15</Item>
-                        <Item Key="20">20</Item>
-                        <Item Key="25">25</Item>
-                        <Item Key="30">30</Item>
-                        <Item Key="35">35</Item>
-                    </Hash>
-                </Item>
-                <Item Key="DataSelected">25</Item>
-                <Item Key="PrefKey">UserTicketOverviewSmallPageShown</Item>
-                <Item Key="Prio">8000</Item>
-                <Item Key="Active">0</Item>
-            </Hash>
-        </Value>
-    </Setting>
+    <!--<Setting Name="PreferencesGroups###TicketOverviewSmallPageShown" Required="0" Valid="1">-->
+        <!--<Description Translatable="1">Parameters for the pages (in which the tickets are shown) of the small ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>-->
+        <!--<Navigation>Frontend::Agent::View::Preferences</Navigation>-->
+        <!--<Value>-->
+            <!--<Hash>-->
+                <!--<Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>-->
+                <!--<Item Key="PreferenceGroup">Miscellaneous</Item>-->
+                <!--<Item Key="Label" Translatable="1">Ticket Overview "Small" Limit</Item>-->
+                <!--<Item Key="Desc" Translatable="1">Ticket limit per page for Ticket Overview "Small".</Item>-->
+                <!--<Item Key="Key" Translatable="1"></Item>-->
+                <!--<Item Key="Data">-->
+                    <!--<Hash>-->
+                        <!--<Item Key="10">10</Item>-->
+                        <!--<Item Key="15">15</Item>-->
+                        <!--<Item Key="20">20</Item>-->
+                        <!--<Item Key="25">25</Item>-->
+                        <!--<Item Key="30">30</Item>-->
+                        <!--<Item Key="35">35</Item>-->
+                    <!--</Hash>-->
+                <!--</Item>-->
+                <!--<Item Key="DataSelected">25</Item>-->
+                <!--<Item Key="PrefKey">UserTicketOverviewSmallPageShown</Item>-->
+                <!--<Item Key="Prio">8000</Item>-->
+                <!--<Item Key="Active">0</Item>-->
+            <!--</Hash>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="PreferencesGroups###TicketOverviewFilterSettings" Required="0" Valid="1">
         <Description Translatable="1">Parameters for the column filters of the small ticket overview. Please note: setting 'Active' to 0 will only prevent agents from editing settings of this group in their personal preferences, but will still allow administrators to edit the settings of another user's behalf. Use 'PreferenceGroup' to control in which area these settings should be shown in the user interface.</Description>
         <Navigation>Frontend::Agent::View::Preferences</Navigation>
@@ -6895,6 +6895,9 @@
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">20</Item>
@@ -6922,6 +6925,9 @@
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">15</Item>
@@ -7030,13 +7036,13 @@
             <Item ValueType="Checkbox">1</Item>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::CustomerTicketMessage###PriorityDefault" Required="1" Valid="1">
-        <Description Translatable="1">Defines the default priority of new customer tickets in the customer interface.</Description>
-        <Navigation>Frontend::Customer::View::TicketMessage</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Frontend::CustomerTicketMessage###PriorityDefault" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Defines the default priority of new customer tickets in the customer interface.</Description>-->
+        <!--<Navigation>Frontend::Customer::View::TicketMessage</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::CustomerTicketMessage###Queue" Required="1" Valid="1">
         <Description Translatable="1">Allows customers to set the ticket queue in the customer interface. If this is not enabled, QueueDefault should be configured.</Description>
         <Navigation>Frontend::Customer::View::TicketMessage</Navigation>
@@ -7062,7 +7068,7 @@
         <Description Translatable="1">Defines the default ticket type for new customer tickets in the customer interface.</Description>
         <Navigation>Frontend::Customer::View::TicketMessage</Navigation>
         <Value>
-            <Item ValueType="Entity" ValueEntityType="Type">Unclassified</Item>
+            <Item ValueType="Entity" ValueEntityType="Type">Не классифицировано</Item>
         </Value>
     </Setting>
     <Setting Name="Ticket::Frontend::CustomerTicketMessage###Service" Required="1" Valid="1">
@@ -7193,13 +7199,13 @@
             <Item ValueType="Checkbox">1</Item>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::CustomerTicketZoom###PriorityDefault" Required="1" Valid="1">
-        <Description Translatable="1">Defines the default priority of follow-up customer tickets in the ticket zoom screen in the customer interface.</Description>
-        <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Frontend::CustomerTicketZoom###PriorityDefault" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Defines the default priority of follow-up customer tickets in the ticket zoom screen in the customer interface.</Description>-->
+        <!--<Navigation>Frontend::Customer::View::TicketZoom</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::CustomerTicketZoom###State" Required="1" Valid="1">
         <Description Translatable="1">Allows choosing the next compose state for customer tickets in the customer interface.</Description>
         <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
@@ -11176,20 +11182,20 @@
             <Item ValueType="String" ValueRegex="^[0-9]{1,3}$">1</Item>
         </Value>
     </Setting>
-    <Setting Name="PostmasterDefaultQueue" Required="1" Valid="1">
-        <Description Translatable="1">Defines the postmaster default queue.</Description>
-        <Navigation>Core::Email::PostMaster</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Queue" ValueRegex="">Raw</Item>
-        </Value>
-    </Setting>
-    <Setting Name="PostmasterDefaultPriority" Required="1" Valid="1">
-        <Description Translatable="1">Defines the default priority of new tickets.</Description>
-        <Navigation>Core::Email::PostMaster</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="PostmasterDefaultQueue" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Defines the postmaster default queue.</Description>-->
+        <!--<Navigation>Core::Email::PostMaster</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Queue" ValueRegex="">Raw</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
+    <!--<Setting Name="PostmasterDefaultPriority" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Defines the default priority of new tickets.</Description>-->
+        <!--<Navigation>Core::Email::PostMaster</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="PostmasterDefaultState" Required="1" Valid="1">
         <Description Translatable="1">Defines the default state of new tickets.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
@@ -11638,13 +11644,13 @@ Thanks for your help!
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="PostMaster::NewTicket::AutoAssignCustomerIDForUnknownCustomers" Required="1" Valid="1">
-        <Description Translatable="1">Controls if CustomerID is automatically copied from the sender address for unknown customers.</Description>
-        <Navigation>Core::Email::PostMaster</Navigation>
-        <Value>
-            <Item ValueType="Checkbox">1</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="PostMaster::NewTicket::AutoAssignCustomerIDForUnknownCustomers" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">Controls if CustomerID is automatically copied from the sender address for unknown customers.</Description>-->
+        <!--<Navigation>Core::Email::PostMaster</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Checkbox">1</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="SendNoAutoResponseRegExp" Required="1" Valid="1">
         <Description Translatable="1">If this regex matches, no message will be send by the autoresponder.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
@@ -11868,6 +11874,9 @@ Thanks for your help!
                         <Item Key="25">25</Item>
                         <Item Key="30">30</Item>
                         <Item Key="35">35</Item>
+                        <Item Key="50">50</Item>
+                        <Item Key="100">100</Item>
+                        <Item Key="200">200</Item>
                     </Hash>
                 </Item>
                 <Item Key="DataSelected">25</Item>
@@ -12216,19 +12225,19 @@ Thanks for your help!
             </Hash>
         </Value>
     </Setting>
-    <Setting Name="Ticket::Frontend::AgentTicketFreeText###DynamicField" Required="0" Valid="1">
-        <Description Translatable="1">Dynamic fields shown in the ticket free text screen of the agent interface.</Description>
-        <Navigation>Frontend::Agent::View::TicketFreeText</Navigation>
-        <Value>
-            <Hash>
-                <DefaultItem ValueType="Select">
-                    <Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>
-                    <Item ValueType="Option" Value="1" Translatable="1">1 - Enabled</Item>
-                    <Item ValueType="Option" Value="2" Translatable="1">2 - Enabled and required</Item>
-                </DefaultItem>
-            </Hash>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Ticket::Frontend::AgentTicketFreeText###DynamicField" Required="0" Valid="1">-->
+        <!--<Description Translatable="1">Dynamic fields shown in the ticket free text screen of the agent interface.</Description>-->
+        <!--<Navigation>Frontend::Agent::View::TicketFreeText</Navigation>-->
+        <!--<Value>-->
+            <!--<Hash>-->
+                <!--<DefaultItem ValueType="Select">-->
+                    <!--<Item ValueType="Option" Value="0" Translatable="1">0 - Disabled</Item>-->
+                    <!--<Item ValueType="Option" Value="1" Translatable="1">1 - Enabled</Item>-->
+                    <!--<Item ValueType="Option" Value="2" Translatable="1">2 - Enabled and required</Item>-->
+                <!--</DefaultItem>-->
+            <!--</Hash>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::AgentTicketForward###DynamicField" Required="0" Valid="1">
         <Description Translatable="1">Dynamic fields shown in the ticket forward screen of the agent interface.</Description>
         <Navigation>Frontend::Agent::View::TicketForward</Navigation>

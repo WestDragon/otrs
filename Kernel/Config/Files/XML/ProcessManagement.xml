@@ -398,13 +398,13 @@
             <Item ValueType="String" ValueRegex="">ProcessManagementActivityID</Item>
         </Value>
     </Setting>
-    <Setting Name="Process::DefaultQueue" Required="1" Valid="1">
-        <Description Translatable="1">This option defines the process tickets default queue.</Description>
-        <Navigation>Core::ProcessManagement</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Queue" ValueRegex="">Raw</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Process::DefaultQueue" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">This option defines the process tickets default queue.</Description>-->
+        <!--<Navigation>Core::ProcessManagement</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Queue" ValueRegex="">Raw</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Process::DefaultState" Required="1" Valid="1">
         <Description Translatable="1">This option defines the process tickets default state.</Description>
         <Navigation>Core::ProcessManagement</Navigation>
@@ -419,13 +419,13 @@
             <Item ValueType="String" ValueRegex="">unlock</Item>
         </Value>
     </Setting>
-    <Setting Name="Process::DefaultPriority" Required="1" Valid="1">
-        <Description Translatable="1">This option defines the process tickets default priority.</Description>
-        <Navigation>Core::ProcessManagement</Navigation>
-        <Value>
-            <Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>
-        </Value>
-    </Setting>
+    <!--<Setting Name="Process::DefaultPriority" Required="1" Valid="1">-->
+        <!--<Description Translatable="1">This option defines the process tickets default priority.</Description>-->
+        <!--<Navigation>Core::ProcessManagement</Navigation>-->
+        <!--<Value>-->
+            <!--<Item ValueType="Entity" ValueEntityType="Priority" ValueRegex="">3 normal</Item>-->
+        <!--</Value>-->
+    <!--</Setting>-->
     <Setting Name="Ticket::Frontend::AgentTicketZoom###ProcessDisplay" UserPreferencesGroup="Advanced" UserModificationPossible="1" Required="1" Valid="1">
         <Description Translatable="1">Display settings to override defaults for Process Tickets.</Description>
         <Navigation>Frontend::Agent::View::TicketZoom</Navigation>
