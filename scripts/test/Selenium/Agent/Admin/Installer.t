@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -140,6 +140,10 @@ $Selenium->RunTest(
                 $Selenium->find_element( '#DBName', 'css' )->send_keys($DBName);
             }
 
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => '#ButtonCheckDB',
+            );
+
             $Selenium->find_element( '#ButtonCheckDB', 'css' )->click();
             $Selenium->WaitFor(
                 Time       => 300,
@@ -152,9 +156,12 @@ $Selenium->RunTest(
                 'Database check was successful'
             );
 
+            $Selenium->WaitFor(
+                JavaScript => 'return typeof($) === "function" && !$("#FormDBSubmit").hasClass("Disabled");'
+            );
+
             # Go to next step of installation (Create Database).
-            $Selenium->execute_script("\$('#FormDBSubmit').click();");
-            sleep 3;
+            $Selenium->find_element( '#FormDBSubmit', 'css' )->click();
             $Selenium->WaitFor(
                 Time => 300,
                 JavaScript =>
@@ -174,10 +181,13 @@ $Selenium->RunTest(
                 'Database setup was successful'
             );
 
-            # Go to next step of installation (System Settings).
-            $Selenium->execute_script("\$('button[type=submit]').click();");
-            sleep 3;
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => 'div.Center input',
+                Event       => 'change',
+            );
 
+            # Go to next step of installation (System Settings).
+            $Selenium->find_element("//button[\@type='submit']")->VerifiedClick();
             $Selenium->WaitFor(
                 Time => 300,
                 JavaScript =>
@@ -195,10 +205,12 @@ $Selenium->RunTest(
             $Selenium->WaitFor(
                 JavaScript => 'return typeof($) === "function" && $("#CheckMXRecord").length === 1;'
             );
-            sleep 1;
-            $Selenium->execute_script("\$('button[type=submit]').click();");
-            sleep 3;
 
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => '.TableLike',
+            );
+
+            $Selenium->find_element("//button[\@type='submit']")->VerifiedClick();
             $Selenium->WaitFor(
                 Time => 300,
                 JavaScript =>
@@ -212,14 +224,12 @@ $Selenium->RunTest(
                 'Loaded 3/4 screen - Mail Configuration'
             );
 
-            $Selenium->WaitFor(
-                JavaScript => 'return typeof($) === "function" && $("#ButtonSkipMail").length === 1;'
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => '#ButtonSkipMail',
             );
 
             # Go to last step of installation.
-            $Selenium->execute_script("\$('#ButtonSkipMail').click();");
-            sleep 3;
-
+            $Selenium->find_element( '#ButtonSkipMail', 'css' )->click();
             $Selenium->WaitFor(
                 Time => 300,
                 JavaScript =>

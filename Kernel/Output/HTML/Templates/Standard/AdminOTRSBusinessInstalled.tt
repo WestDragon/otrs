@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="http://otrs.github.io/doc/manual/otrs-business-solution/stable/en/html/index.html" target="_blank" class="CallForAction Fullsize Center">
+                        <a href="https://doc.otrs.com/doc/manual/otrs-business-solution/6.0/en/html/index.html" target="_blank" class="CallForAction Fullsize Center">
                             <span><i class="fa fa-book"></i> [% Translate("Read documentation") | html %]</span>
                         </a>
                     </li>

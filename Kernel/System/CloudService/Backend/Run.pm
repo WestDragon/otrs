@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -271,8 +271,8 @@ sub Request {
         my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
 
         # check cache
-        my $CacheKey = "APIKey::" . $Self->{RegistrationData}->{APIKey} || ''
-            . "::UniqueID::" . $Self->{RegistrationData}->{UniqueID} || '';
+        my $CacheKey = "APIKey::" . ( $Self->{RegistrationData}->{APIKey} || '' )
+            . "::UniqueID::" . ( $Self->{RegistrationData}->{UniqueID} || '' );
         my $CacheContent = $CacheObject->Get(
             Type => 'RequestUniqueIDAuth',
             Key  => $CacheKey,

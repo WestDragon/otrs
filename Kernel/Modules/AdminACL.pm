@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -517,7 +517,7 @@ sub Run {
 
         # Create new ACL name.
         my $Count   = 1;
-        my $ACLName = "$ACLData->{Name} (" . $LayoutObject->{LanguageObject}->Translate('Copy') . ") $Count";
+        my $ACLName = $LayoutObject->{LanguageObject}->Translate( '%s (copy) %s', $ACLData->{Name}, $Count );
         while (
             $ACLObject->ACLGet(
                 Name   => $ACLName,

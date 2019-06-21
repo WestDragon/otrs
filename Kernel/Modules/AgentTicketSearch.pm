@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -656,7 +656,6 @@ sub Run {
         {
             my $TicketID = $TicketObject->TicketIDLookup(
                 TicketNumber => $GetParam{Fulltext},
-                UserID       => $Self->{UserID},
             );
             if ($TicketID) {
                 return $LayoutObject->Redirect(
@@ -1301,6 +1300,9 @@ sub Run {
             # start HTML page
             my $Output = $LayoutObject->Header();
             $Output .= $LayoutObject->NavigationBar();
+
+            # Notify if there are tickets which are not updated.
+            $Output .= $LayoutObject->NotifyNonUpdatedTickets() // '';
 
             $Self->{Filter} = $ParamObject->GetParam( Param => 'Filter' ) || '';
             $Self->{View}   = $ParamObject->GetParam( Param => 'View' )   || '';
@@ -2576,6 +2578,10 @@ sub Run {
     # show default search screen
     $Output = $LayoutObject->Header();
     $Output .= $LayoutObject->NavigationBar();
+
+    # Notify if there are tickets which are not updated.
+    $Output .= $LayoutObject->NotifyNonUpdatedTickets() // '';
+
     $LayoutObject->AddJSData(
         Key   => 'NonAJAXSearch',
         Value => 1,

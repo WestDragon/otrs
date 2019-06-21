@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -25,8 +25,19 @@ $Selenium->RunTest(
         $Helper->ConfigSettingChange(
             Valid => 1,
             Key   => 'WebMaxFileUpload',
-            Value => '68000'
+            Value => '50000'
         );
+
+        # Disable SessionUseCookie. See bug#14432.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'SessionUseCookie',
+            Value => 0,
+        );
+
+        # Get all sessions before login.
+        my $AuthSessionObject = $Kernel::OM->Get('Kernel::System::AuthSession');
+        my @PreLoginSessions  = $AuthSessionObject->GetAllSessionIDs();
 
         my $Language = 'en';
 
@@ -50,12 +61,33 @@ $Selenium->RunTest(
         my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
         my $ScriptAlias  = $ConfigObject->Get('ScriptAlias');
         my $Home         = $ConfigObject->Get('Home');
+        my $SessionName  = $ConfigObject->Get('SessionName');
+        my $SessionToken;
+
+        # Get all session after login.
+        my @PostLoginSessions = $AuthSessionObject->GetAllSessionIDs();
+
+        # If there are no other sessions before login, take token from only available one.
+        if ( !scalar @PreLoginSessions ) {
+            $SessionToken = $PostLoginSessions[0];
+        }
+
+        # If there are more sessions, find current logged one by looking at the difference.
+        else {
+            my %Difference;
+            @Difference{@PostLoginSessions} = @PostLoginSessions;
+            delete @Difference{@PreLoginSessions};
+            $SessionToken = ( keys %Difference )[0];
+        }
 
         # Check screens.
         for my $Action (qw(AgentTicketPhone AgentTicketEmail))
         {
 
-            $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=$Action");
+            $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=$Action;$SessionName=$SessionToken");
+            $Selenium->WaitFor(
+                JavaScript => 'return typeof($) === "function" && $(".DnDUpload").length;'
+            );
 
             # Check DnDUpload.
             my $Element = $Selenium->find_element( ".DnDUpload", 'css' );
@@ -210,51 +242,29 @@ $Selenium->RunTest(
                 "\$('#FileUpload').removeData('max-size-per-file')"
             );
 
-            # Delete the remaining file.
-            $Self->True(
-                $Selenium->execute_script(
-                    "return \$('.AttachmentList tbody tr td.Filename:contains(\"Test1.pdf\")').length"
-                ),
-                "$Action - Uploaded 'pdf' file still there"
-            );
+            $Selenium->VerifiedRefresh();
 
-            # Delete Attachment.
-            $Selenium->find_element( "(//a[\@class='AttachmentDelete'])[1]", 'xpath' )->click();
-            sleep 2;
+            # Hide DnDUpload and show input field.
+            $Selenium->execute_script("\$('.DnDUpload').css('display', 'none')");
+            $Selenium->execute_script("\$('#FileUpload').css('display', 'block')");
 
+            # Upload file.
+            $Location = "$Home/scripts/test/sample/Main/Main-Test1.txt";
+            $Selenium->find_element( "#FileUpload", 'css' )->clear();
+            $Selenium->find_element( "#FileUpload", 'css' )->send_keys($Location);
             $Selenium->WaitFor(
                 JavaScript =>
-                    "return typeof(\$) === 'function' && \$('.AttachmentDelete i').length === 0"
+                    "return typeof(\$) === 'function' && \$('.AttachmentDelete i').length"
             );
+            sleep 2;
 
-            # Check if deleted.
+            # Check if uploaded.
             $Self->True(
                 $Selenium->execute_script(
-                    "return \$('.AttachmentDelete i').length === 0"
+                    "return \$('.AttachmentList tbody tr td.Filename:contains(\"Main-Test1.txt\")').length"
                 ),
-                "$Action - Uploaded file Test1.pdf deleted"
+                "$Action - Upload Main-Test1.txt file correct"
             );
-
-            # Upload files.
-            for my $UploadExtension (qw(doc pdf png txt xls)) {
-
-                my $Location = "$Home/scripts/test/sample/Main/Main-Test1.$UploadExtension";
-                $Selenium->find_element( "#FileUpload", 'css' )->clear();
-                $Selenium->find_element( "#FileUpload", 'css' )->send_keys($Location);
-                $Selenium->WaitFor(
-                    JavaScript =>
-                        "return typeof(\$) === 'function' && \$('.AttachmentDelete i').length"
-                );
-                sleep 2;
-
-                # Check if uploaded.
-                $Self->True(
-                    $Selenium->execute_script(
-                        "return \$('.AttachmentList tbody tr td.Filename:contains(\"Main-Test1.$UploadExtension\")').length"
-                    ),
-                    "$Action - Upload '$UploadExtension' file correct"
-                );
-            }
 
             # Upload file again.
             my $CheckUploadAgainFilename = 'Main-Test1.txt';
@@ -279,6 +289,12 @@ $Selenium->RunTest(
             $Selenium->find_element( "#DialogButton1", 'css' )->click();
             $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".Dialog.Modal").length' );
 
+            $Selenium->VerifiedRefresh();
+
+            # Hide DnDUpload and show input field.
+            $Selenium->execute_script("\$('.DnDUpload').css('display', 'none')");
+            $Selenium->execute_script("\$('#FileUpload').css('display', 'block')");
+
             # Check max size.
             my $CheckMaxSizeFilename = 'PostMaster-Test13.box';
             $Location = "$Home/scripts/test/sample/EmailParser/$CheckMaxSizeFilename";
@@ -301,35 +317,6 @@ $Selenium->RunTest(
             $Selenium->find_element( "#DialogButton1", 'css' )->click();
             $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".Dialog.Modal").length' );
 
-            # Submit and check later if files still there.
-            $Selenium->find_element( "#submitRichText", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => "return \$('#Subject.Error').length" );
-
-            $Count = 5;
-
-            # Delete files.
-            for my $DeleteExtension (qw(doc pdf png txt xls)) {
-
-                # Delete Attachment.
-                $Selenium->find_element( "(//a[\@class='AttachmentDelete'])[$Count]", 'xpath' )->click();
-                $Count--;
-                sleep 2;
-
-                # Wait until attachment is deleted.
-                $Selenium->WaitFor(
-                    JavaScript =>
-                        "return typeof(\$) === 'function' && \$('.AttachmentDelete i').length == $Count"
-                );
-
-                # Check if deleted.
-                $Self->True(
-                    $Selenium->execute_script(
-                        "return \$('.AttachmentDelete i').length == $Count"
-                    ),
-                    "$Action - Uploaded file 'Main-Test1.$DeleteExtension' deleted"
-                );
-                sleep 1;
-            }
         }
     }
 );

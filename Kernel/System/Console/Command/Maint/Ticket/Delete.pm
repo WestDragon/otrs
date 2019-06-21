@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -70,7 +70,6 @@ sub Run {
         # lookup ticket id
         my $TicketID = $Kernel::OM->Get('Kernel::System::Ticket')->TicketIDLookup(
             TicketNumber => $TicketNumber,
-            UserID       => 1,
         );
 
         # error handling
@@ -88,7 +87,6 @@ sub Run {
         # lookup ticket number
         my $TicketNumber = $Kernel::OM->Get('Kernel::System::Ticket')->TicketNumberLookup(
             TicketID => $TicketID,
-            UserID   => 1,
         );
 
         # error handling

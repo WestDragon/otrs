@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -121,9 +121,6 @@ sub OSInfoGet {
                 $OSName = $Content->[0];
             }
         }
-        else {
-            $OSName = "Unknown version";
-        }
     }
     elsif ( $^O eq 'darwin' ) {
 
@@ -139,14 +136,11 @@ sub OSInfoGet {
 
         $OSName = "$OSMap{$^O} $BSDVersion";
     }
-    else {
-        $OSName = "Unknown";
-    }
 
     # collect OS data
     my %EnvOS = (
         Hostname     => hostname_long(),
-        OSName       => $OSName,
+        OSName       => $OSName || 'Unknown version',
         Distribution => $Distribution,
         User         => $ENV{USER} || $ENV{USERNAME},
         Path         => $ENV{PATH},

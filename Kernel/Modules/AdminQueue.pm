@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -68,8 +68,18 @@ sub Run {
             my @PrivateKeys = $CryptObjectPGP->PrivateKeySearch( Search => $QueueData{Email} );
 
             for my $DataRef (@PrivateKeys) {
-                $KeyList{"PGP::Inline::$DataRef->{Key}"}   = "PGP-Inline: $DataRef->{Key} $DataRef->{Identifier}";
-                $KeyList{"PGP::Detached::$DataRef->{Key}"} = "PGP-Detached: $DataRef->{Key} $DataRef->{Identifier}";
+
+                my $Status = '[' . $DataRef->{Status} . ']';
+                if ( $DataRef->{Status} eq 'expired' ) {
+                    $Status = '[WARNING: EXPIRED KEY]';
+                }
+                elsif ( $DataRef->{Status} eq 'revoked' ) {
+                    $Status = '[WARNING: REVOKED KEY]';
+                }
+
+                $KeyList{"PGP::Inline::$DataRef->{Key}"} = "PGP-Inline:$Status $DataRef->{Key} $DataRef->{Identifier}";
+                $KeyList{"PGP::Detached::$DataRef->{Key}"}
+                    = "PGP-Detached:$Status $DataRef->{Key} $DataRef->{Identifier}";
             }
         }
 
@@ -79,9 +89,18 @@ sub Run {
 
             my @PrivateKeys = $CryptObjectSMIME->PrivateSearch( Search => $QueueData{Email} );
 
+            my $Expired;
             for my $DataRef (@PrivateKeys) {
+                $Expired = '';
+                if (
+                    defined $DataRef->{EndDate}
+                    && $CryptObjectSMIME->KeyExpiredCheck( EndDate => $DataRef->{EndDate} )
+                    )
+                {
+                    $Expired = ' [WARNING: EXPIRED KEY]';
+                }
                 $KeyList{"SMIME::Detached::$DataRef->{Filename}"}
-                    = "SMIME-Detached: $DataRef->{Filename} [$DataRef->{EndDate}] $DataRef->{Email}";
+                    = "SMIME-Detached:$Expired $DataRef->{Filename} [$DataRef->{EndDate}] $DataRef->{Email}";
             }
         }
     }
@@ -738,7 +757,7 @@ sub _Edit {
             %DefaultSignKeyList
         },
         Name       => 'DefaultSignKey',
-        Max        => 50,
+        Max        => 150,
         SelectedID => $Param{DefaultSignKey},
         Class      => 'Modernize',
     );

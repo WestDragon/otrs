@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -424,6 +424,11 @@ sub Run {
             );
         }
 
+        # Modify ArticleLimit if it is greater then number of articles (see bug#14585).
+        if ( $ArticleLimit > scalar @Articles ) {
+            $ArticleLimit = scalar @Articles;
+        }
+
         # Set number of articles by ArticleLimit and ArticleOrder parameters.
         if ( IsArrayRefWithData( \@Articles ) && $ArticleLimit ) {
             if ( $ArticleOrder eq 'DESC' ) {
@@ -469,8 +474,8 @@ sub Run {
                 $Attachment{FileID} = $FileID;
                 if ($GetAttachmentContents)
                 {
-                    # convert content to base64
-                    $Attachment{Content} = encode_base64( $Attachment{Content} );
+                    # convert content to base64, but prevent 76 chars brake, see bug#14500.
+                    $Attachment{Content} = encode_base64( $Attachment{Content}, '' );
                 }
                 else {
                     # unset content

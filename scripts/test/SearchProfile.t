@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -35,8 +35,7 @@ $ConfigObject->Set(
 );
 
 # create test user
-my $Login  = $Helper->TestUserCreate();
-my $UserID = $Kernel::OM->Get('Kernel::System::User')->UserLookup( UserLogin => $Login );
+my ( $Login, $UserID ) = $Helper->TestUserCreate();
 
 my $RandomID = $Helper->GetRandomID();
 

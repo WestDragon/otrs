@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -158,6 +158,9 @@ $Selenium->RunTest(
         $Selenium->execute_script(
             "\$('#FileUpload').css('display', 'block');"
         );
+
+        # Scroll to attachment element view if necessary.
+        $Selenium->execute_script("\$('#FileUpload')[0].scrollIntoView(true);");
 
         # Add an attachment.
         $Location = $ConfigObject->Get('Home') . "/scripts/test/sample/Main/Main-Test1.txt";

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -21,6 +21,7 @@ our @ObjectDependencies = (
     'Kernel::Config',
     'Kernel::Language',
     'Kernel::System::AuthSession',
+    'Kernel::System::Cache',
     'Kernel::System::Chat',
     'Kernel::System::CustomerGroup',
     'Kernel::System::DateTime',
@@ -1194,6 +1195,37 @@ sub Notify {
     );
 }
 
+=head2 NotifyNonUpdatedTickets()
+
+Adds notification about tickets which are not updated.
+
+    my $Output = $LayoutObject->NotifyNonUpdatedTickets();
+
+=cut
+
+sub NotifyNonUpdatedTickets {
+    my ( $Self, %Param ) = @_;
+
+    my $NonUpdatedTicketsString = $Kernel::OM->Get('Kernel::System::Cache')->Get(
+        Type => 'Ticket',
+        Key  => 'NonUpdatedTicketsString-' . $Self->{UserID},
+    );
+
+    return if !$NonUpdatedTicketsString;
+
+    # Delete this value from the cache.
+    $Kernel::OM->Get('Kernel::System::Cache')->Delete(
+        Type => 'Ticket',
+        Key  => 'NonUpdatedTicketsString-' . $Self->{UserID},
+    );
+
+    return $Self->Notify(
+        Info => $Self->{LanguageObject}
+            ->Translate( "The following tickets are not updated: %s.", $NonUpdatedTicketsString ),
+    );
+
+}
+
 =head2 Header()
 
 generates the HTML for the page begin in the Agent interface.
@@ -1606,6 +1638,7 @@ sub Footer {
         SessionIDCookie                => $Self->{SessionIDCookie},
         SessionName                    => $Self->{SessionName},
         SessionID                      => $Self->{SessionID},
+        SessionUseCookie               => $ConfigObject->Get('SessionUseCookie'),
         ChallengeToken                 => $Self->{UserChallengeToken},
         CustomerPanelSessionName       => $ConfigObject->Get('CustomerPanelSessionName'),
         UserLanguage                   => $Self->{UserLanguage},
@@ -1892,6 +1925,9 @@ sub Ascii2Html {
     if ( $Param{HTMLResultMode} ) {
         ${$Text} =~ s/\n/<br\/>\n/g;
         ${$Text} =~ s/  /&nbsp;&nbsp;/g;
+
+        # Convert the space at the beginning of the line (see bug#14346 - https://bugs.otrs.org/show_bug.cgi?id=14346).
+        ${$Text} =~ s/\n /\n&nbsp;/g;
     }
 
     if ( $Param{Type} && $Param{Type} eq 'JSText' ) {
@@ -4235,6 +4271,7 @@ sub CustomerFooter {
         SessionIDCookie          => $Self->{SessionIDCookie},
         SessionName              => $Self->{SessionName},
         SessionID                => $Self->{SessionID},
+        SessionUseCookie         => $ConfigObject->Get('SessionUseCookie'),
         ChallengeToken           => $Self->{UserChallengeToken},
         CustomerPanelSessionName => $ConfigObject->Get('CustomerPanelSessionName'),
         UserLanguage             => $Self->{UserLanguage},
@@ -5010,8 +5047,7 @@ sub RichTextDocumentServe {
 
         if ( !$Param{LoadExternalImages} ) {
 
-            # Strip out external images, but show a confirmation button to
-            #   load them explicitly.
+            # Strip out external content.
             my %SafetyCheckResult = $Kernel::OM->Get('Kernel::System::HTMLUtils')->Safety(
                 String       => $Param{Data}->{Content},
                 NoApplet     => 1,
@@ -5026,7 +5062,12 @@ sub RichTextDocumentServe {
 
             $Param{Data}->{Content} = $SafetyCheckResult{String};
 
-            if ( $SafetyCheckResult{Replace} ) {
+           # Show confirmation button to load external content explicitly only if BlockLoadingRemoteContent is disabled.
+            if (
+                $SafetyCheckResult{Replace}
+                && !$Kernel::OM->Get('Kernel::Config')->Get('Ticket::Frontend::BlockLoadingRemoteContent')
+                )
+            {
 
                 # Generate blocker message.
                 my $Message = $Self->Output( TemplateFile => 'AttachmentBlocker' );

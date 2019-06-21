@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -100,11 +100,11 @@ my %DynamicFieldDropdownConfig = (
     Label      => 'Description',
     ValidID    => 1,
     Config     => {
-        PossibleValues => [
+        PossibleValues => {
             1 => 'One',
             2 => 'Two',
             3 => 'Three',
-        ],
+        },
     },
 );
 my $FieldDropdownID = $DynamicFieldObject->DynamicFieldAdd(
@@ -129,11 +129,11 @@ my %DynamicFieldMultiselectConfig = (
     Label      => 'Multiselect label',
     ValidID    => 1,
     Config     => {
-        PossibleValues => [
+        PossibleValues => {
             1 => 'Value9ßüß',
             2 => 'DifferentValue',
             3 => '1234567',
-        ],
+        },
     },
 );
 my $FieldMultiselectID = $DynamicFieldObject->DynamicFieldAdd(
@@ -698,7 +698,7 @@ my @Tests = (
                 From                 => 'enjoy@otrs.com',
                 Charset              => 'utf8',
                 MimeType             => 'text/plain',
-                HistoryType          => 'NewTicket',
+                HistoryType          => 'AddNote',
                 HistoryComment       => '%%',
             },
             Attachment => [
@@ -708,6 +708,88 @@ my @Tests = (
                     Filename    => 'test.txt',
                 },
             ],
+        },
+        IncludeTicketData        => 1,
+        ExpectedReturnRemoteData => {
+            Success => 1,
+            Data    => {
+                TicketID     => $Ticket{TicketID},
+                TicketNumber => $Ticket{TicketNumber},
+            },
+        },
+        ExpectedReturnLocalData => {
+            Success => 1,
+            Data    => {
+                TicketID     => $Ticket{TicketID},
+                TicketNumber => $Ticket{TicketNumber},
+            },
+        },
+        Operation => 'TicketUpdate',
+    },
+    {
+        Name           => 'Add article (with To, Cc and Bcc parameters)',
+        SuccessRequest => '1',
+        RequestData    => {
+            TicketID => $TicketID1,
+            Ticket   => {
+                Title => 'Updated',
+            },
+            Article => {
+                Subject              => 'Article subject äöüßÄÖÜ€ис',
+                Body                 => 'Article body',
+                AutoResponseType     => 'auto reply',
+                IsVisibleForCustomer => 1,
+                CommunicationChannel => 'Email',
+                SenderType           => 'agent',
+                From                 => 'enjoy@otrs.com',
+                To                   => 'someTo@otrs.com',
+                Cc                   => 'someCc@otrs.com',
+                Bcc                  => 'someBcc@otrs.com',
+                Charset              => 'utf8',
+                MimeType             => 'text/plain',
+                HistoryType          => 'AddNote',
+                HistoryComment       => '%%',
+            },
+        },
+        IncludeTicketData        => 1,
+        ExpectedReturnRemoteData => {
+            Success => 1,
+            Data    => {
+                TicketID     => $Ticket{TicketID},
+                TicketNumber => $Ticket{TicketNumber},
+            },
+        },
+        ExpectedReturnLocalData => {
+            Success => 1,
+            Data    => {
+                TicketID     => $Ticket{TicketID},
+                TicketNumber => $Ticket{TicketNumber},
+            },
+        },
+        Operation => 'TicketUpdate',
+    },
+    {
+        Name           => 'Add article (with CustomerUser parameter)',
+        SuccessRequest => '1',
+        RequestData    => {
+            TicketID => $TicketID1,
+            Ticket   => {
+                Title        => 'Updated',
+                CustomerUser => $CustomerUserLogin,
+            },
+            Article => {
+                Subject              => 'Article subject äöüßÄÖÜ€ис',
+                Body                 => 'Article body',
+                AutoResponseType     => 'auto reply',
+                IsVisibleForCustomer => 1,
+                CommunicationChannel => 'Email',
+                SenderType           => 'agent',
+                From                 => 'enjoy@otrs.com',
+                Charset              => 'utf8',
+                MimeType             => 'text/plain',
+                HistoryType          => 'AddNote',
+                HistoryComment       => '%%',
+            },
         },
         IncludeTicketData        => 1,
         ExpectedReturnRemoteData => {
@@ -924,8 +1006,34 @@ for my $Test (@Tests) {
         };
     }
 
+    if ( defined $Test->{RequestData}->{Ticket}->{CustomerUser} ) {
+        $Self->Is(
+            "\"$CustomerUserLogin $CustomerUserLogin\" <$CustomerUserLogin\@localunittest.com>",
+            $RequesterResult->{Data}->{Ticket}->{Article}->{To},
+            "Article parameter To is set well after TicketUpdate()",
+        );
+    }
+
     if ( $Test->{RequestData}->{Article} ) {
         $Kernel::OM->Get('Kernel::System::Cache')->CleanUp();
+
+        # Check if parameters To, cc and Bcc set well
+        # See bug#14393 for more information.
+        if (
+            defined $Test->{RequestData}->{Article}->{To}
+            && defined $Test->{RequestData}->{Article}->{Cc}
+            && defined $Test->{RequestData}->{Article}->{Bcc}
+            )
+        {
+
+            for my $Item (qw(To Cc Bcc)) {
+                $Self->Is(
+                    $Test->{RequestData}->{Article}->{$Item},
+                    $RequesterResult->{Data}->{Ticket}->{Article}->{$Item},
+                    "Article parameter $Item is set well after TicketUpdate() - $Test->{RequestData}->{Article}->{$Item}",
+                );
+            }
+        }
 
         # Get latest article data.
         my @ArticleList = $ArticleObject->ArticleList(
@@ -987,7 +1095,7 @@ for my $Test (@Tests) {
                 next ATTACHMENT if !IsHashRefWithData( \%Attachment );
 
                 # Convert content to base64.
-                $Attachment{Content} = MIME::Base64::encode_base64( $Attachment{Content} );
+                $Attachment{Content} = MIME::Base64::encode_base64( $Attachment{Content}, '' );
                 push @Attachments, {%Attachment};
             }
 
@@ -1074,11 +1182,8 @@ $ConfigObject->Set(
     Value => 1,
 );
 
-my $UserLoginOutOfOffice = $Helper->TestUserCreate(
+my ( $UserLoginOutOfOffice, $UserIDOutOfOffice ) = $Helper->TestUserCreate(
     Groups => ['users'],
-);
-my $UserIDOutOfOffice = $UserObject->UserLookup(
-    UserLogin => $UserLoginOutOfOffice,
 );
 my $UserIDNoOutOfOffice = $UserObject->UserLookup(
     UserLogin => $UserLogin,

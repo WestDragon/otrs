@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1748,10 +1748,11 @@ sub DefaultSettingLock {
 
         # Set new cache value.
         $CacheObject->Set(
-            Type  => 'SysConfigDefaultListGet',
-            Key   => 'DefaultSettingListGet',
-            Value => $DefaultSettingListGet,
-            TTL   => $Self->{CacheTTL},
+            Type           => 'SysConfigDefaultListGet',
+            Key            => 'DefaultSettingListGet',
+            Value          => $DefaultSettingListGet,
+            TTL            => $Self->{CacheTTL},
+            CacheInBackend => 0,
         );
     }
 
@@ -2064,10 +2065,11 @@ sub DefaultSettingUnlock {
 
         # Set new cache value.
         $CacheObject->Set(
-            Type  => 'SysConfigDefaultListGet',
-            Key   => 'DefaultSettingListGet',
-            Value => $DefaultSettingListGet,
-            TTL   => $Self->{CacheTTL},
+            Type           => 'SysConfigDefaultListGet',
+            Key            => 'DefaultSettingListGet',
+            Value          => $DefaultSettingListGet,
+            TTL            => $Self->{CacheTTL},
+            CacheInBackend => 0,
         );
     }
     $CacheObject->Delete(
@@ -2147,10 +2149,11 @@ sub DefaultSettingDirtyCleanUp {
 
         # Set new cache value.
         $CacheObject->Set(
-            Type  => 'SysConfigDefaultListGet',
-            Key   => 'DefaultSettingListGet',
-            Value => $DefaultSettingListGet,
-            TTL   => $Self->{CacheTTL},
+            Type           => 'SysConfigDefaultListGet',
+            Key            => 'DefaultSettingListGet',
+            Value          => $DefaultSettingListGet,
+            TTL            => $Self->{CacheTTL},
+            CacheInBackend => 0,
         );
     }
 
@@ -2807,7 +2810,7 @@ sub ModifiedSettingAdd {
     if ( $Param{Name} ne $DefaultSetting{Name} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
-            Message  => "Name is Invalid!",
+            Message  => "Name doesn't match ('$Param{Name}')! It should be '$DefaultSetting{Name}'.",
         );
 
         return;

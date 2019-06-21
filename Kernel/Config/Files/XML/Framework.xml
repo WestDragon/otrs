@@ -160,12 +160,14 @@
                 <Item Key="ko" Translatable="1">Korean</Item>
                 <Item Key="lt" Translatable="1">Lithuanian</Item>
                 <Item Key="lv" Translatable="1">Latvian</Item>
+                <Item Key="mk" Translatable="1">Macedonian</Item>
                 <Item Key="ms" Translatable="1">Malay</Item>
                 <Item Key="nl" Translatable="1">Dutch</Item>
                 <Item Key="nb_NO" Translatable="1">Norwegian</Item>
                 <Item Key="pt_BR" Translatable="1">Portuguese (Brasil)</Item>
                 <Item Key="pt" Translatable="1">Portuguese</Item>
                 <Item Key="pl" Translatable="1">Polish</Item>
+                <Item Key="ro" Translatable="1">Romanian</Item>
                 <Item Key="ru" Translatable="1">Russian</Item>
                 <Item Key="sl" Translatable="1">Slovenian</Item>
                 <Item Key="sr_Latn" Translatable="1">Serbian Latin</Item>
@@ -216,12 +218,14 @@
                 <Item Key="ko">한국어</Item>
                 <Item Key="lt">Lietuvių kalba</Item>
                 <Item Key="lv">Latvijas</Item>
+                <Item Key="mk">Mакедонски</Item>
                 <Item Key="ms">Melayu</Item>
                 <Item Key="nl">Nederlandse</Item>
                 <Item Key="nb_NO">Norsk bokmål</Item>
                 <Item Key="pt_BR">Português Brasileiro</Item>
                 <Item Key="pt">Português</Item>
                 <Item Key="pl">Polski</Item>
+                <Item Key="ro">Română</Item>
                 <Item Key="ru">Русский</Item>
                 <Item Key="sl">Slovenščina</Item>
                 <Item Key="sr_Latn">Srpski</Item>
@@ -239,7 +243,7 @@
         </Value>
     </Setting>
     <Setting Name="DefaultTheme" Required="1" Valid="1" ConfigLevel="200">
-        <Description Translatable="1">Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.</Description>
+        <Description Translatable="1">Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.</Description>
         <Navigation>Frontend::Base</Navigation>
         <Value>
             <Item ValueType="String" ValueRegex="">Standard</Item>
@@ -3270,7 +3274,7 @@ You can log in via the following URL:
                 <Item Key="Module">Kernel::Output::HTML::Preferences::Generic</Item>
                 <Item Key="PreferenceGroup">UserProfile</Item>
                 <Item Key="Label" Translatable="1">Google Authenticator</Item>
-                <Item Key="Desc" Translatable="1">Enter your shared secret to enable two factor authentication.</Item>
+                <Item Key="Desc" Translatable="1">Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.</Item>
                 <Item Key="Key" Translatable="1">Shared Secret</Item>
                 <Item Key="Block">Input</Item>
                 <Item Key="PrefKey">UserGoogleAuthenticatorSecretKey</Item>
@@ -4031,7 +4035,7 @@ via the Preferences button after logging in.
                 <Item Key="PreferenceGroup">Miscellaneous</Item>
                 <Item Key="Label" Translatable="1">Google Authenticator</Item>
                 <Item Key="Key" Translatable="1">Shared Secret</Item>
-                <Item Key="Desc" Translatable="1">Enter your shared secret to enable two factor authentication.</Item>
+                <Item Key="Desc" Translatable="1">Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.</Item>
                 <Item Key="Block">Input</Item>
                 <Item Key="PrefKey">UserGoogleAuthenticatorSecretKey</Item>
                 <Item Key="ValidateRegex">^([A-Z2-7]{16}|)$</Item>
@@ -4634,6 +4638,7 @@ via the Preferences button after logging in.
                         <Item>Core.UI.AllocationList.js</Item>
                         <Item>Core.Agent.TableFilters.js</Item>
                         <Item>Core.Agent.Preferences.js</Item>
+                        <Item>Core.Agent.SharedSecretGenerator.js</Item>
                         <Item>Core.SystemConfiguration.js</Item>
                         <Item>Core.SystemConfiguration.Date.js</Item>
                     </Array>
@@ -5303,7 +5308,7 @@ via the Preferences button after logging in.
                     </Array>
                 </Item>
                 <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
-                <Item Key="Name" Translatable="1">Customer User</Item>
+                <Item Key="Name" Translatable="1">Customer Users</Item>
                 <Item Key="Block">Users</Item>
                 <Item Key="Description" Translatable="1">Create and manage customer users.</Item>
                 <Item Key="IconBig">fa-male</Item>
@@ -8066,7 +8071,7 @@ via the Preferences button after logging in.
                 <Item>thirdparty/jquery-ui-touch-punch-0.2.3/jquery.ui.touch-punch.js</Item>
                 <Item>thirdparty/jquery-validate-1.16.0/jquery.validate.js</Item>
                 <Item>thirdparty/jquery-pubsub/pubsub.js</Item>
-                <Item>thirdparty/jquery-jstree-3.3.4/jquery.jstree.js</Item>
+                <Item>thirdparty/jquery-jstree-3.3.7/jquery.jstree.js</Item>
                 <Item>thirdparty/nunjucks-3.0.1/nunjucks.js</Item>
                 <Item>Core.Init.js</Item>
                 <Item>Core.JavaScriptEnhancements.js</Item>
@@ -8166,7 +8171,7 @@ via the Preferences button after logging in.
                 <Item>thirdparty/jquery-validate-1.16.0/jquery.validate.js</Item>
                 <Item>thirdparty/jquery-ui-1.12.1/jquery-ui.js</Item>
                 <Item>thirdparty/jquery-pubsub/pubsub.js</Item>
-                <Item>thirdparty/jquery-jstree-3.3.4/jquery.jstree.js</Item>
+                <Item>thirdparty/jquery-jstree-3.3.7/jquery.jstree.js</Item>
                 <Item>thirdparty/nunjucks-3.0.1/nunjucks.js</Item>
                 <Item>Core.Init.js</Item>
                 <Item>Core.Debug.js</Item>

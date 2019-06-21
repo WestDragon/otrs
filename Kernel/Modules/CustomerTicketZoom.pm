@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -46,7 +46,6 @@ sub Run {
     if ( !$Self->{TicketID} && $TicketNumber ) {
         $Self->{TicketID} = $TicketObject->TicketIDLookup(
             TicketNumber => $ParamObject->GetParam( Param => 'TicketNumber' ),
-            UserID       => $Self->{UserID},
         );
     }
 
@@ -583,8 +582,7 @@ sub Run {
             );
         }
 
-        my $From = "$Self->{UserFullname} <$Self->{UserEmail}>";
-
+        my $From     = "\"$Self->{UserFullname}\" <$Self->{UserEmail}>";
         my $MimeType = 'text/plain';
         if ( $LayoutObject->{BrowserRichText} ) {
             $MimeType = 'text/html';

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -20,6 +20,8 @@ our @ObjectDependencies = (
     'Kernel::System::Log',
     'Kernel::System::Ticket',
     'Kernel::System::Ticket::Article',
+    'Kernel::System::DynamicField',
+    'Kernel::System::DynamicField::Backend',
     'Kernel::System::User',
     'Kernel::System::HTMLUtils',
 );
@@ -63,23 +65,127 @@ sub new {
         ActivityEntityID         => 'A123',
         TransitionEntityID       => 'T123',
         TransitionActionEntityID => 'TA123',
-        Config                   => {
+        Config => {
             SenderType           => 'agent',                            # (required) agent|system|customer
             IsVisibleForCustomer => 1,                                  # 0 or 1
             CommunicationChannel => 'Internal',                         # Internal|Phone|Email|..., default: Internal
 
-            %DataPayload,                                               # some parameters depending of each communication channel
+            %DataPayload,                                               # some parameters depending of each communication channel, please check ArticleCreate() on each
+                                                                        #   communication channel for the full list of optional and mandatory parameters
 
-            TimeUnit => 123                                             # optional, to set the acouting time
+            TimeUnit => 123,                                            # optional, to set the accounting time
             UserID   => 123,                                            # optional, to override the UserID from the logged user
-        }
+       },
     );
+
     Ticket contains the result of TicketGet including DynamicFields
     Config is the Config Hash stored in a Process::TransitionAction's  Config key
     Returns:
 
     $TicketArticleCreateResult = 1; # 0
 
+    Internal article example:
+
+    my $TicketArticleCreateResult = $TicketArticleCreateActionObject->Run(
+        UserID => 123,
+        Ticket => {
+            TicketNumber => '20101027000001',
+            Title        => 'some title',
+            TicketID     => 123,
+            State        => 'some state',
+            # ... (all ticket properties)
+        },
+        ProcessEntityID          => 'P123',
+        ActivityEntityID         => 'A123',
+        TransitionEntityID       => 'T123',
+        TransitionActionEntityID => 'TA123',
+        Config => {
+            SenderType           => 'agent',
+            IsVisibleForCustomer => 1,
+            CommunicationChannel => 'Internal',
+
+            # Internal article data payload.
+            From           => 'Some Agent <email@example.com>',
+            To             => 'Some Customer A <customer-a@example.com>',
+            Subject        => 'some short description',
+            Body           => 'the message text',
+            Charset        => 'ISO-8859-15',
+            MimeType       => 'text/plain',
+            HistoryType    => 'OwnerUpdate',
+            HistoryComment => 'Some free text!',
+            UnlockOnAway   => 1,
+        },
+    );
+
+    Chat article example:
+
+    my $TicketArticleCreateResult = $TicketArticleCreateActionObject->Run(
+        UserID => 123,
+        Ticket => {
+            TicketNumber       => '20101027000001',
+            Title              => 'some title',
+            TicketID           => 123,
+            State              => 'some state',
+            # ... (all ticket properties, as the result from Kernel::System::Ticket::TicketGet)
+        },
+        ProcessEntityID          => 'P123',
+        ActivityEntityID         => 'A123',
+        TransitionEntityID       => 'T123',
+        TransitionActionEntityID => 'TA123',
+        Config => {
+            SenderType           => 'agent',
+            IsVisibleForCustomer => 1,
+            CommunicationChannel => 'Internal',
+
+            # Internal article data payload.
+            From             => 'Some Agent <email@example.com>',
+            To               => 'Some Customer A <customer-a@example.com>',
+            Subject          => 'some short description',
+            Body             => 'the message text',
+            Charset          => 'ISO-8859-15',
+            MimeType         => 'text/plain',
+            HistoryType      => 'OwnerUpdate',
+            HistoryComment   => 'Some free text!',
+            UnlockOnAway     => 1,
+        },
+    );
+
+    Chat article example:
+
+    my $TicketArticleCreateResult = $TicketArticleCreateActionObject->Run(
+        UserID => 123,
+        Ticket => {
+            TicketNumber => '20101027000001',
+            Title        => 'some title',
+            TicketID     => 123,
+            State        => 'some state',
+            # ... (all ticket properties, as the result from Kernel::System::Ticket::TicketGet)
+        },
+        ProcessEntityID            => 'P123',
+        ActivityEntityID           => 'A123',
+        SequenceFlowEntityID       => 'T123',
+        SequenceFlowActionEntityID => 'TA123',
+        Config                   => {
+            SenderType           => 'agent',
+            IsVisibleForCustomer => 1,
+            CommunicationChannel => 'Internal',
+
+            # Chat article data payload.
+            ChatMessageList => [
+                {
+                    ID              => 1,
+                    MessageText     => 'My chat message',
+                    CreateTime      => '2014-04-04 10:10:10',
+                    SystemGenerated => 0,
+                    ChatterID       => '123',
+                    ChatterType     => 'User',
+                    ChatterName     => 'John Doe',
+                },
+                # ...
+            ],
+            HistoryType    => 'OwnerUpdate',
+            HistoryComment => 'Some free text!',
+        },
     );
 
 =cut
@@ -113,11 +219,28 @@ sub Run {
     # Override UserID if specified as a parameter in the TA config.
     $Param{UserID} = $Self->_OverrideUserID(%Param);
 
+    my $DynamicFieldObject        = $Kernel::OM->Get('Kernel::System::DynamicField');
+    my $DynamicFieldBackendObject = $Kernel::OM->Get('Kernel::System::DynamicField::Backend');
+
     # Convert DynamicField value to HTML string, see bug#14229.
     my $HTMLUtilsObject = $Kernel::OM->Get('Kernel::System::HTMLUtils');
     if ( $Param{Config}->{Body} =~ /OTRS_TICKET_DynamicField_/ ) {
+        MATCH:
         for my $Match ( sort keys %{ $Param{Ticket} } ) {
-            if ( $Match =~ /DynamicField_/ && $Param{Ticket}->{$Match} ) {
+            if ( $Match =~ m/DynamicField_(.*)/ && $Param{Ticket}->{$Match} ) {
+
+                my $DynamicFieldConfig = $DynamicFieldObject->DynamicFieldGet(
+                    Name => $1,
+                );
+
+                # Check if there is HTML content.
+                my $IsHTMLContent = $DynamicFieldBackendObject->HasBehavior(
+                    DynamicFieldConfig => $DynamicFieldConfig,
+                    Behavior           => 'IsHTMLContent',
+                );
+
+                # Avoid duble conversion to HTML for dynamic fields with HTML content.
+                next MATCH if $IsHTMLContent;
                 $Param{Ticket}->{$Match} = $HTMLUtilsObject->ToHTML(
                     String => $Param{Ticket}->{$Match},
                 );

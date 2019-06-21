@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -293,9 +293,10 @@ sub ArticleCreate {
         push @{ $Param{Attachment} }, $Attach;
 
         # set ASCII body
-        $Param{MimeType}    = 'text/plain';
-        $Param{ContentType} = 'text/plain';
-        $Param{Body}        = '- no text message => see attachment -';
+        $Param{MimeType}           = 'text/plain';
+        $Param{ContentType}        = 'text/plain';
+        $Param{Body}               = '- no text message => see attachment -';
+        $Param{OrigHeader}->{Body} = $Param{Body};
     }
 
     # fix some bad stuff from some browsers (Opera)!

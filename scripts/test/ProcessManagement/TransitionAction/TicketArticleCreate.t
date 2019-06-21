@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -31,14 +31,10 @@ $Kernel::OM->Get('Kernel::Config')->Set(
 );
 
 # define variables
-my $UserID     = 1;
 my $ModuleName = 'TicketArticleCreate';
 
 # set user details
-my $TestUserLogin = $Helper->TestUserCreate();
-my $TestUserID    = $Kernel::OM->Get('Kernel::System::User')->UserLookup(
-    UserLogin => $TestUserLogin,
-);
+my ( $TestUserLogin, $UserID ) = $Helper->TestUserCreate();
 
 # get ticket object
 my $TicketObject         = $Kernel::OM->Get('Kernel::System::Ticket');
@@ -695,6 +691,28 @@ my @Tests = (
         },
         Success => 0,
     },
+    {
+        Name   => 'Correct using Phone backend without "From" parameter',
+        Config => {
+            UserID => $UserID,
+            Ticket => \%Ticket,
+            Config => {
+                SenderType           => 'agent',
+                IsVisibleForCustomer => 0,
+                CommunicationChannel => 'Phone',
+                Subject              => 'Test Phone',
+                Body                 => 'Test body',
+                HistoryType          => 'OwnerUpdate',
+                HistoryComment       => 'Some free text!',
+                To                   => 'Some Customer A <customer-a@example.com>',
+                Charset              => 'ISO-8859-15',
+                MimeType             => 'text/plain',
+                UnlockOnAway         => 1,
+            },
+        },
+        Success        => 1,
+        CheckFromValue => 1,
+    },
 );
 
 my %ExcludedArtributes = (
@@ -738,6 +756,14 @@ for my $Test (@Tests) {
             OnlyLast => 1,
         );
         my %Article = $ArticleObject->BackendForArticle( %{ $MetaArticles[-1] } )->ArticleGet( %{ $MetaArticles[-1] } );
+
+        # Check 'From' value of article (see bug#13867).
+        if ( $Test->{CheckFromValue} ) {
+            $Self->True(
+                $Article{From} =~ /$TestUserLogin/,
+                "Article 'From' value is correct",
+            );
+        }
 
         ATTRIBUTE:
         for my $Attribute ( sort keys %{ $Test->{Config}->{Config} } ) {

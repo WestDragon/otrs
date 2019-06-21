@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -100,7 +100,7 @@ $Self->Is(
 
 $Self->True(
     $Result
-        =~ m{Following settings have invalid value:.*?Ticket::Frontend::AgentTicketPhone###Priority = '-123 Invalid priority value';}s
+        =~ m{The following settings have an invalid value:.*?Ticket::Frontend::AgentTicketPhone###Priority = '-123 Invalid priority value';}s
     ? 1
     : 0,
     'Check invalid result.'

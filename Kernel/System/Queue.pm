@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -750,7 +750,7 @@ add queue with attributes
         Name                => 'Some::Queue',
         ValidID             => 1,
         GroupID             => 1,
-        Calendar            => 'Calendar1', # (optional)
+        Calendar            => '1',         # (optional)
         FirstResponseTime   => 120,         # (optional)
         FirstResponseNotify => 60,          # (optional, notify agent if first response escalation is 60% reached)
         UpdateTime          => 180,         # (optional)

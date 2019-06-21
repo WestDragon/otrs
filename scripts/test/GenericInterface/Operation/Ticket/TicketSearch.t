@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1430,7 +1430,7 @@ my @Tests = (
             TicketCreateTimeNewerDate => $Kernel::OM->Create(
                 'Kernel::System::DateTime',
                 ObjectParams => {
-                    Epoch => $StartTime->ToEpoch() + 10,
+                    Epoch => $StartTime->ToEpoch() + 100,
                 },
             )->ToString(),
             SortBy  => 'Ticket',    # force order, because the Age (default) can be the same

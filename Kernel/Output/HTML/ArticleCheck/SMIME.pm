@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -19,6 +19,7 @@ our @ObjectDependencies = (
     'Kernel::System::Crypt::SMIME',
     'Kernel::System::Log',
     'Kernel::System::Ticket::Article',
+    'Kernel::Output::HTML::Layout',
 );
 
 sub new {
@@ -48,8 +49,11 @@ sub Check {
     my %SignCheck;
     my @Return;
 
-    # get config object
     my $ConfigObject = $Param{ConfigObject} || $Kernel::OM->Get('Kernel::Config');
+    my $LayoutObject = $Param{LayoutObject} || $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+
+    my $UserType = $LayoutObject->{UserType} // '';
+    my $ChangeUserID = $UserType eq 'Customer' ? $ConfigObject->Get('CustomerPanelUserID') : $Self->{UserID};
 
     # check if smime is enabled
     return if !$ConfigObject->Get('SMIME');
@@ -297,13 +301,13 @@ sub Check {
                     ArticleID => $Self->{ArticleID},
                     Key       => 'Body',
                     Value     => $Body,
-                    UserID    => $Self->{UserID},
+                    UserID    => $ChangeUserID,
                 );
 
                 # delete crypted attachments
                 $ArticleBackendObject->ArticleDeleteAttachment(
                     ArticleID => $Self->{ArticleID},
-                    UserID    => $Self->{UserID},
+                    UserID    => $ChangeUserID,
                 );
 
                 # write attachments to the storage
@@ -311,7 +315,7 @@ sub Check {
                     $ArticleBackendObject->ArticleWriteAttachment(
                         %{$Attachment},
                         ArticleID => $Self->{ArticleID},
-                        UserID    => $Self->{UserID},
+                        UserID    => $ChangeUserID,
                     );
                 }
 
@@ -409,13 +413,13 @@ sub Check {
                     ArticleID => $Self->{ArticleID},
                     Key       => 'Body',
                     Value     => $Body,
-                    UserID    => $Self->{UserID},
+                    UserID    => $ChangeUserID,
                 );
 
                 # delete crypted attachments
                 $ArticleBackendObject->ArticleDeleteAttachment(
                     ArticleID => $Self->{ArticleID},
-                    UserID    => $Self->{UserID},
+                    UserID    => $ChangeUserID,
                 );
 
                 # write attachments to the storage
@@ -423,7 +427,7 @@ sub Check {
                     $ArticleBackendObject->ArticleWriteAttachment(
                         %{$Attachment},
                         ArticleID => $Self->{ArticleID},
-                        UserID    => $Self->{UserID},
+                        UserID    => $ChangeUserID,
                     );
                 }
             }

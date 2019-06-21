@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -374,7 +374,6 @@ sub Run {
     if ( $Param{Data}->{TicketNumber} ) {
         $TicketID = $TicketObject->TicketIDLookup(
             TicketNumber => $Param{Data}->{TicketNumber},
-            UserID       => $UserID,
         );
 
     }
@@ -2048,8 +2047,32 @@ sub _TicketUpdate {
             $From = $UserData{UserFullname};
         }
 
-        # set Article To
-        my $To = '';
+        # Set Article To, Cc, Bcc.
+        my ( $To, $Cc, $Bcc );
+        if ( $Article->{To} ) {
+            $To = $Article->{To};
+        }
+        if ( $Article->{Cc} ) {
+            $Cc = $Article->{Cc};
+        }
+        if ( $Article->{Bcc} ) {
+            $Bcc = $Article->{Bcc};
+        }
+
+        # Fallback for To
+        if ( !$To && $Article->{CommunicationChannel} eq 'Email' ) {
+
+            # Use data from customer user (if customer user is in database).
+            if ( IsHashRefWithData( \%CustomerUserData ) ) {
+                $To = '"' . $CustomerUserData{UserFullname} . '"'
+                    . ' <' . $CustomerUserData{UserEmail} . '>';
+            }
+
+            # Otherwise use customer user as sent from the request (it should be an email).
+            else {
+                $To = $Ticket->{CustomerUser} // $TicketData{CustomerUserID};
+            }
+        }
 
         if ( !$Article->{CommunicationChannel} ) {
 
@@ -2082,6 +2105,8 @@ sub _TicketUpdate {
             IsVisibleForCustomer => $Article->{IsVisibleForCustomer},
             From                 => $From,
             To                   => $To,
+            Cc                   => $Cc,
+            Bcc                  => $Bcc,
             Subject              => $Article->{Subject},
             Body                 => $Article->{Body},
             MimeType             => $Article->{MimeType} || '',
@@ -2295,8 +2320,8 @@ sub _TicketUpdate {
 
             next ATTACHMENT if !IsHashRefWithData( \%Attachment );
 
-            # convert content to base64
-            $Attachment{Content} = MIME::Base64::encode_base64( $Attachment{Content} );
+            # convert content to base64, but prevent 76 chars brake, see bug#14500.
+            $Attachment{Content} = MIME::Base64::encode_base64( $Attachment{Content}, '' );
             push @Attachments, {%Attachment};
         }
 

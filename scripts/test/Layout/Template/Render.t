@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -371,11 +371,20 @@ console.log(22);
         Result => '',
     },
     {
+        Name      => 'JSData 4 with AddJSData()',
+        Template  => '',
+        AddJSData => {
+            Key   => 'JS.String.CaseInsensitive',
+            Value => { String => '</ScRiPt></ScRiPt>' },
+        },
+        Result => '',
+    },
+    {
         Name     => 'JSDataInsert',
         Template => '
 [% PROCESS "JSDataInsert" -%]',
         Result => '
-Core.Config.AddConfig({"Config.Test":123,"Config.Test2":[1,2,{"test":"test"}],"JS.String":{"String":"<\/script><\/script>"},"Perl.Code":{"Perl":"Data"}});
+Core.Config.AddConfig({"Config.Test":123,"Config.Test2":[1,2,{"test":"test"}],"JS.String":{"String":"<\/script><\/script>"},"JS.String.CaseInsensitive":{"String":"<\/ScRiPt><\/ScRiPt>"},"Perl.Code":{"Perl":"Data"}});
 ',
     },
     {

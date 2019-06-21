@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -96,6 +96,15 @@ sub Run {
         if ($NameExists) {
             $Errors{NameInvalid} = 'ServerError';
             $Errors{ErrorType}   = 'AlreadyUsed';
+        }
+
+        # Check if system address is used by auto response.
+        my $SystemAddressIsUsed = $Kernel::OM->Get('Kernel::System::SystemAddress')->SystemAddressIsUsed(
+            SystemAddressID => $GetParam{ID},
+        );
+        if ( $SystemAddressIsUsed && $GetParam{ValidID} > 1 ) {
+            $Errors{ValidIDInvalid}      = 'ServerError';
+            $Errors{SystemAddressIsUsed} = 1;
         }
 
         # if no errors occurred

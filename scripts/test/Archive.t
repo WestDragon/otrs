@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -57,6 +57,14 @@ for my $Index ( 0 .. 99 ) {
         $Self->False(
             1,
             "$Filename not found"
+        );
+        next INDEX;
+    }
+
+    if ( $Filename =~ /Cron|CHANGES/ ) {
+        $Self->True(
+            1,
+            "$Filename checksum is skipped",
         );
         next INDEX;
     }

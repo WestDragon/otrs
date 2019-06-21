@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -793,9 +793,10 @@ sub XMLParse {
     if ( eval 'require XML::Parser' ) {    ## no critic
         my $Parser = XML::Parser->new(
             Handlers => {
-                Start => sub { $Self->_HS(@_); },
-                End   => sub { $Self->_ES(@_); },
-                Char  => sub { $Self->_CS(@_); },
+                Start     => sub { $Self->_HS(@_); },
+                End       => sub { $Self->_ES(@_); },
+                Char      => sub { $Self->_CS(@_); },
+                ExternEnt => sub { return '' },         # suppress loading of external entities
             },
         );
 
@@ -827,9 +828,10 @@ sub XMLParse {
 
         my $Parser = XML::Parser::Lite->new(
             Handlers => {
-                Start => sub { $Self->_HS(@_); },
-                End   => sub { $Self->_ES(@_); },
-                Char  => sub { $Self->_CS(@_); },
+                Start     => sub { $Self->_HS(@_); },
+                End       => sub { $Self->_ES(@_); },
+                Char      => sub { $Self->_CS(@_); },
+                ExternEnt => sub { return '' },         # suppress loading of external entities
             },
         );
         $Parser->parse( $Param{String} );

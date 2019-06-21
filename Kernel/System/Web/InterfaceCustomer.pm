@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -348,9 +348,15 @@ sub Run {
         # create datetime object
         my $SessionDTObject = $Kernel::OM->Create('Kernel::System::DateTime');
 
+        # Remove certain user attributes that are not needed to be stored in the session.
+        #   - SMIME Certificate could be in binary format, if session backend in DB (default)
+        #   it wont be possible to be saved in certain databases (see bug#14405).
+        my %UserSessionData = %UserData;
+        delete $UserSessionData{UserSMIMECertificate};
+
         # create new session id
         my $NewSessionID = $SessionObject->CreateSessionID(
-            %UserData,
+            %UserSessionData,
             UserLastRequest => $SessionDTObject->ToEpoch(),
             UserType        => 'Customer',
             SessionSource   => 'CustomerInterface',

@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -211,12 +211,12 @@ Core.Agent.Statistics = (function (TargetNS) {
             $(this).addClass('Active');
             $('.PreviewContent:visible').hide();
             $('svg.PreviewContent').empty();
-            $('#PreviewContent' + FormatCleaned).show();
+            $('#PreviewContent' + Core.App.EscapeSelector(FormatCleaned)).show();
             if (Format.match(/D3/)) {
                 Core.UI.AdvancedChart.Init(
                     Format,
                     StatsPreviewResult,
-                    'svg#PreviewContent' + FormatCleaned,
+                    'svg#PreviewContent' + Core.App.EscapeSelector(FormatCleaned),
                     {
                         HideLegend: true
                     }

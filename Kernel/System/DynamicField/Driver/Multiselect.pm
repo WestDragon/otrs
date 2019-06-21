@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -232,6 +232,45 @@ sub ValueValidate {
     }
 
     return $Success;
+}
+
+sub FieldValueValidate {
+    my ( $Self, %Param ) = @_;
+
+    # Check for valid possible values list.
+    if ( !IsHashRefWithData( $Param{DynamicFieldConfig}->{Config}->{PossibleValues} ) ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need PossibleValues in Multiselect DynamicFieldConfig!",
+        );
+        return;
+    }
+
+    # Check for defined value.
+    if ( !defined $Param{Value} ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need Value in Multiselect DynamicField!",
+        );
+        return;
+    }
+
+    # Check if value parameter exists in possible values config.
+    if ( length $Param{Value} ) {
+        my @Values;
+        if ( ref $Param{Value} eq 'ARRAY' ) {
+            @Values = @{ $Param{Value} };
+        }
+        else {
+            push @Values, $Param{Value};
+        }
+
+        for my $Value (@Values) {
+            return if !defined $Param{DynamicFieldConfig}->{Config}->{PossibleValues}->{$Value};
+        }
+    }
+
+    return 1;
 }
 
 sub EditFieldRender {

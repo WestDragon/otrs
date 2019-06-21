@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -592,12 +592,14 @@ sub DisplayValueRender {
     my $Title = $Value;
 
     # set field link form config
-    my $Link = $Param{DynamicFieldConfig}->{Config}->{Link} || '';
+    my $Link        = $Param{DynamicFieldConfig}->{Config}->{Link}        || '';
+    my $LinkPreview = $Param{DynamicFieldConfig}->{Config}->{LinkPreview} || '';
 
     my $Data = {
-        Value => $Value,
-        Title => $Title,
-        Link  => $Link,
+        Value       => $Value,
+        Title       => $Title,
+        Link        => $Link,
+        LinkPreview => $LinkPreview,
     };
 
     return $Data;

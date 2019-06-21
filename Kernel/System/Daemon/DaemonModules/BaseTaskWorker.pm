@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -35,9 +35,9 @@ Creates a system error message and sends an email with the error messages form a
 
     my $Success = $TaskWorkerObject->_HandleError(
         TaskName     => 'some name',
-        TaksTye      => 'some type',
+        TaskType      => 'some type',
         LogMessage   => 'some message',       # message to set in the OTRS error log
-        ErrorMessage => 'some message',       # message to be sent ad a body of the email, usually contains
+        ErrorMessage => 'some message',       # message to be sent as a body of the email, usually contains
                                               #     all messages from STDERR including tracebacks
     );
 

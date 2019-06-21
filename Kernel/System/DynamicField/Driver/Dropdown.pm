@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -18,6 +18,7 @@ use parent qw(Kernel::System::DynamicField::Driver::BaseSelect);
 our @ObjectDependencies = (
     'Kernel::Config',
     'Kernel::System::DynamicFieldValue',
+    'Kernel::System::Log',
     'Kernel::System::Main',
 );
 
@@ -96,6 +97,35 @@ sub new {
     }
 
     return $Self;
+}
+
+sub FieldValueValidate {
+    my ( $Self, %Param ) = @_;
+
+    # Check for valid possible values list.
+    if ( !IsHashRefWithData( $Param{DynamicFieldConfig}->{Config}->{PossibleValues} ) ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need PossibleValues in Dropdown DynamicFieldConfig!",
+        );
+        return;
+    }
+
+    # Check for defined value.
+    if ( !defined $Param{Value} ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need Value in Dropdown DynamicField!",
+        );
+        return;
+    }
+
+    # Check if value parameter exists in possible values config.
+    if ( length $Param{Value} ) {
+        return if !$Param{DynamicFieldConfig}->{Config}->{PossibleValues}->{ $Param{Value} };
+    }
+
+    return 1;
 }
 
 1;

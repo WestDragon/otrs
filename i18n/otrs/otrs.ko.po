@@ -1,13 +1,13 @@
 # Translators:
-# Carlos Rodríguez <carlos.rodriguez@otrs.com>, 2018
 # 신홍열 <hyshin@shinjjang.com>, 2018
+# Carlos Rodríguez <carlos.rodriguez@otrs.com>, 2018
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-12-06 17:43+0000\n"
+"POT-Creation-Date: 2019-05-14 06:48+0000\n"
 "PO-Revision-Date: 2018-09-20 13:03+0000\n"
-"Last-Translator: 신홍열 <hyshin@shinjjang.com>, 2018\n"
+"Last-Translator: Carlos Rodríguez <carlos.rodriguez@otrs.com>, 2018\n"
 "Language-Team: Korean (https://www.transifex.com/otrs/teams/23435/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2070,6 +2070,10 @@ msgstr "시간 계획"
 #. Template: AdminGenericAgent
 msgid "Schedule days"
 msgstr "하루 일정"
+
+#. Template: AdminGenericAgent
+msgid "Automatic execution values are in the system timezone."
+msgstr ""
 
 #. Template: AdminGenericAgent
 msgid "Currently this generic agent job will not run automatically."
@@ -6702,10 +6706,14 @@ msgid "The display name and email address will be shown on mail you send."
 msgstr "표시 이름과 이메일 주소가 보내는 메일에 표시됩니다."
 
 #. Template: AdminSystemAddress
+msgid "This system address cannot be set to invalid."
+msgstr ""
+
+#. Template: AdminSystemAddress
 msgid ""
 "This system address cannot be set to invalid, because it is used in one or "
-"more queue(s)."
-msgstr "이 시스템 주소는 하나 이상의 대기열(s)에서 사용되기 때문에 유효하지 않게 설정할 수 없습니다. "
+"more queue(s) or auto response(s)."
+msgstr ""
 
 #. Template: AdminSystemConfiguration
 msgid "online administrator documentation"
@@ -7056,8 +7064,8 @@ msgid "Your email address is"
 msgstr "귀하의 이메일 주소 : "
 
 #. Template: AdminTemplateAttachment
-msgid "Manage Templates-Attachments Relations"
-msgstr "템플릿 관리 - 첨부파일 관계"
+msgid "Manage Template-Attachment Relations"
+msgstr ""
 
 #. Template: AdminTemplateAttachment
 msgid "Toggle active for all"
@@ -7968,16 +7976,16 @@ msgid "Split"
 msgstr "분리"
 
 #. Template: AgentStatisticsAdd
-msgid "Statistics Overview"
-msgstr "통계 개요"
-
-#. Template: AgentStatisticsAdd
-msgid "Read more about statistics in OTRS"
-msgstr "OTRS의 통계에 대해 자세히 알아보십시오."
+msgid "Statistics Management"
+msgstr ""
 
 #. Template: AgentStatisticsAdd
 msgid "Add Statistics"
 msgstr "통계 추가"
+
+#. Template: AgentStatisticsAdd
+msgid "Read more about statistics in OTRS"
+msgstr "OTRS의 통계에 대해 자세히 알아보십시오."
 
 #. Template: AgentStatisticsAdd
 msgid "Dynamic Matrix"
@@ -8012,6 +8020,10 @@ msgid "Create Statistic"
 msgstr "통계 생성"
 
 #. Template: AgentStatisticsEdit
+msgid "Edit Statistics"
+msgstr ""
+
+#. Template: AgentStatisticsEdit
 msgid "Run now"
 msgstr "지금 실행"
 
@@ -8022,6 +8034,10 @@ msgstr "통계 미리보기"
 #. Template: AgentStatisticsEdit
 msgid "Save Statistic"
 msgstr "통계 저장"
+
+#. Template: AgentStatisticsImport
+msgid "Import Statistics"
+msgstr ""
 
 #. Template: AgentStatisticsImport
 msgid "Import Statistics Configuration"
@@ -8054,6 +8070,14 @@ msgstr "통계 \"%s\"  삭제"
 #. Template: AgentStatisticsOverview
 msgid "Delete statistic %s"
 msgstr "통계 \"%s\" 삭제"
+
+#. Template: AgentStatisticsView
+msgid "Statistics Overview"
+msgstr "통계 개요"
+
+#. Template: AgentStatisticsView
+msgid "View Statistics"
+msgstr ""
 
 #. Template: AgentStatisticsView
 msgid "Statistics Information"
@@ -10359,10 +10383,6 @@ msgid "Deploy now"
 msgstr "지금 배포"
 
 #. JS Template: DialogDeployment
-msgid "Close"
-msgstr "닫기"
-
-#. JS Template: DialogDeployment
 msgid "Try again"
 msgstr "다시 시도하십시오."
 
@@ -10521,6 +10541,10 @@ msgid "There was an error getting data for ACL with ID %s"
 msgstr "ID가 %s 인 ACL에 대한 데이터를 가져 오는 중 오류가 발생했습니다."
 
 #. Perl Module: Kernel/Modules/AdminACL.pm
+msgid "%s (copy) %s"
+msgstr ""
+
+#. Perl Module: Kernel/Modules/AdminACL.pm
 msgid ""
 "Please note that ACL restrictions will be ignored for the Superuser account "
 "(UserID 1)."
@@ -10641,6 +10665,10 @@ msgstr "ID가 %s 인 알림 데이터를 가져 오는 중 오류가 발생했�
 #. Perl Module: Kernel/Modules/AdminAppointmentNotificationEvent.pm
 msgid "Unknown Notification %s!"
 msgstr "알 수없는 알림 %s!"
+
+#. Perl Module: Kernel/Modules/AdminAppointmentNotificationEvent.pm
+msgid "%s (copy)"
+msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminAppointmentNotificationEvent.pm
 msgid "There was an error creating the Notification"
@@ -11610,8 +11638,9 @@ msgid "Repository List"
 msgstr "저장소 목록"
 
 #. Perl Module: Kernel/Modules/AdminPackageManager.pm
-msgid "No packages or no new packages found in selected repository."
-msgstr "선택한 저장소에 패키지가 없거나 새로운 패키지가 없습니다."
+msgid ""
+"No packages found in selected repository. Please check log for more info!"
+msgstr ""
 
 #. Perl Module: Kernel/Modules/AdminPackageManager.pm
 msgid ""
@@ -12598,6 +12627,22 @@ msgid "Ticket (%s) is not unlocked!"
 msgstr "티켓 (%s)은 잠금 해제되지 않았습니다!"
 
 #. Perl Module: Kernel/Modules/AgentTicketBulk.pm
+msgid ""
+"The following tickets were ignored because they are locked by another agent "
+"or you don't have write access to tickets: %s."
+msgstr ""
+
+#. Perl Module: Kernel/Modules/AgentTicketBulk.pm
+msgid ""
+"The following ticket was ignored because it is locked by another agent or "
+"you don't have write access to ticket: %s."
+msgstr ""
+
+#. Perl Module: Kernel/Modules/AgentTicketBulk.pm
+msgid "You need to select at least one ticket."
+msgstr "하나 이상의 티켓을 선택해야 합니다."
+
+#. Perl Module: Kernel/Modules/AgentTicketBulk.pm
 msgid "Bulk feature is not enabled!"
 msgstr "대량 기능을 사용할 수 없습니다!"
 
@@ -12610,10 +12655,6 @@ msgid ""
 "You either selected no ticket or only tickets which are locked by other "
 "agents."
 msgstr "티켓을 선택하지 않았거나 다른 상담원이 잠근 티켓만 선택했습니다."
-
-#. Perl Module: Kernel/Modules/AgentTicketBulk.pm
-msgid "You need to select at least one ticket."
-msgstr "하나 이상의 티켓을 선택해야 합니다."
 
 #. Perl Module: Kernel/Modules/AgentTicketBulk.pm
 msgid ""
@@ -13680,6 +13721,14 @@ msgid "There are no selected encryption keys for the addresses: '%s'. "
 msgstr "주소에 대해 선택된 암호화 키가 없습니다 : '%s'."
 
 #. Perl Module: Kernel/Output/HTML/ArticleCompose/Crypt.pm
+msgid "Cannot use expired encryption keys for the addresses: '%s'. "
+msgstr ""
+
+#. Perl Module: Kernel/Output/HTML/ArticleCompose/Crypt.pm
+msgid "Cannot use revoked encryption keys for the addresses: '%s'. "
+msgstr ""
+
+#. Perl Module: Kernel/Output/HTML/ArticleCompose/Crypt.pm
 msgid "Encrypt"
 msgstr "암호화"
 
@@ -13719,6 +13768,14 @@ msgstr "SMIME 서명 및 암호화"
 #. Perl Module: Kernel/Output/HTML/ArticleCompose/Security.pm
 msgid "SMIME encrypt"
 msgstr "SMIME 암호화"
+
+#. Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+msgid "Cannot use expired signing key: '%s'. "
+msgstr ""
+
+#. Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+msgid "Cannot use revoked signing key: '%s'. "
+msgstr ""
 
 #. Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
 msgid "There are no signing keys available for the addresses '%s'."
@@ -13840,6 +13897,10 @@ msgstr "불가능"
 #. Perl Module: Kernel/Output/HTML/Layout.pm
 msgid "Standard"
 msgstr "표준"
+
+#. Perl Module: Kernel/Output/HTML/Layout.pm
+msgid "The following tickets are not updated: %s."
+msgstr ""
 
 #. Perl Module: Kernel/Output/HTML/Layout.pm
 msgid "h"
@@ -14511,14 +14572,9 @@ msgstr ""
 #. Perl Module: Kernel/System/Package.pm
 msgid ""
 "<p>The installation of packages which are not verified by the OTRS Group is "
-"not possible by default.</p>"
-msgstr ""
-
-#. Perl Module: Kernel/System/Package.pm
-msgid ""
-"<p>You can activate the installation of not verified packages in the <a "
-"href=\"%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages\""
-" target=\"_blank\">System Configuration</a>.</p>"
+"not possible by default. You can activate the installation of not verified "
+"packages via the \"AllowNotVerifiedPackages\" system configuration "
+"setting.</p>"
 msgstr ""
 
 #. Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -15048,6 +15104,10 @@ msgstr "배포를 결정할 수 없습니다."
 msgid "Kernel Version"
 msgstr "커널 버전"
 
+#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
+msgid "Could not determine kernel version."
+msgstr ""
+
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
 msgid "System Load"
 msgstr "시스템로드"
@@ -15316,16 +15376,16 @@ msgstr "레거시 구성 백업 파일이 없습니다."
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
 msgid ""
-"Legacy configuration backup files found in %s, but they might still be "
-"required by some packages."
-msgstr "레거시 구성 백업 파일은 %s에서 발견되었지만 일부 패키지에서는 여전히 필요합니다."
+"Legacy configuration backup files found in Kernel/Config/Backups folder, but"
+" they might still be required by some packages."
+msgstr ""
 
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
 msgid ""
 "Legacy configuration backup files are no longer needed for the installed "
-"packages, please remove them from %s."
-msgstr "레거시 구성 백업 파일은 설치된 패키지에 더 이상 필요하지 않으므로 %s에서 제거하십시오."
+"packages, please remove them from Kernel/Config/Backups folder."
+msgstr ""
 
 #. Perl Module:
 #. Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
@@ -15495,10 +15555,6 @@ msgstr "사용자 기본 시간대"
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/TimeSettings.pm
 msgid "User default time zone is not set."
 msgstr "사용자 기본 시간대가 설정되지 않았습니다."
-
-#. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/TimeSettings.pm
-msgid "OTRS time zone setting for calendar"
-msgstr "캘린더의 OTRS 시간대 설정"
 
 #. Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/TimeSettings.pm
 msgid "Calendar time zone is not set."
@@ -16866,6 +16922,10 @@ msgid ""
 "searched for:"
 msgstr "검색할 수 없으므로 다음 단어를 검색에서 제거하십시오."
 
+#. JS File: Core.Agent.SharedSecretGenerator
+msgid "Generate"
+msgstr ""
+
 #. JS File: Core.Agent.SortedTree
 msgid "This element has children elements and can currently not be removed."
 msgstr "이 요소는 하위 요소를 가지며 현재 제거할 수 없습니다."
@@ -17642,12 +17702,6 @@ msgid "All new tickets, these tickets have not been worked on yet"
 msgstr "모든 새로운 티켓이 그 티켓은 아직 작동하지 않았습니다."
 
 #. SysConfig
-msgid ""
-"All open tickets, these tickets have already been worked on, but need a "
-"response"
-msgstr "열러있는 모든 티켓, 이 티켓은 이미 작업되었지만 응답이 필요합니다."
-
-#. SysConfig
 msgid "All open tickets, these tickets have already been worked on."
 msgstr "열려있는 모든 티켓, 이 티켓들은 이미 작업되었습니다."
 
@@ -17801,6 +17855,14 @@ msgid ""
 msgstr ""
 "일반 에이전트 인터페이스의 티켓 검색에서 확장 된 검색 조건을 허용합니다. 이 기능을 사용하면 e. 지. \"(* key1 * && * "
 "key2 *)\"또는 \"(* key1 * || * key2 *)\"와 같은 조건의 티켓 제목을 사용하십시오."
+
+#. SysConfig
+msgid "Allows generic agent to execute custom command line scripts."
+msgstr ""
+
+#. SysConfig
+msgid "Allows generic agent to execute custom modules."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -18031,10 +18093,8 @@ msgstr "전역 서식있는 텍스트 설정에 기반"
 #. SysConfig
 msgid ""
 "Basic fulltext index settings. Execute \"bin/otrs.Console.pl "
-"Maint::Ticket::FulltextIndexRebuild\" in order to generate a new index."
+"Maint::Ticket::FulltextIndex --rebuild\" in order to generate a new index."
 msgstr ""
-"기본 전체 텍스트 색인 설정. 새 인덱스를 생성하려면 \"bin / otrs.Console.pl Maint :: Ticket :: "
-"FulltextIndexRebuild\"를 실행하십시오."
 
 #. SysConfig
 msgid ""
@@ -18277,6 +18337,10 @@ msgid "Christmas Eve"
 msgstr "크리스마스 이브"
 
 #. SysConfig
+msgid "Close"
+msgstr "닫기"
+
+#. SysConfig
 msgid "Close this ticket"
 msgstr "이 티켓을 닫습니다."
 
@@ -18466,11 +18530,8 @@ msgid ""
 "Configures a default TicketDynamicField setting. \"Name\" defines the "
 "dynamic field which should be used, \"Value\" is the data that will be set, "
 "and \"Event\" defines the trigger event. Please check the developer manual "
-"(http://otrs.github.io/doc/), chapter \"Ticket Event Module\"."
+"(https://doc.otrs.com/doc/), chapter \"Ticket Event Module\"."
 msgstr ""
-"기본 TicketDynamicField 설정을 구성합니다. \"Name\"은 사용할 동적 필드를 정의하고, \"Value\"는 설정할 "
-"데이터이고 \"Event\"는 트리거 이벤트를 정의합니다. 개발자 설명서 (http://otrs.github.io/doc/), "
-"\"Ticket Event Module\"장을 확인하십시오."
 
 #. SysConfig
 msgid "Controls how to display the ticket history entries as readable values."
@@ -18827,6 +18888,10 @@ msgid ""
 "Default ProcessManagement entity prefixes for entity IDs that are "
 "automatically generated."
 msgstr "자동으로 생성되는 엔티티 ID에 대한 기본 ProcessManagement 엔티티 접두사입니다."
+
+#. SysConfig
+msgid "Default agent name"
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -19791,6 +19856,12 @@ msgstr "서식있는 텍스트 편집기에 사용되는 기본 CSS를 정의합
 
 #. SysConfig
 msgid ""
+"Defines the default agent name in the ticket zoom view of the customer "
+"interface."
+msgstr ""
+
+#. SysConfig
+msgid ""
 "Defines the default auto response type of the article for this operation."
 msgstr "이 작업에 대한 아티클의 기본 자동 응답 유형을 정의합니다."
 
@@ -19813,10 +19884,8 @@ msgstr ""
 msgid ""
 "Defines the default front-end (HTML) theme to be used by the agents and "
 "customers. If you like, you can add your own theme. Please refer the "
-"administrator manual located at http://otrs.github.io/doc/."
+"administrator manual located at https://doc.otrs.com/doc/."
 msgstr ""
-"에이전트 및 고객이 사용할 기본 프런트 엔드 (HTML) 테마를 정의합니다. 원한다면 자신 만의 테마를 추가 할 수 있습니다. "
-"http://otrs.github.io/doc/ 에있는 관리자 설명서를 참조하십시오."
 
 #. SysConfig
 msgid ""
@@ -20310,6 +20379,13 @@ msgid ""
 "Defines the default visibility of the article to customer for this "
 "operation."
 msgstr "이 작업을 위해 고객에게 기사의 기본 가시성을 정의합니다."
+
+#. SysConfig
+msgid ""
+"Defines the displayed style of the From field in notes that are visible for "
+"customers. A default agent name can be defined in "
+"Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting."
+msgstr ""
 
 #. SysConfig
 msgid ""
@@ -22087,8 +22163,12 @@ msgid "Enroll process for this ticket"
 msgstr "이 티켓에 대한 프로세스 등록"
 
 #. SysConfig
-msgid "Enter your shared secret to enable two factor authentication."
-msgstr "공유 인증을 입력하면 두가지 요소 인증을 사용할 수 있습니다."
+msgid ""
+"Enter your shared secret to enable two factor authentication. WARNING: Make "
+"sure that you add the shared secret to your generator application and the "
+"application works well. Otherwise you will be not able to login anymore "
+"without the two factor token."
+msgstr ""
 
 #. SysConfig
 msgid "Escalated Tickets"
@@ -22566,8 +22646,8 @@ msgid ""
 "Helps to extend your articles full-text search (From, To, Cc, Subject and "
 "Body search). It will strip all articles and will build an index after "
 "article creation, increasing fulltext searches about 50%. To create an "
-"initial index use \"bin/otrs.Console.pl "
-"Maint::Ticket::FulltextIndexRebuild\"."
+"initial index use \"bin/otrs.Console.pl Maint::Ticket::FulltextIndex "
+"--rebuild\"."
 msgstr ""
 
 #. SysConfig
@@ -23408,6 +23488,10 @@ msgid "Main menu registration."
 msgstr "기본 메뉴 등록."
 
 #. SysConfig
+msgid "Makes the application block external content loading."
+msgstr ""
+
+#. SysConfig
 msgid ""
 "Makes the application check the MX record of email addresses before sending "
 "an email or submitting a telephone or email ticket."
@@ -23884,10 +23968,6 @@ msgid ""
 msgstr ""
 "OTRS는 끝 날짜 또는 반복 횟수가없는 되풀이 약속을 지원하지 않습니다. 가져 오기 프로세스 중에 ICS 파일에 이러한 약속이 포함될 "
 "수 있습니다. 대신, 시스템은 과거의 모든 약속과 다음 N 개월 (기본적으로 120 개월 / 10 년)의 약속을 작성합니다."
-
-#. SysConfig
-msgid "Open Tickets / Need to be answered"
-msgstr "진행중 티켓 / 답변이 필요함"
 
 #. SysConfig
 msgid "Open an external link!"
@@ -24705,8 +24785,9 @@ msgstr "AgentTicketQueue 티켓 색인을 다시 작성하십시오."
 #. SysConfig
 msgid ""
 "Recognize if a ticket is a follow-up to an existing ticket using an external"
-" ticket number."
-msgstr "티켓이 외부 티켓 번호를 사용하여 기존 티켓의 후속 조치인지 확인하십시오."
+" ticket number. Note: the first capturing group from the 'NumberRegExp' "
+"expression will be used as the ticket number value."
+msgstr ""
 
 #. SysConfig
 msgid "Refresh interval"
@@ -24725,6 +24806,12 @@ msgstr "잊지 말아야 할 티켓"
 #. SysConfig
 msgid "Removed subscription for user \"%s\"."
 msgstr "\"%s\" 사용자에 대한 가입이 삭제되었습니다."
+
+#. SysConfig
+msgid ""
+"Removes old generic interface debug log entries created before the specified"
+" amount of days."
+msgstr ""
 
 #. SysConfig
 msgid "Removes old system configuration deployments (Sunday mornings)."
@@ -26500,6 +26587,10 @@ msgstr ""
 " 키 \"그룹\"과 \"rw : group1; move_into : group2\"와 같은 내용을 사용하여 수행 할 수 있습니다."
 
 #. SysConfig
+msgid "Shows the article head information in the agent zoom view."
+msgstr ""
+
+#. SysConfig
 msgid ""
 "Shows the articles sorted normally or in reverse, under ticket zoom in the "
 "agent interface."
@@ -26979,6 +27070,10 @@ msgid "Strips empty lines on the ticket preview in the service view."
 msgstr "서비스보기의 티켓 미리보기에서 빈 줄을 제거합니다."
 
 #. SysConfig
+msgid "Support Agent"
+msgstr ""
+
+#. SysConfig
 msgid "Swahili"
 msgstr "스와힐리어"
 
@@ -27180,6 +27275,10 @@ msgid ""
 "The text at the beginning of the subject when an email is forwarded, e.g. "
 "FW, Fwd, or WG."
 msgstr "이메일이 전달 될 때 제목의 시작 부분에있는 텍스트입니다 예 : FW, FWD 또는 WG."
+
+#. SysConfig
+msgid "The value of the From field"
+msgstr ""
 
 #. SysConfig
 msgid "Theme"

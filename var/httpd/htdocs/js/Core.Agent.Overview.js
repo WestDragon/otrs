@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -81,7 +81,7 @@ Core.Agent.Overview = (function (TargetNS) {
 
                                     // only add this field if its not already there. This could happen
                                     // if e.g. the save button is clicked multiple times
-                                    if (!$('#' + FieldID).length) {
+                                    if (!$('#' + Core.App.EscapeSelector(FieldID)).length) {
                                         $('<input name="UserFilterColumnsEnabled" type="hidden" />').attr('id', FieldID).val($(this).attr('data-fieldname')).appendTo($ListContainer.closest('div'));
                                     }
                                 });

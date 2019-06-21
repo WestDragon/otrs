@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -91,8 +91,23 @@ $Selenium->RunTest(
             'Client side validation correctly detected missing input value',
         );
 
+        # Check server side validation and verify JS is still working correct after server error. See bug#14588.
+        $Selenium->execute_script("\$('#DescriptionShort').removeClass('Validate_Required');");
+        $Selenium->find_element( "#Name",   'css' )->send_keys($ActivityDialogRandom);
+        $Selenium->find_element( "#Submit", 'css' )->click();
+
+        # Wait for error dialog to appear.
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 1;'
+        );
+
+        $Selenium->find_element( "#DialogButton1", 'css' )->click();
+
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 0;'
+        );
+
         # Input fields and submit.
-        $Selenium->find_element( "#Name",             'css' )->send_keys($ActivityDialogRandom);
         $Selenium->find_element( "#DescriptionShort", 'css' )->send_keys($DescriptionShort);
         $Selenium->InputFieldValueSet(
             Element => '#Interface',

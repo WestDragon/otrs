@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -16,9 +16,58 @@ my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
     sub {
+        my $Helper       = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+        my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-        my $Helper                  = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
-        my $ConfigObject            = $Kernel::OM->Get('Kernel::Config');
+        my $Home           = $ConfigObject->Get('Home');
+        my $Daemon         = $Home . '/bin/otrs.Daemon.pl';
+        my $DaemonExitCode = 1;
+
+        my $RevertDeamonStatus = sub {
+            if ( !$DaemonExitCode ) {
+                `$^X $Daemon stop`;
+
+                $Self->True(
+                    1,
+                    'Stopped daemon started earlier'
+                );
+            }
+        };
+
+        my $WaitForDaemon = sub {
+            my $SchedulerDBObject = $Kernel::OM->Get('Kernel::System::Daemon::SchedulerDB');
+
+            # Sleep up to 20 seconds - we tried with 10 seconds, but in some cases it's not enough.
+            my $WaitTime = 20;
+
+            my @TaskList;
+
+            # Wait for daemon to do it's magic.
+            print "Waiting at most $WaitTime s until tasks are executed\n";
+            ACTIVESLEEP:
+            for my $Seconds ( 1 .. $WaitTime ) {
+                @TaskList = $SchedulerDBObject->TaskList();
+                last ACTIVESLEEP if !scalar @TaskList;
+                print "Sleeping for $Seconds seconds...\n";
+                sleep 1;
+            }
+
+            @TaskList = $SchedulerDBObject->TaskList();
+            if (@TaskList) {
+                my $Tasks = $Kernel::OM->Get('Kernel::System::Main')->Dump(
+                    \@TaskList,
+                );
+                $Kernel::OM->Get('Kernel::System::Log')->Log(
+                    Priority => 'error',
+                    Message  => "Tasks running: $Tasks!"
+                );
+
+                $RevertDeamonStatus->();
+
+                die "Daemon tasks are not finished after $WaitTime seconds!";
+            }
+        };
+
         my $GroupObject             = $Kernel::OM->Get('Kernel::System::Group');
         my $DynamicFieldObject      = $Kernel::OM->Get('Kernel::System::DynamicField');
         my $DynamicFieldValueObject = $Kernel::OM->Get('Kernel::System::DynamicFieldValue');
@@ -110,10 +159,6 @@ $Selenium->RunTest(
                 "TaskDelete - Removed scheduled task $Task->{TaskID}",
             );
         }
-
-        my $Home           = $ConfigObject->Get('Home');
-        my $Daemon         = $Home . '/bin/otrs.Daemon.pl';
-        my $DaemonExitCode = 1;
 
         # Get current daemon status.
         my $PreviousDaemonStatus = `$Daemon status`;
@@ -308,7 +353,11 @@ $Selenium->RunTest(
         my $TestUserLogin = $Helper->TestUserCreate(
             Groups   => [ 'admin', $GroupName ],
             Language => $Language,
-        ) || die 'Did not get test user';
+        );
+        if ( !$TestUserLogin ) {
+            $RevertDeamonStatus->();
+            die 'Did not get test user';
+        }
 
         $Selenium->Login(
             Type     => 'Agent',
@@ -345,9 +394,6 @@ $Selenium->RunTest(
 
         my $AppointmentObject = $Kernel::OM->Get('Kernel::System::Calendar::Appointment');
         my $CacheObject       = $Kernel::OM->Get('Kernel::System::Cache');
-
-        # Sleep for slow systems.
-        my $SleepTime = 2;
 
         #
         # Tests for ticket appointments
@@ -540,15 +586,8 @@ $Selenium->RunTest(
                 "$Test->{Name} - Added ticket appointment rule",
             );
 
-            # Wait for daemon to do its magic.
-            print "Waiting at most $SleepTime s until tasks are executed\n";
-            ACTIVESLEEP:
-            for my $Seconds ( 1 .. $SleepTime ) {
-                my @List = $SchedulerDBObject->TaskList();
-                last ACTIVESLEEP if !scalar @List;
-                print "Sleeping for $Seconds seconds...\n";
-                sleep 1;
-            }
+            # Wait for daemon to do it's magic.
+            $WaitForDaemon->();
 
             # Make sure the cache is correct.
             $CacheObject->CleanUp(
@@ -608,8 +647,8 @@ $Selenium->RunTest(
                     "$Test->{Name} - Appointment updated"
                 );
 
-                # Wait for daemon to do its magic.
-                sleep $SleepTime;
+                # Wait for daemon.
+                $WaitForDaemon->();
 
                 # Make sure the cache is correct.
                 $CacheObject->CleanUp(
@@ -658,15 +697,8 @@ $Selenium->RunTest(
                 "$Test->{Name} - Removed ticket appointment rule"
             );
 
-            # Wait for daemon to do its magic.
-            print "Waiting at most $SleepTime s until tasks are executed\n";
-            ACTIVESLEEP:
-            for my $Seconds ( 1 .. $SleepTime ) {
-                my @List = $SchedulerDBObject->TaskList();
-                last ACTIVESLEEP if !scalar @List;
-                print "Sleeping for $Seconds seconds...\n";
-                sleep 1;
-            }
+            # Wait for daemon.
+            $WaitForDaemon->();
 
             # Make sure the cache is correct.
             $CacheObject->CleanUp(
@@ -684,14 +716,7 @@ $Selenium->RunTest(
         }
 
         # Stop daemon if it was started earlier in the test.
-        if ( !$DaemonExitCode ) {
-            `$^X $Daemon stop`;
-
-            $Self->True(
-                1,
-                'Stopped daemon started earlier'
-            );
-        }
+        $RevertDeamonStatus->();
 
         #
         # Cleanup

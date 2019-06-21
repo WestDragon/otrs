@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1616,6 +1616,11 @@ sub Run {
                     $DataValue = $Article{$TicketColumn}
                         || $UserInfo{$TicketColumn}
                         || $CustomerInfo{$TicketColumn};
+
+                    # If value is in date format, change block type to 'Time' so it can be localized. See bug#14542.
+                    if ( $DataValue =~ /^\d\d\d\d-(\d|\d\d)-(\d|\d\d)\s(\d|\d\d):(\d|\d\d):(\d|\d\d)/ ) {
+                        $BlockType = 'Time';
+                    }
                 }
 
                 $LayoutObject->Block(

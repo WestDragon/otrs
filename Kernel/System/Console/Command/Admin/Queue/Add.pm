@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -46,7 +46,7 @@ sub Configure {
     );
     $Self->AddOption(
         Name        => 'system-address-name',
-        Description => 'Name of the system address which should be assigned to the new queue.',
+        Description => 'System email address which should be assigned to the new queue.',
         Required    => 0,
         HasValue    => 1,
         ValueRegex  => qr/.*/smx,
@@ -67,7 +67,7 @@ sub Configure {
     );
     $Self->AddOption(
         Name        => 'first-response-time',
-        Description => 'Ticket first respone time in minutes for the new queue.',
+        Description => 'Ticket first response time in minutes for the new queue.',
         Required    => 0,
         HasValue    => 1,
         ValueRegex  => qr/\d/smx,
@@ -88,7 +88,7 @@ sub Configure {
     );
     $Self->AddOption(
         Name        => 'calendar',
-        Description => 'Name of the calendar for the new queue.',
+        Description => 'Calendar order number for the new queue.',
         Required    => 0,
         HasValue    => 1,
         ValueRegex  => qr/.*/smx,

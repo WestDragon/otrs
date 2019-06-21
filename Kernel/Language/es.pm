@@ -29,7 +29,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%D/%M/%Y';
     $Self->{DateInputFormat}     = '%D/%M/%Y';
     $Self->{DateInputFormatLong} = '%D/%M/%Y - %T';
-    $Self->{Completeness}        = 0.674107142857143;
+    $Self->{Completeness}        = 0.676867840656523;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -112,7 +112,7 @@ sub Data {
         'Overwrite existing entities' => 'Sobrescribir entidades existentes',
         'Upload calendar configuration' => 'Cargar configuración de calendario',
         'Import Calendar' => 'Importar Calendario',
-        'Filter for Calendars' => '',
+        'Filter for Calendars' => 'Filtro para Calendarios',
         'Filter for calendars' => 'Filtro para Calendarios',
         'Depending on the group field, the system will allow users the access to the calendar according to their permission level.' =>
             'Dependiendo del campo de grupo, el sistema permite el acceso a usuarios al calendario de acuerdo a sus niveles de permisos.',
@@ -322,10 +322,10 @@ sub Data {
 
         # Template: AdminCommunicationLog
         'Communication Log' => 'Registro de comunicación',
-        'Time Range' => '',
+        'Time Range' => 'Período de tiempo',
         'Show only communication logs created in specific time range.' =>
             'Muestre solo los registros de comunicación creados en un rango específico de tiempo',
-        'Filter for Communications' => '',
+        'Filter for Communications' => 'Filtro para comunicaciones',
         'Filter for communications' => 'Filtro para comunicaciones',
         'In this screen you can see an overview about incoming and outgoing communications.' =>
             'En esta pantalla usted puede ver un resumen acerca de las comunicaciones entrantes y salientes',
@@ -356,8 +356,8 @@ sub Data {
 
         # Template: AdminCommunicationLogAccounts
         'Account Status' => 'Estado de la cuenta',
-        'Back to overview' => '',
-        'Filter for Accounts' => '',
+        'Back to overview' => 'Volver a la visión general',
+        'Filter for Accounts' => 'Filtrar por cuentas',
         'Filter for accounts' => 'Filtrar para cuentas',
         'You can change the sort and order of those columns by clicking on the column header.' =>
             'Puede cambiar el orden de esas columnas haciendo clic en el encabezado de columna.',
@@ -384,7 +384,7 @@ sub Data {
 
         # Template: AdminCommunicationLogZoom
         'Detail view for %s communication started at %s' => 'Vista detallada de la %s comunicación iniciada en %s',
-        'Filter for Log Entries' => '',
+        'Filter for Log Entries' => 'Filtrar por entradas de log',
         'Filter for log entries' => 'Filtrar entradas de registro',
         'Show only entries with specific priority and higher:' => 'Mostrar solo entradas de prioridad específica ó más alta:',
         'Communication Log Overview (%s)' => 'La Visión General del Registro de Comunicación (%s)',
@@ -490,14 +490,14 @@ sub Data {
             'Éstos grupos son automaticamente asignados a todos los usuarios del cliente.',
         'You can manage these groups via the configuration setting "CustomerGroupAlwaysGroups".' =>
             'Puede gestionar estos grupos mediante el ajuste de configuración «CustomerGroupAlwaysGroups».',
-        'Filter for groups' => '',
+        'Filter for groups' => 'Filtrar por grupos',
         'Select the customer user - group permissions.' => 'Seleccionar los permisos Usuario del Cliente - Grupo.',
         'If nothing is selected, then there are no permissions in this group (tickets will not be available for the customer user).' =>
             'Sí no está seleccionado nada, entónces no habrá permisos en éste grupo (tickets no serán disponibles para el usuario del cliente).',
         'Customer User Default Groups:' => 'Grupos del Usuario del Cliente por Defecto:',
 
         # Template: AdminCustomerUserService
-        'Manage Customer User-Service Relations' => '',
+        'Manage Customer User-Service Relations' => 'Administrar relaciones usuario-servicio del cliente ',
         'Edit default services' => 'Editar los servicios predeterminados',
         'Filter for Services' => 'Filtro para los servicios',
         'Filter for services' => 'Filtrar por servicios',
@@ -628,12 +628,12 @@ sub Data {
         'Send' => 'Enviar',
 
         # Template: AdminGenericAgent
-        'Generic Agent Job Management' => '',
-        'Edit Job' => '',
-        'Add Job' => '',
-        'Run Job' => '',
-        'Filter for Jobs' => '',
-        'Filter for jobs' => '',
+        'Generic Agent Job Management' => 'Gestión de trabajos del agente',
+        'Edit Job' => 'Editar trabajo',
+        'Add Job' => 'Añadir trabajo',
+        'Run Job' => 'Ejecutar trabajo',
+        'Filter for Jobs' => 'Filtro por trabajos',
+        'Filter for jobs' => 'Filtro por trabajos',
         'Last run' => 'Última ejecución',
         'Run Now!' => '¡Ejecutar ahora!',
         'Delete this task' => 'Borrar esta tarea',
@@ -646,6 +646,7 @@ sub Data {
         'Schedule minutes' => 'Minutos para la planificación',
         'Schedule hours' => 'Horas para planificación',
         'Schedule days' => 'Días para la planificación',
+        'Automatic execution values are in the system timezone.' => '',
         'Currently this generic agent job will not run automatically.' =>
             'Actualmente este trabajo de agente genérico no se ejecutará automáticamente.',
         'To enable automatic execution select at least one value from minutes, hours and days!' =>
@@ -948,19 +949,19 @@ sub Data {
         'Find previous' => 'Buscar anterior',
         'Find and replace' => 'Buscar y reemplazar',
         'Find and replace all' => 'Buscar y reemplazar todo',
-        'XSLT Mapping' => '',
-        'XSLT stylesheet' => '',
+        'XSLT Mapping' => 'Mapeo XSLT',
+        'XSLT stylesheet' => 'hoja de estilos XSLT',
         'The entered data is not a valid XSLT style sheet.' => 'Los datos introducidos no son un formato de hoja XSLT válido',
-        'Here you can add or modify your XSLT mapping code.' => '',
+        'Here you can add or modify your XSLT mapping code.' => 'Aquí puede añadir o midificar su código de mapeo',
         'The editing field allows you to use different functions like automatic formatting, window resize as well as tag- and bracket-completion.' =>
-            '',
+            'El campo de edición le permite usar diferentes funciones como el formato automático, reescalado de ventanas así como completado de marcas y corchetes.',
         'Data includes' => 'Datos incluidos',
         'Select one or more sets of data that were created at earlier request/response stages to be included in mappable data.' =>
-            '',
+            'Seleccione uno o más conjuntos de datos que se crearon en las etapas de solicitud / respuesta anteriores para incluirlos en los datos asignables.',
         'These sets will appear in the data structure at \'/DataInclude/<DataSetName>\' (see debugger output of actual requests for details).' =>
-            '',
-        'Data key regex filters (before mapping)' => '',
-        'Data key regex filters (after mapping)' => '',
+            'Estos conjuntos aparecerán en la estructura de datos en \'/ DataInclude/<DataSetName>\' (vea la salida del depurador de las solicitudes actuales para obtener más detalles).',
+        'Data key regex filters (before mapping)' => 'Filtros de expresiones regulares por clave de datos (antes del mapeo)',
+        'Data key regex filters (after mapping)' => 'Filtros de expresiones regulares por clave de datos (después del mapeo)',
         'Regular expressions' => 'Expresiones Regulares',
         'Replace' => 'Reemplazar',
         'Remove regex' => 'Remover regex',
@@ -979,7 +980,7 @@ sub Data {
             '',
         'For information about regular expressions in Perl please see here:' =>
             '',
-        'Perl regular expressions tutorial' => '',
+        'Perl regular expressions tutorial' => 'Tutorial de expresiones regulares en Perl',
         'If modifiers are desired they have to be specified within the regexes themselves.' =>
             '',
         'Regular expressions defined here will be applied before the XSLT mapping.' =>
@@ -1003,11 +1004,11 @@ sub Data {
         'Mapping for outgoing response data' => 'Asignación de datos de respuesta de salida',
         'The response data will be processed by this mapping, to transform it to the kind of data the remote system expects.' =>
             'Los datos de respuesta serán procesados por esta asignación, para transformar a la clase de datos que el sistema remoto espera.',
-        'Include Ticket Data' => '',
-        'Include ticket data in response.' => '',
+        'Include Ticket Data' => 'Incluir en el Ticket Datos de Entrada ',
+        'Include ticket data in response.' => 'Incluir en la respuesta los datos del ticket',
 
         # Template: AdminGenericInterfaceTransportHTTPREST
-        'Network Transport' => '',
+        'Network Transport' => 'Transporte de Red',
         'Properties' => 'Propiedades',
         'Route mapping for Operation' => 'Asignación de rutas para la Operación',
         'Define the route that should get mapped to this operation. Variables marked by a \':\' will get mapped to the entered name and passed along with the others to the mapping. (e.g. /Ticket/:TicketID).' =>
@@ -1030,15 +1031,15 @@ sub Data {
         'e.g https://www.otrs.com:10745/api/v1.0 (without trailing backslash)' =>
             'ej. https://www.otrs.com:10745/api/v1.0 (sin la barra invertida)',
         'Timeout' => 'Se acabó el tiempo',
-        'Timeout value for requests.' => '',
+        'Timeout value for requests.' => 'Valor de tiempo de espera para las solicitudes.',
         'Authentication' => 'Autenticación',
         'An optional authentication mechanism to access the remote system.' =>
-            '',
+            'Un mecanismo de autenticación opcional para acceder al sistema remoto.',
         'BasicAuth User' => '',
         'The user name to be used to access the remote system.' => 'Nombre de usuario a ser usado para acceder al sistema remoto.',
         'BasicAuth Password' => '',
         'The password for the privileged user.' => 'La contraseña para el usuario con permisos especiales.',
-        'Use Proxy Options' => '',
+        'Use Proxy Options' => 'Utilizar Opciones de Proxy',
         'Show or hide Proxy options to connect to the remote system.' => '',
         'Proxy Server' => 'Servidor Proxy',
         'URI of a proxy server to be used (if needed).' => 'URI del servidor proxy a usar (si se requiere).',
@@ -1047,15 +1048,15 @@ sub Data {
         'The user name to be used to access the proxy server.' => 'El nombre de usuario a ser usado para acceder al servidor proxy.',
         'Proxy Password' => 'Contraseña de Proxy',
         'The password for the proxy user.' => 'La contraseña para el usuario de proxy.',
-        'Skip Proxy' => '',
+        'Skip Proxy' => 'Saltar Proxy',
         'Skip proxy servers that might be configured globally?' => '',
         'Use SSL Options' => 'Usar opciones SSL',
         'Show or hide SSL options to connect to the remote system.' => 'Muestra u oculta las opciones SSL para conectar al sistema remoto.',
-        'Client Certificate' => '',
+        'Client Certificate' => 'Certificado de Cliente',
         'The full path and name of the SSL client certificate file (must be in PEM, DER or PKCS#12 format).' =>
             '',
         'e.g. /opt/otrs/var/certificates/SOAP/certificate.pem' => '',
-        'Client Certificate Key' => '',
+        'Client Certificate Key' => 'Clave de Certificado de Cliente',
         'The full path and name of the SSL client certificate key file (if not already included in certificate file).' =>
             '',
         'e.g. /opt/otrs/var/certificates/SOAP/key.pem' => '',
@@ -1090,8 +1091,8 @@ sub Data {
             '',
         'SOAPAction scheme' => '',
         'Select how SOAPAction should be constructed.' => '',
-        'Some web services require a specific construction.' => '',
-        'Some web services send a specific construction.' => '',
+        'Some web services require a specific construction.' => 'Algunos servicios web requieren una construcción específica.',
+        'Some web services send a specific construction.' => 'Algunos servicios web envían una construcción específica.',
         'SOAPAction separator' => 'Separador SOAPAcción',
         'Character to use as separator between name space and SOAP operation.' =>
             '',
@@ -1171,7 +1172,7 @@ sub Data {
         'Error handling modules are used to react in case of errors during the communication. Those modules are executed in a specific order, which can be changed by drag and drop.' =>
             '',
         'Backend' => '',
-        'Add error handling module' => '',
+        'Add error handling module' => 'Agregar módulo de manejo de errores',
         'Operations are individual system functions which remote systems can request.' =>
             'Operaciones son funciones de sistema individuales las cuales los sistemas remotos pueden solicitar.',
         'Invokers prepare data for a request to a remote web service, and process its response data.' =>
@@ -1221,7 +1222,7 @@ sub Data {
         'Add Mail Account' => 'Agregar Cuenta de Correo',
         'Edit Mail Account for host' => '',
         'and user account' => '',
-        'Filter for Mail Accounts' => '',
+        'Filter for Mail Accounts' => 'Filtro para Cuenta de Mail',
         'Filter for mail accounts' => '',
         'All incoming emails with one account will be dispatched in the selected queue.' =>
             '',
@@ -2042,7 +2043,8 @@ sub Data {
         'This email address is already used as system email address.' => '',
         'The display name and email address will be shown on mail you send.' =>
             'El nombre a mostrar y la dirección de correo electrónico serán mostrados en el correo que tu envías.',
-        'This system address cannot be set to invalid, because it is used in one or more queue(s).' =>
+        'This system address cannot be set to invalid.' => '',
+        'This system address cannot be set to invalid, because it is used in one or more queue(s) or auto response(s).' =>
             '',
 
         # Template: AdminSystemConfiguration
@@ -2165,7 +2167,7 @@ sub Data {
         'Your email address is' => 'Su dirección de correo electrónico es',
 
         # Template: AdminTemplateAttachment
-        'Manage Templates-Attachments Relations' => '',
+        'Manage Template-Attachment Relations' => '',
         'Toggle active for all' => 'Alternar a activo para todos',
         'Link %s to selected %s' => 'Enlaza %s al %s seleccionado',
 
@@ -2478,9 +2480,9 @@ sub Data {
         'Split' => 'Dividir',
 
         # Template: AgentStatisticsAdd
-        'Statistics Overview' => '',
-        'Read more about statistics in OTRS' => '',
+        'Statistics Management' => '',
         'Add Statistics' => '',
+        'Read more about statistics in OTRS' => '',
         'Dynamic Matrix' => 'Matriz Dinámica',
         'Each cell contains a singular data point.' => '',
         'Dynamic List' => 'Lista Dinámica',
@@ -2491,11 +2493,13 @@ sub Data {
         'Create Statistic' => 'Crear Estadística',
 
         # Template: AgentStatisticsEdit
+        'Edit Statistics' => '',
         'Run now' => 'Ejecutar ahora',
         'Statistics Preview' => 'Vista previa de Estadísticas',
         'Save Statistic' => '',
 
         # Template: AgentStatisticsImport
+        'Import Statistics' => '',
         'Import Statistics Configuration' => '',
 
         # Template: AgentStatisticsOverview
@@ -2508,6 +2512,8 @@ sub Data {
         'Delete statistic %s' => 'Eliminar estadística %s',
 
         # Template: AgentStatisticsView
+        'Statistics Overview' => '',
+        'View Statistics' => '',
         'Statistics Information' => '',
         'Created by' => 'Creado por',
         'Changed by' => 'Modificado por',
@@ -3319,7 +3325,6 @@ sub Data {
         'Deploying, please wait...' => '',
         'Preparing to deploy, please wait...' => '',
         'Deploy now' => '',
-        'Close' => 'Cerrar',
         'Try again' => '',
 
         # JS Template: DialogReset
@@ -3370,6 +3375,7 @@ sub Data {
         'There was an error synchronizing the ACLs.' => 'Se produjo un error al sincronizar las ACL.',
         'ACL %s could not be deleted' => 'La ACL %s no se pudo eliminar',
         'There was an error getting data for ACL with ID %s' => 'Se produjo un error al obtener datos de la ACL con ID %s',
+        '%s (copy) %s' => '',
         'Please note that ACL restrictions will be ignored for the Superuser account (UserID 1).' =>
             '',
         'Exact match' => 'Coincidencia exacta',
@@ -3408,6 +3414,7 @@ sub Data {
         'There was an error getting data for Notification with ID:%s!' =>
             'Se produjo un error al obtener los datos para Notificación con ID:%s!',
         'Unknown Notification %s!' => 'Notificación %s Desconocida! ',
+        '%s (copy)' => '',
         'There was an error creating the Notification' => 'Se produjo un error al crear la Notificación',
         'Notifications could not be Imported due to a unknown error, please check OTRS logs for more information' =>
             'Los notificaciones no se pudieron importarse debido a un error desconocido, favor, compruebe los registros de OTRS para más información.',
@@ -3429,7 +3436,7 @@ sub Data {
         'Attachment added!' => '¡Archivo adjunto añadido!',
 
         # Perl Module: Kernel/Modules/AdminAutoResponse.pm
-        'Auto Response added!' => '',
+        'Auto Response added!' => 'Auto Respuesta Añadida!',
 
         # Perl Module: Kernel/Modules/AdminCommunicationLog.pm
         'Invalid CommunicationID!' => '',
@@ -3716,8 +3723,8 @@ sub Data {
         'Package could not be installed' => '',
         'Package could not be upgraded' => '',
         'Repository List' => '',
-        'No packages or no new packages found in selected repository.' =>
-            'No hay paquetes ó ningún paquete encontrado en el repositorio seleccionado.',
+        'No packages found in selected repository. Please check log for more info!' =>
+            '',
         'Package not verified due a communication issue with verification server!' =>
             'Paquete no verificado debido a problema en la comunicación con el servidor de verificación!',
         'Can\'t connect to OTRS Feature Add-on list server!' => 'No se pudo conectarse con el servidor de la lista de Funciones de los Complementos  de OTRS!',
@@ -4068,11 +4075,15 @@ sub Data {
         # Perl Module: Kernel/Modules/AgentTicketBulk.pm
         'Can\'t lock Tickets, no TicketIDs are given!' => 'No se puede bloquear los Ticket, ningún TicketID está dado!',
         'Ticket (%s) is not unlocked!' => '¡El ticket (% s) no está desbloqueado!',
+        'The following tickets were ignored because they are locked by another agent or you don\'t have write access to tickets: %s.' =>
+            '',
+        'The following ticket was ignored because it is locked by another agent or you don\'t have write access to ticket: %s.' =>
+            '',
+        'You need to select at least one ticket.' => 'Debe seleccionar al menos un ticket.',
         'Bulk feature is not enabled!' => 'La característica básica no está habilitada!',
         'No selectable TicketID is given!' => 'Ningún TicketID seleccionable está dado!',
         'You either selected no ticket or only tickets which are locked by other agents.' =>
             'No seleccionaste ningún ticket ó solamente seleccionaste los tickets que están bloqueados por otros agentes.',
-        'You need to select at least one ticket.' => 'Debe seleccionar al menos un ticket.',
         'The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.' =>
             'Los siguientes tickets fueron ignorados porque están bloqueadas por otro agente o no tiene acceso de escritura a estos tickets: %s.',
         'The following tickets were locked: %s.' => 'Los siguientes tickets fueron bloqueados: %s.',
@@ -4452,6 +4463,10 @@ sub Data {
             '',
         'There are no selected encryption keys for the addresses: \'%s\'. ' =>
             '',
+        'Cannot use expired encryption keys for the addresses: \'%s\'. ' =>
+            '',
+        'Cannot use revoked encryption keys for the addresses: \'%s\'. ' =>
+            '',
         'Encrypt' => '',
         'Keys/certificates will only be shown for recipients with more than one key/certificate. The first found key/certificate will be pre-selected. Please make sure to select the correct one.' =>
             '',
@@ -4466,6 +4481,8 @@ sub Data {
         'SMIME encrypt' => '',
 
         # Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+        'Cannot use expired signing key: \'%s\'. ' => '',
+        'Cannot use revoked signing key: \'%s\'. ' => '',
         'There are no signing keys available for the addresses \'%s\'.' =>
             '',
         'There are no selected signing keys for the addresses \'%s\'.' =>
@@ -4520,6 +4537,7 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Layout.pm
         'Standard' => 'Estándar',
+        'The following tickets are not updated: %s.' => '',
         'h' => 'h',
         'm' => 'm',
         'd' => 'd',
@@ -4801,9 +4819,7 @@ sub Data {
         'Can\'t read file!' => '¡El archivo no se puede leer!',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '',
-        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
-            '<p>La instalación de paquetes que no han sido verificados por el Grupo OTRS no es posible por defecto.</p>',
-        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -5005,6 +5021,7 @@ sub Data {
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
         'Kernel Version' => 'Versión del Kernel',
+        'Could not determine kernel version.' => 'No se pudo determinar la versión del kernel.',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
         'System Load' => 'Carga del Sistema',
@@ -5095,9 +5112,9 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '',
         'No legacy configuration backup files found.' => '',
-        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
+        'Legacy configuration backup files found in Kernel/Config/Backups folder, but they might still be required by some packages.' =>
             '',
-        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from Kernel/Config/Backups folder.' =>
             '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
@@ -5163,7 +5180,6 @@ sub Data {
         'OTRS time zone is not set.' => '',
         'User default time zone' => '',
         'User default time zone is not set.' => '',
-        'OTRS time zone setting for calendar' => '',
         'Calendar time zone is not set.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/UI/AgentSkinUsage.pm
@@ -5669,6 +5685,9 @@ sub Data {
         'Please remove the following words from your search as they cannot be searched for:' =>
             'Por favor elimine las siguientes palabras de su búsqueda pues ellas no pueden ser buscadas por:',
 
+        # JS File: Core.Agent.SharedSecretGenerator
+        'Generate' => '',
+
         # JS File: Core.Agent.SortedTree
         'This element has children elements and can currently not be removed.' =>
             '',
@@ -5950,8 +5969,6 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'All customer users of a CustomerID' => 'Todos los clientes de un IDCliente',
         'All escalated tickets' => 'Todos los Tickets escalados',
         'All new tickets, these tickets have not been worked on yet' => 'Todos los Tickets nuevos, todavía no se ha trabajado en estos tickets',
-        'All open tickets, these tickets have already been worked on, but need a response' =>
-            'Todos los Tickets abiertos, ya se ha trabajado en estos tickets, pero necesitan una respuesta',
         'All open tickets, these tickets have already been worked on.' =>
             '',
         'All tickets with a reminder set where the reminder date has been reached' =>
@@ -5999,6 +6016,9 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
             'Permite las condiciones de una búsqueda extendida en la búsqueda del ticket del interfaz del cliente. Con éste función puede buscar por ejemplo, el ticket con tal tipo de condiciones como "(*key1*&&*key2*)" ó "(*key1*||*key2*)".',
         'Allows extended search conditions in ticket search of the generic agent interface. With this feature you can search e. g. ticket title with this kind of conditions like "(*key1*&&*key2*)" or "(*key1*||*key2*)".' =>
             'Permite las condiciones de una búsqueda extendida en la búsqueda del ticket del interfaz del agente genérico. Con éste función puede buscar por ejemplo, el ticket con tal tipo de condiciones como "(*key1*&&*key2*)" ó "(*key1*||*key2*)".',
+        'Allows generic agent to execute custom command line scripts.' =>
+            '',
+        'Allows generic agent to execute custom modules.' => '',
         'Allows having a medium format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
             'Permite tener un formato medio de la vista general de ticket (InfoCliente => 1 - muestra también la información de cliente).',
         'Allows having a small format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
@@ -6068,8 +6088,8 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Balanced white skin by Felix Niklas (slim version).' => 'Apariencia blanca equilibrada por Felix Niklas (versión slim).',
         'Balanced white skin by Felix Niklas.' => 'Apariencia blanca equilibrada por Felix Niklas.',
         'Based on global RichText setting' => 'Basada en ajustes de RichText global',
-        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.' =>
-            'Ajustes básicos del índice de texto completo . Ejecutar "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" con el fin de generar un nuevo índice.',
+        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.' =>
+            '',
         'Blocks all the incoming emails that do not have a valid ticket number in subject with From: @example.com address.' =>
             'Bloquea todos los emails entrantes que no tengan un número de ticket válido en el asunto con Desde: la dirección @example.com.',
         'Bounced to "%s".' => 'Rebotado a «%s».',
@@ -6136,6 +6156,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
             '',
         'Choose which notifications you\'d like to receive.' => '',
         'Christmas Eve' => 'Nochebuena',
+        'Close' => 'Cerrar',
         'Close this ticket' => 'Cerrar este ticket',
         'Closed tickets (customer user)' => 'Tickets cerrados (cliente usuario)',
         'Closed tickets (customer)' => 'Tickets cerrados (cliente)',
@@ -6184,8 +6205,8 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Configure which screen should be shown after a new ticket has been created.' =>
             'Configura que pantalla debe ser mostrada después de que un nuevo ticket haya sido creado.',
         'Configure your own log text for PGP.' => 'Configure su propio texto de registro de PGP.',
-        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".' =>
-            'Configura un ajuste por defecto de CampoDinamicoTicket. "Nombre" define el campo dinámico que debe ser usado, "Valor" es el dato que será establecido, y "Evento" define el disparador del evento. Por favor compruebe el manual del desarrollador (http://otrs.github.io/doc/), capítulo "Módulo Evento Ticket".',
+        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".' =>
+            'Configura un ajuste por defecto de CampoDinamicoTicket. "Nombre" define el campo dinámico que debe ser usado, "Valor" es el dato que será establecido, y "Evento" define el disparador del evento. Por favor compruebe el manual del desarrollador (https://doc.otrs.com/doc/), capítulo "Módulo Evento Ticket".',
         'Controls how to display the ticket history entries as readable values.' =>
             'Controla cómo mostrar el historial de entradas como valores legibles.',
         'Controls if CustomerID is automatically copied from the sender address for unknown customers.' =>
@@ -6282,6 +6303,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Default ACL values for ticket actions.' => 'Valores ACL por defecto para las acciones de tickets.',
         'Default ProcessManagement entity prefixes for entity IDs that are automatically generated.' =>
             'Prefijos entidad GestiónProceso por defecto para las IDs entidades que son generadas automaticamnete.',
+        'Default agent name' => '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".' =>
             'Datos por defecto a usar en el atributo para la pantalla buscar ticket. Ejemplo: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimeStartYear=2010;TicketCreateTimeStartMonth=10;TicketCreateTimeStartDay=4;TicketCreateTimeStopYear=2010;TicketCreateTimeStopMonth=11;TicketCreateTimeStopDay=3;".' =>
@@ -6527,13 +6549,15 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Defines the date input format used in forms (option or input fields).' =>
             '',
         'Defines the default CSS used in rich text editors.' => '',
+        'Defines the default agent name in the ticket zoom view of the customer interface.' =>
+            '',
         'Defines the default auto response type of the article for this operation.' =>
             '',
         'Defines the default body of a note in the ticket free text screen of the agent interface.' =>
             '',
         'Defines the default filter fields in the customer user address book search (CustomerUser or CustomerCompany). For the CustomerCompany fields a prefix \'CustomerCompany_\' must be added.' =>
             '',
-        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.' =>
+        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.' =>
             '',
         'Defines the default front-end language. All the possible values are determined by the available language files on the system (see the next setting).' =>
             '',
@@ -6684,6 +6708,8 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Defines the default viewable sender types of a ticket (default: customer).' =>
             '',
         'Defines the default visibility of the article to customer for this operation.' =>
+            '',
+        'Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.' =>
             '',
         'Defines the dynamic fields that are used for displaying on calendar events.' =>
             '',
@@ -7207,8 +7233,8 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'English stop words for fulltext index. These words will be removed from the search index.' =>
             'Palabras vacías en ingles para el índice de texto completo. Estas palabras serán eliminadas del índice de búsqueda.',
         'Enroll process for this ticket' => '',
-        'Enter your shared secret to enable two factor authentication.' =>
-            'Ingrese su secreto compartido para habilitar la autenticación de dos factores.',
+        'Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.' =>
+            '',
         'Escalated Tickets' => 'Tickets Escalados',
         'Escalation view' => 'Vista de escaladas',
         'EscalationTime' => 'Tiempo para escalada',
@@ -7345,7 +7371,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Graph: Stacked Area Chart' => 'Gráfico: Gráfico de áreas apiladas',
         'Greek' => 'Griego',
         'Hebrew' => 'Hebreo',
-        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".' =>
+        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".' =>
             '',
         'High Contrast' => '',
         'High contrast skin for visually impaired users.' => '',
@@ -7569,10 +7595,12 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Logout of customer panel.' => 'Salir del panel de cliente.',
         'Look into a ticket!' => '¡Revisar un ticket!',
         'Loop protection: no auto-response sent to "%s".' => '',
+        'Macedonian' => '',
         'Mail Accounts' => 'Cuentas de Correo',
         'MailQueue configuration settings.' => '',
         'Main menu item registration.' => 'Registro del elemento del menú principal.',
         'Main menu registration.' => 'Registro del menú principal.',
+        'Makes the application block external content loading.' => '',
         'Makes the application check the MX record of email addresses before sending an email or submitting a telephone or email ticket.' =>
             '',
         'Makes the application check the syntax of email addresses.' => '',
@@ -7712,7 +7740,6 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
             '',
         'OTRS doesn\'t support recurring Appointments without end date or number of iterations. During import process, it might happen that ICS file contains such Appointments. Instead, system creates all Appointments in the past, plus Appointments for the next N months (120 months/10 years by default).' =>
             '',
-        'Open Tickets / Need to be answered' => 'Tickets Abiertos / Necesitan ser respondidos',
         'Open an external link!' => '¡Abrir un enlace externo!',
         'Open tickets (customer user)' => 'Tickets abiertos (usuario cliente)',
         'Open tickets (customer)' => 'Tickets abiertos (cliente)',
@@ -7861,13 +7888,15 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Queue view' => 'Vista por colas',
         'Queues ↔ Auto Responses' => '',
         'Rebuild the ticket index for AgentTicketQueue.' => '',
-        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.' =>
+        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the \'NumberRegExp\' expression will be used as the ticket number value.' =>
             '',
         'Refresh interval' => 'Intervalo de actualización',
         'Registers a log module, that can be used to log communication related information.' =>
             '',
         'Reminder Tickets' => 'Tickets Recordatorio',
         'Removed subscription for user "%s".' => 'Eliminada suscripción para el usuario «%s».',
+        'Removes old generic interface debug log entries created before the specified amount of days.' =>
+            '',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '',
         'Removes old ticket number counters (each 10 minutes).' => '',
@@ -7926,6 +7955,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
             '',
         'Right' => 'Derecha',
         'Roles ↔ Groups' => 'Roles ↔ Grupos',
+        'Romanian' => '',
         'Run file based generic agent jobs (Note: module name needs to be specified in -configuration-module param e.g. "Kernel::System::GenericAgent").' =>
             '',
         'Running Process Tickets' => 'Tickets de Proceso en ejecución',
@@ -8352,6 +8382,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Shows information on how to start OTRS Daemon' => 'Muestra información sobre cómo iniciar OTRS Daemon',
         'Shows link to external page in the ticket zoom view of the agent interface. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '',
+        'Shows the article head information in the agent zoom view.' => '',
         'Shows the articles sorted normally or in reverse, under ticket zoom in the agent interface.' =>
             '',
         'Shows the customer user information (phone and email) in the compose screen.' =>
@@ -8493,6 +8524,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Strips empty lines on the ticket preview in the queue view.' => '',
         'Strips empty lines on the ticket preview in the service view.' =>
             '',
+        'Support Agent' => 'Agente de soporte',
         'Swahili' => 'Suajili',
         'Swedish' => 'Sueco',
         'System Address Display Name' => '',
@@ -8553,6 +8585,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
             '',
         'The text at the beginning of the subject when an email is forwarded, e.g. FW, Fwd, or WG.' =>
             '',
+        'The value of the From field' => '',
         'Theme' => 'Tema',
         'This event module stores attributes from CustomerUser as DynamicFields tickets. Please see DynamicFieldFromCustomerUser::Mapping setting for how to configure the mapping.' =>
             '',
@@ -8784,7 +8817,6 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
-        'Close',
         'Close preview',
         'Close this dialog',
         'Complex %s with %s arguments',
@@ -8866,6 +8898,7 @@ El control del acceso adicional para demostrar o no demostrar éste enlace puede
         'Fr',
         'Fri',
         'Friday',
+        'Generate',
         'Generate Result',
         'Generating...',
         'Grouped',

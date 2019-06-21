@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1413,6 +1413,15 @@ sub Run {
             UploadCacheObject => $UploadCacheObject,
         );
 
+        # Strip out external content if BlockLoadingRemoteContent is enabled.
+        if ( $ConfigObject->Get('Ticket::Frontend::BlockLoadingRemoteContent') ) {
+            my %SafetyCheckResult = $Kernel::OM->Get('Kernel::System::HTMLUtils')->Safety(
+                String       => $Data{Body},
+                NoExtSrcLoad => 1,
+            );
+            $Data{Body} = $SafetyCheckResult{String};
+        }
+
         # restrict number of body lines if configured
         if (
             $Data{Body}
@@ -2087,12 +2096,15 @@ sub _Mask {
                 Limit            => 1,
             );
 
+            # CustomerSearch hash could have one item from each backend, so insert just the first one.
             if (%CustomerSearch) {
+                CUSTOMERUSERID:
                 for my $CustomerUserID ( sort keys %CustomerSearch ) {
                     push @EmailAddressesCc, {
                         CustomerKey        => $CustomerUserID,
                         CustomerTicketText => $CustomerSearch{$CustomerUserID},
                     };
+                    last CUSTOMERUSERID;
                 }
             }
             else {
@@ -2123,12 +2135,15 @@ sub _Mask {
                 Limit            => 1,
             );
 
+            # CustomerSearch hash could have one item from each backend, so insert just the first one.
             if (%CustomerSearch) {
+                CUSTOMERUSERID:
                 for my $CustomerUserID ( sort keys %CustomerSearch ) {
                     push @EmailAddressesTo, {
                         CustomerKey        => $CustomerUserID,
                         CustomerTicketText => $CustomerSearch{$CustomerUserID},
                     };
+                    last CUSTOMERUSERID;
                 }
             }
             else {

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -129,12 +129,8 @@ $Self->Is(
     'Ticket created as closed as Close Time = Creation Time',
 );
 
-my $TestUserLogin = $Helper->TestUserCreate(
+my ( $TestUserLogin, $TestUserID ) = $Helper->TestUserCreate(
     Groups => [ 'users', ],
-);
-
-my $TestUserID = $UserObject->UserLookup(
-    UserLogin => $TestUserLogin,
 );
 
 my $TicketIDCreatedBy = $TicketObject->TicketCreate(
@@ -2816,5 +2812,16 @@ for my $Test (@Tests) {
         "TicketCountByAttribute() for Attribute $Test->{Attribute} correct,"
     );
 }
+
+# Test TicketCountByAttribute() function with more then 1000 entries.
+@TicketIDs   = ( @TicketIDs, 100 .. 1100 );
+$TicketCount = $TicketObject->TicketCountByAttribute(
+    Attribute => 'Service',
+    TicketIDs => \@TicketIDs,
+);
+$Self->True(
+    IsHashRefWithData($TicketCount),
+    "TicketCountByAttribute() for more then 1000 entries correct"
+);
 
 1;

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -142,7 +142,7 @@ returns a list of repository packages
     my @List = $PackageObject->RepositoryList();
 
     my @List = $PackageObject->RepositoryList(
-        Result => 'short',  # will only return name, version, install_status md5sum and vendor
+        Result => 'short',  # will only return name, version, install_status md5sum, vendor and build commit ID
         instead of the structure
     );
 
@@ -205,6 +205,12 @@ sub RepositoryList {
         #   opm file from a mail client on Windows (see http://bugs.otrs.org/show_bug.cgi?id=9838).
         $Content =~ s{\r\n}{\n}xmsg;
         $Package{MD5sum} = $MainObject->MD5sum( String => \$Content );
+
+        # Extract and include build commit ID.
+        if ( $Content =~ m{ <BuildCommitID> (.*) </BuildCommitID> }smx ) {
+            $Package{BuildCommitID} = $1;
+            $Package{BuildCommitID} =~ s{ ^\s+|\s+$ }{}gsmx;
+        }
 
         # get package attributes
         if ( $Content && $Result eq 'Short' ) {
@@ -1881,11 +1887,7 @@ sub PackageVerify {
         $PackageVerifyInfo = {
             Description =>
                 Translatable(
-                "<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>"
-                )
-                .
-                Translatable(
-                '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>'
+                '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>'
                 ),
             Title =>
                 Translatable('Package not verified by the OTRS Group! It is recommended not to use this package.'),

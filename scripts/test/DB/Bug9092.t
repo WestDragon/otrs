@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -63,8 +63,7 @@ $Self->True(
 
 # create test user
 my $UserObject = $Kernel::OM->Get('Kernel::System::User');
-my $UserLogin  = $Helper->TestUserCreate();
-my $UserID     = $UserObject->UserLookup( UserLogin => $UserLogin );
+my ( $UserLogin, $UserID ) = $Helper->TestUserCreate();
 
 =cut
 This test is supposed to verify the solution for bug#9092, which showed

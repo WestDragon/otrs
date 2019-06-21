@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -309,7 +309,18 @@ $Selenium->RunTest(
             );
 
             # Click on Save.
+            $Selenium->execute_script(
+                "\$('#EditFormSubmit')[0].scrollIntoView(true);",
+            );
+
+            # Wait for reload to kick in.
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => "#EditFormSubmit",
+            );
             $Selenium->find_element( '#EditFormSubmit', 'css' )->click();
+
+            # Wait until all AJAX calls finished.
+            $Selenium->WaitFor( JavaScript => "return \$.active == 0" );
 
             # Wait for dialog to close and AJAX to finish.
             $Selenium->WaitFor(
@@ -738,7 +749,7 @@ $Selenium->RunTest(
                     NotificationCustomRelativePointOfTime => 'beforestart',
                     DateTimeDay                           => '18',
                     DateTimeMonth                         => '10',
-                    DateTimeYear                          => '2016',
+                    DateTimeYear                          => $YearBeforeLastSettings->{Year},
                     DateTimeHour                          => '2',
                     DateTimeMinute                        => '3',
                     UserID                                => $UserID,

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -25,7 +25,7 @@ for my $Attribute (qw(Hostname OS OSName User)) {
 }
 
 $Self->True(
-    $OSInfo{OSName} !~ m{\A Unknown }xms,
+    $OSInfo{OSName} !~ m{\A Unknown version }xms ? 1 : 0,
     "OSInfoGet - OSName is not unknown but '$OSInfo{OSName}'",
 );
 

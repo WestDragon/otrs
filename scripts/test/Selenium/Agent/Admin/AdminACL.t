@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -20,14 +20,60 @@ my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 $Selenium->RunTest(
     sub {
 
-        my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+        my $Helper      = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+        my $QueueObject = $Kernel::OM->Get('Kernel::System::Queue');
+        my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
 
         # defined user language for testing if message is being translated correctly
         my $Language = "de";
 
+        $Helper->ConfigSettingChange(
+            Valid => 0,
+            Key   => 'Ticket::Frontend::AgentTicketNote###DynamicField',
+            Value => 0
+        );
+
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###Queue',
+            Value => 0
+        );
+
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###QueueMandatory',
+            Value => 0
+        );
+
+        # Do not check RichText.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Frontend::RichText',
+            Value => 0
+        );
+
+        # Delete ACL if are any.
+        my $ACLObject = $Kernel::OM->Get('Kernel::System::ACL::DB::ACL');
+        my $List      = $ACLObject->ACLListGet(
+            UserID   => 1,
+            ValidIDs => [ '1', '2' ],
+        );
+        for my $ItemACL ( @{$List} ) {
+            if ( $ItemACL->{Name} ) {
+                my $Success = $ACLObject->ACLDelete(
+                    ID     => $ItemACL->{ID},
+                    UserID => 1,
+                );
+                $Self->True(
+                    $Success,
+                    "ACL $ItemACL->{Name} is deleted",
+                );
+            }
+        }
+
         # create test user and login
         my $TestUserLogin = $Helper->TestUserCreate(
-            Groups   => ['admin'],
+            Groups   => [ 'admin', 'users' ],
             Language => $Language,
         ) || die "Did not get test user";
 
@@ -103,10 +149,14 @@ $Selenium->RunTest(
             push @TestACLNames, $TestACLName;
         }
 
+        # Test for Bug#14411, 300 is more than the allowed by the filed (200), exceeding characters
+        #   are just not typed.
+        my $Description = 'a' x 300;
+
         # fill in test data
         $Selenium->find_element( "#Name",           'css' )->send_keys( $TestACLNames[0] );
         $Selenium->find_element( "#Comment",        'css' )->send_keys('Selenium Test ACL');
-        $Selenium->find_element( "#Description",    'css' )->send_keys('Selenium Test ACL');
+        $Selenium->find_element( "#Description",    'css' )->send_keys($Description);
         $Selenium->find_element( "#StopAfterMatch", 'css' )->click();
         $Selenium->InputFieldValueSet(
             Element => '#ValidID',
@@ -154,9 +204,12 @@ $Selenium->RunTest(
             'Selenium Test ACL',
             "#Comment stored value",
         );
+
+        # Test for Bug#14411 (only 200 out of 300 characters should be stored).
+        my $StoredDescription = 'a' x 200;
         $Self->Is(
             $Selenium->find_element( '#Description', 'css' )->get_value(),
-            'Selenium Test ACL',
+            $StoredDescription,
             "#Description stored value",
         );
         $Self->Is(
@@ -307,6 +360,10 @@ JAVASCRIPT
             Element => '#ValidID',
             Value   => 2,
         );
+
+        my @AclID1     = split( 'ID=', $Selenium->get_current_url() );
+        my $ACLfirstID = $AclID1[1];
+
         $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
 
         # navigate to 'Create new ACL' screen
@@ -326,6 +383,9 @@ JAVASCRIPT
             JavaScript =>
                 'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
         );
+
+        my @AclID2      = split( 'ID=', $Selenium->get_current_url() );
+        my $ACLSecondID = $AclID2[1];
 
         # click 'Save and Finish'
         $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
@@ -372,8 +432,7 @@ JAVASCRIPT
         $Selenium->VerifiedRefresh();
 
         # Create copy of the first ACL.
-        my $ACLObject = $Kernel::OM->Get('Kernel::System::ACL::DB::ACL');
-        my $ACLID     = $ACLObject->ACLGet(
+        my $ACLID = $ACLObject->ACLGet(
             Name   => $TestACLNames[0],
             UserID => 1,
         )->{ID};
@@ -385,8 +444,9 @@ JAVASCRIPT
             ->VerifiedClick();
 
         # Verify there are both copied ACL's.
-        my $Copy = $LanguageObject->Translate('Copy');
-        push @TestACLNames, "$TestACLNames[0] ($Copy) 1", "$TestACLNames[0] ($Copy) 2";
+        push @TestACLNames,
+            $LanguageObject->Translate( '%s (copy) %s', $TestACLNames[0], 1 ),
+            $LanguageObject->Translate( '%s (copy) %s', $TestACLNames[0], 2 );
 
         $Self->True(
             index( $Selenium->get_page_source(), $TestACLNames[2] ) > -1,
@@ -397,6 +457,191 @@ JAVASCRIPT
             "Second copied ACL '$TestACLNames[3]' found on screen",
         );
 
+        # Check if queue based acl works on AgentTicketNote. See bug#14504.
+        my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+        $ConfigObject->Set(
+            Key   => 'CheckEmailAddresses',
+            Value => 0,
+        );
+
+        my $UserObject = $Kernel::OM->Get('Kernel::System::User');
+        my $TestUserID = $UserObject->UserLookup( UserLogin => $TestUserLogin );
+
+        # Create dynamic field.
+        my $DynamicFieldObject     = $Kernel::OM->Get('Kernel::System::DynamicField');
+        my $RandomID               = $Helper->GetRandomID();
+        my $DynamicFieldName       = "Produkt$RandomID";
+        my $DynamicFieldDropDownID = $DynamicFieldObject->DynamicFieldAdd(
+            Name       => $DynamicFieldName,
+            Label      => $DynamicFieldName,
+            ValidID    => 1,
+            FieldType  => 'Dropdown',
+            ObjectType => 'Ticket',
+            FieldOrder => 11,
+            UserID     => 1,
+            Config     => {
+                PossibleValues => {
+                    A => 'A',
+                    B => 'B',
+                    C => 'C'
+                }
+            },
+        );
+        $Self->True(
+            $DynamicFieldDropDownID,
+            "Dynamic dropdown field is created",
+        );
+
+        # Create test queue.
+        my $QueueNameACL = "QueueACL$RandomID";
+        my $QueueName    = "Queue$RandomID";
+        my @QueueIDs;
+        for my $Queue ( $QueueNameACL, $QueueName ) {
+            my $QueueID = $QueueObject->QueueAdd(
+                Name            => $Queue,
+                ValidID         => 1,
+                GroupID         => 1,
+                SystemAddressID => 1,
+                FollowUpID      => 1,
+                SalutationID    => 1,
+                SignatureID     => 1,
+                Comment         => 'UnitTest queue',
+                UserID          => 1,
+            );
+            $Self->True(
+                $QueueID,
+                "QueueID $QueueID is created",
+            );
+            push @QueueIDs, $QueueID;
+        }
+
+        # Set fields to AgentTicketNote screen.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###DynamicField',
+            Value => {
+                $DynamicFieldName => 1,
+            },
+        );
+
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###Queue',
+            Value => 1
+        );
+
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###QueueMandatory',
+            Value => 1
+        );
+
+        # Update ACL, disable dynamic fields.
+        my $Success = $ACLObject->ACLUpdate(
+            ID           => $ACLfirstID,
+            Name         => $TestACLNames[0],
+            Comment      => '',
+            Description  => '',
+            ConfigChange => {
+                Possible    => {},
+                PossibleNot => {
+                    Ticket => {
+                        "DynamicField_$DynamicFieldName" => [
+                            '[RegExp].+'
+                        ]
+                    }
+                }
+            },
+            ConfigMatch    => '',
+            ValidID        => 1,
+            StopAfterMatch => 0,
+            UserID         => 1,
+        );
+        $Self->True(
+            $Success,
+            "ACLID $ACLfirstID updated",
+        );
+
+        # Update ACL, enable dynamic fields for specific queue.
+        $Success = $ACLObject->ACLUpdate(
+            ID             => $ACLSecondID,
+            Name           => $TestACLNames[1],
+            Description    => '',
+            StopAfterMatch => 0,
+            UserID         => 1,
+            ValidID        => 1,
+            Comment        => '',
+            ConfigChange   => {
+                Possible    => {},
+                PossibleAdd => {
+                    Ticket => {
+                        "DynamicField_$DynamicFieldName" => [
+                            'A',
+                            'B',
+                            'C'
+                        ]
+                    }
+                }
+            },
+            ConfigMatch => {
+                Properties => {
+                    Ticket => {
+                        Queue => [
+                            $QueueNameACL,
+                        ]
+                    }
+                }
+            },
+
+        );
+        $Self->True(
+            $Success,
+            "ACLID $ACLSecondID updated",
+        );
+
+        # Create ticket with queue other then ACL queue.
+        my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
+        my $TicketID     = $TicketObject->TicketCreate(
+            Title        => 'Some Ticket Title',
+            QueueID      => $QueueIDs[1],
+            Lock         => 'unlock',
+            State        => 'open',
+            Priority     => '3 normal',
+            CustomerID   => "Customer#$RandomID",
+            CustomerUser => "CustomerLogin#$RandomID",
+            OwnerID      => $TestUserID,
+            UserID       => 1,
+        );
+        $Self->True(
+            $TicketID,
+            "TicketID $TicketID is created",
+        );
+
+        # Deploy ACL.
+        $Selenium->find_element("//a[contains(\@href, 'Action=AdminACL;Subaction=ACLDeploy' )]")->VerifiedClick();
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketNote;TicketID=$TicketID");
+
+        # Select ACL queue.
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#NewQueueID").length;' );
+        $Selenium->InputFieldValueSet(
+            Element => '#NewQueueID',
+            Value   => $QueueIDs[0],
+        );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+        $Selenium->find_element( "#Subject",        'css' )->send_keys("Some Subject");
+        $Selenium->find_element( "#RichText",       'css' )->send_keys("Some Text");
+        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
+
+        # Check if AgentTicketHistory contains added note.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketHistory;TicketID=$TicketID");
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('.DataTable td[title=AddNote]').length;"
+            ),
+            1,
+            "Note is added"
+        );
+
         # delete test ACLs from the database
         for my $TestACLName (@TestACLNames) {
 
@@ -405,7 +650,7 @@ JAVASCRIPT
                 UserID => 1,
             )->{ID};
 
-            my $Success = $ACLObject->ACLDelete(
+            $Success = $ACLObject->ACLDelete(
                 ID     => $ACLID,
                 UserID => 1,
             );
@@ -415,10 +660,44 @@ JAVASCRIPT
             );
         }
 
-        # sync ACL information from database with the system configuration
+        $Success = $TicketObject->TicketDelete(
+            TicketID => $TicketID,
+            UserID   => 1,
+        );
+
+        # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+        if ( !$Success ) {
+            sleep 3;
+            $Success = $TicketObject->TicketDelete(
+                TicketID => $TicketID,
+                UserID   => 1,
+            );
+        }
+        $Self->True(
+            $Success,
+            "Deleted test ticket - $TicketID",
+        );
+
+        # Delete queues.
+        for my $Item (@QueueIDs) {
+            if ($Item) {
+                my $Success = $DBObject->Do(
+                    SQL => "DELETE FROM queue WHERE id = $Item",
+                );
+                $Self->True(
+                    $Success,
+                    "Queue with ID $Item is deleted!",
+                );
+            }
+        }
+
+        # Navigate to AdminACL screen.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminACL");
+
+        # Sync ACL information from database with the system configuration.
         $Selenium->find_element("//a[contains(\@href, 'Action=AdminACL;Subaction=ACLDeploy' )]")->VerifiedClick();
 
-        # make sure the cache is correct
+        # Make sure the cache is correct.
         $Kernel::OM->Get('Kernel::System::Cache')->CleanUp(
             Type => 'ACLEditor_ACL',
         );

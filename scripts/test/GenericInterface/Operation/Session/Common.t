@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -27,6 +27,10 @@ my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
 my $RandomID = $Helper->GetRandomID();
 
+# set user details
+my ( $UserLogin, $UserID ) = $Helper->TestUserCreate();
+my $UserPassword = $UserLogin;
+
 # create web service object
 my $WebserviceObject = $Kernel::OM->Get('Kernel::System::GenericInterface::Webservice');
 
@@ -52,7 +56,7 @@ my $WebserviceID = $WebserviceObject->WebserviceAdd(
         },
     },
     ValidID => 1,
-    UserID  => 1,
+    UserID  => $UserID,
 );
 $Self->True(
     $WebserviceID,
@@ -72,13 +76,6 @@ $Self->Is(
     ref $DebuggerObject,
     'Kernel::GenericInterface::Debugger',
     'DebuggerObject instantiate correctly',
-);
-
-# set user details
-my $UserLogin    = $Helper->TestUserCreate();
-my $UserPassword = $UserLogin;
-my $UserID       = $Kernel::OM->Get('Kernel::System::User')->UserLookup(
-    UserLogin => $UserLogin,
 );
 
 # set customer user details

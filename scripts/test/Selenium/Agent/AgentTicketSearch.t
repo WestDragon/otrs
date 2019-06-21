@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -24,6 +24,12 @@ $Selenium->RunTest(
             Valid => 1,
             Key   => 'Ticket::SearchIndex::WarnOnStopWordUsage',
             Value => 0,
+        );
+
+        # Enable ModernizeFormFields.
+        $Helper->ConfigSettingChange(
+            Key   => 'ModernizeFormFields',
+            Value => 1,
         );
 
         my $RandomID = $Helper->GetRandomID();
@@ -664,6 +670,80 @@ $Selenium->RunTest(
             "TicketID $TicketIDs[2] is found in the table"
         );
 
+        # Verify tree selection view in AgentTicketSearch for multiple fields. See bug#14494.
+        $Helper->ConfigSettingChange(
+            Key   => 'ModernizeFormFields',
+            Value => 0,
+        );
+
+        # Refresh screen.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketSearch");
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#Attribute',
+            Event       => 'change',
+        );
+
+        $Selenium->InputFieldValueSet(
+            Element => '#Attribute',
+            Value   => 'QueueIDs',
+        );
+        $Selenium->InputFieldValueSet(
+            Element => '#Attribute',
+            Value   => 'CreatedQueueIDs',
+        );
+
+        # Click to show tree selection for both fields.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '.ShowTreeSelection',
+        );
+        $Selenium->execute_script("\$('.ShowTreeSelection').click();");
+        sleep 1;
+
+        my @SearchElements = $Selenium->find_elements("//input[contains(\@placeholder,'Search...')]");
+
+        # Filter by Created in Queue.
+        $SearchElements[1]->send_keys('Junk');
+
+        # Verify only one visible entry is found in tree view selection for Created in Queue.
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return \$('#CreatedQueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+        );
+        $Self->True(
+            $Selenium->execute_script(
+                "return \$('#CreatedQueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+            ),
+            "Tree view filter for Created in Queue correctly found expected value."
+        );
+
+        # Filter by Queue.
+        $SearchElements[0]->send_keys('Misc');
+
+        # Verify only one visible entry is found in tree view selection for Created in Queue.
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return \$('#QueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+        );
+        $Self->True(
+            $Selenium->execute_script(
+                "return \$('#QueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+            ),
+            "Tree view filter for Queue correctly found expected value."
+        );
+
+        # Click to remove filter for Queue and verify that Created in Queue remained filtered.
+        $Selenium->execute_script("\$('#QueueIDs').siblings('.DialogTreeSearch').find('span').click();");
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return !\$('#QueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+        );
+        $Self->True(
+            $Selenium->execute_script(
+                "return \$('#CreatedQueueIDs').siblings('.JSTreeField').find('ul li a').hasClass('jstree-search');"
+            ),
+            "Tree view filter for CreatedQueueIDs correctly found expected value after removing Queue tree view filter."
+        );
+
         # Change test user language and verify searchable Article Fields are translated.
         # See bug#13913 (https://bugs.otrs.org/show_bug.cgi?id=13913).
 
@@ -738,6 +818,15 @@ $Selenium->RunTest(
                 TicketID => $TicketID,
                 UserID   => 1,
             );
+
+            # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+            if ( !$Success ) {
+                sleep 3;
+                $Success = $TicketObject->TicketDelete(
+                    TicketID => $TicketID,
+                    UserID   => 1,
+                );
+            }
             $Self->True(
                 $Success,
                 "Ticket - ID $TicketID - deleted",

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -143,7 +143,17 @@ $Selenium->RunTest(
                 $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
             }
 
-            $Selenium->find_element("//a[contains(\@href, \'Action=$Action;TicketID=$TicketID' )]")->click();
+            if ( $Action eq 'AgentTicketMove' ) {
+                $Selenium->WaitForjQueryEventBound(
+                    CSSSelector => "a[title='Change Queue']",
+                );
+
+                # Click on 'Move' and switch window.
+                $Selenium->find_element("//a[\@title='Change Queue']")->click();
+            }
+            else {
+                $Selenium->find_element("//a[contains(\@href, \'Action=$Action;TicketID=$TicketID' )]")->click();
+            }
 
             $Selenium->WaitFor( WindowCount => 2 );
             my $Handles = $Selenium->get_window_handles();

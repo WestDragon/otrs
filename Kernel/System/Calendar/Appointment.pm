@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1494,6 +1494,16 @@ sub AppointmentDelete {
         ],
     );
 
+    # Fire event.
+    $Self->EventHandler(
+        Event => 'AppointmentDelete',
+        Data  => {
+            AppointmentID => $Param{AppointmentID},
+            CalendarID    => $CalendarID,
+        },
+        UserID => $Param{UserID},
+    );
+
     # delete cache
     $CacheObject->Delete(
         Type => $Self->{CacheType},
@@ -1506,16 +1516,6 @@ sub AppointmentDelete {
     );
     $CacheObject->CleanUp(
         Type => $Self->{CacheType} . 'Days' . $Param{UserID},
-    );
-
-    # fire event
-    $Self->EventHandler(
-        Event => 'AppointmentDelete',
-        Data  => {
-            AppointmentID => $Param{AppointmentID},
-            CalendarID    => $CalendarID,
-        },
-        UserID => $Param{UserID},
     );
 
     return 1;

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -197,7 +197,7 @@ $Selenium->RunTest(
             'Reminder Tickets',
             'Escalated Tickets',
             'New Tickets',
-            'Open Tickets / Need to be answered',
+            'Open Tickets',
         );
 
         my $Count = 0;

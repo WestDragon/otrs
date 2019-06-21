@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -24,7 +24,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%D/%M/%Y';
     $Self->{DateInputFormat}     = '%D/%M/%Y';
     $Self->{DateInputFormatLong} = '%D/%M/%Y - %T';
-    $Self->{Completeness}        = 0.68801510989011;
+    $Self->{Completeness}        = 0.6840485553086;
 
     # csv separator
     $Self->{Separator}         = ',';
@@ -641,6 +641,7 @@ sub Data {
         'Schedule minutes' => 'Jadwal menit',
         'Schedule hours' => 'Jadwal jam',
         'Schedule days' => 'Jadwal hari',
+        'Automatic execution values are in the system timezone.' => '',
         'Currently this generic agent job will not run automatically.' =>
             'Saat ini pekerjaan agen umum ini tidak dijalankan secara otomatis',
         'To enable automatic execution select at least one value from minutes, hours and days!' =>
@@ -2038,7 +2039,8 @@ EMAILADDRESS:info@example.com dari, kepada atau Cc.',
         'This email address is already used as system email address.' => '',
         'The display name and email address will be shown on mail you send.' =>
             'Paparkan nama dan alamat email yang akan ditunjukkan di email yang anda kirim',
-        'This system address cannot be set to invalid, because it is used in one or more queue(s).' =>
+        'This system address cannot be set to invalid.' => '',
+        'This system address cannot be set to invalid, because it is used in one or more queue(s) or auto response(s).' =>
             '',
 
         # Template: AdminSystemConfiguration
@@ -2161,7 +2163,7 @@ EMAILADDRESS:info@example.com dari, kepada atau Cc.',
         'Your email address is' => 'Alamat email anda adalah',
 
         # Template: AdminTemplateAttachment
-        'Manage Templates-Attachments Relations' => '',
+        'Manage Template-Attachment Relations' => '',
         'Toggle active for all' => 'Beralih aktif untuk semua',
         'Link %s to selected %s' => 'Link ke operator %s',
 
@@ -2475,9 +2477,9 @@ bin/otrs.Daemon.pl status\').',
         'Split' => 'Pisah',
 
         # Template: AgentStatisticsAdd
-        'Statistics Overview' => '',
-        'Read more about statistics in OTRS' => '',
+        'Statistics Management' => '',
         'Add Statistics' => '',
+        'Read more about statistics in OTRS' => '',
         'Dynamic Matrix' => 'Matrik dinamis',
         'Each cell contains a singular data point.' => '',
         'Dynamic List' => 'Daftar dinamis',
@@ -2488,11 +2490,13 @@ bin/otrs.Daemon.pl status\').',
         'Create Statistic' => 'Membuat statistik',
 
         # Template: AgentStatisticsEdit
+        'Edit Statistics' => '',
         'Run now' => 'Jalankan sekarang',
         'Statistics Preview' => 'Statistik peninjauan',
         'Save Statistic' => '',
 
         # Template: AgentStatisticsImport
+        'Import Statistics' => '',
         'Import Statistics Configuration' => '',
 
         # Template: AgentStatisticsOverview
@@ -2505,6 +2509,8 @@ bin/otrs.Daemon.pl status\').',
         'Delete statistic %s' => 'Hapuskan statistik %s',
 
         # Template: AgentStatisticsView
+        'Statistics Overview' => '',
+        'View Statistics' => '',
         'Statistics Information' => '',
         'Created by' => 'Dibuat oleh',
         'Changed by' => 'Diubah oleh',
@@ -3316,7 +3322,6 @@ bin/otrs.Daemon.pl status\').',
         'Deploying, please wait...' => '',
         'Preparing to deploy, please wait...' => '',
         'Deploy now' => '',
-        'Close' => 'Tutup',
         'Try again' => '',
 
         # JS Template: DialogReset
@@ -3367,6 +3372,7 @@ bin/otrs.Daemon.pl status\').',
         'There was an error synchronizing the ACLs.' => 'Terjadi kesalahan saat menyamakan ACL',
         'ACL %s could not be deleted' => 'ACL %s tidak bisa dihapus',
         'There was an error getting data for ACL with ID %s' => 'Terjadi kesalahan saat mendapatkan data untuk ACL dengan ID %s',
+        '%s (copy) %s' => '',
         'Please note that ACL restrictions will be ignored for the Superuser account (UserID 1).' =>
             '',
         'Exact match' => 'Benar-benar cocok',
@@ -3405,6 +3411,7 @@ bin/otrs.Daemon.pl status\').',
         'There was an error getting data for Notification with ID:%s!' =>
             'Ada kesalahan mendapatkan data untuk Pemberitahuan dengan ID:%s!',
         'Unknown Notification %s!' => 'Diketahui Pemberitahuan %s!',
+        '%s (copy)' => '',
         'There was an error creating the Notification' => 'Ada kesalahan saat membuat Pemberitahuan tersebut',
         'Notifications could not be Imported due to a unknown error, please check OTRS logs for more information' =>
             'Pemberitahuan tidak dapat diimpor karena kesalahan yang tidak diketahui, silahkan cek OTRS log untuk informasi lebih lanjut',
@@ -3713,8 +3720,8 @@ bin/otrs.Daemon.pl status\').',
         'Package could not be installed' => '',
         'Package could not be upgraded' => '',
         'Repository List' => '',
-        'No packages or no new packages found in selected repository.' =>
-            'Tidak ada paket atau tidak ada paket baru ditemukan dalam repositori yang dipilih.',
+        'No packages found in selected repository. Please check log for more info!' =>
+            '',
         'Package not verified due a communication issue with verification server!' =>
             'Paket tidak diverifikasi karena masalah komunikasi dengan server verifikasi!',
         'Can\'t connect to OTRS Feature Add-on list server!' => 'Tidak dapat terhubung ke Fitur OTRS Add-on list server!',
@@ -4065,11 +4072,15 @@ bin/otrs.Daemon.pl status\').',
         # Perl Module: Kernel/Modules/AgentTicketBulk.pm
         'Can\'t lock Tickets, no TicketIDs are given!' => 'Tiket tidak bisa dikunci, tidak ada TicketIDs diberikan!',
         'Ticket (%s) is not unlocked!' => 'Tiket (%s) tidak dibuka',
+        'The following tickets were ignored because they are locked by another agent or you don\'t have write access to tickets: %s.' =>
+            '',
+        'The following ticket was ignored because it is locked by another agent or you don\'t have write access to ticket: %s.' =>
+            '',
+        'You need to select at least one ticket.' => '',
         'Bulk feature is not enabled!' => 'Fitur tidak diaktifkan',
         'No selectable TicketID is given!' => 'Tidak ada pilihan TicketID yang diberikan!',
         'You either selected no ticket or only tickets which are locked by other agents.' =>
             '',
-        'You need to select at least one ticket.' => '',
         'The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.' =>
             '',
         'The following tickets were locked: %s.' => '',
@@ -4449,6 +4460,10 @@ bin/otrs.Daemon.pl status\').',
             '',
         'There are no selected encryption keys for the addresses: \'%s\'. ' =>
             '',
+        'Cannot use expired encryption keys for the addresses: \'%s\'. ' =>
+            '',
+        'Cannot use revoked encryption keys for the addresses: \'%s\'. ' =>
+            '',
         'Encrypt' => '',
         'Keys/certificates will only be shown for recipients with more than one key/certificate. The first found key/certificate will be pre-selected. Please make sure to select the correct one.' =>
             '',
@@ -4463,6 +4478,8 @@ bin/otrs.Daemon.pl status\').',
         'SMIME encrypt' => '',
 
         # Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+        'Cannot use expired signing key: \'%s\'. ' => '',
+        'Cannot use revoked signing key: \'%s\'. ' => '',
         'There are no signing keys available for the addresses \'%s\'.' =>
             '',
         'There are no selected signing keys for the addresses \'%s\'.' =>
@@ -4517,6 +4534,7 @@ bin/otrs.Daemon.pl status\').',
 
         # Perl Module: Kernel/Output/HTML/Layout.pm
         'Standard' => 'Standar',
+        'The following tickets are not updated: %s.' => '',
         'h' => 'j',
         'm' => 'm',
         'd' => 'h',
@@ -4797,9 +4815,7 @@ bin/otrs.Daemon.pl status\').',
         'Can\'t read file!' => '',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '',
-        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
-            '',
-        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -5001,6 +5017,7 @@ bin/otrs.Daemon.pl status\').',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
         'Kernel Version' => 'Versi Kernel',
+        'Could not determine kernel version.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
         'System Load' => 'Sistem dimuat',
@@ -5091,9 +5108,9 @@ bin/otrs.Daemon.pl status\').',
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '',
         'No legacy configuration backup files found.' => '',
-        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
+        'Legacy configuration backup files found in Kernel/Config/Backups folder, but they might still be required by some packages.' =>
             '',
-        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from Kernel/Config/Backups folder.' =>
             '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
@@ -5159,7 +5176,6 @@ bin/otrs.Daemon.pl status\').',
         'OTRS time zone is not set.' => '',
         'User default time zone' => '',
         'User default time zone is not set.' => '',
-        'OTRS time zone setting for calendar' => '',
         'Calendar time zone is not set.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/UI/AgentSkinUsage.pm
@@ -5665,6 +5681,9 @@ bin/otrs.Daemon.pl status\').',
         'Please remove the following words from your search as they cannot be searched for:' =>
             'Silahkan hapus perkataan berikut dari pencarian anda sebagaimana tidak dapat dicari',
 
+        # JS File: Core.Agent.SharedSecretGenerator
+        'Generate' => '',
+
         # JS File: Core.Agent.SortedTree
         'This element has children elements and can currently not be removed.' =>
             '',
@@ -5940,8 +5959,6 @@ Helpdesk Team Anda
         'All customer users of a CustomerID' => 'Semua pengguna pelanggan dari ID Pelanggan',
         'All escalated tickets' => 'Semua tiket yang telah tereskalasi',
         'All new tickets, these tickets have not been worked on yet' => 'Semua tiket baru, tiket-tiket ini belum dikerjakan.',
-        'All open tickets, these tickets have already been worked on, but need a response' =>
-            'Semua tiket terbuka, tiket-tiket ini telah dikerjakan, tetapi memerlukan respon.',
         'All open tickets, these tickets have already been worked on.' =>
             '',
         'All tickets with a reminder set where the reminder date has been reached' =>
@@ -5989,6 +6006,9 @@ Helpdesk Team Anda
             '',
         'Allows extended search conditions in ticket search of the generic agent interface. With this feature you can search e. g. ticket title with this kind of conditions like "(*key1*&&*key2*)" or "(*key1*||*key2*)".' =>
             'Memungkinkan kondisi pencarian diperpanjang mencari tiket dari antarmuka agen generik. Dengan fitur ini Anda dapat mencari e. g. title tiket dengan jenis kondisi seperti "(* key1 * && * key2 *)" atau "(* key1 * || * key2 *)".',
+        'Allows generic agent to execute custom command line scripts.' =>
+            '',
+        'Allows generic agent to execute custom modules.' => '',
         'Allows having a medium format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
             'Memungkinkan memiliki gambaran format medium tiket (CustomerInfo => 1 - menunjukkan juga informasi pelanggan).',
         'Allows having a small format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
@@ -6058,8 +6078,8 @@ Helpdesk Team Anda
         'Balanced white skin by Felix Niklas (slim version).' => 'kulit putih yang seimbang oleh Felix Niklas (versi slim).',
         'Balanced white skin by Felix Niklas.' => 'kulit putih yang seimbang oleh Felix Niklas ',
         'Based on global RichText setting' => 'Berdasarkan pengaturan global Rich Text ',
-        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.' =>
-            'Pengaturan indeks fulltext dasar. Jalankan "bin/otrs.Console.pl Maint::Ticket::Fulltext Indeks Rebuild" untuk menghasilkan sebuah indeks baru.',
+        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.' =>
+            '',
         'Blocks all the incoming emails that do not have a valid ticket number in subject with From: @example.com address.' =>
             'Blok semua email masuk yang tidak memiliki nomor tiket yang valid dalam subjek dengan Dari: @ example.com sebagai alamat email',
         'Bounced to "%s".' => 'Terpental ke "%s".',
@@ -6126,6 +6146,7 @@ Helpdesk Team Anda
             '',
         'Choose which notifications you\'d like to receive.' => '',
         'Christmas Eve' => 'Malam natal',
+        'Close' => 'Tutup',
         'Close this ticket' => 'Tutup tiket ini',
         'Closed tickets (customer user)' => 'Tiket tertutup (customer pengguna)',
         'Closed tickets (customer)' => 'Tiket tertutup (pelanggan)',
@@ -6174,8 +6195,8 @@ Helpdesk Team Anda
         'Configure which screen should be shown after a new ticket has been created.' =>
             'Konfigurasi yang layar harus ditampilkan setelah tiket baru telah dibuat.',
         'Configure your own log text for PGP.' => 'Mengkonfigurasi teks log Anda sendiri untuk PGP.',
-        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".' =>
-            'Mengkonfigurasi TicketDynamicField pengaturan default. "Nama" mendefinisikan bidang yang dinamis yang harus digunakan, "Value" adalah data yang akan ditetapkan, dan "Event" mendefinisikan acara pemicu. Silakan periksa pengembang user (http://otrs.github.io/doc/), bab "Ticket acara Modul".',
+        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".' =>
+            'Mengkonfigurasi TicketDynamicField pengaturan default. "Nama" mendefinisikan bidang yang dinamis yang harus digunakan, "Value" adalah data yang akan ditetapkan, dan "Event" mendefinisikan acara pemicu. Silakan periksa pengembang user (https://doc.otrs.com/doc/), bab "Ticket acara Modul".',
         'Controls how to display the ticket history entries as readable values.' =>
             'Kontrol bagaimana menampilkan entri sejarah tiket sebagai nilai-nilai yang dapat dibaca.',
         'Controls if CustomerID is automatically copied from the sender address for unknown customers.' =>
@@ -6272,6 +6293,7 @@ Helpdesk Team Anda
         'Default ACL values for ticket actions.' => 'Nilai default ACL untuk tindakan tiket.',
         'Default ProcessManagement entity prefixes for entity IDs that are automatically generated.' =>
             'Proses Manajemen awalan entitas default untuk ID entitas yang secara otomatis dihasilkan.',
+        'Default agent name' => '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".' =>
             'default data digunakan pada atribut untuk layar pencarian tiket. Contoh: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimeStartYear=2010;TicketCreateTimeStartMonth=10;TicketCreateTimeStartDay=4;TicketCreateTimeStopYear=2010;TicketCreateTimeStopMonth=11;TicketCreateTimeStopDay=3;".' =>
@@ -6517,14 +6539,16 @@ Helpdesk Team Anda
         'Defines the date input format used in forms (option or input fields).' =>
             'Mendefinisikan format tanggal input yang digunakan dalam bentuk (pilihan atau masukan bidang).',
         'Defines the default CSS used in rich text editors.' => 'Mendefinisikan CSS default yang digunakan dalam editor teks kaya.',
+        'Defines the default agent name in the ticket zoom view of the customer interface.' =>
+            '',
         'Defines the default auto response type of the article for this operation.' =>
             'Mendefinisikan default jenis respon otomatis dari artikel untuk operasi ini.',
         'Defines the default body of a note in the ticket free text screen of the agent interface.' =>
             'Mendefinisikan tubuh default catatan dalam tiket layar teks bebas dari antarmuka agen.',
         'Defines the default filter fields in the customer user address book search (CustomerUser or CustomerCompany). For the CustomerCompany fields a prefix \'CustomerCompany_\' must be added.' =>
             '',
-        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.' =>
-            'Mendefinisikan default front-end (HTML) tema yang akan digunakan oleh agen dan pelanggan. Jika Anda suka, Anda dapat menambahkan tema Anda sendiri. Silahkan lihat manual administrator yang terletak di http://otrs.github.io/doc/.',
+        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.' =>
+            'Mendefinisikan default front-end (HTML) tema yang akan digunakan oleh agen dan pelanggan. Jika Anda suka, Anda dapat menambahkan tema Anda sendiri. Silahkan lihat manual administrator yang terletak di https://doc.otrs.com/doc/.',
         'Defines the default front-end language. All the possible values are determined by the available language files on the system (see the next setting).' =>
             'Mendefinisikan bahasa default front-end. Semua nilai yang mungkin ditentukan oleh file bahasa yang tersedia pada sistem (lihat pengaturan berikutnya).',
         'Defines the default history type in the customer interface.' => 'Mendefinisikan jenis sejarah default dalam antarmuka pelanggan.',
@@ -6675,6 +6699,8 @@ Helpdesk Team Anda
         'Defines the default viewable sender types of a ticket (default: customer).' =>
             'Mendefinisikan default jenis pengirim dapat dilihat dari tiket (default: pelanggan).',
         'Defines the default visibility of the article to customer for this operation.' =>
+            '',
+        'Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.' =>
             '',
         'Defines the dynamic fields that are used for displaying on calendar events.' =>
             'Mendefinisikan bidang dinamis yang digunakan untuk menampilkan pada acara kalender.',
@@ -7198,8 +7224,8 @@ Helpdesk Team Anda
         'English stop words for fulltext index. These words will be removed from the search index.' =>
             'kata berhenti Bahasa Inggris untuk indeks fulltext. Kata-kata ini akan dihapus dari indeks pencarian.',
         'Enroll process for this ticket' => 'Daftarkan proses untuk tiket ini',
-        'Enter your shared secret to enable two factor authentication.' =>
-            'Masukkan rahasia bersama Anda untuk mengaktifkan dua faktor otentikasi.',
+        'Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.' =>
+            '',
         'Escalated Tickets' => 'Tiket tereskalasi',
         'Escalation view' => 'lihat eskalasi',
         'EscalationTime' => 'Waktu Eskalasi',
@@ -7336,7 +7362,7 @@ Helpdesk Team Anda
         'Graph: Stacked Area Chart' => 'Grafik: Tumpukan Bagan Lokasi',
         'Greek' => 'Yunani',
         'Hebrew' => 'Ibrani',
-        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".' =>
+        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".' =>
             '',
         'High Contrast' => '',
         'High contrast skin for visually impaired users.' => '',
@@ -7560,10 +7586,12 @@ Helpdesk Team Anda
         'Logout of customer panel.' => 'Keluar dari panel pelanggan.',
         'Look into a ticket!' => 'Lihat ke dalam tiket ini!',
         'Loop protection: no auto-response sent to "%s".' => '',
+        'Macedonian' => '',
         'Mail Accounts' => 'Akun email',
         'MailQueue configuration settings.' => '',
         'Main menu item registration.' => '',
         'Main menu registration.' => 'Menu utama untuk pendaftaran ',
+        'Makes the application block external content loading.' => '',
         'Makes the application check the MX record of email addresses before sending an email or submitting a telephone or email ticket.' =>
             'Membuat aplikasi untuk memeriksa catatan MX alamat email sebelum mengirim email   telepon atau email tiket.',
         'Makes the application check the syntax of email addresses.' => 'Membuat aplikasi memeriksa catatan MX alamat email sebelum mengirim email untuk mengirimkan telepon atau email tiket.',
@@ -7703,7 +7731,6 @@ Helpdesk Team Anda
             'OTRS dapat menggunakan satu atau lebih database cermin dibaca untuk operasi mahal seperti penuh pencarian teks atau statistik generasi. Di sini Anda dapat menentukan DSN untuk database cermin pertama.',
         'OTRS doesn\'t support recurring Appointments without end date or number of iterations. During import process, it might happen that ICS file contains such Appointments. Instead, system creates all Appointments in the past, plus Appointments for the next N months (120 months/10 years by default).' =>
             '',
-        'Open Tickets / Need to be answered' => 'Tiket terbuka/perlu dijawab',
         'Open an external link!' => '',
         'Open tickets (customer user)' => 'Tiket terbuka (pelanggan pengguna)',
         'Open tickets (customer)' => 'Buka tiket (pelanggan)',
@@ -7852,13 +7879,15 @@ Helpdesk Team Anda
         'Queue view' => 'lihat antrian',
         'Queues ↔ Auto Responses' => '',
         'Rebuild the ticket index for AgentTicketQueue.' => 'Membangun kembali indeks tiket untuk AgentTicketQueue.',
-        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.' =>
-            'Mengakui jika tiket adalah tindak lanjut ke tiket yang ada menggunakan nomor tiket eksternal.',
+        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the \'NumberRegExp\' expression will be used as the ticket number value.' =>
+            '',
         'Refresh interval' => 'refresh interval',
         'Registers a log module, that can be used to log communication related information.' =>
             '',
         'Reminder Tickets' => 'Tiket pengingat',
         'Removed subscription for user "%s".' => 'Hapus berlangganan untuk pengguna "%s".',
+        'Removes old generic interface debug log entries created before the specified amount of days.' =>
+            '',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '',
         'Removes old ticket number counters (each 10 minutes).' => '',
@@ -7917,6 +7946,7 @@ Helpdesk Team Anda
             'Mempertahankan semua layanan dalam daftar bahkan jika mereka adalah anak-anak dari elemen yang tidak valid.',
         'Right' => 'Kanan',
         'Roles ↔ Groups' => '',
+        'Romanian' => '',
         'Run file based generic agent jobs (Note: module name needs to be specified in -configuration-module param e.g. "Kernel::System::GenericAgent").' =>
             '',
         'Running Process Tickets' => 'Menjalankan proses tiket',
@@ -8343,6 +8373,7 @@ Helpdesk Team Anda
         'Shows information on how to start OTRS Daemon' => 'Menunjukkan informasi tentang cara untuk memulai OTRS Daemon',
         'Shows link to external page in the ticket zoom view of the agent interface. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '',
+        'Shows the article head information in the agent zoom view.' => '',
         'Shows the articles sorted normally or in reverse, under ticket zoom in the agent interface.' =>
             'Menunjukkan artikel diurutkan secara normal atau terbalik, di bawah zoom tiket di antarmuka agen.',
         'Shows the customer user information (phone and email) in the compose screen.' =>
@@ -8484,6 +8515,7 @@ Helpdesk Team Anda
         'Strips empty lines on the ticket preview in the queue view.' => 'Strip garis kosong di preview tiket dalam tampilan antrian.',
         'Strips empty lines on the ticket preview in the service view.' =>
             'Strip garis kosong di preview tiket di tampilan layanan.',
+        'Support Agent' => '',
         'Swahili' => 'Swahili',
         'Swedish' => 'Swedia',
         'System Address Display Name' => 'Sistem Alamat Nama Tampilan',
@@ -8544,6 +8576,7 @@ Helpdesk Team Anda
             'Teks pada awal subjek di balasan email, e.g.g. RAW, atau AS.',
         'The text at the beginning of the subject when an email is forwarded, e.g. FW, Fwd, or WG.' =>
             'Teks pada awal subjek ketika email diteruskan, misalnya FW, Fwd, atau WG.',
+        'The value of the From field' => '',
         'Theme' => 'Tema',
         'This event module stores attributes from CustomerUser as DynamicFields tickets. Please see DynamicFieldFromCustomerUser::Mapping setting for how to configure the mapping.' =>
             '',
@@ -8775,7 +8808,6 @@ Helpdesk Team Anda
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
-        'Close',
         'Close preview',
         'Close this dialog',
         'Complex %s with %s arguments',
@@ -8857,6 +8889,7 @@ Helpdesk Team Anda
         'Fr',
         'Fri',
         'Friday',
+        'Generate',
         'Generate Result',
         'Generating...',
         'Grouped',

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -29,6 +29,13 @@ $Selenium->RunTest(
                 Value => 1
             );
         }
+
+        # Set to change queue for ticket in a new window.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::MoveType',
+            Value => 'link'
+        );
 
         # get menu config params
         my @TicketMenu = (
@@ -179,17 +186,13 @@ $Selenium->RunTest(
         for my $MenuModulePre (@PreMenuModule) {
 
             my $NameForID;
-            if ( $MenuModulePre->{Name} eq 'Move' ) {
-                $NameForID = 'DestQueueID';
-            }
-            else {
-                $NameForID = $MenuModulePre->{Name};
-                $NameForID =~ s/ /-/g if ( $NameForID =~ m/ / );
-            }
+
+            $NameForID = $MenuModulePre->{Name};
+            $NameForID =~ s/ /-/g if ( $NameForID =~ m/ / );
 
             # check pre menu module link
             $Self->True(
-                $Selenium->find_element("//a[contains(\@href, \'Action=$MenuModulePre->{Action}' )]"),
+                $Selenium->find_elements("//a[contains(\@href, \'Action=$MenuModulePre->{Action}' )]")->[0],
                 "Ticket pre menu $MenuModulePre->{Name} is found"
             );
 
@@ -334,6 +337,15 @@ $Selenium->RunTest(
             TicketID => $TicketID,
             UserID   => $TestUserID,
         );
+
+        # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+        if ( !$Success ) {
+            sleep 3;
+            $Success = $TicketObject->TicketDelete(
+                TicketID => $TicketID,
+                UserID   => $TestUserID,
+            );
+        }
         $Self->True(
             $Success,
             "Delete ticket - $TicketID"

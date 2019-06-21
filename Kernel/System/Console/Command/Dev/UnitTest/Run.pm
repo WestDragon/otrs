@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -106,6 +106,13 @@ sub Configure {
         ValueRegex => qr/.*/smx,
         Multiple   => 1
     );
+    $Self->AddOption(
+        Name        => 'test-runs',
+        Description => 'Number of successive runs for every single unit test, default 1.',
+        Required    => 0,
+        HasValue    => 1,
+        ValueRegex  => qr/^\d+$/smx,
+    );
     return;
 }
 
@@ -142,6 +149,7 @@ sub Run {
         AttachmentPath         => $Self->GetOption('attachment-path'),
         PostTestScripts        => $Self->GetOption('post-test-script'),
         PreSubmitScripts       => $Self->GetOption('pre-submit-script'),
+        NumberOfTestRuns       => $Self->GetOption('test-runs'),
     );
 
     if ($FunctionResult) {

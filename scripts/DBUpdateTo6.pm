@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -208,6 +208,10 @@ sub _TasksGet {
         {
             Message => 'Check required Perl modules',
             Module  => 'PerlModulesCheck',
+        },
+        {
+            Message => 'Check installed CPAN modules for known vulnerabilities',
+            Module  => 'CPANAuditCheck',
         },
         {
             Message => 'Check if database has been backed up',

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -536,8 +536,8 @@ sub StateLookup {
     # check needed stuff
     if ( !$Param{State} && !$Param{StateID} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
-            State   => 'error',
-            Message => 'Need State or StateID!'
+            Priority => 'error',
+            Message  => 'Need State or StateID!'
         );
         return;
     }

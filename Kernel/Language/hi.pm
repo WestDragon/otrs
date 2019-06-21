@@ -26,7 +26,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%D/%M/%Y';
     $Self->{DateInputFormat}     = '%D/%M/%Y';
     $Self->{DateInputFormatLong} = '%D/%M/%Y - %T';
-    $Self->{Completeness}        = 0.276957417582418;
+    $Self->{Completeness}        = 0.275431697726107;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -643,6 +643,7 @@ sub Data {
         'Schedule minutes' => 'अनुसूची मिनट ',
         'Schedule hours' => 'अनुसूची घंटे',
         'Schedule days' => 'अनुसूची दिनों',
+        'Automatic execution values are in the system timezone.' => '',
         'Currently this generic agent job will not run automatically.' =>
             'फ़िलहाल इस सामान्य प्रतिनिधि के काम स्वचालित रूप से नहीं चलेंगे।',
         'To enable automatic execution select at least one value from minutes, hours and days!' =>
@@ -2039,7 +2040,8 @@ sub Data {
         'This email address is already used as system email address.' => '',
         'The display name and email address will be shown on mail you send.' =>
             'आपके द्वारा भेजे गए मेल पर प्रदर्शित होने वाला नाम और ईमेल पता दिखाया जाएगा।',
-        'This system address cannot be set to invalid, because it is used in one or more queue(s).' =>
+        'This system address cannot be set to invalid.' => '',
+        'This system address cannot be set to invalid, because it is used in one or more queue(s) or auto response(s).' =>
             '',
 
         # Template: AdminSystemConfiguration
@@ -2162,7 +2164,7 @@ sub Data {
         'Your email address is' => 'आपका ईमेल पता है',
 
         # Template: AdminTemplateAttachment
-        'Manage Templates-Attachments Relations' => '',
+        'Manage Template-Attachment Relations' => '',
         'Toggle active for all' => 'सभी के लिए स्विच सक्रिय करें',
         'Link %s to selected %s' => 'लिंक %s को चयनित %s',
 
@@ -2475,9 +2477,9 @@ sub Data {
         'Split' => '',
 
         # Template: AgentStatisticsAdd
-        'Statistics Overview' => '',
-        'Read more about statistics in OTRS' => '',
+        'Statistics Management' => '',
         'Add Statistics' => '',
+        'Read more about statistics in OTRS' => '',
         'Dynamic Matrix' => '',
         'Each cell contains a singular data point.' => '',
         'Dynamic List' => '',
@@ -2488,11 +2490,13 @@ sub Data {
         'Create Statistic' => '',
 
         # Template: AgentStatisticsEdit
+        'Edit Statistics' => '',
         'Run now' => '',
         'Statistics Preview' => '',
         'Save Statistic' => '',
 
         # Template: AgentStatisticsImport
+        'Import Statistics' => '',
         'Import Statistics Configuration' => '',
 
         # Template: AgentStatisticsOverview
@@ -2505,6 +2509,8 @@ sub Data {
         'Delete statistic %s' => '',
 
         # Template: AgentStatisticsView
+        'Statistics Overview' => '',
+        'View Statistics' => '',
         'Statistics Information' => '',
         'Created by' => 'द्वारा बनाया गया',
         'Changed by' => 'से बदला',
@@ -3316,7 +3322,6 @@ sub Data {
         'Deploying, please wait...' => '',
         'Preparing to deploy, please wait...' => '',
         'Deploy now' => '',
-        'Close' => 'अंत',
         'Try again' => '',
 
         # JS Template: DialogReset
@@ -3367,6 +3372,7 @@ sub Data {
         'There was an error synchronizing the ACLs.' => '',
         'ACL %s could not be deleted' => '',
         'There was an error getting data for ACL with ID %s' => '',
+        '%s (copy) %s' => '',
         'Please note that ACL restrictions will be ignored for the Superuser account (UserID 1).' =>
             '',
         'Exact match' => '',
@@ -3405,6 +3411,7 @@ sub Data {
         'There was an error getting data for Notification with ID:%s!' =>
             '',
         'Unknown Notification %s!' => '',
+        '%s (copy)' => '',
         'There was an error creating the Notification' => '',
         'Notifications could not be Imported due to a unknown error, please check OTRS logs for more information' =>
             '',
@@ -3713,7 +3720,7 @@ sub Data {
         'Package could not be installed' => '',
         'Package could not be upgraded' => '',
         'Repository List' => '',
-        'No packages or no new packages found in selected repository.' =>
+        'No packages found in selected repository. Please check log for more info!' =>
             '',
         'Package not verified due a communication issue with verification server!' =>
             '',
@@ -4065,11 +4072,15 @@ sub Data {
         # Perl Module: Kernel/Modules/AgentTicketBulk.pm
         'Can\'t lock Tickets, no TicketIDs are given!' => '',
         'Ticket (%s) is not unlocked!' => '',
+        'The following tickets were ignored because they are locked by another agent or you don\'t have write access to tickets: %s.' =>
+            '',
+        'The following ticket was ignored because it is locked by another agent or you don\'t have write access to ticket: %s.' =>
+            '',
+        'You need to select at least one ticket.' => '',
         'Bulk feature is not enabled!' => '',
         'No selectable TicketID is given!' => '',
         'You either selected no ticket or only tickets which are locked by other agents.' =>
             '',
-        'You need to select at least one ticket.' => '',
         'The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.' =>
             '',
         'The following tickets were locked: %s.' => '',
@@ -4449,6 +4460,10 @@ sub Data {
             '',
         'There are no selected encryption keys for the addresses: \'%s\'. ' =>
             '',
+        'Cannot use expired encryption keys for the addresses: \'%s\'. ' =>
+            '',
+        'Cannot use revoked encryption keys for the addresses: \'%s\'. ' =>
+            '',
         'Encrypt' => '',
         'Keys/certificates will only be shown for recipients with more than one key/certificate. The first found key/certificate will be pre-selected. Please make sure to select the correct one.' =>
             '',
@@ -4463,6 +4478,8 @@ sub Data {
         'SMIME encrypt' => '',
 
         # Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+        'Cannot use expired signing key: \'%s\'. ' => '',
+        'Cannot use revoked signing key: \'%s\'. ' => '',
         'There are no signing keys available for the addresses \'%s\'.' =>
             '',
         'There are no selected signing keys for the addresses \'%s\'.' =>
@@ -4517,6 +4534,7 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Layout.pm
         'Standard' => 'मानक',
+        'The following tickets are not updated: %s.' => '',
         'h' => 'एच',
         'm' => 'म',
         'd' => 'डी',
@@ -4797,9 +4815,7 @@ sub Data {
         'Can\'t read file!' => '',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '',
-        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
-            '',
-        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -5001,6 +5017,7 @@ sub Data {
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
         'Kernel Version' => '',
+        'Could not determine kernel version.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
         'System Load' => '',
@@ -5091,9 +5108,9 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '',
         'No legacy configuration backup files found.' => '',
-        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
+        'Legacy configuration backup files found in Kernel/Config/Backups folder, but they might still be required by some packages.' =>
             '',
-        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from Kernel/Config/Backups folder.' =>
             '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
@@ -5159,7 +5176,6 @@ sub Data {
         'OTRS time zone is not set.' => '',
         'User default time zone' => '',
         'User default time zone is not set.' => '',
-        'OTRS time zone setting for calendar' => '',
         'Calendar time zone is not set.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/UI/AgentSkinUsage.pm
@@ -5665,6 +5681,9 @@ sub Data {
         'Please remove the following words from your search as they cannot be searched for:' =>
             '',
 
+        # JS File: Core.Agent.SharedSecretGenerator
+        'Generate' => '',
+
         # JS File: Core.Agent.SortedTree
         'This element has children elements and can currently not be removed.' =>
             '',
@@ -5929,8 +5948,6 @@ Thanks for your help!
         'All customer users of a CustomerID' => '',
         'All escalated tickets' => 'सभी संवर्धित टिकट',
         'All new tickets, these tickets have not been worked on yet' => 'सभी नये टिकट,इन टिकटों पर अभी तक काम नहीं किया गया है।',
-        'All open tickets, these tickets have already been worked on, but need a response' =>
-            'सभी खुले टिकट,इन टिकटों पर पहले ही काम किया जा चुका है,लेकिन प्रतिक्रिया की जरूरत है।',
         'All open tickets, these tickets have already been worked on.' =>
             '',
         'All tickets with a reminder set where the reminder date has been reached' =>
@@ -5978,6 +5995,9 @@ Thanks for your help!
             '',
         'Allows extended search conditions in ticket search of the generic agent interface. With this feature you can search e. g. ticket title with this kind of conditions like "(*key1*&&*key2*)" or "(*key1*||*key2*)".' =>
             '',
+        'Allows generic agent to execute custom command line scripts.' =>
+            '',
+        'Allows generic agent to execute custom modules.' => '',
         'Allows having a medium format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
             'एक मध्यम प्रारूप टिकट अवलोकन होने की अनुमति देता है(ग्राहक जानकारी =>1 - यह भी ग्राहकों की जानकारी दिखाता है)।',
         'Allows having a small format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
@@ -6047,7 +6067,7 @@ Thanks for your help!
         'Balanced white skin by Felix Niklas (slim version).' => '',
         'Balanced white skin by Felix Niklas.' => 'संतुलित सफेद सतही फेलिक्स निकलस के द्वारा',
         'Based on global RichText setting' => '',
-        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.' =>
+        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.' =>
             '',
         'Blocks all the incoming emails that do not have a valid ticket number in subject with From: @example.com address.' =>
             'सभी आने वाली ईमेल से:@ example.com पते के जिनके विषय में एक वैध टिकट नंबर नहीं है उनको रोकें।',
@@ -6115,6 +6135,7 @@ Thanks for your help!
             '',
         'Choose which notifications you\'d like to receive.' => '',
         'Christmas Eve' => '',
+        'Close' => 'अंत',
         'Close this ticket' => '',
         'Closed tickets (customer user)' => '',
         'Closed tickets (customer)' => '',
@@ -6163,7 +6184,7 @@ Thanks for your help!
         'Configure which screen should be shown after a new ticket has been created.' =>
             '',
         'Configure your own log text for PGP.' => 'आपके PGP के लिए अपनी अभिलेख पाठ विन्यस्त करें।',
-        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".' =>
+        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".' =>
             '',
         'Controls how to display the ticket history entries as readable values.' =>
             '',
@@ -6261,6 +6282,7 @@ Thanks for your help!
         'Default ACL values for ticket actions.' => 'तयशुदा ACL मान टिकट कार्रवाई के लिए।',
         'Default ProcessManagement entity prefixes for entity IDs that are automatically generated.' =>
             '',
+        'Default agent name' => '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".' =>
             '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimeStartYear=2010;TicketCreateTimeStartMonth=10;TicketCreateTimeStartDay=4;TicketCreateTimeStopYear=2010;TicketCreateTimeStopMonth=11;TicketCreateTimeStopDay=3;".' =>
@@ -6506,13 +6528,15 @@ Thanks for your help!
         'Defines the date input format used in forms (option or input fields).' =>
             'तारीख निवेश रूपों में उपयोग प्रारूप को परिभाषित करता है(विकल्प या निवेश क्षेत्र)।',
         'Defines the default CSS used in rich text editors.' => 'समृद्ध पाठ संपादकों में प्रयुक्त तयशुदा CSS को परिभाषित करता है।',
+        'Defines the default agent name in the ticket zoom view of the customer interface.' =>
+            '',
         'Defines the default auto response type of the article for this operation.' =>
             '',
         'Defines the default body of a note in the ticket free text screen of the agent interface.' =>
             'प्रतिनिधि अग्रांत से टिकट मुक्त पाठ स्क्रीन में एक टिप्पणी के तयशुदा मुख्य-भाग को परिभाषित करता है।',
         'Defines the default filter fields in the customer user address book search (CustomerUser or CustomerCompany). For the CustomerCompany fields a prefix \'CustomerCompany_\' must be added.' =>
             '',
-        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.' =>
+        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.' =>
             '',
         'Defines the default front-end language. All the possible values are determined by the available language files on the system (see the next setting).' =>
             'तयशुदा अग्रांत भाषा परिभाषित करें। सभी संभावित मान प्रणाली पर उपलब्ध भाषा फ़ाइलों से निर्धारित होते हैं(अगली व्यवस्थाओ को देखें)।',
@@ -6663,6 +6687,8 @@ Thanks for your help!
         'Defines the default viewable sender types of a ticket (default: customer).' =>
             'एक टिकट के तयशुदा देखने योग्य प्रेषक के प्रकार को परिभाषित करता है(तयशुदा:ग्राहक)।',
         'Defines the default visibility of the article to customer for this operation.' =>
+            '',
+        'Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.' =>
             '',
         'Defines the dynamic fields that are used for displaying on calendar events.' =>
             '',
@@ -7186,7 +7212,7 @@ Thanks for your help!
         'English stop words for fulltext index. These words will be removed from the search index.' =>
             '',
         'Enroll process for this ticket' => '',
-        'Enter your shared secret to enable two factor authentication.' =>
+        'Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.' =>
             '',
         'Escalated Tickets' => 'संवर्धित टिकटें',
         'Escalation view' => 'संवर्धित दृश्य',
@@ -7324,7 +7350,7 @@ Thanks for your help!
         'Graph: Stacked Area Chart' => '',
         'Greek' => '',
         'Hebrew' => '',
-        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".' =>
+        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".' =>
             '',
         'High Contrast' => '',
         'High contrast skin for visually impaired users.' => '',
@@ -7548,10 +7574,12 @@ Thanks for your help!
         'Logout of customer panel.' => '',
         'Look into a ticket!' => 'टिकट में देखें',
         'Loop protection: no auto-response sent to "%s".' => '',
+        'Macedonian' => '',
         'Mail Accounts' => '',
         'MailQueue configuration settings.' => '',
         'Main menu item registration.' => '',
         'Main menu registration.' => '',
+        'Makes the application block external content loading.' => '',
         'Makes the application check the MX record of email addresses before sending an email or submitting a telephone or email ticket.' =>
             'एक ईमेल भेजने या एक टेलीफोन जमा या ईमेल के टिकट से पहले अनुप्रयोग ईमेल पतों की MX रिकॉर्ड की जाँच करें।',
         'Makes the application check the syntax of email addresses.' => 'अनुप्रयोग ईमेल पतों के वाक्यविन्यास की जाँच करें।',
@@ -7691,7 +7719,6 @@ Thanks for your help!
             '',
         'OTRS doesn\'t support recurring Appointments without end date or number of iterations. During import process, it might happen that ICS file contains such Appointments. Instead, system creates all Appointments in the past, plus Appointments for the next N months (120 months/10 years by default).' =>
             '',
-        'Open Tickets / Need to be answered' => 'खुले टिकटें / उत्तर दिया जाना चाहिए',
         'Open an external link!' => '',
         'Open tickets (customer user)' => '',
         'Open tickets (customer)' => '',
@@ -7840,13 +7867,15 @@ Thanks for your help!
         'Queue view' => 'श्रेणी दृश्य',
         'Queues ↔ Auto Responses' => '',
         'Rebuild the ticket index for AgentTicketQueue.' => '',
-        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.' =>
+        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the \'NumberRegExp\' expression will be used as the ticket number value.' =>
             '',
         'Refresh interval' => 'ताज़ाकरण अंतराल',
         'Registers a log module, that can be used to log communication related information.' =>
             '',
         'Reminder Tickets' => 'अनुस्मारक टिकटें',
         'Removed subscription for user "%s".' => 'सदस्यता रद्द करें "%s"।',
+        'Removes old generic interface debug log entries created before the specified amount of days.' =>
+            '',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '',
         'Removes old ticket number counters (each 10 minutes).' => '',
@@ -7905,6 +7934,7 @@ Thanks for your help!
             '',
         'Right' => '',
         'Roles ↔ Groups' => '',
+        'Romanian' => '',
         'Run file based generic agent jobs (Note: module name needs to be specified in -configuration-module param e.g. "Kernel::System::GenericAgent").' =>
             '',
         'Running Process Tickets' => '',
@@ -8331,6 +8361,7 @@ Thanks for your help!
         'Shows information on how to start OTRS Daemon' => '',
         'Shows link to external page in the ticket zoom view of the agent interface. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '',
+        'Shows the article head information in the agent zoom view.' => '',
         'Shows the articles sorted normally or in reverse, under ticket zoom in the agent interface.' =>
             'अनुच्छेद दिखाता है सामान्य रूप से हल या विपरीत दिशा में,प्रतिनिधि अंतरफलक में ज़ूम टिकट के अंतर्गत।',
         'Shows the customer user information (phone and email) in the compose screen.' =>
@@ -8472,6 +8503,7 @@ Thanks for your help!
         'Strips empty lines on the ticket preview in the queue view.' => 'कतार दृश्य में टिकट पूर्वावलोकन पर रिक्त पंक्तियाँ खाली कर देता है।',
         'Strips empty lines on the ticket preview in the service view.' =>
             '',
+        'Support Agent' => '',
         'Swahili' => '',
         'Swedish' => '',
         'System Address Display Name' => '',
@@ -8532,6 +8564,7 @@ Thanks for your help!
             'एक ईमेल जवाब में विषय के प्रारंभ में पाठ,उदा. RE, AW, या AS।',
         'The text at the beginning of the subject when an email is forwarded, e.g. FW, Fwd, or WG.' =>
             'एक ईमेल जवाब में विषय के प्रारंभ में पाठ जब एक ईमेल अग्रेषित किया हैं,उदा. FW, Fwd, या WG। ',
+        'The value of the From field' => '',
         'Theme' => 'थीम',
         'This event module stores attributes from CustomerUser as DynamicFields tickets. Please see DynamicFieldFromCustomerUser::Mapping setting for how to configure the mapping.' =>
             '',
@@ -8763,7 +8796,6 @@ Thanks for your help!
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
-        'Close',
         'Close preview',
         'Close this dialog',
         'Complex %s with %s arguments',
@@ -8845,6 +8877,7 @@ Thanks for your help!
         'Fr',
         'Fri',
         'Friday',
+        'Generate',
         'Generate Result',
         'Generating...',
         'Grouped',

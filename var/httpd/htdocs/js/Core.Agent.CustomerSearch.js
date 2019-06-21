@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -404,6 +404,23 @@ Core.Agent.CustomerSearch = (function (TargetNS) {
             });
         }
 
+        // Enable free selection or input of CustomerID field on AgentTicketProcess and AgentTicketCustomer.
+        if ((Core.Config.Get('Action') === 'AgentTicketProcess'
+            && !Core.Config.Get('Ticket::Frontend::AgentTicketProcess::CustomerIDReadOnly'))
+            ||
+            (Core.Config.Get('Action') === 'AgentTicketCustomer'
+            && !Core.Config.Get('Ticket::Frontend::AgentTicketCustomer::CustomerIDReadOnly'))
+            ) {
+            $('#CustomerAutoComplete').on('blur keyup' , function() {
+                if($('#CustomerAutoComplete').val()) {
+                    ActivateSelectionCustomerID();
+                }
+                else {
+                    DeactivateSelectionCustomerID();
+                }
+            });
+        }
+
         // get customer tickets for AgentTicketPhone and AgentTicketEmail
         if ((Core.Config.Get('Action') === 'AgentTicketEmail' || Core.Config.Get('Action') === 'AgentTicketPhone') && $('#SelectedCustomerUser').val() !== '') {
             GetCustomerTickets($('#SelectedCustomerUser').val());
@@ -579,13 +596,13 @@ Core.Agent.CustomerSearch = (function (TargetNS) {
                     if (FieldValue !== BackupData.CustomerEmail && FieldValue !== BackupData.CustomerKey) {
                         $('#SelectedCustomerUser').val('');
                         $('#CustomerUserID').val('');
-                        $('#CustomerID').val('');
                         $('#CustomerUserOption').val('');
                         $('#ShowCustomerID').html('');
 
                         // Restore customer info table.
                         if (Core.Config.Get('Action') !== 'AgentTicketCustomer') {
                             $('#CustomerInfo .Content').html(BackupData.CustomerInfo);
+                            $('#CustomerID').val('');
                         }
 
                         if (Core.Config.Get('Action') === 'AgentTicketProcess' && typeof Core.Config.Get('CustomerFieldsToUpdate') !== 'undefined') {

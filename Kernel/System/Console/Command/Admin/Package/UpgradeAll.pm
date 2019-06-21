@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -18,6 +18,7 @@ use parent qw(Kernel::System::Console::BaseCommand);
 
 our @ObjectDependencies = (
     'Kernel::Config',
+    'Kernel::System::Cache',
     'Kernel::System::Package',
     'Kernel::System::SystemData',
 );
@@ -38,6 +39,13 @@ sub Configure {
 
 sub Run {
     my ( $Self, %Param ) = @_;
+
+    my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
+
+    # Enable in-memory cache to improve SysConfig performance, which is normally disabled for commands.
+    $CacheObject->Configure(
+        CacheInMemory => 1,
+    );
 
     my $PackageObject = $Kernel::OM->Get('Kernel::System::Package');
 
@@ -205,6 +213,11 @@ sub Run {
             . " or <yellow>Admin::Package::ReinstallAll</yellow> console commands.\n";
         $Self->Print($Message);
     }
+
+    # Disable in memory cache.
+    $CacheObject->Configure(
+        CacheInMemory => 0,
+    );
 
     $Self->Print("\n<green>Done.</green>\n");
     return $Self->ExitCodeOk();

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -640,6 +640,7 @@ search a local certificate
 
     my @Result = $CryptObject->CertificateSearch(
         Search => 'some text to search',
+        Valid  => 1
     );
 
 =cut
@@ -648,6 +649,7 @@ sub CertificateSearch {
     my ( $Self, %Param ) = @_;
 
     my $Search = $Param{Search} || '';
+    $Param{Valid} //= 0;
 
     # 1 - Get certificate list
     my @CertList = $Self->CertificateList();
@@ -658,7 +660,8 @@ sub CertificateSearch {
         # 2 - For the certs in list get its attributes and add them to @Results
         @Result = $Self->_CheckCertificateList(
             CertificateList => \@CertList,
-            Search          => $Search
+            Search          => $Search,
+            Valid           => $Param{Valid},
         );
     }
 
@@ -678,7 +681,8 @@ sub CertificateSearch {
             if (@CertList) {
                 @Result = $Self->_CheckCertificateList(
                     CertificateList => \@CertList,
-                    Search          => $Search
+                    Search          => $Search,
+                    Valid           => $Param{Valid},
                 );
             }
         }
@@ -692,9 +696,11 @@ sub _CheckCertificateList {
 
     my @CertList = @{ $Param{CertificateList} };
     my $Search   = $Param{Search} || '';
+    $Param{Valid} //= 0;
 
     my @Result;
 
+    FILE:
     for my $Filename (@CertList) {
         my $Certificate = $Self->CertificateGet( Filename => $Filename );
         my %Attributes  = $Self->CertificateAttributes(
@@ -718,6 +724,15 @@ sub _CheckCertificateList {
         $Attributes{Filename} = $Filename;
 
         if ($Hit) {
+
+            my $Expired = 0;
+            if ( $Param{Valid} ) {
+                $Expired = $Self->KeyExpiredCheck(
+                    EndDate => $Attributes{EndDate},
+                );
+            }
+
+            next FILE if $Expired;
             push @Result, \%Attributes;
         }
     }
@@ -787,6 +802,7 @@ sub FetchFromCustomer {
             my $Cert = $Self->ConvertCertFormat(
                 String => $CustomerUser{UserSMIMECertificate},
             );
+
             my %Result = $Self->CertificateAdd(
                 Certificate => $Cert,
             );
@@ -968,7 +984,7 @@ sub CertificateAdd {
 
     # look for an available filename
     FILENAME:
-    for my $Count ( 0 .. 9 ) {
+    for my $Count ( 0 .. 99 ) {
         if ( -e "$Self->{CertPath}/$Attributes{Hash}.$Count" ) {
             next FILENAME;
         }
@@ -1087,6 +1103,17 @@ sub CertificateRemove {
 
     my %Result;
 
+    my %CertificateAttributes = $Self->CertificateAttributes(
+        Certificate => $Self->CertificateGet( Filename => $Param{Filename} ),
+        Filename    => $Param{Filename},
+    );
+
+    if (%CertificateAttributes) {
+        $Self->SignerCertRelationDelete(
+            CAFingerprint => $CertificateAttributes{Fingerprint},
+        );
+    }
+
     # private certificate shouldn't exists if certificate is deleted
     # therefor if exists, first remove private certificate
     # if private delete fails abort certificate removing
@@ -1157,7 +1184,7 @@ sub CertificateList {
 
     my @CertList;
     my @Filters;
-    for my $Number ( 0 .. 9 ) {
+    for my $Number ( 0 .. 99 ) {
         push @Filters, "*.$Number";
     }
 
@@ -1312,6 +1339,7 @@ returns private keys
 
     my @Result = $CryptObject->PrivateSearch(
         Search => 'some text to search',
+        Valid  => 1  # optional
     );
 
 =cut
@@ -1320,9 +1348,11 @@ sub PrivateSearch {
     my ( $Self, %Param ) = @_;
 
     my $Search = $Param{Search} || '';
+    $Param{Valid} //= 0;
     my @Result;
     my @Certificates = $Self->CertificateList();
 
+    FILE:
     for my $File (@Certificates) {
         my $Certificate = $Self->CertificateGet( Filename => $File );
         my %Attributes  = $Self->CertificateAttributes(
@@ -1346,10 +1376,86 @@ sub PrivateSearch {
         if ( $Hit && $Attributes{Private} && $Attributes{Private} eq 'Yes' ) {
             $Attributes{Type}     = 'key';
             $Attributes{Filename} = $File;
+
+            my $Expired = 0;
+            if ( $Param{Valid} ) {
+                $Expired = $Self->KeyExpiredCheck(
+                    EndDate => $Attributes{EndDate},
+                );
+            }
+
+            next FILE if $Expired;
             push @Result, \%Attributes;
         }
     }
+
     return @Result;
+}
+
+=head2 KeyExpiredCheck()
+
+returns if SMIME key is expired
+
+    my $Valid = $CryptObject->KeyExpiredCheck(
+        EndDate => 'May 12 23:50:40 2018 GMT',
+    );
+
+=cut
+
+sub KeyExpiredCheck {
+    my ( $Self, %Param ) = @_;
+
+    if ( !$Param{EndDate} ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Need EndDate!"
+        );
+        return;
+    }
+
+    my %Months = (
+        Jan => '01',
+        Feb => '02',
+        Mar => '03',
+        Apr => '04',
+        May => '05',
+        Jun => '06',
+        Jul => '07',
+        Aug => '08',
+        Sep => '09',
+        Oct => '10',
+        Nov => '11',
+        Dec => '12',
+    );
+
+    # EndDate is in this format: May 12 23:50:40 2018 GMT
+    # It is transformed in supported format for DateTimeObject: 2018-05-12T23:50:40GMT
+    if ( $Param{EndDate} =~ /(.+?)\s(.+?)\s(\d\d:\d\d:\d\d)\s(\d\d\d\d)\s(\w+)/ ) {
+        my $Day   = int($2);
+        my $Month = $Months{$1};
+        my $Year  = $4;
+
+        if ( $Day < 10 ) {
+            $Day = "0$Day";
+        }
+
+        my $EndDateTimeObject = $Kernel::OM->Create(
+            'Kernel::System::DateTime',
+            ObjectParams => {
+                String => "$Year-" . $Month . "-" . $Day . "T$3" . $5,
+            },
+        );
+
+        my $CurrentTimeObject = $Kernel::OM->Create(
+            'Kernel::System::DateTime',
+        );
+
+        # Check if key is expired.
+        if ( $EndDateTimeObject->Compare( DateTimeObject => $CurrentTimeObject ) == -1 ) {
+            return 1;
+        }
+    }
+    return;
 }
 
 =head2 PrivateAdd()
@@ -1640,7 +1746,7 @@ sub PrivateList {
 
     my @CertList;
     my @Filters;
-    for my $Number ( 0 .. 9 ) {
+    for my $Number ( 0 .. 99 ) {
         push @Filters, "*.$Number";
     }
 
@@ -2019,16 +2125,21 @@ returns 1 if success
         CAFingerprint   => $CAFingerprint,
     );
 
+    # delete one relation by CAFingerprint
+    $Success = $CryptObject->SignerCertRelationDelete (
+        CAFingerprint   => $CAFingerprint,
+    );
+
 =cut
 
 sub SignerCertRelationDelete {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    if ( !$Param{CertFingerprint} && !$Param{ID} ) {
+    if ( !$Param{CertFingerprint} && !$Param{ID} && !$Param{CAFingerprint} ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
-            Message  => 'Need ID or CertFingerprint!'
+            Message  => 'Need ID or CertFingerprint or CAFingerprint!'
         );
         return;
     }
@@ -2067,6 +2178,25 @@ sub SignerCertRelationDelete {
                 Message =>
                     "DB Error, Not possible to delete relation for "
                     . "CertFingerprint:$Param{CertFingerprint} and CAFingerprint:$Param{CAFingerprint}!",
+                Priority => 'error',
+            );
+        }
+        return $Success;
+    }
+    elsif ( $Param{CAFingerprint} ) {
+
+        # delete one row
+        my $Success = $DBObject->Do(
+            SQL => 'DELETE FROM smime_signer_cert_relations '
+                . 'WHERE ca_fingerprint = ?',
+            Bind => [ \$Param{CAFingerprint} ],
+        );
+
+        if ( !$Success ) {
+            $Kernel::OM->Get('Kernel::System::Log')->Log(
+                Message =>
+                    "DB Error, Not possible to delete relation for "
+                    . "CAFingerprint:$Param{CAFingerprint}!",
                 Priority => 'error',
             );
         }
@@ -2308,12 +2438,12 @@ sub _FetchAttributesFromCert {
             $AttributesRef->{$DateType} =~ /(.+?)\s(.+?)\s(\d\d:\d\d:\d\d)\s(\d\d\d\d)/
             )
         {
-            my $Day   = $2;
+            my $Day   = int($2);
             my $Month = '';
             my $Year  = $4;
 
             if ( $Day < 10 ) {
-                $Day = "0" . int($Day);
+                $Day = "0$Day";
             }
 
             MONTH_KEY:
@@ -2487,7 +2617,7 @@ sub _NormalizePrivateSecretFiles {
         my @UsedPrivateSecretFiles;
 
         KEYFILENAME:
-        for my $Count ( 0 .. 9 ) {
+        for my $Count ( 0 .. 99 ) {
             my $PrivateKeyFileLocation = "$Self->{PrivatePath}/$Hash.$Count";
 
             # get private keys
@@ -2648,7 +2778,7 @@ sub _ReHashCertificates {
         );
 
         # split filename into Hash.Index (12345678.0 -> 12345678 / 0)
-        $File =~ m{ (.+) \. (\d) }smx;
+        $File =~ m{ (.+) \. (\d+) }smx;
         my $Hash  = $1;
         my $Index = $2;
 
@@ -2707,7 +2837,7 @@ sub _ReHashCertificates {
         my $NewPrivateKeyFile;
         my $NewIndex;
         FILENAME:
-        for my $Count ( 0 .. 9 ) {
+        for my $Count ( 0 .. 99 ) {
             my $CertTestFile = "$Self->{CertPath}/$WrongCertificate->{NewHash}.$Count";
             if ( -e $CertTestFile ) {
                 next FILENAME;

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -134,8 +134,8 @@ $Selenium->RunTest(
         # Click on the split action.
         $Selenium->find_element( '.SplitSelection', 'css' )->click();
 
-        $Selenium->WaitFor(
-            JavaScript => 'return $("#SplitSubmit").length'
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#SplitSubmit',
         );
 
         # Change it to Process.
@@ -144,7 +144,7 @@ $Selenium->RunTest(
             Value   => 'ProcessTicket',
         );
         $Selenium->WaitFor(
-            JavaScript => 'return $("#ProcessEntityID").length'
+            JavaScript => 'return $("#ProcessEntityID").length;'
         );
 
         # Change it to Process EntityID.
@@ -154,9 +154,48 @@ $Selenium->RunTest(
         );
         $Selenium->find_element( '#SplitSubmit', 'css' )->VerifiedClick();
 
+        # Check if CustomerID read only field can be disabled. See bug#14412.
+        # Disable CustomerID read only.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketProcess::CustomerIDReadOnly',
+            Value => 0
+        );
+
+        $Selenium->VerifiedRefresh();
+
         # Check if customer user input is on create process screen.
         $Selenium->WaitFor(
-            JavaScript => 'return $("#CustomerAutoComplete").length'
+            JavaScript => 'return $("#CustomerAutoComplete").length;'
+        );
+
+        my $RandomCustomerUser = 'RandomCustomerUser' . $Helper->GetRandomID();
+        $Selenium->find_element( "#CustomerAutoComplete", 'css' )->clear();
+        $Selenium->find_element( "#CustomerID",           'css' )->clear();
+        $Selenium->find_element( "#CustomerAutoComplete", 'css' )->send_keys($RandomCustomerUser);
+        $Selenium->find_element( "#CustomerID",           'css' )->send_keys($RandomCustomerUser);
+
+        # Check if select button is enabled.
+        $Self->Is(
+            $Selenium->execute_script("return \$('#SelectionCustomerID').prop('disabled');"),
+            0,
+            "Button to select a other CustomerID is disabled",
+        );
+
+        $Selenium->find_element( "#CustomerAutoComplete", 'css' )->clear();
+        $Selenium->find_element( "#CustomerID",           'css' )->clear();
+
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketProcess::CustomerIDReadOnly',
+            Value => 1
+        );
+
+        $Selenium->VerifiedRefresh();
+
+        # Check if customer user input is on create process screen.
+        $Selenium->WaitFor(
+            JavaScript => 'return $("#CustomerAutoComplete").length;'
         );
 
         # Create Process ticket without article.
@@ -168,7 +207,7 @@ $Selenium->RunTest(
         push @DeleteTicketIDs, $TicketID[1];
 
         $Selenium->WaitFor(
-            JavaScript => 'return $(".AsBlock.LinkObjectLink").length'
+            JavaScript => 'return typeof($) === "function" && $(".AsBlock.LinkObjectLink").length;'
         );
 
         # Verify there is link to parent ticket.
@@ -179,11 +218,16 @@ $Selenium->RunTest(
             "Link to parent ticket is found",
         );
 
+        # Scroll down.
+        $Selenium->execute_script(
+            "\$('a.LinkObjectLink[href*=\"Action=AgentTicketZoom;TicketID=$TicketID\"]')[0].scrollIntoView(true);",
+        );
+
         # Go to linked Ticket.
         $Selenium->find_element("//a[contains(\@href, 'Action=AgentTicketZoom;TicketID=$TicketID' )]")->VerifiedClick();
 
         $Selenium->WaitFor(
-            JavaScript => 'return $(".AsBlock.LinkObjectLink").length'
+            JavaScript => 'return typeof($) === "function" && $(".AsBlock.LinkObjectLink").length;'
         );
 
         # Verify there is link to child ticket.

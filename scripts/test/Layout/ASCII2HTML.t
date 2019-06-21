@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -285,6 +285,12 @@ my @Tests = (
         Result =>
             "<a href=\"http://wwww.exaple.com?Action=ActionName#position(12)\" target=\"_blank\" " .
             "title=\"http://wwww.exaple.com?Action=ActionName#position(12)\">http://wwww.exaple.com?Action=ActionName#position(12)</a>",
+    },
+    {
+        Name   => 'Ascii2Html() - #30',
+        String => '
+ ',
+        Result => "<br/>\n&nbsp;",
     },
 );
 

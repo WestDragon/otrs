@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -21,6 +21,7 @@ use Kernel::System::VariableCheck qw(:all);
 
 our @ObjectDependencies = (
     'Kernel::Config',
+    'Kernel::System::DB',
     'Kernel::System::Log',
     'Kernel::System::PID',
     'Kernel::System::Ticket',
@@ -118,6 +119,8 @@ sub ArticleIndexRebuild {
     my ( $Self, %Param ) = @_;
 
     my @ArticleIDs = keys %{ $Param{ArticleTicketIDs} };
+
+    $Kernel::OM->Get('Kernel::System::DB')->Disconnect();
 
     # Destroy objects for the child processes.
     $Kernel::OM->ObjectsDiscard(

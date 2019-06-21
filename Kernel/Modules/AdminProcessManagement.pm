@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -726,11 +726,7 @@ sub Run {
         }
 
         # create new process name
-        my $ProcessName =
-            $ProcessData->{Name}
-            . ' ('
-            . $LayoutObject->{LanguageObject}->Translate('Copy')
-            . ')';
+        my $ProcessName = $LayoutObject->{LanguageObject}->Translate( '%s (copy)', $ProcessData->{Name} );
 
         # generate entity ID
         my $EntityID = $EntityObject->EntityIDGenerate(

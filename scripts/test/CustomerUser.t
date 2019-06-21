@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -28,7 +28,6 @@ $Kernel::OM->ObjectParamAdd(
 );
 my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
-# add three users
 $ConfigObject->Set(
     Key   => 'CheckEmailAddresses',
     Value => 0,
@@ -216,6 +215,7 @@ for my $Key ( 1 .. 3, 'ä', 'カス', '_', '&' ) {
     # search by CustomerID with asterisk
     %List = $CustomerUserObject->CustomerSearch(
         CustomerID => '*',
+        Limit      => 100000,
         ValidID    => 1,
     );
     $Self->True(
@@ -256,6 +256,7 @@ for my $Key ( 1 .. 3, 'ä', 'カス', '_', '&' ) {
     # search by CustomerID with %
     %List = $CustomerUserObject->CustomerSearch(
         CustomerID => '%',
+        Limit      => 100000,
         ValidID    => 1,
     );
     $Self->True(

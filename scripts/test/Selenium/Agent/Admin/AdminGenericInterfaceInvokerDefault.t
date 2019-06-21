@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -91,7 +91,12 @@ $Selenium->RunTest(
             Value   => 'Test::TestSimple',
         );
         $Selenium->WaitFor(
-            JavaScript => "return typeof(\$) === 'function' && \$('#Invoker').length === 1"
+            JavaScript => "return typeof(\$) === 'function' && \$('#Invoker').length;"
+        );
+
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete;'
         );
 
         my $InvokerName = "Invoker$RandomID";
@@ -100,10 +105,14 @@ $Selenium->RunTest(
         # Click on 'Save'.
         $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
 
+        $Selenium->WaitFor(
+            JavaScript => "return typeof(\$) === 'function' && \$('#EventType').length && \$('#TicketEvent').length;"
+        );
+
         # Check if Modernize class is included to Add Event Trigger select.
         $Self->Is(
             $Selenium->execute_script(
-                "return \$('#EventType').hasClass('Modernize')"
+                "return \$('#EventType').hasClass('Modernize');"
             ),
             '1',
             'Check if Add Event Trigger select has class "Modernize"',
@@ -112,7 +121,7 @@ $Selenium->RunTest(
         # Check if Modernize class is included to Ticket Event.
         $Self->Is(
             $Selenium->execute_script(
-                "return \$('#TicketEvent').hasClass('Modernize')"
+                "return \$('#TicketEvent').hasClass('Modernize');"
             ),
             '1',
             'Check if Ticket Event select has class "Modernize"',
@@ -127,6 +136,10 @@ $Selenium->RunTest(
         # Add a new event to event triggers.
         my $Count = 0;
         for my $Event (qw (QueueCreate  QueueUpdate)) {
+            $Selenium->WaitForjQueryEventBound(
+                CSSSelector => "#AddEvent",
+            );
+
             $Selenium->find_element( "#AddEvent", 'css' )->VerifiedClick();
 
             $Self->Is(
@@ -138,14 +151,16 @@ $Selenium->RunTest(
             $Count++;
         }
 
-        $Selenium->find_element( "#AddEvent", 'css' )->click();
-
-        $Selenium->WaitFor(
-            JavaScript => "return \$('.Dialog.Modal').length === 1"
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => "#AddEvent",
         );
 
+        $Selenium->find_element( "#AddEvent", 'css' )->click();
+
+        $Selenium->WaitFor( JavaScript => "return \$('.Dialog.Modal').length;" );
+
         $Self->Is(
-            $Selenium->execute_script("return \$('.Dialog.Modal div.InnerContent').text()"),
+            $Selenium->execute_script("return \$('.Dialog.Modal div.InnerContent').text();"),
             "It is not possible to add a new event trigger because the event is not set.",
             "Event Triggers dialog is shown"
         );

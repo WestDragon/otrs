@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -196,12 +196,14 @@ sub LoadDefaults {
         'ko'      => 'Korean',
         'lt'      => 'Lithuanian',
         'lv'      => 'Latvian',
+        'mk'      => 'Macedonian',
         'ms'      => 'Malay',
         'nl'      => 'Dutch',
         'nb_NO'   => 'Norwegian',
         'pt_BR'   => 'Portuguese (Brasil)',
         'pt'      => 'Portuguese',
         'pl'      => 'Polish',
+        'ro'      => 'Romanian',
         'ru'      => 'Russian',
         'sl'      => 'Slovenian',
         'sr_Latn' => 'Serbian Latin',
@@ -247,12 +249,14 @@ sub LoadDefaults {
         'ko'      => '한국어',
         'lt'      => 'Lietuvių kalba',
         'lv'      => 'Latvijas',
+        'mk'      => 'Mакедонски',
         'ms'      => 'Melayu',
         'nl'      => 'Nederlandse',
         'nb_NO'   => 'Norsk bokmål',
         'pt_BR'   => 'Português Brasileiro',
         'pt'      => 'Português',
         'pl'      => 'Polski',
+        'ro'      => 'Română',
         'ru'      => 'Русский',
         'sl'      => 'Slovenščina',
         'sr_Latn' => 'Srpski',
@@ -989,7 +993,7 @@ sub LoadDefaults {
         'thirdparty/jquery-validate-1.16.0/jquery.validate.js',
         'thirdparty/jquery-ui-1.12.1/jquery-ui.js',
         'thirdparty/jquery-pubsub/pubsub.js',
-        'thirdparty/jquery-jstree-3.3.4/jquery.jstree.js',
+        'thirdparty/jquery-jstree-3.3.7/jquery.jstree.js',
         'thirdparty/nunjucks-3.0.1/nunjucks.js',
         'Core.Init.js',
         'Core.Debug.js',
@@ -1028,7 +1032,7 @@ sub LoadDefaults {
         'thirdparty/jquery-ui-touch-punch-0.2.3/jquery.ui.touch-punch.js',
         'thirdparty/jquery-validate-1.16.0/jquery.validate.js',
         'thirdparty/jquery-pubsub/pubsub.js',
-        'thirdparty/jquery-jstree-3.3.4/jquery.jstree.js',
+        'thirdparty/jquery-jstree-3.3.7/jquery.jstree.js',
         'thirdparty/nunjucks-3.0.1/nunjucks.js',
         'Core.Init.js',
         'Core.JavaScriptEnhancements.js',

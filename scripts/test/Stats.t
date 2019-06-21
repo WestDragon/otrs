@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -596,6 +596,29 @@ $Result = $StatsObject->StatsCleanUp(
 $Self->True(
     $Result,
     'StatsCleanUp() - clean up stats',
+);
+
+# Check _ToOTRSTimeZone for invalid date (Daylight Saving Time).
+# See bug#14511 for more information.
+my $String = $StatsObject->_ToOTRSTimeZone(
+    String   => '2019-03-31 02:30:00',
+    TimeZone => 'Europe/Berlin',
+);
+
+$Self->False(
+    $String,
+    '_ToOTRSTimeZone() - invalid date',
+);
+
+# Check _ToOTRSTimeZone for valid date.
+$String = $StatsObject->_ToOTRSTimeZone(
+    String   => '2019-03-31 12:30:00',
+    TimeZone => 'Europe/Berlin',
+);
+
+$Self->True(
+    $String,
+    '_ToOTRSTimeZone() - valid date',
 );
 
 # cleanup is done by RestoreDatabase

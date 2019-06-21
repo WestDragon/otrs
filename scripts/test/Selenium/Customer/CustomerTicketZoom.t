@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -34,9 +34,31 @@ $Selenium->RunTest(
             Value => 0,
         );
 
+        # Disable check email address.
+        $Helper->ConfigSettingChange(
+            Key   => 'CheckEmailAddresses',
+            Value => 0,
+        );
+
         # Create test customer user.
         my $TestCustomerUserLogin = $Helper->TestCustomerUserCreate(
         ) || die "Did not get test customer user";
+
+        # Change customer user first and last name.
+        my $RandomID          = $Helper->GetRandomID();
+        my $CustomerFirstName = 'FirstName';
+        my $CustomerLastName  = 'LastName, test (12345)';
+        $Kernel::OM->Get('Kernel::System::CustomerUser')->CustomerUserUpdate(
+            Source         => 'CustomerUser',
+            ID             => $TestCustomerUserLogin,
+            UserCustomerID => $TestCustomerUserLogin,
+            UserLogin      => $TestCustomerUserLogin,
+            UserFirstname  => $CustomerFirstName,
+            UserLastname   => $CustomerLastName,
+            UserEmail      => "$RandomID\@localhost.com",
+            ValidID        => 1,
+            UserID         => 1,
+        );
 
         # Create test ticket.
         my $TicketNumber = $TicketObject->TicketCreateNumber();
@@ -233,7 +255,8 @@ $Selenium->RunTest(
         # Check reply button.
         $Selenium->find_element("//a[contains(\@id, \'ReplyButton' )]")->click();
         $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#FollowUp.Visible').length" );
-        $Selenium->find_element("//button[contains(\@value, \'Submit' )]");
+        $Selenium->find_element( '#RichText', 'css' )->send_keys('TestBody');
+        $Selenium->find_element("//button[contains(\@value, \'Submit' )]")->VerifiedClick();
 
         # Change the ticket state to 'merged'.
         my $Merged = $TicketObject->TicketStateSet(
@@ -246,8 +269,7 @@ $Selenium->RunTest(
             "Ticket state changed to 'merged'",
         );
 
-        # Refresh the page.
-        $Selenium->VerifiedRefresh();
+        $Selenium->VerifiedGet("${ScriptAlias}customer.pl?Action=CustomerTicketZoom;TicketNumber=$TicketNumber");
 
         # Check if reply button is missing in merged ticket (bug#7301).
         $Self->Is(
@@ -261,6 +283,108 @@ $Selenium->RunTest(
             $Selenium->execute_script('return $("a[href*=\'Action=CustomerTicketPrint\']").length'),
             1,
             "Print button is found",
+        );
+
+        my $ArticleBackendObjectInternal = $Kernel::OM->Get('Kernel::System::Ticket::Article')->BackendForChannel(
+            ChannelName => 'Internal',
+        );
+
+        my $TestOriginalFrom = 'Agent Some Agent Some Agent' . $Helper->GetRandomID();
+
+        # Add article from agent, with enabled IsVisibleForCustomer.
+        my $ArticleID3 = $ArticleBackendObjectInternal->ArticleCreate(
+            TicketID             => $TicketID,
+            SenderType           => 'agent',
+            IsVisibleForCustomer => 1,
+            From                 => $TestOriginalFrom . ' <email@example.com>',
+            Subject              => $SubjectRandom,
+            Body                 => $TextRandom,
+            Charset              => 'charset=ISO-8859-15',
+            MimeType             => 'text/plain',
+            HistoryType          => 'AddNote',
+            HistoryComment       => 'Some free text!',
+            UserID               => 1,
+        );
+
+        $Self->True(
+            $ArticleID2,
+            "Article #2 is created - $ArticleID2",
+        );
+
+        # Use From field value.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::CustomerTicketZoom###DisplayNoteFrom',
+            Value => 'FromField',
+        );
+
+        # Allow apache to pick up the changed SysConfig via Apache::Reload.
+        sleep 2;
+
+        # Refresh the page.
+        $Selenium->VerifiedRefresh();
+
+        # Check From field value.
+        my $FromString = $Selenium->execute_script(
+            "return \$('.MessageBody:eq(3) span:eq(0)').text().trim();"
+        );
+        $Self->Is(
+            $FromString,
+            $TestOriginalFrom,
+            "Test From content",
+        );
+
+        # Use default agent name setting.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::CustomerTicketZoom###DisplayNoteFrom',
+            Value => 'DefaultAgentName',
+        );
+
+        my $TestDefaultAgentName = 'ADefaultValueForAgentName' . $Helper->GetRandomID();
+
+        # Set a default value for agent.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::CustomerTicketZoom###DefaultAgentName',
+            Value => $TestDefaultAgentName,
+        );
+
+        # Allow apache to pick up the changed SysConfig via Apache::Reload.
+        sleep 2;
+
+        # Refresh the page.
+        $Selenium->VerifiedRefresh();
+
+        # Check From field value.
+        $FromString = $Selenium->execute_script(
+            "return \$('.MessageBody:eq(3) span:eq(0)').text().trim();"
+        );
+        $Self->Is(
+            $FromString,
+            $TestDefaultAgentName,
+            "Test From content",
+        );
+
+        # Login to Agent interface and verify customer name in answer article.
+        my $TestUserLogin = $Helper->TestUserCreate(
+            Groups => [ 'admin', 'users' ],
+        ) || die "Did not get test user";
+
+        $Selenium->Login(
+            Type     => 'Agent',
+            User     => $TestUserLogin,
+            Password => $TestUserLogin,
+        );
+
+        # Navigate to AgentTicketZoom screen.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketID");
+
+        $Self->True(
+            $Selenium->execute_script(
+                'return $("#ArticleTable a:contains(\'FirstName LastName, test (12345)\')").length;'
+            ),
+            "Customer name found in reply article",
         );
 
         # Clean up test data from the DB.

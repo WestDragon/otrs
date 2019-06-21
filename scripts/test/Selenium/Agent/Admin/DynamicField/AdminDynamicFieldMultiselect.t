@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -62,7 +62,7 @@ $Selenium->RunTest(
                 qw(Name Label FieldOrder ValidID DefaultValue AddValue PossibleNone TreeView TranslatableValues)
                 )
             {
-                $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#$ID').length" );
+                $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function' && \$('#$ID').length;" );
                 my $Element = $Selenium->find_element( "#$ID", 'css' );
                 $Element->is_enabled();
                 $Element->is_displayed();
@@ -72,11 +72,11 @@ $Selenium->RunTest(
             my $Element2 = $Selenium->find_element( "#Name", 'css' );
             $Element2->send_keys("");
             $Selenium->find_element( "#Submit", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => 'return $("#Name.Error").length' );
+            $Selenium->WaitFor( JavaScript => 'return $("#Name.Error").length;' );
 
             $Self->Is(
                 $Selenium->execute_script(
-                    "return \$('#Name').hasClass('Error')"
+                    "return \$('#Name').hasClass('Error');"
                 ),
                 '1',
                 'Client side validation correctly detected missing input value',
@@ -88,7 +88,7 @@ $Selenium->RunTest(
             $Selenium->find_element( "#Name",     'css' )->send_keys($RandomID);
             $Selenium->find_element( "#Label",    'css' )->send_keys($RandomID);
             $Selenium->find_element( "#AddValue", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => 'return $("#Key_1").length && $("#Value_1").length' );
+            $Selenium->WaitFor( JavaScript => 'return $("#Key_1").length && $("#Value_1").length;' );
             $Selenium->find_element( "#Key_1",   'css' )->send_keys("Key1");
             $Selenium->find_element( "#Value_1", 'css' )->send_keys("Value1");
 
@@ -101,21 +101,21 @@ $Selenium->RunTest(
 
             # Add another possible value.
             $Selenium->find_element( "#AddValue", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => 'return $("#Key_2").length && $("#Value_2").length' );
+            $Selenium->WaitFor( JavaScript => 'return $("#Key_2").length && $("#Value_2").length;' );
             $Selenium->find_element( "#Key_2",   'css' )->send_keys("Key2");
             $Selenium->find_element( "#Value_2", 'css' )->send_keys("Value2");
 
             # Add another possible value.
             $Selenium->find_element( "#AddValue", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => 'return $("#Key_3").length && $("#Value_3").length' );
+            $Selenium->WaitFor( JavaScript => 'return $("#Key_3").length && $("#Value_3").length;' );
 
             # Submit form, expecting validation check.
             $Selenium->find_element("//button[\@type='submit']")->click();
-            $Selenium->WaitFor( JavaScript => 'return $("#Key_3.Error").length' );
+            $Selenium->WaitFor( JavaScript => 'return $("#Key_3.Error").length;' );
 
             $Self->Is(
                 $Selenium->execute_script(
-                    "return \$('#Key_3').hasClass('Error')"
+                    "return \$('#Key_3').hasClass('Error');"
                 ),
                 '1',
                 'Client side validation correctly detected missing input value for added possible value',
@@ -140,7 +140,7 @@ $Selenium->RunTest(
 
             # Remove added possible value.
             $Selenium->find_element( "#RemoveValue__3", 'css' )->click();
-            $Selenium->WaitFor( JavaScript => 'return !$("#Key_3:visible").length && !$("#Value_3:visible").length' );
+            $Selenium->WaitFor( JavaScript => 'return !$("#Key_3:visible").length && !$("#Value_3:visible").length;' );
 
             # Verify default value is changed.
             $Self->Is(
@@ -153,6 +153,10 @@ $Selenium->RunTest(
             $Selenium->InputFieldValueSet(
                 Element => '#DefaultValue',
                 Value   => "['Key1', 'Key2']",
+            );
+
+            $Selenium->execute_script(
+                "\$('#Submit')[0].scrollIntoView(true);"
             );
 
             # Submit form.
@@ -189,6 +193,11 @@ $Selenium->RunTest(
                 Element => '#ValidID',
                 Value   => 2,
             );
+
+            $Selenium->execute_script(
+                "\$('#Submit')[0].scrollIntoView(true);"
+            );
+
             $Selenium->find_element( "#Submit", 'css' )->VerifiedClick();
 
             # Check new and edited DynamicFieldMultiselect values.

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -12,9 +12,26 @@ use utf8;
 
 use vars (qw($Self));
 
-my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+my $Helper        = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+my $PackageObject = $Kernel::OM->Get('Kernel::System::Package');
+my $ConfigObject  = $Kernel::OM->Get('Kernel::Config');
 
-# make sure to enable cloud services
+my @List = $PackageObject->RepositoryList(
+    Result => 'short',
+);
+my $NumberOfPackagesInstalled = scalar @List;
+
+# Skip the test if there is more then 8 packages installed (8 because of SaaS scenarios).
+# TODO: fix the main issue with "unexpected alert open".
+if ( $NumberOfPackagesInstalled > 8 ) {
+    $Self->True(
+        1,
+        "Found $NumberOfPackagesInstalled packages installed, skipping test..."
+    );
+    return 1;
+}
+
+# Make sure to enable cloud services.
 $Helper->ConfigSettingChange(
     Valid => 1,
     Key   => 'CloudServices::Disabled',
@@ -75,66 +92,51 @@ my $CheckBreadcrumb = sub {
     }
 };
 
+my $NavigateToAdminPackageManager = sub {
+
+    # Wait until all AJAX calls finished.
+    $Selenium->WaitFor( JavaScript => "return \$.active == 0" );
+
+    # Go back to overview.
+    # Navigate to AdminPackageManager screen.
+    my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
+    $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminPackageManager");
+    $Selenium->WaitFor(
+        Time => 120,
+        JavaScript =>
+            'return typeof($) == "function" && $("#FileUpload").length;'
+    );
+};
+
+my $ClickAction = sub {
+
+    my $Selector = $_[0];
+
+    $Selenium->execute_script('window.Core.App.PageLoadComplete = false;');
+    $Selenium->find_element($Selector)->click();
+    $Selenium->WaitFor(
+        Time => 120,
+        JavaScript =>
+            'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+    );
+};
+
 $Selenium->RunTest(
     sub {
+        my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
-        my $Helper        = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
-        my $PackageObject = $Kernel::OM->Get('Kernel::System::Package');
-
-        # For test stability check if package is already installed.
-        my $PackageCheck = $PackageObject->PackageIsInstalled(
-            Name => 'Test',
+        # For the sake of stability, check if test package is already installed.
+        my $TestPackage = $PackageObject->RepositoryGet(
+            Name            => 'Test',
+            Version         => '0.0.1',
+            DisableWarnings => 1,
         );
 
-        # If package is installed, remove it so we can install it again in the test.
-        if ($PackageCheck) {
-            my $FileString = '<?xml version="1.0" encoding="utf-8" ?>
-                <otrs_package version="1.0">
-                  <Name>Test</Name>
-                  <Version>0.0.1</Version>
-                  <Framework>x.x.x</Framework>
-                  <Vendor>OTRS AG</Vendor>
-                  <URL>https://otrs.com/</URL>
-                  <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
-                  <ChangeLog>2005-11-10 New package (some test &lt; &gt; &amp;).</ChangeLog>
-                  <Description Lang="en">A test package (some test &lt; &gt; &amp;).</Description>
-                  <Description Lang="de">Ein Test Paket (some test &lt; &gt; &amp;).</Description>
-                  <ModuleRequired Version="1.112">Encode</ModuleRequired>
-                  <BuildDate>2005-11-10 21:17:16</BuildDate>
-                  <BuildHost>yourhost.example.com</BuildHost>
-                  <CodeInstall>
-                   # just a test &lt;some&gt; plus some &amp; text
-                  </CodeInstall>
-                  <DatabaseInstall>
-                    <TableCreate Name="test_package">
-                        <Column Name="name_a" Required="true" Type="INTEGER"/>
-                        <Column Name="name_b" Required="true" Size="60" Type="VARCHAR"/>
-                        <Column Name="name_c" Required="false" Size="60" Type="VARCHAR"/>
-                    </TableCreate>
-                    <Insert Table="test_package">
-                        <Data Key="name_a">1234</Data>
-                        <Data Key="name_b" Type="Quote">some text</Data>
-                        <Data Key="name_c" Type="Quote">some text &lt;more&gt;
-                          text &amp; text
-                        </Data>
-                    </Insert>
-                    <Insert Table="test_package">
-                        <Data Key="name_a">0</Data>
-                        <Data Key="name_b" Type="Quote">1</Data>
-                    </Insert>
-                  </DatabaseInstall>
-                  <DatabaseUninstall>
-                    <TableDrop Name="test_package"/>
-                  </DatabaseUninstall>
-                  <Filelist>
-                    <File Location="var/tmp/Test" Permission="644" Encode="Base64">aGVsbG8K</File>
-                    <File Location="var/Test" Permission="644" Encode="Base64">aGVsbG8K</File>
-                  </Filelist>
-                </otrs_package>';
-
-            my $PackageUninstall = $PackageObject->PackageUninstall( String => $FileString );
+        # If test package is installed, remove it so we can install it again.
+        if ($TestPackage) {
+            my $PackageUninstall = $PackageObject->PackageUninstall( String => $TestPackage );
             $Self->True(
-                $PackageUninstall,
+                $TestPackage,
                 'Test package is uninstalled'
             );
         }
@@ -150,13 +152,23 @@ $Selenium->RunTest(
             Password => $TestUserLogin,
         );
 
-        my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
-
         # Get script alias.
         my $ScriptAlias = $ConfigObject->Get('ScriptAlias');
 
-        # Navigate to AdminPackageManager screen.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminPackageManager");
+
+        # Check if needed frontend module is registered in sysconfig.
+        if ( !$ConfigObject->Get('Frontend::Module')->{AdminPackageManager} ) {
+            $Self->True(
+                index(
+                    $Selenium->get_page_source(),
+                    'Module Kernel::Modules::AdminPackageManager not registered in Kernel/Config.pm!'
+                ) > 0,
+                'Module AdminPackageManager is not registered in sysconfig, skipping test...'
+            );
+
+            return 1;
+        }
 
         # Check breadcrumb on Overview screen.
         $Self->True(
@@ -174,7 +186,7 @@ $Selenium->RunTest(
 
         $Selenium->find_element( '#FileUpload', 'css' )->send_keys($Location);
 
-        $Selenium->find_element("//button[\@value='Install'][\@type='submit']")->VerifiedClick();
+        $ClickAction->("//button[contains(.,'Install Package')]");
 
         # Check breadcrumb on Install screen.
         $CheckBreadcrumb->(
@@ -203,10 +215,10 @@ $Selenium->RunTest(
             Value => 1,
         );
 
-        # Allow apache to pick up the changed SysConfig via Apache::Reload.
+        # Allow web server to pick up the changed config setting.
         sleep 1;
 
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminPackageManager");
+        $NavigateToAdminPackageManager->();
 
         # Check for notification.
         $Self->True(
@@ -217,22 +229,22 @@ $Selenium->RunTest(
         );
 
         $Selenium->find_element( '#FileUpload', 'css' )->send_keys($Location);
-        sleep 2;
 
-        $Selenium->find_element("//button[\@value='Install'][\@type='submit']")->VerifiedClick();
+        $Selenium->execute_script('window.Core.App.PageLoadComplete = false;');
+        $Selenium->find_element("//button[contains(.,'Install Package')]")->click();
+        $Selenium->WaitFor(
+            Time => 120,
+            JavaScript =>
+                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+        );
 
         $CheckBreadcrumb->(
             BreadcrumbText => 'Install Package:',
         );
 
-        $Selenium->find_element("//button[\@value='Continue'][\@type='submit']")->click();
-        $Selenium->WaitFor(
-            Time => 120,
-            JavaScript =>
-                'return typeof($) == "function" && !$("button[value=\'Continue\']").length;'
-        );
+        $ClickAction->("//button[\@value='Continue'][\@type='submit']");
 
-        $PackageCheck = $PackageObject->PackageIsInstalled(
+        my $PackageCheck = $PackageObject->PackageIsInstalled(
             Name => 'Test',
         );
         $Self->True(
@@ -240,41 +252,27 @@ $Selenium->RunTest(
             'Test package is installed'
         );
 
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminPackageManager");
+        $NavigateToAdminPackageManager->();
 
         # Load page with metadata of installed package.
-        $Selenium->find_element(
-            "//a[contains(\@href, \'Subaction=View;Name=Test' )]"
-        )->VerifiedClick();
+        $ClickAction->("//a[contains(.,'Test')]");
 
         # Check breadcrumb on Package metadata screen.
         $CheckBreadcrumb->(
             BreadcrumbText => 'Package Information:',
         );
 
-        $Selenium->find_element("//a[contains(\@href, \'Subaction=Download' )]");
-        $Selenium->find_element("//a[contains(\@href, \'Subaction=RebuildPackage' )]");
-        $Selenium->find_element("//a[contains(\@href, \'Subaction=Reinstall' )]");
-
-        # Go back to overview.
-        $Selenium->find_element("//a[contains(\@href, \'Action=AdminPackageManager' )]")->VerifiedClick();
+        $NavigateToAdminPackageManager->();
 
         # Uninstall package.
-        $Selenium->find_element(
-            "//a[contains(\@href, \'Subaction=Uninstall;Name=Test' )]"
-        )->VerifiedClick();
+        $ClickAction->("//a[contains(\@href, \'Subaction=Uninstall;Name=Test' )]");
 
         # Check breadcrumb on uninstall screen.
         $CheckBreadcrumb->(
             BreadcrumbText => 'Uninstall Package:',
         );
 
-        $Selenium->find_element("//button[\@value='Uninstall package'][\@type='submit']")->click();
-        $Selenium->WaitFor(
-            Time => 120,
-            JavaScript =>
-                'return typeof($) == "function" && !$("button[value=\'Uninstall package\']").length;'
-        );
+        $ClickAction->("//button[\@value='Uninstall package'][\@type='submit']");
 
         # Check if test package is uninstalled.
         $Self->True(
@@ -288,16 +286,15 @@ $Selenium->RunTest(
 
         $Selenium->find_element( 'div.ErrorScreen', 'css' );
 
-        # Navigate to AdminPackageManager screen.
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminPackageManager");
+        $NavigateToAdminPackageManager->();
 
         # Try to install incompatible test package.
         $Location = $ConfigObject->Get('Home') . '/scripts/test/sample/PackageManager/TestPackageIncompatible.opm';
-
         $Selenium->find_element( '#FileUpload', 'css' )->send_keys($Location);
 
-        $Selenium->find_element("//button[\@value='Install'][\@type='submit']")->VerifiedClick();
-        $Selenium->find_element("//button[\@value='Continue'][\@type='submit']")->VerifiedClick();
+        $ClickAction->("//button[contains(.,'Install Package')]");
+
+        $ClickAction->("//button[\@value='Continue'][\@type='submit']");
 
         # Check if info for incompatible package is shown.
         $Self->True(
@@ -307,7 +304,49 @@ $Selenium->RunTest(
             'Info for incompatible package is shown'
         );
 
+        # Set default repository list.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Package::RepositoryList',
+            Value => {
+                'ftp://ftp.example.com/pub/otrs/misc/packages/' => '[Example] ftp://ftp.example.com/'
+            },
+        );
+
+        # Allow web server to pick up the changed SysConfig.
+        sleep 3;
+
+        $NavigateToAdminPackageManager->();
+        $Selenium->InputFieldValueSet(
+            Element => '#Soruce',
+            Value   => 'ftp://ftp.example.com/pub/otrs/misc/packages/',
+        );
+
+        $ClickAction->("//button[\@name=\'GetRepositoryList']");
+
+        # Check that there is a notification about no packages.
+        my $Notification = 'No packages found in selected repository. Please check log for more info!';
+        $Self->True(
+            $Selenium->execute_script("return \$('.MessageBox.Notice p:contains($Notification)').length"),
+            "$Notification - notification is found."
+        );
     }
 );
+
+# Do an implicit cleanup of the test package, in case it's still present in the system.
+#   If Selenium Run() method above fails because of an error, it will not proceed to uninstall the test package in an
+#   interactive way. Here we check for existence of the test package, and remove it only if it's found.
+my $TestPackage = $PackageObject->RepositoryGet(
+    Name            => 'Test',
+    Version         => '0.0.1',
+    DisableWarnings => 1,
+);
+if ($TestPackage) {
+    my $PackageUninstall = $PackageObject->PackageUninstall( String => $TestPackage );
+    $Self->True(
+        $TestPackage,
+        'Test package is cleaned up'
+    );
+}
 
 1;

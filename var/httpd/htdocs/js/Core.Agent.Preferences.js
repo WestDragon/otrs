@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -91,7 +91,8 @@ Core.Agent.Preferences = (function (TargetNS) {
 
             var $FormObj = $(this).closest('form'),
                 $WidgetObj = $(this).closest('.WidgetSimple'),
-                $ButtonObj = $(this);
+                $ButtonObj = $(this),
+                Link = window.location.href.split('?')[1];
 
             Core.UI.WidgetOverlayShow($WidgetObj, 'Loading');
 
@@ -122,7 +123,7 @@ Core.Agent.Preferences = (function (TargetNS) {
 
                             // if settings need a reload, show a notification
                             if (typeof Response.NeedsReload !== 'undefined' && parseInt(Response.NeedsReload, 10) > 0) {
-                                Core.UI.ShowNotification(Core.Language.Translate('Please note that at least one of the settings you have changed requires a page reload. Click here to reload the current screen.'));
+                                Core.UI.ShowNotification(Core.Language.Translate('Please note that at least one of the settings you have changed requires a page reload. Click here to reload the current screen.'), 'Notice', Link);
                             }
                         }
                     }

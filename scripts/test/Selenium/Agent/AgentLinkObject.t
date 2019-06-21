@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -85,24 +85,12 @@ $Selenium->RunTest(
 
         my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
-        # Navigate to zoom view of created test ticket.
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketIDs[0]");
+        # Navigate to link object screen of created test ticket.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentLinkObject;SourceObject=Ticket;SourceKey=$TicketIDs[0]"
+        );
 
-        # Force sub menus to be visible in order to be able to click one of the links.
-        $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
-
-        $Selenium->WaitFor( JavaScript => 'return $(".Cluster ul ul").css("opacity") == 1;' );
-        sleep 1;
-
-        # Click on 'Link'.
-        $Selenium->find_element("//a[contains(\@href, \'Action=AgentLinkObject;SourceObject=Ticket;' )]")->click();
-
-        # Switch to link object window.
-        $Selenium->WaitFor( WindowCount => 2 );
-        my $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[1] );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#SubmitSearch").length;' );
-        sleep 1;
 
         $Selenium->execute_script("\$('#SubmitSearch').click();");
 
@@ -120,6 +108,11 @@ $Selenium->RunTest(
         $Selenium->find_element(".//*[\@id='SEARCH::TicketNumber']")->send_keys( $TicketNumbers[1] );
         $Selenium->find_element( '#SubmitSearch', 'css' )->VerifiedClick();
 
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('input[value=$TicketIDs[1]][type=checkbox]').length;"
+        );
+
         # Link created test tickets.
         $Selenium->find_element("//input[\@value='$TicketIDs[1]'][\@type='checkbox']")->click();
         $Selenium->WaitFor(
@@ -129,12 +122,17 @@ $Selenium->RunTest(
             Element => '#TypeIdentifier',
             Value   => 'ParentChild::Target',
         );
-        $Selenium->find_element("//button[\@type='submit'][\@name='AddLinks']")->click();
+        $Selenium->find_element("//button[\@type='submit'][\@name='AddLinks']")->VerifiedClick();
 
         # Search for third created test ticket.
         $Selenium->find_element(".//*[\@id='SEARCH::TicketNumber']")->clear();
         $Selenium->find_element(".//*[\@id='SEARCH::TicketNumber']")->send_keys( $TicketNumbers[2] );
         $Selenium->find_element( '#SubmitSearch', 'css' )->VerifiedClick();
+
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('input[value=$TicketIDs[2]][type=checkbox]').length;"
+        );
 
         # Link created test tickets.
         $Selenium->find_element("//input[\@value='$TicketIDs[2]'][\@type='checkbox']")->click();
@@ -147,15 +145,8 @@ $Selenium->RunTest(
         );
         $Selenium->find_element("//button[\@type='submit'][\@name='AddLinks']")->VerifiedClick();
 
-        $Selenium->find_element( "#LinkAddCloseLink", 'css' )->click();
-
-        # Switch back to the main window.
-        $Selenium->WaitFor( WindowCount => 1 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[0] );
-
-        # Refresh agent ticket zoom.
-        $Selenium->VerifiedRefresh();
+        # Navigate to zoom view of created test ticket.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketIDs[0]");
 
         # Verify that parent test tickets is linked with child test ticket.
         $Self->True(
@@ -207,7 +198,7 @@ $Selenium->RunTest(
         my $Success    = $TicketObject->TicketTitleUpdate(
             Title    => $LongTicketTitle,
             TicketID => $TicketIDs[1],
-            UserID   => 1,
+            UserID   => $TestUserID,
         );
         $Self->True(
             $Success,
@@ -457,22 +448,12 @@ $Selenium->RunTest(
             );
         }
 
-        # Force sub menus to be visible in order to be able to click one of the links.
-        $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
-
-        $Selenium->WaitFor( JavaScript => 'return $(".Cluster ul ul").css("opacity") == 1;' );
-        sleep 1;
-
-        # Click on 'Link'.
-        $Selenium->find_element("//a[contains(\@href, \'Action=AgentLinkObject;SourceObject=Ticket;' )]")->click();
-
-        # Switch to link object window.
-        $Selenium->WaitFor( WindowCount => 2 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[1] );
+        # Navigate to link object screen of created test ticket.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentLinkObject;SourceObject=Ticket;SourceKey=$TicketIDs[0]"
+        );
 
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("a[href*=\'#ManageLinks\']").length;' );
-        sleep 1;
 
         # Switch to manage links tab.
         $Selenium->find_element("//a[contains(\@href, \'#ManageLinks' )]")->click();
@@ -497,6 +478,9 @@ $Selenium->RunTest(
         ) || die;
 
         # Select all links.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '.Tabs div.Active .SelectAll',
+        );
         $Selenium->find_element( ".Tabs div.Active .SelectAll", "css" )->click();
 
         # Make sure it's selected.
@@ -504,6 +488,8 @@ $Selenium->RunTest(
 
         # Click on delete links.
         $Selenium->find_element( ".Tabs div.Active .CallForAction", "css" )->VerifiedClick();
+
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("a[href*=\'#AddNewLinks\']").length;' );
 
         # Switch to add links tab.
         $Selenium->find_element("//a[contains(\@href, \'#AddNewLinks' )]")->click();
@@ -554,17 +540,17 @@ $Selenium->RunTest(
         $Selenium->find_element( "#SubmitSearch", "css" )->VerifiedClick();
 
         # Wait till search is loaded.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#SelectAllLinks0").length;' );
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $(".Tabs div.Active .SelectAll").length && $("#AddLinks").length;'
+        );
 
         # Link again.
         $Selenium->find_element( ".Tabs div.Active .SelectAll", "css" )->click();
         $Selenium->find_element( "#AddLinks",                   "css" )->VerifiedClick();
-        $Selenium->find_element( "#LinkAddCloseLink",           "css" )->click();
 
-        # Switch back to the main window.
-        $Selenium->WaitFor( WindowCount => 1 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[0] );
+        # Navigate to zoom view of created test ticket.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketIDs[0]");
 
         # Make sure they are really linked.
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#WidgetTicket").length;' );
@@ -578,11 +564,11 @@ $Selenium->RunTest(
             CalendarName => "Calendar-$RandomID",
             Color        => '#3A87AD',
             GroupID      => 1,
-            UserID       => 1,
+            UserID       => $TestUserID,
         );
         $Self->True(
             $Calendar{CalendarID},
-            "CalendarID $Calendar{CalendarID} is created.   "
+            "CalendarID $Calendar{CalendarID} is created."
         );
 
         # Create Appointment.
@@ -602,7 +588,7 @@ $Selenium->RunTest(
             Location    => 'Straubing',
             StartTime   => $StartTimeObject->ToString(),
             EndTime     => $EndTimeObject->ToString(),
-            UserID      => 1,
+            UserID      => $TestUserID,
             TimezoneID  => 0,
         );
         $Self->True(
@@ -610,24 +596,12 @@ $Selenium->RunTest(
             "AppointmentID $AppointmentID is created.",
         );
 
-        $Selenium->VerifiedRefresh();
+        # Navigate to link object screen of created test ticket.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentLinkObject;SourceObject=Ticket;SourceKey=$TicketIDs[0]"
+        );
 
-        # Force sub menus to be visible in order to be able to click one of the links.
-        $Selenium->execute_script("\$('.Cluster ul ul').addClass('ForceVisible');");
-
-        $Selenium->WaitFor( JavaScript => 'return $(".Cluster ul ul").css("opacity") == 1;' );
-        sleep 1;
-
-        # Click on 'Link'.
-        $Selenium->find_element("//a[contains(\@href, \'Action=AgentLinkObject;SourceObject=Ticket;' )]")->click();
-
-        # Switch to link object window.
-        $Selenium->WaitFor( WindowCount => 2 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[1] );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#TargetIdentifier").length;' );
-
-        sleep 1;
 
         # Select 'Appointment' as link type.
         $Selenium->InputFieldValueSet(
@@ -645,21 +619,21 @@ $Selenium->RunTest(
         );
         $Selenium->find_element( '#SubmitSearch', 'css' )->VerifiedClick();
 
+        $Selenium->WaitFor(
+            JavaScript =>
+                "return typeof(\$) === 'function' && \$('input[value=$AppointmentID][type=checkbox]').length && \$('#AddLinks').length;"
+        );
+
         # Link created test appointment.
         $Selenium->find_element("//input[\@value='$AppointmentID'][\@type='checkbox']")->click();
         $Selenium->WaitFor(
             JavaScript => "return \$('input[value=$AppointmentID][type=checkbox]:checked').length;"
         );
 
-        $Selenium->find_element( "#AddLinks",         "css" )->VerifiedClick();
-        $Selenium->find_element( "#LinkAddCloseLink", "css" )->click();
+        $Selenium->find_element( "#AddLinks", "css" )->VerifiedClick();
 
-        # Switch back to the main window.
-        $Selenium->WaitFor( WindowCount => 1 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[0] );
-
-        sleep 2;
+        # Navigate to zoom view of created test ticket.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketIDs[0]");
 
         # Verify column settings button is available for both Ticket and Appointment link object widget.
         # See bug#13702 (https://bugs.otrs.org/show_bug.cgi?id=13702);
@@ -678,7 +652,7 @@ $Selenium->RunTest(
             $Selenium->execute_script(
                 "\$('a#linkobject-$LinkObject-toggle').click();"
             );
-            sleep 2;
+            sleep 1;
 
             $Selenium->WaitFor(
                 JavaScript =>
@@ -698,6 +672,15 @@ $Selenium->RunTest(
                 TicketID => $TicketID,
                 UserID   => $TestUserID,
             );
+
+            # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+            if ( !$Success ) {
+                sleep 3;
+                $Success = $TicketObject->TicketDelete(
+                    TicketID => $TicketID,
+                    UserID   => $TestUserID,
+                );
+            }
             $Self->True(
                 $Success,
                 "TicketID $TicketID is deleted.",
@@ -707,7 +690,7 @@ $Selenium->RunTest(
         # Delete created test Appointment.
         $Success = $AppointmentObject->AppointmentDelete(
             AppointmentID => $AppointmentID,
-            UserID        => 1,
+            UserID        => $TestUserID,
         );
         $Self->True(
             $Success,

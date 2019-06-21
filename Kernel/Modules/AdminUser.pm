@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -61,7 +61,8 @@ sub Run {
             NoOutOfOffice => 1,
         );
 
-        my $NewSessionID = $Kernel::OM->Get('Kernel::System::AuthSession')->CreateSessionID(
+        my $SessionObject = $Kernel::OM->Get('Kernel::System::AuthSession');
+        my $NewSessionID  = $SessionObject->CreateSessionID(
             %UserData,
             UserLastRequest => $Kernel::OM->Create('Kernel::System::DateTime')->ToEpoch(),
             UserType        => 'User',
@@ -106,6 +107,11 @@ sub Run {
         $LogObject->Log(
             Priority => 'notice',
             Message  => "Switched to User ($Self->{UserLogin} -=> $UserData{UserLogin})",
+        );
+
+        # Delete old session, see bug#14322 (https://bugs.otrs.org/show_bug.cgi?id=14322);
+        $SessionObject->RemoveSessionID(
+            SessionID => $LayoutObject->{SessionID}
         );
 
         # redirect with new session id

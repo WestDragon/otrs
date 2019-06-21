@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -74,13 +74,17 @@ sub Run {
     # get ticket object
     my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
 
+    # Loop protection: prevent from running if ArticleSend has already triggered for certain ticket.
+    if ( $Param{Event} eq 'ArticleSend' ) {
+        return if $TicketObject->{'_NotificationEvent::ArticleSend'}->{ $Param{Data}->{TicketID} }++;
+    }
+
     # return if no notification is active
     return 1 if $TicketObject->{SendNoNotification};
 
     # return if no ticket exists (e. g. it got deleted)
     my $TicketExists = $TicketObject->TicketNumberLookup(
         TicketID => $Param{Data}->{TicketID},
-        UserID   => $Param{UserID},
     );
 
     return 1 if !$TicketExists;

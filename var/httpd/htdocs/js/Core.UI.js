@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -539,10 +539,24 @@ Core.UI = (function (TargetNS) {
                 NoSpaceLeft = [],
                 NoSpaceLeftText,
                 UsedSpace = 0,
-                WebMaxFileUpload = Core.Config.Get('WebMaxFileUpload');
+                WebMaxFileUpload = Core.Config.Get('WebMaxFileUpload'),
+                CGIHandle = Core.Config.Get('CGIHandle'),
+                SessionToken = '',
+                SessionName;
 
             if (!FormID || !SelectedFiles || !$DropObj || !ChallengeToken) {
                 return false;
+            }
+
+            // If SessionUseCookie is disabled use Session cookie in AjaxAttachment. See bug#14432.
+            if (Core.Config.Get('SessionUseCookie') === '0') {
+                if (CGIHandle.indexOf('index') > -1) {
+                    SessionName =  Core.Config.Get('SessionName');
+                }
+                else if (CGIHandle.indexOf('customer') > -1) {
+                    SessionName =  Core.Config.Get('CustomerPanelSessionName');
+                }
+                SessionToken = ';' + SessionName + '=' + $DropObj.closest('form').find('input[name=' + SessionName + ']').val();
             }
 
             // if the original upload field doesn't have the multiple attribute,
@@ -636,7 +650,7 @@ Core.UI = (function (TargetNS) {
                 Upload.append('Files', File);
 
                 $.ajax({
-                    url: Core.Config.Get('CGIHandle') + '?Action=AjaxAttachment;Subaction=Upload;FormID=' + FormID + ';ChallengeToken=' + ChallengeToken,
+                    url: Core.Config.Get('CGIHandle') + '?Action=AjaxAttachment;Subaction=Upload;FormID=' + FormID + ';ChallengeToken=' + ChallengeToken + SessionToken,
                     type: 'post',
                     data: Upload,
                     xhr: function() {

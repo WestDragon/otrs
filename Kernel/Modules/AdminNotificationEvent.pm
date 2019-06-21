@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -666,11 +666,7 @@ sub Run {
         }
 
         # create new Notification name
-        my $NotificationName =
-            $NotificationData{Name}
-            . ' ('
-            . $LayoutObject->{LanguageObject}->Translate('Copy')
-            . ')';
+        my $NotificationName = $LayoutObject->{LanguageObject}->Translate( '%s (copy)', $NotificationData{Name} );
 
         # otherwise save configuration and return to overview screen
         my $NewNotificationID = $NotificationEventObject->NotificationAdd(
@@ -1096,6 +1092,9 @@ sub _Edit {
         );
     }
 
+    # get names of languages in English
+    my %DefaultUsedLanguages = %{ $ConfigObject->Get('DefaultUsedLanguages') || {} };
+
     # get language ids from message parameter, use English if no message is given
     # make sure English is the first language
     my @LanguageIDs;
@@ -1109,12 +1108,12 @@ sub _Edit {
             push @LanguageIDs, $LanguageID;
         }
     }
-    else {
-        @LanguageIDs = ('en');
+    elsif ( $DefaultUsedLanguages{en} ) {
+        push @LanguageIDs, 'en';
     }
-
-    # get names of languages in English
-    my %DefaultUsedLanguages = %{ $ConfigObject->Get('DefaultUsedLanguages') || {} };
+    else {
+        push @LanguageIDs, ( sort keys %DefaultUsedLanguages )[0];
+    }
 
     # get native names of languages
     my %DefaultUsedLanguagesNative = %{ $ConfigObject->Get('DefaultUsedLanguagesNative') || {} };
@@ -1196,16 +1195,13 @@ sub _Edit {
             },
         );
 
-        # show the button to remove a notification only if it is not the English notification
-        if ( $LanguageID ne 'en' ) {
-            $LayoutObject->Block(
-                Name => 'NotificationLanguageRemoveButton',
-                Data => {
-                    %Param,
-                    LanguageID => $LanguageID,
-                },
-            );
-        }
+        $LayoutObject->Block(
+            Name => 'NotificationLanguageRemoveButton',
+            Data => {
+                %Param,
+                LanguageID => $LanguageID,
+            },
+        );
 
         # delete language from drop-down list because it is already shown
         delete $Languages{$LanguageID};

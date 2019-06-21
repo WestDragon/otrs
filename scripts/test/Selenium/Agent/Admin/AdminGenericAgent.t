@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -12,7 +12,8 @@ use utf8;
 
 use vars (qw($Self));
 
-my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
+my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+my $Selenium     = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
     sub {
@@ -44,6 +45,31 @@ $Selenium->RunTest(
         my $UserID = $Kernel::OM->Get('Kernel::System::User')->UserLookup(
             UserLogin => $TestUserLogin,
         );
+
+        # Login as test user.
+        $Selenium->Login(
+            Type     => 'Agent',
+            User     => $TestUserLogin,
+            Password => $TestUserLogin,
+        );
+
+        my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
+
+        # navigate to AdminGenericAgent screen
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminGenericAgent");
+
+        # Check if needed frontend module is registered in sysconfig.
+        if ( !$ConfigObject->Get('Frontend::Module')->{AdminGenericAgent} ) {
+            $Self->True(
+                index(
+                    $Selenium->get_page_source(),
+                    'Module Kernel::Modules::AdminGenericAgent not registered in Kernel/Config.pm!'
+                ) > 0,
+                'Module AdminGenericAgent is not registered in sysconfig, skipping test...'
+            );
+
+            return 1;
+        }
 
         my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
 
@@ -118,24 +144,11 @@ $Selenium->RunTest(
 
             my $TicketNumber = $TicketObject->TicketNumberLookup(
                 TicketID => $TicketID,
-                UserID   => 1,
             );
 
             push @TicketNumbers, $TicketNumber;
 
         }
-
-        # Login as test user.
-        $Selenium->Login(
-            Type     => 'Agent',
-            User     => $TestUserLogin,
-            Password => $TestUserLogin,
-        );
-
-        my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
-
-        # navigate to AdminGenericAgent screen
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminGenericAgent");
 
         # check overview AdminGenericAgent
         $Selenium->find_element( "table",             'css' );

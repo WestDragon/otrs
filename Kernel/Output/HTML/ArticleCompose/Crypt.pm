@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -40,8 +40,8 @@ sub Option {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    # Get config object.
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     # Check if PGP and SMIME are disabled.
     return if !$ConfigObject->Get('PGP') && !$ConfigObject->Get('SMIME');
@@ -50,8 +50,25 @@ sub Run {
 
     # Recipients with unique public keys won't be displayed in the selection
     my $UniqueEncryptKeyIDsToRemove = $Self->_GetUniqueEncryptKeyIDsToRemove(%Param);
+    my @ExpiredIdentifiers;
+    my @RevokedIdentifiers;
+    my $InvalidMessage = '';
+    my $Class          = '';
     if ( IsArrayRefWithData($UniqueEncryptKeyIDsToRemove) ) {
+        UNIQUEKEY:
         for my $UniqueEncryptKeyIDToRemove ( @{$UniqueEncryptKeyIDsToRemove} ) {
+
+            next UNIQUEKEY if !defined $KeyList{$UniqueEncryptKeyIDToRemove};
+
+            if ( $KeyList{$UniqueEncryptKeyIDToRemove} =~ m/WARNING: EXPIRED KEY/ ) {
+                my ( $Type, $Key, $Identifier ) = split /::/, $UniqueEncryptKeyIDToRemove;
+                push @ExpiredIdentifiers, $Identifier;
+            }
+
+            if ( $KeyList{$UniqueEncryptKeyIDToRemove} =~ m/WARNING: REVOKED KEY/ ) {
+                my ( $Type, $Key, $Identifier ) = split /::/, $UniqueEncryptKeyIDToRemove;
+                push @RevokedIdentifiers, $Identifier;
+            }
             delete $KeyList{$UniqueEncryptKeyIDToRemove};
         }
     }
@@ -68,8 +85,6 @@ sub Run {
         @SearchAddress = Mail::Address->parse($Recipient);
     }
 
-    my $Class = '';
-
     if (
         !IsArrayRefWithData( $Param{CryptKeyID} )
         || ( $Param{ExpandCustomerName} && $Param{ExpandCustomerName} == 3 )
@@ -77,11 +92,6 @@ sub Run {
     {
         $Param{CryptKeyID} = $Self->_PickEncryptKeyIDs(%Param);
     }
-
-    # Get layout object.
-    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-
-    my $InvalidMessage;
 
     # Check if all recipients have at least a key selected
     if (
@@ -107,6 +117,50 @@ sub Run {
             $Self->{Error}->{EncryptMissingKey} = 1;
             $Class .= ' ServerError';
         }
+    }
+
+    # Check if selected encryption keys are expired.
+    if (
+        IsArrayRefWithData( $Param{CryptKeyID} )
+        && !IsArrayRefWithData( \@ExpiredIdentifiers )
+        && !IsArrayRefWithData( \@RevokedIdentifiers )
+        )
+    {
+
+        ENCRYPTKEYID:
+        for my $EncryptKey ( @{ $Param{CryptKeyID} } ) {
+            my ( $Type, $Key, $Identifier ) = split /::/, $EncryptKey;
+
+            next ENCRYPTKEYID if !defined $KeyList{$EncryptKey};
+
+            if ( $KeyList{$EncryptKey} =~ m/WARNING: EXPIRED KEY/ ) {
+                push @ExpiredIdentifiers, $Identifier;
+            }
+
+            if ( $KeyList{$EncryptKey} =~ m/WARNING: REVOKED KEY/ ) {
+                push @RevokedIdentifiers, $Identifier;
+            }
+        }
+    }
+
+    if ( IsArrayRefWithData( \@ExpiredIdentifiers ) ) {
+        $InvalidMessage .= $LayoutObject->{LanguageObject}->Translate(
+            "Cannot use expired encryption keys for the addresses: '%s'. ",
+            join ', ', @ExpiredIdentifiers
+        );
+
+        $Self->{Error}->{ExpiredKey} = 1;
+        $Class .= ' ServerError';
+    }
+
+    if ( IsArrayRefWithData( \@RevokedIdentifiers ) ) {
+        $InvalidMessage .= $LayoutObject->{LanguageObject}->Translate(
+            "Cannot use revoked encryption keys for the addresses: '%s'. ",
+            join ', ', @RevokedIdentifiers
+        );
+
+        $Self->{Error}->{ExpiredKey} = 1;
+        $Class .= ' ServerError';
     }
 
     # Add encrypt options.
@@ -197,8 +251,7 @@ sub Data {
                         $Expires = "[$DataRef->{Expires}]";
                     }
 
-                    my $Status = '';
-                    $Status = '[' . $DataRef->{Status} . ']';
+                    my $Status = '[' . $DataRef->{Status} . ']';
                     if ( $DataRef->{Status} eq 'expired' ) {
                         $Status = '[WARNING: EXPIRED KEY]';
                     }
@@ -225,12 +278,15 @@ sub Data {
                 Search => $SearchAddress->address(),
             );
             for my $DataRef (@PublicKeys) {
-                my $EndDate = '';
-                if ( $DataRef->{EndDate} ) {
-                    $EndDate = "[$DataRef->{EndDate}]";
+                my $Expired = '';
+                my $EndDate = ( defined $DataRef->{EndDate} ) ? "[$DataRef->{EndDate}]" : '';
+
+                if ( defined $DataRef->{EndDate} && $SMIMEObject->KeyExpiredCheck( EndDate => $DataRef->{EndDate} ) ) {
+                    $Expired = ' [WARNING: EXPIRED KEY]';
                 }
+
                 $KeyList{"SMIME::$DataRef->{Filename}::$DataRef->{Email}"}
-                    = "SMIME: $DataRef->{Filename} $EndDate $DataRef->{Email}";
+                    = "SMIME:$Expired $DataRef->{Filename} $EndDate $DataRef->{Email}";
             }
         }
     }
@@ -396,6 +452,8 @@ sub _PickEncryptKeyIDs {
     for my $EncryptKeyID ( @{ $Param{CryptKeyID} } ) {
         next ENCRYPTKEYID if !$EncryptKeyID;
         next ENCRYPTKEYID if !$KeyList{$EncryptKeyID};
+        next ENCRYPTKEYID if $KeyList{$EncryptKeyID} =~ m/WARNING: EXPIRED KEY/;
+        next ENCRYPTKEYID if $KeyList{$EncryptKeyID} =~ m/WARNING: REVOKED KEY/;
 
         $SelectedEncryptKeyIDs{$EncryptKeyID} = 1;
     }
@@ -436,6 +494,7 @@ sub _PickEncryptKeyIDs {
             else {
                 @PublicKeys = $EncryptObject->CertificateSearch(
                     Search => $Address->address(),
+                    Valid  => 1,
                 );
             }
 

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -237,7 +237,7 @@ sub _InstallOTRSExtensions {
 
                 # Escape closing script tags in the JSON content as they will confuse the
                 #   browser's parser.
-                $JSONString =~ s{</script}{<\\/script}smxg;
+                $JSONString =~ s{ </(?<ScriptTag>script)}{<\\/$+{ScriptTag}}ismxg;
 
                 $output .= "Core.Config.AddConfig($JSONString);\n";
             }

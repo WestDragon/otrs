@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -54,18 +54,12 @@ $Selenium->RunTest(
             Value => 20,
         );
 
-        # Create test user and login.
+        # Create test user.
         my $Language      = 'de';
         my $TestUserLogin = $Helper->TestUserCreate(
             Groups   => [ 'admin', 'users' ],
             Language => $Language,
         ) || die "Did not get test user";
-
-        $Selenium->Login(
-            Type     => 'Agent',
-            User     => $TestUserLogin,
-            Password => $TestUserLogin,
-        );
 
         my $TestUserID = $Kernel::OM->Get('Kernel::System::User')->UserLookup(
             UserLogin => $TestUserLogin,
@@ -152,7 +146,10 @@ $Selenium->RunTest(
             }
         );
 
-        my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
+        my $TicketObject         = $Kernel::OM->Get('Kernel::System::Ticket');
+        my $ArticleBackendObject = $Kernel::OM->Get('Kernel::System::Ticket::Article')->BackendForChannel(
+            ChannelName => 'Email',
+        );
 
         my $LanguageObject = Kernel::Language->new(
             UserLanguage => $Language,
@@ -183,7 +180,28 @@ $Selenium->RunTest(
 
             push @TicketIDs, $TicketID;
 
+            # Create email article.
+            my $ArticleID = $ArticleBackendObject->ArticleCreate(
+                TicketID             => $TicketID,
+                SenderType           => 'customer',
+                IsVisibleForCustomer => 1,
+                From                 => 'Some Customer A <customer-a@example.com>',
+                To                   => 'Some Agent <email@example.com>',
+                Subject              => 'some short description',
+                Body                 => 'the message text',
+                ContentType          => 'text/plain; charset=ISO-8859-15',
+                HistoryType          => 'EmailCustomer',
+                HistoryComment       => 'Customer sent an email',
+                UserID               => $TestUserID,
+            );
         }
+
+        # Login as test user.
+        $Selenium->Login(
+            Type     => 'Agent',
+            User     => $TestUserLogin,
+            Password => $TestUserLogin,
+        );
 
         my $ScriptAlias = $ConfigObject->Get('ScriptAlias');
 
@@ -228,7 +246,6 @@ $Selenium->RunTest(
             );
             $Element->is_enabled();
             $Element->is_displayed();
-            $Element->VerifiedClick();
 
             # Check different views for filters.
             for my $View (qw(Small Medium Preview)) {
@@ -236,6 +253,12 @@ $Selenium->RunTest(
                 # Return to default small view.
                 $Selenium->VerifiedGet(
                     "${ScriptAlias}index.pl?Action=AgentTicketQueue;QueueID=$Test->{QueueID};SortBy=Age;OrderBy=Down;View=Small"
+                );
+
+                # Wait until page has finished loading.
+                $Selenium->WaitFor(
+                    JavaScript =>
+                        "return typeof(\$) === 'function' && \$('a[href*=\"Action=AgentTicketQueue;Filter=Unlocked;View=$View;QueueID=$Test->{QueueID};SortBy=Age;OrderBy=Down;View=Small\"]').length;"
                 );
 
                 # Click on viewer controller.
@@ -274,8 +297,38 @@ $Selenium->RunTest(
             }
         }
 
+        # Test bug #14473 (https://bugs.otrs.org/show_bug.cgi?id=14473).
+        # Config 'Ticket::Frontend::Overview::PreviewArticleSenderTypes' does not work.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentTicketQueue;QueueID=$Queues[0]->{QueueID};View=Preview;Filter=Unlocked"
+        );
+        $Self->True(
+            $Selenium->execute_script("return \$('.Content .Preview').length;"),
+            "ArticlePreview is found"
+        );
+
+        # Enable config 'Ticket::Frontend::Overview::PreviewArticleSenderTypes' and set value
+        # to not show customer articles in preview mode.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::Overview::PreviewArticleSenderTypes',
+            Value => {
+                agent    => 1,
+                customer => 0,
+                system   => 1,
+            },
+        );
+
+        # Refresh screen.
+        $Selenium->VerifiedRefresh();
+
+        $Self->False(
+            $Selenium->execute_script("return \$('.Content .Preview').length;"),
+            "ArticlePreview is not found for customer sender type."
+        );
+
         # Go to small view for 'Delete' queue.
-        # See Bug 13826 - Queue Names are translated (but should not)
+        # See Bug 13826 - Queue Names are translated (but should not).
         $Selenium->VerifiedGet(
             "${ScriptAlias}index.pl?Action=AgentTicketQueue;QueueID=$Queues[2]->{QueueID};View=Small;Filter=Unlocked"
         );
@@ -283,7 +336,7 @@ $Selenium->RunTest(
         $Self->Is(
             $Selenium->execute_script("return \$('.OverviewBox.Small h1').text().trim();"),
             $LanguageObject->Translate('QueueView') . ": Delete",
-            "Title for filtered AgentTicketQueue screen is not transleted.",
+            "Title for filtered AgentTicketQueue screen is not translated.",
         );
 
         # Delete created test tickets.
@@ -293,6 +346,15 @@ $Selenium->RunTest(
                 TicketID => $TicketID,
                 UserID   => $TestUserID,
             );
+
+            # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+            if ( !$Success ) {
+                sleep 3;
+                $Success = $TicketObject->TicketDelete(
+                    TicketID => $TicketID,
+                    UserID   => $TestUserID,
+                );
+            }
             $Self->True(
                 $Success,
                 "Delete ticket - ID $TicketID"
@@ -310,12 +372,14 @@ $Selenium->RunTest(
             );
         }
 
+        my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
+
         # Make sure the cache is correct.
         for my $Cache (
             qw (Ticket Queue)
             )
         {
-            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp(
+            $CacheObject->CleanUp(
                 Type => $Cache,
             );
         }

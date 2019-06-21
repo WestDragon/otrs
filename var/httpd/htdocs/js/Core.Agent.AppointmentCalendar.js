@@ -1,5 +1,5 @@
 // --
-// Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+// Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 // --
 // This software comes with ABSOLUTELY NO WARRANTY. For details, see
 // the enclosed file COPYING for license information (GPL). If you
@@ -1376,7 +1376,7 @@ Core.Agent.AppointmentCalendar = (function (TargetNS) {
 
                             // Overwrite option text, because of wrong html quoting of text content.
                             // (This is needed for IE.)
-                            NewOption.innerHTML = Value;
+                            NewOption.innerHTML = Core.App.EscapeHTML(Value);
 
                             // Restore selection
                             if (SelectedID && SelectedID.indexOf(Index) > -1) {
@@ -1397,7 +1397,8 @@ Core.Agent.AppointmentCalendar = (function (TargetNS) {
         function CollapseValues($ValueObj, Values) {
             $ValueObj.html('');
             $.each(Values, function (Index, Value) {
-                var Count = Values.length;
+                var Count = Values.length,
+                    TooltipIndex = $('.Dialog').css('z-index');
 
                 if (Index < 2) {
                     $ValueObj.html($ValueObj.html() + Value + '<br>');
@@ -1432,6 +1433,13 @@ Core.Agent.AppointmentCalendar = (function (TargetNS) {
                             PosX += 10;
                             PosY += 5;
 
+                            if (typeof TooltipIndex !== 'undefined') {
+                                TooltipIndex = parseInt(TooltipIndex, 10) + 500;
+                            }
+                            else{
+                                TooltipIndex = 4000;
+                            }
+
                             // Create tooltip object
                             $TooltipObj = $('<div/>').addClass('AppointmentTooltip DialogTooltip Hidden')
                                 .offset({
@@ -1439,7 +1447,7 @@ Core.Agent.AppointmentCalendar = (function (TargetNS) {
                                     left: PosX
                                 })
                                 .html(TooltipHTML)
-                                .css('z-index', 4000)
+                                .css('z-index', TooltipIndex)
                                 .css('width', 'auto')
                                 .off('click.AppointmentCalendar')
                                 .on('click.AppointmentCalendar', function (Event) {
@@ -1467,6 +1475,9 @@ Core.Agent.AppointmentCalendar = (function (TargetNS) {
                             // Close tooltip on any outside click
                             $(document).off('click.AppointmentCalendar')
                                 .on('click.AppointmentCalendar', function (Event) {
+                                    $('.Close').on('click', function(){
+                                        $('.DialogTooltip').remove();
+                                    });
                                     if (!$(Event.target).closest('.DialogTooltipLink').length) {
                                         $('.DialogTooltip').remove();
                                         $(document).off('click.AppointmentCalendar');

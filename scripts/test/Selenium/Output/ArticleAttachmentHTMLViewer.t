@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -205,8 +205,16 @@ $Selenium->RunTest(
         $Selenium->get_page_source() =~ m{<iframe [^>]+ src="(?!about:blank)(?<HTMLViewURL>.*?)"}xms;
         die 'Could not find IFRAME content URL!' if !$+{HTMLViewURL};
 
+        # Get current SessionID and SessionName.
+        my $SessionID   = $Selenium->execute_script('return Core.Config.Get("SessionID");');
+        my $SessionName = $Kernel::OM->Get('Kernel::Config')->Get('SessionName');
+
+        # Append session information to the url, since in the next selenium get request
+        # we don't have session information in the cookie.
+        my $URL = $+{HTMLViewURL} . ";$SessionName=$SessionID";
+
         # Load article content only.
-        $Selenium->get( $+{HTMLViewURL} );
+        $Selenium->get($URL);
 
         # Wait for page to load if necessary.
         $Selenium->WaitFor( JavaScript => 'return document.readyState === "complete";' );

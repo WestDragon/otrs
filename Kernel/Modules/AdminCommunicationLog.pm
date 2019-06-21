@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -79,6 +79,9 @@ sub Run {
         return $LayoutObject->FatalError(
             Message => $LayoutObject->{LanguageObject}->Translate( 'Invalid StartTime: %s!', $GetParam{StartTime} ),
         );
+    }
+    elsif ( $GetParam{StartTime} == 0 ) {
+        $GetParam{DateTime} = $GetParam{StartTime};
     }
     else {
         my $DateTimeObject = $Kernel::OM->Create('Kernel::System::DateTime');

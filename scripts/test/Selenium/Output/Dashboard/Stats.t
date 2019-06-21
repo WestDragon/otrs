@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -207,6 +207,32 @@ $Selenium->RunTest(
             $Selenium->execute_script('return $(".nv-legend-text:contains(offen)").length;'),
             1,
             "Legend entry for open state found.",
+        );
+
+        # Check if statistic PNG can be downloaded. See bug#14583.
+        my $HashRef = $StatsObject->StatsGet(
+            StatID             => $TestStatID,
+            NoObjectAttributes => 1,
+        );
+
+        $Selenium->execute_script(
+            "\$('#GraphWidgetLink10$TestStatID-Stats').closest('.ActionMenu').show();"
+        );
+
+        $Selenium->execute_script(
+            "\$('#GraphWidgetLink10$TestStatID-Stats').find('.TriggerTooltip').click();"
+        );
+
+        $Selenium->find_element( "#GraphWidgetLink10$TestStatID-Stats a[download=\"$HashRef->{Title}\.png\"]", "css" )
+            ->click();
+
+        # Check if href is created.
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('#GraphWidgetLink10$TestStatID-Stats a[href*=\"data:image\/png\"]').length;"
+            ),
+            1,
+            "Download link for png exists"
         );
 
         # Delete test stat.

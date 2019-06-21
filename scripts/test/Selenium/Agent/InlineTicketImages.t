@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -88,8 +88,14 @@ my $ImportSampleEmail = sub {
         QueueID => 0,
     );
 
+    my @Articles = $Kernel::OM->Get('Kernel::System::Ticket::Article')->ArticleList(
+        TicketID => $TicketID,
+        OnlyLast => 1,
+    );
+
     return {
         TicketID               => $TicketID,
+        ArticleID              => $Articles[0]->{ArticleID},
         CommunicationLogObject => $CommunicationLogObject,
     };
 };
@@ -111,11 +117,20 @@ my $DeleteSampleEmail = sub {
     );
 
     # Delete ticket
-    my $TicketDeleted = $Kernel::OM->Get('Kernel::System::Ticket')->TicketDelete(
+    my $TicketObject  = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $TicketDeleted = $TicketObject->TicketDelete(
         TicketID => $Data->{TicketID},
         UserID   => 1,
     );
 
+    # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+    if ( !$TicketDeleted ) {
+        sleep 3;
+        $TicketDeleted = $TicketObject->TicketDelete(
+            TicketID => $Data->{TicketID},
+            UserID   => 1,
+        );
+    }
     $Self->True(
         $TicketDeleted,
         'Ticket deleted.',
@@ -130,13 +145,12 @@ my $CheckTicketZoom = sub {
 
     my $TicketID = $Param{TicketID};
 
-    # get script alias
     my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
-    # go to ticket zoom page
+    # Go to ticket zoom page.
     $Selenium->VerifiedGet( "${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=" . $TicketID );
 
-    # get the attachment list items
+    # Get the attachment list items.
     my $AttachmentsList = $Selenium->find_elements( '.ArticleMailContent .ArticleAttachments li', 'css' );
 
     $Self->False(
@@ -171,7 +185,7 @@ my $CheckEmailContentDisposition = sub {
         'inline',
         $ContentDisposition,
         "TicketCompose(${ Action }), Content-Disposition as inline",
-    );
+    ) || die;
 
     return;
 };
@@ -180,29 +194,30 @@ my $CheckEmailContentDisposition = sub {
 my $CheckTicketReplyOrForward = sub {
     my %Param = @_;
 
-    my $TicketID = $Param{TicketID};
-    my $Action   = $Param{Action};
+    my $TicketID  = $Param{TicketID};
+    my $ArticleID = $Param{ArticleID};
+    my $Action    = $Param{Action};
 
-    # get script alias
     my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
-    # go to ticket zoom page
-    $Selenium->VerifiedGet( "${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=" . $TicketID );
-
     if ( $Action eq 'Reply' ) {
-        $Selenium->InputFieldValueSet(
-            Element => "form[title=\"Reply\"] select[id^=\"ResponseID\"]",
-            Value   => 1,
+
+        # Go to ticket AgentTicketCompose page.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentTicketCompose&TicketID="
+                . $TicketID
+                . "&ArticleID="
+                . $ArticleID
+                . "&ResponseID=1"
         );
     }
-    else {    # Forward
-        $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketForward;')]")->click();
-    }
+    else {
 
-    # Switch to compose window.
-    $Selenium->WaitFor( WindowCount => 2 );
-    my $Handles = $Selenium->get_window_handles();
-    $Selenium->switch_to_window( $Handles->[1] );
+        # Go to ticket AgentTicketForward page.
+        $Selenium->VerifiedGet(
+            "${ScriptAlias}index.pl?Action=AgentTicketForward&TicketID=" . $TicketID . "&ArticleID=" . $ArticleID
+        );
+    }
 
     # Wait without jQuery because it might not be loaded yet.
     $Selenium->WaitFor(
@@ -237,8 +252,8 @@ my $CheckTicketReplyOrForward = sub {
     }
     $Selenium->execute_script("\$('#submitRichText').click()");
 
-    $Selenium->WaitFor( WindowCount => 1 );
-    $Selenium->switch_to_window( $Handles->[0] );
+    # Go to ticket zoom page.
+    $Selenium->VerifiedGet( "${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=" . $TicketID );
 
     $Selenium->VerifiedRefresh();
 
@@ -292,12 +307,14 @@ $Selenium->RunTest(
         );
 
         $CheckTicketReplyOrForward->(
-            TicketID => $ImportedEmail->{TicketID},
-            Action   => 'Reply',
+            TicketID  => $ImportedEmail->{TicketID},
+            ArticleID => $ImportedEmail->{ArticleID},
+            Action    => 'Reply',
         );
 
         $CheckTicketReplyOrForward->(
             TicketID     => $ImportedEmail->{TicketID},
+            ArticleID    => $ImportedEmail->{ArticleID},
             Action       => 'Forward',
             TestCustomer => $TestCustomer,
         );

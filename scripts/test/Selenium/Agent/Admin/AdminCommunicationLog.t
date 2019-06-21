@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -211,7 +211,20 @@ $Selenium->RunTest(
         my $ScriptAlias = $Kernel::OM->Get('Kernel::Config')->Get('ScriptAlias');
 
         # Navigate to AdminCommunicationLog screen.
-        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminCommunicationLog");
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminCommunicationLog;Expand=1;");
+
+        $Selenium->execute_script('window.Core.App.PageLoadComplete = false;');
+
+        # Set Time Range to 'All Communication', see bug#14379
+        $Selenium->InputFieldValueSet(
+            Element => '#TimeRange',
+            Value   => '0',
+        );
+
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+        );
 
         # Verify status widgets show successful accounts and failed communications.
         $Self->Is(
@@ -229,15 +242,8 @@ $Selenium->RunTest(
             'Failed communication'
         );
 
-        # Expand the widget.
-        $Selenium->find_element( "#CommunicationList .Toggle a", 'css' )->click();
-        $Selenium->WaitFor(
-            JavaScript =>
-                'return typeof($) === "function" && $(".WidgetSimple.Expanded").length;'
-        );
-
         # Filter for successful communications.
-        $Selenium->find_element( 'Successful (1)', 'partial_link_text' )->VerifiedClick();
+        $Selenium->find_element( 'Successful (1)', 'link_text' )->VerifiedClick();
 
         # Verify one communication is shown.
         $Self->Is(

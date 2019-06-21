@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -117,15 +117,18 @@ $Selenium->RunTest(
         );
 
         $Selenium->WaitFor(
-            JavaScript => "return typeof(\$) === 'function' && \$('.CustomerUserAddressBookForm').length === 1;"
+            JavaScript => "return typeof(\$) === 'function' && \$('#SelectAllCustomerUser').length === 1;"
+        );
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#SelectAllCustomerUser',
+            Event       => 'click',
         );
 
         # Select customer user in search results.
-        $Selenium->find_element("//input[contains(\@data-customer-ticket-text, \'$UserFirstname $UserLastname' )]")
-            ->click();
+        $Selenium->find_element( '#SelectAllCustomerUser', 'css' )->click();
         $Selenium->WaitFor(
             JavaScript =>
-                "return typeof(\$) === 'function' && \$('input[data-customer-ticket-text*=\"$UserFirstname $UserLastname\"]').prop('checked') === true;"
+                "return typeof(\$) === 'function' && \$('#SelectAllCustomerUser').prop('checked') === true;"
         );
 
         $Selenium->switch_to_frame();

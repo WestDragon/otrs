@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -233,6 +233,12 @@ $Selenium->RunTest(
 
         # Import test Selenium Process.
         my $Location = $ConfigObject->Get('Home') . "/scripts/test/sample/ProcessManagement/CustomerTicketProcess.yml";
+
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $("#FileUpload:visible").length;'
+        );
+        $Selenium->find_element( "#FileUpload",                      'css' )->clear();
         $Selenium->find_element( "#FileUpload",                      'css' )->send_keys($Location);
         $Selenium->find_element( "#OverwriteExistingEntitiesImport", 'css' )->click();
         $Selenium->WaitFor(
@@ -373,6 +379,12 @@ $Selenium->RunTest(
             "\$('#FileUpload').css('display', 'block')"
         );
 
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $("#FileUpload:visible").length;'
+        );
+
+        $Selenium->find_element( "#FileUpload", 'css' )->clear();
         $Selenium->find_element( "#FileUpload", 'css' )->send_keys($AttachmentLocation);
         $Selenium->WaitFor(
             JavaScript => 'return typeof($) === "function" && $("[class^=\'AttachmentDelete\']").length'

@@ -418,7 +418,7 @@
         </Value>
     </Setting>
     <Setting Name="Ticket::SearchIndexModule" Required="1" Valid="1" ConfigLevel="200">
-        <Description Translatable="1">Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".</Description>
+        <Description Translatable="1">Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".</Description>
         <Navigation>Core::Ticket::FulltextSearch</Navigation>
         <Value>
             <Item ValueType="PerlModule" ValueFilter="Kernel/System/Ticket/ArticleSearchIndex/*.pm">Kernel::System::Ticket::ArticleSearchIndex::DB</Item>
@@ -446,7 +446,7 @@
         </Value>
     </Setting>
     <Setting Name="Ticket::SearchIndex::Attribute" Required="1" Valid="1" ConfigLevel="200">
-        <Description Translatable="1">Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.</Description>
+        <Description Translatable="1">Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.</Description>
         <Navigation>Core::Ticket::FulltextSearch</Navigation>
         <Value>
             <Hash>
@@ -1569,6 +1569,13 @@
             </Item>
         </Value>
     </Setting>
+    <Setting Name="Ticket::Frontend::ArticleHeadVisibleDefault" Required="1" Valid="1">
+        <Description Translatable="1">Shows the article head information in the agent zoom view.</Description>
+        <Navigation>Frontend::Agent::View::TicketZoom</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
     <Setting Name="Ticket::ZoomAttachmentDisplayCount" Required="1" Valid="1">
         <Description Translatable="1">Shows a count of attachments in the ticket zoom, if the article has attachments.</Description>
         <Navigation>Frontend::Agent::View::TicketZoom</Navigation>
@@ -1734,6 +1741,13 @@
                 <Item ValueType="Option" Value="25">25</Item>
                 <Item ValueType="Option" Value="30">30</Item>
             </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::Frontend::BlockLoadingRemoteContent" Required="1" Valid="1">
+        <Description Translatable="1">Makes the application block external content loading.</Description>
+        <Navigation>Frontend::Base</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="Ticket::Frontend::CustomerInfoCompose" Required="1" Valid="1">
@@ -6487,8 +6501,8 @@
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Dashboard::TicketGeneric</Item>
-                <Item Key="Title" Translatable="1">Open Tickets / Need to be answered</Item>
-                <Item Key="Description" Translatable="1">All open tickets, these tickets have already been worked on, but need a response</Item>
+                <Item Key="Title" Translatable="1">Open Tickets</Item>
+                <Item Key="Description" Translatable="1">All open tickets, these tickets have already been worked on.</Item>
                 <Item Key="Attributes">StateType=open;</Item>
                 <Item Key="Filter" Translatable="1">All</Item>
                 <Item Key="Time">Age</Item>
@@ -6730,8 +6744,8 @@
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::Dashboard::TicketGeneric</Item>
-                <Item Key="Title" Translatable="1">Open Tickets / Need to be answered</Item>
-                <Item Key="Description" Translatable="1">All open tickets, these tickets have already been worked on, but need a response</Item>
+                <Item Key="Title" Translatable="1">Open Tickets</Item>
+                <Item Key="Description" Translatable="1">All open tickets, these tickets have already been worked on.</Item>
                 <Item Key="Attributes">StateType=open;</Item>
                 <Item Key="Filter" Translatable="1">All</Item>
                 <Item Key="Time">Age</Item>
@@ -7258,6 +7272,23 @@
         <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::Frontend::CustomerTicketZoom###DisplayNoteFrom" Required="1" Valid="1">
+        <Description Translatable="1">Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.</Description>
+        <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
+        <Value>
+            <Item ValueType="Select" SelectedID="FromField">
+                <Item ValueType="Option" Value="FromField" Translatable="1">The value of the From field</Item>
+                <Item ValueType="Option" Value="DefaultAgentName" Translatable="1">Default agent name</Item>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::Frontend::CustomerTicketZoom###DefaultAgentName" Required="1" Valid="1">
+        <Description Translatable="1">Defines the default agent name in the ticket zoom view of the customer interface.</Description>
+        <Navigation>Frontend::Customer::View::TicketZoom</Navigation>
+        <Value>
+            <Item ValueType="String" Translatable="1">Support Agent</Item>
         </Value>
     </Setting>
     <Setting Name="Ticket::CustomerTicketSearch::SearchLimit" Required="1" Valid="1">
@@ -10403,6 +10434,20 @@
             <Item ValueType="String" ValueRegex="^[0-9]{1,6}$">4000</Item>
         </Value>
     </Setting>
+    <Setting Name="Ticket::GenericAgentAllowCustomScriptExecution" Required="0" Valid="1">
+        <Description Translatable="1">Allows generic agent to execute custom command line scripts.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::GenericAgentAllowCustomModuleExecution" Required="0" Valid="1">
+        <Description Translatable="1">Allows generic agent to execute custom modules.</Description>
+        <Navigation>Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">1</Item>
+        </Value>
+    </Setting>
     <Setting Name="Ticket::UnlockOnAway" Required="1" Valid="1">
         <Description Translatable="1">Unlock tickets whenever a note is added and the owner is out of office.</Description>
         <Navigation>Core::Ticket</Navigation>
@@ -11482,7 +11527,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="PostMaster::PreFilterModule###000-ExternalTicketNumberRecognition1" Required="0" Valid="0">
-        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.</Description>
+        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the 'NumberRegExp' expression will be used as the ticket number value.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
         <Value>
             <Hash>
@@ -11500,7 +11545,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="PostMaster::PreFilterModule###000-ExternalTicketNumberRecognition2" Required="0" Valid="0">
-        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.</Description>
+        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the 'NumberRegExp' expression will be used as the ticket number value.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
         <Value>
             <Hash>
@@ -11518,7 +11563,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="PostMaster::PreFilterModule###000-ExternalTicketNumberRecognition3" Required="0" Valid="0">
-        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.</Description>
+        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the 'NumberRegExp' expression will be used as the ticket number value.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
         <Value>
             <Hash>
@@ -11536,7 +11581,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="PostMaster::PreFilterModule###000-ExternalTicketNumberRecognition4" Required="0" Valid="0">
-        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.</Description>
+        <Description Translatable="1">Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the 'NumberRegExp' expression will be used as the ticket number value.</Description>
         <Navigation>Core::Email::PostMaster</Navigation>
         <Value>
             <Hash>
@@ -12594,7 +12639,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element1" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12605,7 +12650,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element2" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12616,7 +12661,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element3" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12627,7 +12672,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element4" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12638,7 +12683,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element5" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12649,7 +12694,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element6" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12660,7 +12705,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element7" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12671,7 +12716,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element8" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12682,7 +12727,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element9" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12693,7 +12738,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element10" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12704,7 +12749,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element11" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12715,7 +12760,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element12" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12726,7 +12771,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element13" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12737,7 +12782,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element14" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12748,7 +12793,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element15" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>
@@ -12759,7 +12804,7 @@ Thanks for your help!
         </Value>
     </Setting>
     <Setting Name="Ticket::TicketDynamicFieldDefault###Element16" Required="0" Valid="0">
-        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".</Description>
+        <Description Translatable="1">Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".</Description>
         <Navigation>Core::Ticket::DynamicFieldDefault</Navigation>
         <Value>
             <Hash>

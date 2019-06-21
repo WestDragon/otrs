@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -42,7 +42,7 @@ $Selenium->RunTest(
         my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
         # Create test PGP path and set it in sysConfig.
-        my $PGPPath = $ConfigObject->Get('Home') . "/var/tmp/pgp";
+        my $PGPPath = $ConfigObject->Get('Home') . "/var/tmp/pgp" . $Helper->GetRandomID();
         mkpath( [$PGPPath], 0, 0770 );    ## no critic
 
         my $ScriptAlias = $ConfigObject->Get('ScriptAlias');

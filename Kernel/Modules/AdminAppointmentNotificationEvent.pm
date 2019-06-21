@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -525,11 +525,7 @@ sub Run {
         }
 
         # create new Notification name
-        my $NotificationName =
-            $NotificationData{Name}
-            . ' ('
-            . $LayoutObject->{LanguageObject}->Translate('Copy')
-            . ')';
+        my $NotificationName = $LayoutObject->{LanguageObject}->Translate( '%s (copy)', $NotificationData{Name} );
 
         # otherwise save configuration and return to overview screen
         my $NewNotificationID = $NotificationEventObject->NotificationAdd(
@@ -758,7 +754,7 @@ sub _Edit {
     my $CalendarObject = $Kernel::OM->Get('Kernel::System::Calendar');
 
     my @CalendarList = $CalendarObject->CalendarList(
-        UserID     => 1,
+        UserID     => $Self->{UserID},
         Permission => 'ro',
         ValidID    => 0,
     );

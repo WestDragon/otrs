@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -63,7 +63,7 @@ $Selenium->RunTest(
         # Check client side validation.
         $Selenium->find_element( "#EditName", 'css' )->clear();
         $Selenium->execute_script("\$('#Submit').click();");
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#EditName.Error").length' );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#EditName.Error").length;' );
 
         $Self->Is(
             $Selenium->execute_script(
@@ -105,7 +105,7 @@ $Selenium->RunTest(
         my $Count                = 1;
         for my $BreadcrumbText ( $SecondBreadcrumbText, $ThirdBreadcrumbText ) {
             $Self->Is(
-                $Selenium->execute_script("return \$('.BreadCrumb li:eq($Count)').text().trim()"),
+                $Selenium->execute_script("return \$('.BreadCrumb li:eq($Count)').text().trim();"),
                 $BreadcrumbText,
                 "Breadcrumb text '$BreadcrumbText' is found on screen"
             );
@@ -201,7 +201,7 @@ $Selenium->RunTest(
         $ThirdBreadcrumbText = $LanguageObject->Translate('Edit PostMaster Filter') . ": $PostMasterName";
         for my $BreadcrumbText ( $SecondBreadcrumbText, $ThirdBreadcrumbText ) {
             $Self->Is(
-                $Selenium->execute_script("return \$('.BreadCrumb li:eq($Count)').text().trim()"),
+                $Selenium->execute_script("return \$('.BreadCrumb li:eq($Count)').text().trim();"),
                 $BreadcrumbText,
                 "Breadcrumb text '$BreadcrumbText' is found on screen"
             );
@@ -267,11 +267,16 @@ $Selenium->RunTest(
         $Selenium->find_element( "#SetValue1", 'css' )->send_keys($PostMasterPriority);
         $Selenium->execute_script("\$('#Submit').click();");
 
-        # Wait for dialog to appears.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#DialogButton1").length;' );
+        # Wait for dialog to appears and event to load.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#DialogButton1',
+            Event       => 'click',
+        );
 
         # Confirm JS error.
         $Selenium->find_element( "#DialogButton1", 'css' )->click();
+
+        $Selenium->WaitFor( JavaScript => 'return $("#EditName.Error").length;' );
 
         # Verify duplicated name error.
         $Self->Is(
@@ -307,11 +312,16 @@ $Selenium->RunTest(
         $Selenium->find_element( "#EditName", 'css' )->send_keys($PostMasterName);
         $Selenium->execute_script("\$('#Submit').click();");
 
-        # Wait for dialog to appears.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#DialogButton1").length;' );
+        # Wait for dialog to appears and event to load.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#DialogButton1',
+            Event       => 'click',
+        );
 
         # Confirm JS error.
         $Selenium->find_element( "#DialogButton1", 'css' )->click();
+
+        $Selenium->WaitFor( JavaScript => 'return $("#EditName.Error").length;' );
 
         # Verify duplicated name error.
         $Self->Is(
@@ -339,13 +349,22 @@ $Selenium->RunTest(
             "$PostMasterName2 edited second PostMasterFilter found on page",
         );
 
+        # Wait for click event for delete second PostMasterFilter.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => "a[data-query-string*='Subaction=Delete;Name=$PostMasterName3']",
+            Event       => 'click',
+        );
+
         # Delete second PostMasterFilter.
         $Selenium->find_element(
             "//a[contains(\@data-query-string, \'Subaction=Delete;Name=$PostMasterName3' )]"
         )->click();
 
         # Wait for dialog to appears.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#DialogButton1").length;' );
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#DialogButton1',
+            Event       => 'click',
+        );
 
         # Verify delete dialog message.
         my $DeleteMessage = $LanguageObject->Translate("Do you really want to delete this postmaster filter?");
@@ -358,7 +377,9 @@ $Selenium->RunTest(
         $Selenium->find_element( "#DialogButton1", 'css' )->VerifiedClick();
 
         # Wait for the dialog to disappear.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 0;' );
+        $Selenium->WaitFor(
+            ElementMissing => [ '.Dialog', 'css' ],
+        );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#PostMasterFilters").length > 0;' );
 
         # Check if second PostMasterFilter is deleted.
@@ -367,19 +388,30 @@ $Selenium->RunTest(
             "Second PostMasterFilter '$PostMasterName3' is deleted"
         );
 
+        # Wait for click event for delete first PostMasterFilter.
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => "a[data-query-string*='Subaction=Delete;Name=$PostMasterName']",
+            Event       => 'click',
+        );
+
         # Delete first PostMasterFilter.
         $Selenium->find_element(
             "//a[contains(\@data-query-string, \'Subaction=Delete;Name=$PostMasterName' )]"
         )->click();
 
         # Wait for dialog to appears.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 1;' );
+        $Selenium->WaitForjQueryEventBound(
+            CSSSelector => '#DialogButton1',
+            Event       => 'click',
+        );
 
         # Confirm delete action.
         $Selenium->find_element( "#DialogButton1", 'css' )->VerifiedClick();
 
         # Wait for the dialog to disappear.
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $(".Dialog:visible").length === 0;' );
+        $Selenium->WaitFor(
+            ElementMissing => [ '.Dialog', 'css' ],
+        );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#PostMasterFilters").length > 0;' );
 
         # Check if first postmaster filter is deleted.

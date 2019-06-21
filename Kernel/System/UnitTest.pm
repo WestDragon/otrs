@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -22,6 +22,7 @@ our @ObjectDependencies = (
     'Kernel::System::Encode',
     'Kernel::System::JSON',
     'Kernel::System::Main',
+    'Kernel::System::Package',
     'Kernel::System::SupportDataCollector',
     'Kernel::System::WebUserAgent',
 );
@@ -70,6 +71,7 @@ run all or some tests located in C<scripts/test/**/*.t> and print the result.
                                                         #  You can specify %File%, %TestOk% and %TestNotOk% as dynamic arguments.
         PreSubmitScripts       => ['...'],              # Script(s) to execute after all tests have been executed
                                                         #  and the results are about to be sent to the server.
+        NumberOfTestRuns       => 10,                   # optional (default 1), number of successive runs for every single unit test
     );
 
 Please note that the individual test files are not executed in the main process,
@@ -127,6 +129,11 @@ sub Run {
         Recursive => 1,
     );
 
+    my $NumberOfTestRuns = $Param{NumberOfTestRuns};
+    if ( !$NumberOfTestRuns ) {
+        $NumberOfTestRuns = 1;
+    }
+
     FILE:
     for my $File (@Files) {
 
@@ -147,10 +154,12 @@ sub Run {
             $File = $CustomFile;
         }
 
-        $Self->_HandleFile(
-            PostTestScripts => $Param{PostTestScripts},
-            File            => $File,
-        );
+        for ( 1 .. $NumberOfTestRuns ) {
+            $Self->_HandleFile(
+                PostTestScripts => $Param{PostTestScripts},
+                File            => $File,
+            );
+        }
     }
 
     # Use non-overridden time() function.
@@ -332,25 +341,25 @@ sub _SubmitResults {
         }
     }
 
-    # Save Selenium Data information in Support Data results.
+    # Include Selenium information as part of the support data.
     if ( IsHashRefWithData( $Self->{SeleniumData} ) ) {
         push @{ $SupportData{Result} },
             {
             Value       => $Self->{SeleniumData}->{build}->{version} // 'N/A',
             Label       => 'Selenium Server',
-            DisplayPath => 'Selenium Test Environment',
+            DisplayPath => 'Unit Test/Selenium Information',
             Status      => 1,
             },
             {
             Value       => $Self->{SeleniumData}->{java}->{version} // 'N/A',
             Label       => 'Java',
-            DisplayPath => 'Selenium Test Environment',
+            DisplayPath => 'Unit Test/Selenium Information',
             Status      => 1,
             },
             {
             Value       => $Self->{SeleniumData}->{browserName} // 'N/A',
             Label       => 'Browser Name',
-            DisplayPath => 'Selenium Test Environment',
+            DisplayPath => 'Unit Test/Selenium Information',
             Status      => 1,
             };
         if ( $Self->{SeleniumData}->{browserName} && $Self->{SeleniumData}->{browserName} eq 'chrome' ) {
@@ -358,13 +367,13 @@ sub _SubmitResults {
                 {
                 Value       => $Self->{SeleniumData}->{version} // 'N/A',
                 Label       => 'Browser Version',
-                DisplayPath => 'Selenium Test Environment',
+                DisplayPath => 'Unit Test/Selenium Information',
                 Status      => 1,
                 },
                 {
                 Value       => $Self->{SeleniumData}->{chrome}->{chromedriverVersion} // 'N/A',
                 Label       => 'Chrome Driver',
-                DisplayPath => 'Selenium Test Environment',
+                DisplayPath => 'Unit Test/Selenium Information',
                 Status      => 1,
                 };
         }
@@ -373,15 +382,53 @@ sub _SubmitResults {
                 {
                 Value       => $Self->{SeleniumData}->{browserVersion} // 'N/A',
                 Label       => 'Browser Version',
-                DisplayPath => 'Selenium Test Environment',
+                DisplayPath => 'Unit Test/Selenium Information',
                 Status      => 1,
                 },
                 {
                 Value       => $Self->{SeleniumData}->{'moz:geckodriverVersion'} // 'N/A',
                 Label       => 'Gecko Driver',
-                DisplayPath => 'Selenium Test Environment',
+                DisplayPath => 'Unit Test/Selenium Information',
                 Status      => 1,
                 };
+        }
+    }
+
+    # Include versioning information as part of the support data.
+    #   Get framework commit ID from the RELEASE file.
+    my $ReleaseFile = $Kernel::OM->Get('Kernel::System::Main')->FileRead(
+        Location => $Kernel::OM->Get('Kernel::Config')->Get('Home') . '/RELEASE',
+    );
+
+    if ( ${$ReleaseFile} =~ /COMMIT\_ID\s=\s(.*)$/ ) {
+        my $FrameworkCommitID = $1;
+        push @{ $SupportData{Result} },
+            {
+            Value       => $FrameworkCommitID,
+            Label       => 'Framework',
+            DisplayPath => 'Unit Test/Versioning Information',
+            Identifier  => 'VersionHash',
+            Status      => 1,
+            };
+    }
+
+    # Get build commit IDs of all installed packages.
+    my @PackageList = $Kernel::OM->Get('Kernel::System::Package')->RepositoryList(
+        Result => 'short',
+    );
+
+    if ( IsArrayRefWithData( \@PackageList ) ) {
+        for my $Package (@PackageList) {
+            if ( $Package->{BuildCommitID} ) {
+                push @{ $SupportData{Result} },
+                    {
+                    Value       => $Package->{BuildCommitID},
+                    Label       => $Package->{Name},
+                    DisplayPath => 'Unit Test/Versioning Information',
+                    Identifier  => 'VersionHash',
+                    Status      => 1,
+                    };
+            }
         }
     }
 
@@ -406,9 +453,9 @@ sub _SubmitResults {
     *STDOUT->flush();
     *STDERR->flush();
 
-    # Limit attachment sizes to 2MB in total.
-    my $AttachmentCount = scalar @{ $Param{AttachmentPath} // [] };
-    my $AttachmentsSize = 1024 * 1024 * 2;
+    # Limit attachment sizes to 20MB in total.
+    my $AttachmentCount = scalar grep { -r $_ } @{ $Param{AttachmentPath} // [] };
+    my $AttachmentsSize = 1024 * 1024 * 20;
 
     ATTACHMENT_PATH:
     for my $AttachmentPath ( @{ $Param{AttachmentPath} // [] } ) {

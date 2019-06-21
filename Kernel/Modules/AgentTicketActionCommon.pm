@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1626,6 +1626,15 @@ sub Run {
         # set Body var to calculated content
         $GetParam{Body} = $Body;
 
+        # Strip out external content if BlockLoadingRemoteContent is enabled.
+        if ( $ConfigObject->Get('Ticket::Frontend::BlockLoadingRemoteContent') ) {
+            my %SafetyCheckResult = $Kernel::OM->Get('Kernel::System::HTMLUtils')->Safety(
+                String       => $GetParam{Body},
+                NoExtSrcLoad => 1,
+            );
+            $GetParam{Body} = $SafetyCheckResult{String};
+        }
+
         if ( $Self->{ReplyToArticle} ) {
             my $TicketSubjectRe = $ConfigObject->Get('Ticket::SubjectRe') || 'Re';
             $GetParam{Subject} = $TicketSubjectRe . ': ' . $Self->{ReplyToArticleContent}{Subject};
@@ -2444,12 +2453,20 @@ sub _Mask {
         if ( $Config->{InformAgent} ) {
 
             # get inform user list
-            my @InformUserID = $ParamObject->GetArray( Param => 'InformUserID' );
+            my %InformAgents;
+            my @InformUserID    = $ParamObject->GetArray( Param => 'InformUserID' );
+            my %InformAgentList = $GroupObject->PermissionGroupGet(
+                GroupID => $GID,
+                Type    => 'ro',
+            );
+            for my $UserID ( sort keys %InformAgentList ) {
+                $InformAgents{$UserID} = $AllGroupsMembers{$UserID};
+            }
 
             if ( $Self->{ReplyToArticle} ) {
 
                 # get email address of all users and compare to replyto-addresses
-                for my $UserID ( sort keys %ShownUsers ) {
+                for my $UserID ( sort keys %InformAgents ) {
                     if ( $ReplyToUserIDs{$UserID} ) {
                         push @InformUserID, $UserID;
                         delete $ReplyToUserIDs{$UserID};
@@ -2460,7 +2477,7 @@ sub _Mask {
             my $InformAgentSize = $ConfigObject->Get('Ticket::Frontend::InformAgentMaxSize')
                 || 3;
             $Param{OptionStrg} = $LayoutObject->BuildSelection(
-                Data       => \%ShownUsers,
+                Data       => \%InformAgents,
                 SelectedID => \@InformUserID,
                 Name       => 'InformUserID',
                 Class      => 'Modernize',

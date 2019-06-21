@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -131,13 +131,14 @@ $Selenium->RunTest(
                 Restrictionvalue => $ServiceIDs[0],
             },
             {
-                Title            => 'Statistic - TicketList' . $Helper->GetRandomID(),
-                Object           => 'Kernel::System::Stats::Dynamic::TicketList',
-                Type             => 'DynamicList',
-                YAxis            => 'YAxisOrderBy',
-                OrderBy          => 'TicketNumber',
-                RestrictionID    => 'RestrictionsServiceIDs',
-                Restrictionvalue => $ServiceIDs[0],
+                Title              => 'Statistic - TicketList' . $Helper->GetRandomID(),
+                Object             => 'Kernel::System::Stats::Dynamic::TicketList',
+                Type               => 'DynamicList',
+                YAxis              => 'YAxisOrderBy',
+                OrderBy            => 'TicketNumber',
+                RestrictionID      => 'RestrictionsServiceIDs',
+                Restrictionvalue   => $ServiceIDs[0],
+                CheckInvalidFormat => 1,
             },
         );
 
@@ -385,7 +386,60 @@ $Selenium->RunTest(
                 "Test statistic is created - $StatsData->{Title} "
             );
 
+            # Check handling of invalid formats in the edit screen.
+            if ( $StatsData->{CheckInvalidFormat} ) {
+                my $Stat = $StatsObject->StatsGet(
+                    StatID => $StatsIDLast,
+                );
+
+                # Prepare stat data for an update.
+                my %Data = (
+                    Title                 => $Stat->{Title},
+                    Description           => $Stat->{Description},
+                    Valid                 => $Stat->{Valid},
+                    TimeZone              => $Stat->{TimeZone},
+                    SumRow                => $Stat->{SumRow},
+                    SumCol                => $Stat->{SumCol},
+                    Cache                 => $Stat->{Cache},
+                    ShowAsDashboardWidget => $Stat->{ShowAsDashboardWidget},
+                    Permission            => $Stat->{Permission},
+                    Format                => [
+
+                        # Invalid format.
+                        'D3::BarChart "><br />',
+                    ],
+                );
+
+                my $Success = $StatsObject->StatsUpdate(
+                    StatID => $StatsIDLast,
+                    Hash   => \%Data,
+                    UserID => 1,
+                );
+                $Self->True(
+                    $Success // 0,
+                    'StatsUpdate() - add invalid format'
+                );
+
+                # Go to the stat edit screen.
+                $Selenium->VerifiedGet(
+                    "${ScriptAlias}index.pl?Action=AgentStatistics;Subaction=Edit;StatID=$StatsIDLast"
+                );
+
+                # Check if the button contains expected format attribute value.
+                $Self->Is(
+                    $Selenium->execute_script('return $("button.SwitchPreviewFormat").data("format")') // '',
+                    'D3::BarChart "><br />',
+                    'Preview button format attribute'
+                );
+
+                # Go back to the stats overview screen.
+                $Selenium->VerifiedGet(
+                    "${ScriptAlias}index.pl?Action=AgentStatistics;Subaction=Overview;Direction=DESC;OrderBy=ID;StartHit=1"
+                );
+            }
+
             # Delete created test statistics.
+            $Selenium->execute_script('window.Core.App.PageLoadComplete = false;');
             $Selenium->find_element(
                 "//a[contains(\@href, \'Action=AgentStatistics;Subaction=DeleteAction;StatID=$StatsIDLast\' )]"
             )->click();
@@ -393,14 +447,9 @@ $Selenium->RunTest(
             $Selenium->WaitFor( AlertPresent => 1 );
             sleep 1;
             $Selenium->accept_alert();
-
             $Selenium->WaitFor(
                 JavaScript =>
-                    'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete;'
-            );
-            $Selenium->WaitFor(
-                JavaScript =>
-                    "return typeof(\$) === 'function' && !\$('a[href*=\"Action=AgentStatistics;Subaction=Edit;StatID=$StatsIDLast\"]').length;"
+                    'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
             );
 
             $Self->True(
@@ -408,7 +457,7 @@ $Selenium->RunTest(
                     "return !\$('a[href*=\"Action=AgentStatistics;Subaction=Edit;StatID=$StatsIDLast\"]').length;"
                 ),
                 "StatsData statistic is deleted - $StatsData->{Title} "
-            );
+            ) || die;
         }
 
         my $DBObject = $Kernel::OM->Get('Kernel::System::DB');

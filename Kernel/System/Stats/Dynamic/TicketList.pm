@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1395,6 +1395,7 @@ sub GetStatTable {
             # convert from OTRS time zone to given time zone
             if (
                 $Param{TimeZone}
+                && $Param{TimeZone} ne Kernel::System::DateTime->OTRSTimeZoneGet()
                 && $Ticket{$Attribute}
                 && $Ticket{$Attribute} =~ /\A(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\z/
                 )

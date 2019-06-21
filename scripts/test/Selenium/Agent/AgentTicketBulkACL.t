@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -130,11 +130,8 @@ $Selenium->RunTest(
         my $UserID1    = $UserObject->UserLookup(
             UserLogin => $TestUserLogin1,
         );
-        my $TestUserLogin2 = $Helper->TestUserCreate(
+        my ( $TestUserLogin2, $UserID2 ) = $Helper->TestUserCreate(
             Groups => [ 'admin', 'users' ],
-        ) || die "Did not get test user";
-        my $UserID2 = $UserObject->UserLookup(
-            UserLogin => $TestUserLogin2,
         );
 
         # Create new ticket types

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -24,7 +24,7 @@ sub Data {
     $Self->{DateFormatShort}     = '';
     $Self->{DateInputFormat}     = '';
     $Self->{DateInputFormatLong} = '';
-    $Self->{Completeness}        = 0.987293956043956;
+    $Self->{Completeness}        = 0.981193366387417;
 
     # csv separator
     $Self->{Separator}         = '';
@@ -641,6 +641,7 @@ sub Data {
         'Schedule minutes' => '분 일정',
         'Schedule hours' => '시간 계획',
         'Schedule days' => '하루 일정',
+        'Automatic execution values are in the system timezone.' => '',
         'Currently this generic agent job will not run automatically.' =>
             '현재 이 일반 에이전트 작업은 자동으로 실행되지 않습니다.',
         'To enable automatic execution select at least one value from minutes, hours and days!' =>
@@ -2037,8 +2038,9 @@ sub Data {
         'This email address is already used as system email address.' => '이 전자 메일 주소는 이미 시스템 전자 메일 주소로 사용됩니다.',
         'The display name and email address will be shown on mail you send.' =>
             '표시 이름과 이메일 주소가 보내는 메일에 표시됩니다.',
-        'This system address cannot be set to invalid, because it is used in one or more queue(s).' =>
-            '이 시스템 주소는 하나 이상의 대기열(s)에서 사용되기 때문에 유효하지 않게 설정할 수 없습니다. ',
+        'This system address cannot be set to invalid.' => '',
+        'This system address cannot be set to invalid, because it is used in one or more queue(s) or auto response(s).' =>
+            '',
 
         # Template: AdminSystemConfiguration
         'online administrator documentation' => '온라인 관리자 문서',
@@ -2160,7 +2162,7 @@ sub Data {
         'Your email address is' => '귀하의 이메일 주소 : ',
 
         # Template: AdminTemplateAttachment
-        'Manage Templates-Attachments Relations' => '템플릿 관리 - 첨부파일 관계',
+        'Manage Template-Attachment Relations' => '',
         'Toggle active for all' => '모든 사용자에게 전환 사용',
         'Link %s to selected %s' => '%s를 선택한 %s에 연결',
 
@@ -2473,9 +2475,9 @@ sub Data {
         'Split' => '분리',
 
         # Template: AgentStatisticsAdd
-        'Statistics Overview' => '통계 개요',
-        'Read more about statistics in OTRS' => 'OTRS의 통계에 대해 자세히 알아보십시오.',
+        'Statistics Management' => '',
         'Add Statistics' => '통계 추가',
+        'Read more about statistics in OTRS' => 'OTRS의 통계에 대해 자세히 알아보십시오.',
         'Dynamic Matrix' => '가변 매트릭스',
         'Each cell contains a singular data point.' => '각 셀에는 단일 데이터 요소가 포함되어 있습니다.',
         'Dynamic List' => '가변 리스트',
@@ -2486,11 +2488,13 @@ sub Data {
         'Create Statistic' => '통계 생성',
 
         # Template: AgentStatisticsEdit
+        'Edit Statistics' => '',
         'Run now' => '지금 실행',
         'Statistics Preview' => '통계 미리보기',
         'Save Statistic' => '통계 저장',
 
         # Template: AgentStatisticsImport
+        'Import Statistics' => '',
         'Import Statistics Configuration' => '통계 설정 Import',
 
         # Template: AgentStatisticsOverview
@@ -2503,6 +2507,8 @@ sub Data {
         'Delete statistic %s' => '통계 "%s" 삭제',
 
         # Template: AgentStatisticsView
+        'Statistics Overview' => '통계 개요',
+        'View Statistics' => '',
         'Statistics Information' => '통계 정보',
         'Created by' => '작성자 : ',
         'Changed by' => '변경자 ',
@@ -3314,7 +3320,6 @@ sub Data {
         'Deploying, please wait...' => '배포 중입니다. 잠시 기다려주십시오...',
         'Preparing to deploy, please wait...' => '배포 준비 중입니다, 기다려주세요...',
         'Deploy now' => '지금 배포',
-        'Close' => '닫기',
         'Try again' => '다시 시도하십시오.',
 
         # JS Template: DialogReset
@@ -3365,6 +3370,7 @@ sub Data {
         'There was an error synchronizing the ACLs.' => 'ACL을 동기화하는 중 오류가 발생했습니다.',
         'ACL %s could not be deleted' => 'ACL %s을 삭제할 수 없습니다.',
         'There was an error getting data for ACL with ID %s' => 'ID가 %s 인 ACL에 대한 데이터를 가져 오는 중 오류가 발생했습니다.',
+        '%s (copy) %s' => '',
         'Please note that ACL restrictions will be ignored for the Superuser account (UserID 1).' =>
             '수퍼 유저 계정 (UserID 1)에 대한 ACL 제한은 무시됩니다.',
         'Exact match' => '정확히 일치',
@@ -3403,6 +3409,7 @@ sub Data {
         'There was an error getting data for Notification with ID:%s!' =>
             'ID가 %s 인 알림 데이터를 가져 오는 중 오류가 발생했습니다.',
         'Unknown Notification %s!' => '알 수없는 알림 %s!',
+        '%s (copy)' => '',
         'There was an error creating the Notification' => '알림을 만드는 중 오류가 발생했습니다.',
         'Notifications could not be Imported due to a unknown error, please check OTRS logs for more information' =>
             '알 수없는 오류로 인해 알림을 가져올 수 없습니다. 자세한 내용은 OTRS 로그를 확인하십시오.',
@@ -3711,8 +3718,8 @@ sub Data {
         'Package could not be installed' => '패키지를 설치할 수 없습니다.',
         'Package could not be upgraded' => '패키지를 업그레이드 할 수 없습니다.',
         'Repository List' => '저장소 목록',
-        'No packages or no new packages found in selected repository.' =>
-            '선택한 저장소에 패키지가 없거나 새로운 패키지가 없습니다.',
+        'No packages found in selected repository. Please check log for more info!' =>
+            '',
         'Package not verified due a communication issue with verification server!' =>
             '확인 서버와의 통신 문제로 인해 패키지가 확인되지 않았습니다!',
         'Can\'t connect to OTRS Feature Add-on list server!' => 'OTRS 기능 추가 기능 목록 서버에 연결할 수 없습니다!',
@@ -4063,11 +4070,15 @@ sub Data {
         # Perl Module: Kernel/Modules/AgentTicketBulk.pm
         'Can\'t lock Tickets, no TicketIDs are given!' => '티켓을 잠글 수 없으며 TicketID가 제공되지 않습니다!',
         'Ticket (%s) is not unlocked!' => '티켓 (%s)은 잠금 해제되지 않았습니다!',
+        'The following tickets were ignored because they are locked by another agent or you don\'t have write access to tickets: %s.' =>
+            '',
+        'The following ticket was ignored because it is locked by another agent or you don\'t have write access to ticket: %s.' =>
+            '',
+        'You need to select at least one ticket.' => '하나 이상의 티켓을 선택해야 합니다.',
         'Bulk feature is not enabled!' => '대량 기능을 사용할 수 없습니다!',
         'No selectable TicketID is given!' => '선택할 수있는 TicketID가 제공되지 않습니다!',
         'You either selected no ticket or only tickets which are locked by other agents.' =>
             '티켓을 선택하지 않았거나 다른 상담원이 잠근 티켓만 선택했습니다.',
-        'You need to select at least one ticket.' => '하나 이상의 티켓을 선택해야 합니다.',
         'The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.' =>
             '다음 티켓은 다른 에이전트에 의해 잠겨 있거나이 티켓에 대한 쓰기 권한이 없기 때문에 무시되었습니다 : %s.',
         'The following tickets were locked: %s.' => '다음 티켓이 잠겼습니다 : %s.',
@@ -4447,6 +4458,10 @@ sub Data {
             '주소에 사용할 수있는 암호화 키가 없습니다 \'%s\'.',
         'There are no selected encryption keys for the addresses: \'%s\'. ' =>
             '주소에 대해 선택된 암호화 키가 없습니다 : \'%s\'.',
+        'Cannot use expired encryption keys for the addresses: \'%s\'. ' =>
+            '',
+        'Cannot use revoked encryption keys for the addresses: \'%s\'. ' =>
+            '',
         'Encrypt' => '암호화',
         'Keys/certificates will only be shown for recipients with more than one key/certificate. The first found key/certificate will be pre-selected. Please make sure to select the correct one.' =>
             '키 / 인증서는 둘 이상의 키 / 인증서가있는 수신자에 대해서만 표시됩니다. 처음 발견 된 키 / 인증서가 사전 선택됩니다. 올바른 것을 선택하십시오.',
@@ -4461,6 +4476,8 @@ sub Data {
         'SMIME encrypt' => 'SMIME 암호화',
 
         # Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+        'Cannot use expired signing key: \'%s\'. ' => '',
+        'Cannot use revoked signing key: \'%s\'. ' => '',
         'There are no signing keys available for the addresses \'%s\'.' =>
             '\'%s\'주소에 사용할 수있는 서명 키가 없습니다.',
         'There are no selected signing keys for the addresses \'%s\'.' =>
@@ -4515,6 +4532,7 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Layout.pm
         'Standard' => '표준',
+        'The following tickets are not updated: %s.' => '',
         'h' => '시간',
         'm' => '분',
         'd' => '일',
@@ -4795,9 +4813,7 @@ sub Data {
         'Can\'t read file!' => '파일을 읽을 수 없습니다!',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '1이 패키지를 계속 설치하면 다음과 같은 문제가 발생할 수 있습니다. 123 보안 문제 34 안정성 문제 45 성능 문제 566이 패키지로 작업하여 발생하는 문제는 OTRS 서비스 계약의 적용을받지 않습니다.',
-        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
-            '',
-        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -4999,6 +5015,7 @@ sub Data {
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
         'Kernel Version' => '커널 버전',
+        'Could not determine kernel version.' => '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
         'System Load' => '시스템로드',
@@ -5089,10 +5106,10 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '레거시 구성 백업',
         'No legacy configuration backup files found.' => '레거시 구성 백업 파일이 없습니다.',
-        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
-            '레거시 구성 백업 파일은 %s에서 발견되었지만 일부 패키지에서는 여전히 필요합니다.',
-        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
-            '레거시 구성 백업 파일은 설치된 패키지에 더 이상 필요하지 않으므로 %s에서 제거하십시오.',
+        'Legacy configuration backup files found in Kernel/Config/Backups folder, but they might still be required by some packages.' =>
+            '',
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from Kernel/Config/Backups folder.' =>
+            '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
         'Package Installation Status' => '패키지 설치 상태',
@@ -5157,7 +5174,6 @@ sub Data {
         'OTRS time zone is not set.' => 'OTRS 시간대가 설정되지 않았습니다.',
         'User default time zone' => '사용자 기본 시간대',
         'User default time zone is not set.' => '사용자 기본 시간대가 설정되지 않았습니다.',
-        'OTRS time zone setting for calendar' => '캘린더의 OTRS 시간대 설정',
         'Calendar time zone is not set.' => '달력 표준 시간대가 설정되지 않았습니다.',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/UI/AgentSkinUsage.pm
@@ -5663,6 +5679,9 @@ sub Data {
         'Please remove the following words from your search as they cannot be searched for:' =>
             '검색할 수 없으므로 다음 단어를 검색에서 제거하십시오.',
 
+        # JS File: Core.Agent.SharedSecretGenerator
+        'Generate' => '',
+
         # JS File: Core.Agent.SortedTree
         'This element has children elements and can currently not be removed.' =>
             '이 요소는 하위 요소를 가지며 현재 제거할 수 없습니다.',
@@ -5938,8 +5957,6 @@ Thanks for your help!
         'All customer users of a CustomerID' => 'CustomerID의 모든 고객 사용자',
         'All escalated tickets' => '모든 에스컬레이션된 티켓',
         'All new tickets, these tickets have not been worked on yet' => '모든 새로운 티켓이 그 티켓은 아직 작동하지 않았습니다.',
-        'All open tickets, these tickets have already been worked on, but need a response' =>
-            '열러있는 모든 티켓, 이 티켓은 이미 작업되었지만 응답이 필요합니다.',
         'All open tickets, these tickets have already been worked on.' =>
             '열려있는 모든 티켓, 이 티켓들은 이미 작업되었습니다.',
         'All tickets with a reminder set where the reminder date has been reached' =>
@@ -5987,6 +6004,9 @@ Thanks for your help!
             '고객 인터페이스의 티켓 검색에서 확장 된 검색 조건을 허용합니다. 이 기능을 사용하면 e. 지. "(* key1 * && * key2 *)"또는 "(* key1 * || * key2 *)"와 같은 조건의 티켓 제목을 사용하십시오.',
         'Allows extended search conditions in ticket search of the generic agent interface. With this feature you can search e. g. ticket title with this kind of conditions like "(*key1*&&*key2*)" or "(*key1*||*key2*)".' =>
             '일반 에이전트 인터페이스의 티켓 검색에서 확장 된 검색 조건을 허용합니다. 이 기능을 사용하면 e. 지. "(* key1 * && * key2 *)"또는 "(* key1 * || * key2 *)"와 같은 조건의 티켓 제목을 사용하십시오.',
+        'Allows generic agent to execute custom command line scripts.' =>
+            '',
+        'Allows generic agent to execute custom modules.' => '',
         'Allows having a medium format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
             '중간 형식 티켓 개요 (CustomerInfo => 1 - 고객 정보도 표시)를 허용합니다.',
         'Allows having a small format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
@@ -6056,8 +6076,8 @@ Thanks for your help!
         'Balanced white skin by Felix Niklas (slim version).' => 'Felix Niklas (슬림 버전)의 균형 잡힌 하얀 피부.',
         'Balanced white skin by Felix Niklas.' => 'Felix Niklas의 균형 잡힌 하얀 피부.',
         'Based on global RichText setting' => '전역 서식있는 텍스트 설정에 기반',
-        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.' =>
-            '기본 전체 텍스트 색인 설정. 새 인덱스를 생성하려면 "bin / otrs.Console.pl Maint :: Ticket :: FulltextIndexRebuild"를 실행하십시오.',
+        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.' =>
+            '',
         'Blocks all the incoming emails that do not have a valid ticket number in subject with From: @example.com address.' =>
             '보낸 사람 : @ example.com 주소로 유효한 티켓 번호가없는 수신 전자 메일을 모두 차단합니다.',
         'Bounced to "%s".' => 'Bounced to "%s".',
@@ -6124,6 +6144,7 @@ Thanks for your help!
             '알림을 수신할 티켓 변경 유형을 선택하십시오. 필수로 표시된 알림은 완전히 사용 중지할 수 없습니다.',
         'Choose which notifications you\'d like to receive.' => '수신할 알림을 선택하십시오.',
         'Christmas Eve' => '크리스마스 이브',
+        'Close' => '닫기',
         'Close this ticket' => '이 티켓을 닫습니다.',
         'Closed tickets (customer user)' => '폐쇄된 티켓 (고객 사용자)',
         'Closed tickets (customer)' => '정기권(고객)',
@@ -6172,8 +6193,8 @@ Thanks for your help!
         'Configure which screen should be shown after a new ticket has been created.' =>
             '새 티켓이 작성된 후 표시할 화면을 구성하십시오.',
         'Configure your own log text for PGP.' => 'PGP에 대한 자체 로그 텍스트를 구성하십시오.',
-        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".' =>
-            '기본 TicketDynamicField 설정을 구성합니다. "Name"은 사용할 동적 필드를 정의하고, "Value"는 설정할 데이터이고 "Event"는 트리거 이벤트를 정의합니다. 개발자 설명서 (http://otrs.github.io/doc/), "Ticket Event Module"장을 확인하십시오.',
+        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".' =>
+            '기본 TicketDynamicField 설정을 구성합니다. "Name"은 사용할 동적 필드를 정의하고, "Value"는 설정할 데이터이고 "Event"는 트리거 이벤트를 정의합니다. 개발자 설명서 (https://doc.otrs.com/doc/), "Ticket Event Module"장을 확인하십시오.',
         'Controls how to display the ticket history entries as readable values.' =>
             '티켓 기록 항목을 읽을 수 있는 값으로 표시하는 방법을 제어합니다.',
         'Controls if CustomerID is automatically copied from the sender address for unknown customers.' =>
@@ -6270,6 +6291,7 @@ Thanks for your help!
         'Default ACL values for ticket actions.' => '티켓 조치에 대한 기본 ACL 값.',
         'Default ProcessManagement entity prefixes for entity IDs that are automatically generated.' =>
             '자동으로 생성되는 엔티티 ID에 대한 기본 ProcessManagement 엔티티 접두사입니다.',
+        'Default agent name' => '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".' =>
             '티켓 검색 화면의 속성에 사용할 기본 데이터입니다. 예 : "TicketCreateTimePointFormat = year; TicketCreateTimePointStart = 마지막; TicketCreateTimePoint = 2;".',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimeStartYear=2010;TicketCreateTimeStartMonth=10;TicketCreateTimeStartDay=4;TicketCreateTimeStopYear=2010;TicketCreateTimeStopMonth=11;TicketCreateTimeStopDay=3;".' =>
@@ -6515,14 +6537,16 @@ Thanks for your help!
         'Defines the date input format used in forms (option or input fields).' =>
             '양식 (옵션 또는 입력 필드)에 사용되는 날짜 입력 형식을 정의합니다.',
         'Defines the default CSS used in rich text editors.' => '서식있는 텍스트 편집기에 사용되는 기본 CSS를 정의합니다.',
+        'Defines the default agent name in the ticket zoom view of the customer interface.' =>
+            '',
         'Defines the default auto response type of the article for this operation.' =>
             '이 작업에 대한 아티클의 기본 자동 응답 유형을 정의합니다.',
         'Defines the default body of a note in the ticket free text screen of the agent interface.' =>
             '에이전트 인터페이스의 티켓 비어있는 텍스트 화면에서 노트의 기본 본문을 정의합니다.',
         'Defines the default filter fields in the customer user address book search (CustomerUser or CustomerCompany). For the CustomerCompany fields a prefix \'CustomerCompany_\' must be added.' =>
             '고객 사용자 주소록 검색 (CustomerUser 또는 CustomerCompany)의 기본 필터 필드를 정의합니다. CustomerCompany 필드의 경우 접두사 \'CustomerCompany_\'를 추가해야합니다.',
-        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.' =>
-            '에이전트 및 고객이 사용할 기본 프런트 엔드 (HTML) 테마를 정의합니다. 원한다면 자신 만의 테마를 추가 할 수 있습니다. http://otrs.github.io/doc/ 에있는 관리자 설명서를 참조하십시오.',
+        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.' =>
+            '에이전트 및 고객이 사용할 기본 프런트 엔드 (HTML) 테마를 정의합니다. 원한다면 자신 만의 테마를 추가 할 수 있습니다. https://doc.otrs.com/doc/ 에있는 관리자 설명서를 참조하십시오.',
         'Defines the default front-end language. All the possible values are determined by the available language files on the system (see the next setting).' =>
             '기본 프런트 엔드 언어를 정의합니다. 가능한 모든 값은 시스템에서 사용 가능한 언어 파일에 의해 결정됩니다 (다음 설정 참조).',
         'Defines the default history type in the customer interface.' => '고객 인터페이스에서 기본 기록 유형을 정의합니다.',
@@ -6673,6 +6697,8 @@ Thanks for your help!
             '티켓의 기본 볼 수있는 보낸 사람 유형을 정의합니다 (기본값 : 고객).',
         'Defines the default visibility of the article to customer for this operation.' =>
             '이 작업을 위해 고객에게 기사의 기본 가시성을 정의합니다.',
+        'Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.' =>
+            '',
         'Defines the dynamic fields that are used for displaying on calendar events.' =>
             '달력 이벤트에 표시하는데 사용되는 동적 필드를 정의합니다.',
         'Defines the event object types that will be handled via AdminAppointmentNotificationEvent.' =>
@@ -7195,8 +7221,8 @@ Thanks for your help!
         'English stop words for fulltext index. These words will be removed from the search index.' =>
             '전체 텍스트 색인에 대한 영어 중지 단어. 이 단어는 검색 색인에서 제거됩니다.',
         'Enroll process for this ticket' => '이 티켓에 대한 프로세스 등록',
-        'Enter your shared secret to enable two factor authentication.' =>
-            '공유 인증을 입력하면 두가지 요소 인증을 사용할 수 있습니다.',
+        'Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.' =>
+            '',
         'Escalated Tickets' => 'Escalated 티켓',
         'Escalation view' => 'Escalation 뷰',
         'EscalationTime' => '에스컬레이션 시간',
@@ -7333,7 +7359,7 @@ Thanks for your help!
         'Graph: Stacked Area Chart' => '그래프 : 누적 영역 차트',
         'Greek' => '그리스 사람',
         'Hebrew' => '헤브라이 사람',
-        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".' =>
+        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".' =>
             '',
         'High Contrast' => '고 대비',
         'High contrast skin for visually impaired users.' => '시각 장애가 있는 사용자를 위한 고 대비 피부.',
@@ -7557,10 +7583,12 @@ Thanks for your help!
         'Logout of customer panel.' => '고객 패널 로그 아웃.',
         'Look into a ticket!' => '표를 보세요!',
         'Loop protection: no auto-response sent to "%s".' => '루프 보호 : 자동 응답이 "%s"로 전송되지 않습니다.',
+        'Macedonian' => '',
         'Mail Accounts' => '메일 계정',
         'MailQueue configuration settings.' => 'MailQueue 구성 설정.',
         'Main menu item registration.' => '기본 메뉴 항목 등록.',
         'Main menu registration.' => '기본 메뉴 등록.',
+        'Makes the application block external content loading.' => '',
         'Makes the application check the MX record of email addresses before sending an email or submitting a telephone or email ticket.' =>
             '전자 메일을 보내거나 전화 또는 전자 메일 티켓을 제출하기 전에 응용 프로그램에서 전자 메일 주소의 MX 레코드를 확인하게합니다.',
         'Makes the application check the syntax of email addresses.' => '응용 프로그램이 전자 메일 주소의 구문을 검사하도록 합니다.',
@@ -7700,7 +7728,6 @@ Thanks for your help!
             'OTRS는 전체 텍스트 검색이나 통계 생성과 같은 값 비싼 작업에 대해 하나 이상의 읽기 전용 미러 데이터베이스를 사용할 수 있습니다. 여기서 첫 번째 미러 데이터베이스에 대해 DSN을 지정할 수 있습니다.',
         'OTRS doesn\'t support recurring Appointments without end date or number of iterations. During import process, it might happen that ICS file contains such Appointments. Instead, system creates all Appointments in the past, plus Appointments for the next N months (120 months/10 years by default).' =>
             'OTRS는 끝 날짜 또는 반복 횟수가없는 되풀이 약속을 지원하지 않습니다. 가져 오기 프로세스 중에 ICS 파일에 이러한 약속이 포함될 수 있습니다. 대신, 시스템은 과거의 모든 약속과 다음 N 개월 (기본적으로 120 개월 / 10 년)의 약속을 작성합니다.',
-        'Open Tickets / Need to be answered' => '진행중 티켓 / 답변이 필요함',
         'Open an external link!' => '외부 링크 열기',
         'Open tickets (customer user)' => '진행중 티켓 (고객 사용자)',
         'Open tickets (customer)' => '진행중 티켓 (고객)',
@@ -7849,13 +7876,15 @@ Thanks for your help!
         'Queue view' => '대기열 보기',
         'Queues ↔ Auto Responses' => '',
         'Rebuild the ticket index for AgentTicketQueue.' => 'AgentTicketQueue 티켓 색인을 다시 작성하십시오.',
-        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.' =>
-            '티켓이 외부 티켓 번호를 사용하여 기존 티켓의 후속 조치인지 확인하십시오.',
+        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the \'NumberRegExp\' expression will be used as the ticket number value.' =>
+            '',
         'Refresh interval' => '리프레쉬 간격',
         'Registers a log module, that can be used to log communication related information.' =>
             '통신 관련 정보를 기록하는데 사용할 수있는 로그 모듈을 등록합니다.',
         'Reminder Tickets' => '잊지 말아야 할 티켓',
         'Removed subscription for user "%s".' => '"%s" 사용자에 대한 가입이 삭제되었습니다.',
+        'Removes old generic interface debug log entries created before the specified amount of days.' =>
+            '',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '이전 시스템 구성 배포 (일요일 오전)를 제거합니다.',
         'Removes old ticket number counters (each 10 minutes).' => '',
@@ -7914,6 +7943,7 @@ Thanks for your help!
             '서비스가 잘못된 요소의 하위 항목인 경우에도 목록의 모든 서비스를 유지합니다.',
         'Right' => '권리',
         'Roles ↔ Groups' => '역할 ↔ 그룹',
+        'Romanian' => '',
         'Run file based generic agent jobs (Note: module name needs to be specified in -configuration-module param e.g. "Kernel::System::GenericAgent").' =>
             '파일 기반 일반 에이전트 작업 실행 (참고 : 모듈 이름은 -configuration-module 매개 변수 예 : "Kernel :: System :: GenericAgent")에서 지정해야합니다.',
         'Running Process Tickets' => '프로세스 티켓 실행',
@@ -8340,6 +8370,7 @@ Thanks for your help!
         'Shows information on how to start OTRS Daemon' => 'OTRS 데몬을 시작하는 방법에 대한 정보를 보여줍니다.',
         'Shows link to external page in the ticket zoom view of the agent interface. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '에이전트 인터페이스의 티켓 확대보기에서 외부 페이지에 대한 링크를 표시합니다. 이 링크를 표시하거나 표시하지 않으려는 추가 액세스 제어는 키 "그룹"과 "rw : group1; move_into : group2"와 같은 내용을 사용하여 수행 할 수 있습니다.',
+        'Shows the article head information in the agent zoom view.' => '',
         'Shows the articles sorted normally or in reverse, under ticket zoom in the agent interface.' =>
             '에이전트 인터페이스의 티켓 확대/축소에서 기사를 정상적으로 또는 역순으로 정렬하여 표시합니다.',
         'Shows the customer user information (phone and email) in the compose screen.' =>
@@ -8481,6 +8512,7 @@ Thanks for your help!
         'Strips empty lines on the ticket preview in the queue view.' => '대기열 보기의 티켓 미리보기에서 빈 줄을 제거합니다.',
         'Strips empty lines on the ticket preview in the service view.' =>
             '서비스보기의 티켓 미리보기에서 빈 줄을 제거합니다.',
+        'Support Agent' => '',
         'Swahili' => '스와힐리어',
         'Swedish' => '스웨덴어',
         'System Address Display Name' => '시스템 주소 표시 이름',
@@ -8541,6 +8573,7 @@ Thanks for your help!
             '이메일 답장에서 제목의 시작 부분에있는 텍스트입니다 예 : RE, AW 또는 AS.',
         'The text at the beginning of the subject when an email is forwarded, e.g. FW, Fwd, or WG.' =>
             '이메일이 전달 될 때 제목의 시작 부분에있는 텍스트입니다 예 : FW, FWD 또는 WG.',
+        'The value of the From field' => '',
         'Theme' => '테마',
         'This event module stores attributes from CustomerUser as DynamicFields tickets. Please see DynamicFieldFromCustomerUser::Mapping setting for how to configure the mapping.' =>
             '이 이벤트 모듈은 CustomerUser의 특성을 DynamicFields 티켓으로 저장합니다. 매핑을 구성하는 방법은 DynamicFieldFromCustomerUser::Mapping 설정을 참조하십시오.',
@@ -8772,7 +8805,6 @@ Thanks for your help!
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
-        'Close',
         'Close preview',
         'Close this dialog',
         'Complex %s with %s arguments',
@@ -8854,6 +8886,7 @@ Thanks for your help!
         'Fr',
         'Fri',
         'Friday',
+        'Generate',
         'Generate Result',
         'Generating...',
         'Grouped',

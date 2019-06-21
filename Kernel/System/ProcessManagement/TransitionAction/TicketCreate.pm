@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -267,6 +267,22 @@ sub Run {
     my $ArticleID;
 
     if ($ArticleCreate) {
+
+        # If "From" is not set and MIME based article is to be created.
+        if (
+            !$Param{Config}->{From}
+            && $Param{Config}->{CommunicationChannel} =~ m{\AEmail|Internal|Phone\z}msxi
+            )
+        {
+
+            # Get current user data.
+            my %User = $Kernel::OM->Get('Kernel::System::User')->GetUserData(
+                UserID => $Param{UserID},
+            );
+
+            # Set "From" field according to user - UserFullname <UserEmail>.
+            $Param{Config}->{From} = $User{UserFullname} . ' <' . $User{UserEmail} . '>';
+        }
 
         my $ArticleBackendObject = $Kernel::OM->Get('Kernel::System::Ticket::Article')->BackendForChannel(
             ChannelName => $Param{Config}->{CommunicationChannel},

@@ -27,7 +27,7 @@ sub Data {
     $Self->{DateFormatShort}     = '%Y-%M-%D';
     $Self->{DateInputFormat}     = '%Y-%M-%D';
     $Self->{DateInputFormatLong} = '%Y-%M-%D - %T';
-    $Self->{Completeness}        = 0.662603021978022;
+    $Self->{Completeness}        = 0.672251666951616;
 
     # csv separator
     $Self->{Separator}         = ';';
@@ -110,8 +110,8 @@ sub Data {
         'Overwrite existing entities' => 'Nadpisać istniejące encje',
         'Upload calendar configuration' => 'Wczytaj konfigurację kalendarza',
         'Import Calendar' => 'Zaimportuj Kalendarz',
-        'Filter for Calendars' => '',
-        'Filter for calendars' => 'Filtr dla kalendrzay',
+        'Filter for Calendars' => 'Filtr dla Kalendarzy',
+        'Filter for calendars' => 'Filtr dla kalendarzy',
         'Depending on the group field, the system will allow users the access to the calendar according to their permission level.' =>
             'W zależności od pola grupy, system udostępni użytkownikom dostęp do kalendarza zgodnie z ich uprawnieniami.',
         'Read only: users can see and export all appointments in the calendar.' =>
@@ -213,7 +213,7 @@ sub Data {
         'At least one method is needed per notification.' => 'Wymagana jest przynajmniej jedna metoda na powiadomienie.',
         'Active by default in agent preferences' => 'Domyślnie aktywne w ustawieniach agenta',
         'This is the default value for assigned recipient agents who didn\'t make a choice for this notification in their preferences yet. If the box is enabled, the notification will be sent to such agents.' =>
-            '',
+            'Wartość domyślna ustawienia odbioru tego powiadomienia dla agenta, który nie określił jeszcze tej wartości w swoich preferencjach. Jeśli pole jest zaznaczone, powiadomienie będzie do takich agentów wysyłane.',
         'This feature is currently not available.' => 'Ta funkcja jest obecnie niedostępna.',
         'Upgrade to %s' => 'Zaktualizuj do %s',
         'Please activate this transport in order to use it.' => 'Aktywuj ten sposób transportu aby go użyć.',
@@ -320,10 +320,10 @@ sub Data {
 
         # Template: AdminCommunicationLog
         'Communication Log' => 'Log komunikacji',
-        'Time Range' => '',
+        'Time Range' => 'Zakres czasu',
         'Show only communication logs created in specific time range.' =>
             'Pokaż log komunikacyjny utworzony tylko w określonym zakresie czasu.',
-        'Filter for Communications' => '',
+        'Filter for Communications' => 'Filtr kanałów komunikacji',
         'Filter for communications' => 'Filtr kanałów komunikacji',
         'In this screen you can see an overview about incoming and outgoing communications.' =>
             'Na tym ekranie możesz zobaczyć podsumowanie komunikacji przychodzącej i wychodzącej.',
@@ -354,8 +354,8 @@ sub Data {
 
         # Template: AdminCommunicationLogAccounts
         'Account Status' => 'Status konta',
-        'Back to overview' => '',
-        'Filter for Accounts' => '',
+        'Back to overview' => 'Powrót do przeglądu',
+        'Filter for Accounts' => 'Filtr dla Kont',
         'Filter for accounts' => 'Filtr dla kont',
         'You can change the sort and order of those columns by clicking on the column header.' =>
             'Możesz zmienić kolejność i sortowanie kolumn klikając na nagłówek tabeli.',
@@ -468,7 +468,7 @@ sub Data {
         'Customer' => 'Nazwa klienta',
         'This customer user has no customer access.' => 'Ten użytkownik klienta nie ma dostępu jako klient.',
         'Table above shows granted customer access for the customer user by permission context. The matrix takes into account all inherited access (e.g. via customer groups). Note: The table does not consider changes made to this form without submitting it.' =>
-            '',
+            'Tabela powyżej pokazuje przyznany dostęp klienta dla użytkownika klienta przez kontekst uprawnień. Macierz uwzględnia cały dziedziczny dostęp (na przykład poprzez grupy klientów). Uwaga: tabela nie uwzględnia zmian wprowadzonych w tym formularzu bez jego przesyłania.',
 
         # Template: AdminCustomerUserCustomer
         'Manage Customer User-Customer Relations' => 'Zarządzaj relacjami Użytkownik klienta - Klient',
@@ -489,14 +489,14 @@ sub Data {
             'Te grupy zostaną automatycznie przypisane do wszystkich użytkowników klienta.',
         'You can manage these groups via the configuration setting "CustomerGroupAlwaysGroups".' =>
             'Możesz zarządzać tymi grupami poprzez parametr "CustomerGroupAlwaysGroups".',
-        'Filter for groups' => '',
+        'Filter for groups' => 'Filtr dla grup.',
         'Select the customer user - group permissions.' => 'Określ uprawnienia użytkownik klienta - grupa.',
         'If nothing is selected, then there are no permissions in this group (tickets will not be available for the customer user).' =>
-            '',
+            'Jeśli nic nie zostało zaznaczone, wtedy nie ma uprawnień w tej grupie (zgłoszenia nie będą dostępne dla klienta).',
         'Customer User Default Groups:' => 'Domyślna Grupa Użytkownika klienta',
 
         # Template: AdminCustomerUserService
-        'Manage Customer User-Service Relations' => '',
+        'Manage Customer User-Service Relations' => 'Zarządzaj relacjami Użytkownik klienta - Usługi',
         'Edit default services' => 'Edytuj domyślną usługę',
         'Filter for Services' => 'Filtruj usługi',
         'Filter for services' => 'Filtr usług',
@@ -507,18 +507,18 @@ sub Data {
         'Add new field for object' => 'Dodaj nowej pole do obiektu',
         'Filter for Dynamic Fields' => 'Filtr dla Pól Dynamicznych',
         'Filter for dynamic fields' => 'Filtr dla pól dynamicznych',
-        'More Business Fields' => '',
+        'More Business Fields' => 'Więcej pól biznesowych',
         'Would you like to benefit from additional dynamic field types for businesses? Upgrade to %s to get access to the following field types:' =>
-            '',
+            'Czy chcesz korzystać z dodatkowych dynamicznych typów pól dla firm? Uaktualnij do %s, aby uzyskać dostęp do następujących typów pól:',
         'Database' => 'Baza danych',
         'Use external databases as configurable data sources for this dynamic field.' =>
-            '',
+            'Użyj zewnętrznych baz danych jako konfigurowalnych źródeł danych dla tego dynamicznego pola.',
         'Web service' => 'Serwis sieciowy',
         'External web services can be configured as data sources for this dynamic field.' =>
             'Dla tego pola dynamicznego można skonfigurować jako źródło danych zewnętrzny serwis sieciowy.',
-        'Contact with data' => '',
+        'Contact with data' => 'Połącz z danymi',
         'This feature allows to add (multiple) contacts with data to tickets.' =>
-            '',
+            'Ta funkcja umożliwia dodawanie (wielu) kontaktów z danymi do biletów.',
         'To add a new field, select the field type from one of the object\'s list, the object defines the boundary of the field and it can\'t be changed after the field creation.' =>
             'Aby dodać nowe pole, wybierz typ pola z listy obiektów. Wybrany obiekt definiuje typ pola, który nie będzie mógł być zmieniony po utworzeniu tego pola.',
         'Dynamic Fields List' => 'Lista pól dynamicznych',
@@ -545,13 +545,13 @@ sub Data {
         'This is the order in which this field will be shown on the screens where is active.' =>
             'To jest kolejność zgodnie z którą pole to będzie wyświetlane na ekranach, na których pole to będzie aktywne.',
         'Is not possible to invalidate this entry, all config settings have to be changed beforehand.' =>
-            '',
+            'Nie można unieważnić tego wpisu, wszystkie ustawienia konfiguracji muszą zostać wcześniej zmienione.',
         'Field type' => 'Typ pola',
         'Object type' => 'Typ obiektu',
         'Internal field' => 'Pole wewnętrzne',
         'This field is protected and can\'t be deleted.' => 'To pole jest chronione i nie może być usunięte.',
         'This dynamic field is used in the following config settings:' =>
-            '',
+            'To dynamiczne pole jest używane w następujących ustawieniach konfiguracji:Pole dynamiczne',
         'Field Settings' => 'Ustawienia pola',
         'Default value' => 'Domyślna wartość',
         'This is the default value for this field.' => 'To jest domyślna wartość tego pola.',
@@ -627,12 +627,12 @@ sub Data {
         'Send' => 'Wyślij',
 
         # Template: AdminGenericAgent
-        'Generic Agent Job Management' => '',
-        'Edit Job' => '',
-        'Add Job' => '',
-        'Run Job' => '',
-        'Filter for Jobs' => '',
-        'Filter for jobs' => '',
+        'Generic Agent Job Management' => 'Zarządzanie zadaniami automatycznymi',
+        'Edit Job' => 'Edytuj Zadanie',
+        'Add Job' => 'Dodaj Zadanie',
+        'Run Job' => 'Wykonaj Zadanie',
+        'Filter for Jobs' => 'Filtr Zadań',
+        'Filter for jobs' => 'Filtr zadań',
         'Last run' => 'Ostatnie uruchomienie',
         'Run Now!' => 'Uruchom teraz',
         'Delete this task' => 'Usuń to zadanie',
@@ -645,11 +645,12 @@ sub Data {
         'Schedule minutes' => 'Ustal minuty',
         'Schedule hours' => 'Ustal godziny',
         'Schedule days' => 'Ustal dni',
+        'Automatic execution values are in the system timezone.' => 'Wartości automatycznego wykonania są określone dla strefy czasowej systemu.',
         'Currently this generic agent job will not run automatically.' =>
             'Zadanie nie zostanie uruchomione automatycznie.',
         'To enable automatic execution select at least one value from minutes, hours and days!' =>
             'Aby uruchomić automatyczne wykonywanie zaznacz przynajmniej jedną wartość dla minut, godzin i dni!',
-        'Event Based Execution (Single Ticket)' => '',
+        'Event Based Execution (Single Ticket)' => 'Wykonywanie bazowane na zdarzeniach (pojedyńcze zgłoszenie)',
         'Event Triggers' => 'Triggery',
         'List of all configured events' => 'Lista wszystkich skonfigurowanych zdarzeń',
         'Delete this event' => 'Usuń to zdarzenie',
@@ -659,7 +660,7 @@ sub Data {
             'Jeśli zgłoszenie zostanie wykonane wówczas filtr zgłoszeń zostanie wykonany dla sprawdzenia dopasowania zgłoszenia. Tylko wówczas zadanie jest wykonane na danym zgłoszeniu.',
         'Do you really want to delete this event trigger?' => 'Czy na pewno chcesz usunąć ten trigger?',
         'Add Event Trigger' => 'Dodaj trigger',
-        'To add a new event select the event object and event name' => '',
+        'To add a new event select the event object and event name' => 'Aby dodać nowe wydarzenie, wybierz obiekt zdarzenia i nazwę wydarzenia',
         'Select Tickets' => 'Zaznacz zgłoszenia',
         '(e. g. 10*5155 or 105658*)' => '(np. 10*5155 lub 105658*)',
         '(e. g. 234321)' => '(np. 3242442)',
@@ -761,7 +762,7 @@ sub Data {
             'Czy na pewno chcesz wyczyścić log debug tego serwisu sieciowego?',
         'Request List' => 'Lista żądań',
         'Time' => 'Czas',
-        'Communication ID' => '',
+        'Communication ID' => 'Identyfikator komunikacji',
         'Remote IP' => 'Zdalny IP',
         'Loading' => 'Ładowanie',
         'Select a single request to see its details.' => 'Zaznacz pojedyncze żądanie aby zobaczyć jego szczegóły.',
@@ -779,96 +780,96 @@ sub Data {
         'All configuration data will be lost.' => 'Cała konfiguracja zostanie utracona.',
         'General options' => 'Opcje ogólne',
         'The name can be used to distinguish different error handling configurations.' =>
-            '',
+            'Nazwa może być używana do rozróżniania różnych konfiguracji obsługi błędów.',
         'Please provide a unique name for this web service.' => 'Podaj unikalną nazwę dla tego serwisu sieciowego.',
         'Error handling module backend' => 'Moduł obsługi błędów',
         'This OTRS error handling backend module will be called internally to process the error handling mechanism.' =>
-            '',
+            'Ten moduł zaplecza obsługi błędów OTRS będzie wywoływany wewnętrznie w celu przetworzenia mechanizmu obsługi błędów.',
         'Processing options' => 'Opcje przetwarzania',
         'Configure filters to control error handling module execution.' =>
-            '',
+            'Skonfiguruj filtry, aby kontrolować wykonywanie modułu obsługi błędów.',
         'Only requests matching all configured filters (if any) will trigger module execution.' =>
-            '',
+            'Tylko żądania pasujące do wszystkich skonfigurowanych filtrów (jeśli są) będą pozwalać na wykonanie modułu.',
         'Operation filter' => 'Filtr operacji',
-        'Only execute error handling module for selected operations.' => '',
+        'Only execute error handling module for selected operations.' => 'Wykonuj tylko moduł obsługi błędów dla wybranych operacji.',
         'Note: Operation is undetermined for errors occuring while receiving incoming request data. Filters involving this error stage should not use operation filter.' =>
-            '',
-        'Invoker filter' => '',
-        'Only execute error handling module for selected invokers.' => '',
-        'Error message content filter' => '',
+            'Uwaga: Operacja nieokreślona dla błędów występujących podczas odbierania przychodzących danych żądania. Filtry z tym stopniem błędu nie powinny używać filtra operacji.',
+        'Invoker filter' => 'FIltr odwołujący',
+        'Only execute error handling module for selected invokers.' => 'Wykonuj tylko moduł obsługi błędów dla wybranych odwołań.',
+        'Error message content filter' => 'Filtr treści komunikatu o błędzie',
         'Enter a regular expression to restrict which error messages should cause error handling module execution.' =>
-            '',
+            'Wprowadź wyrażenie regularne, aby ograniczyć, które komunikaty o błędach powinny spowodować wykonanie modułu obsługi błędów.',
         'Error message subject and data (as seen in the debugger error entry) will considered for a match.' =>
-            '',
+            'Obiekt z komunikatem o błędzie i dane (widoczne w opisie błędu debuggera) zostaną uwzględnione w dopasowaniu.',
         'Example: Enter \'^.*401 Unauthorized.*\$\' to handle only authentication related errors.' =>
-            '',
-        'Error stage filter' => '',
+            'Przykład: Wprowadź  \'^.*401 Unauthorized.*\$\', aby obsłużyć tylko błędy związane z uwierzytelnianiem.',
+        'Error stage filter' => 'Filtr fazy błędu',
         'Only execute error handling module on errors that occur during specific processing stages.' =>
-            '',
+            'Moduł obsługi błędów należy uruchamiać wyłącznie w przypadku błędów, które występują podczas określonych etapów przetwarzania.',
         'Example: Handle only errors where mapping for outgoing data could not be applied.' =>
-            '',
+            'Przykład: błędy związane z obsługą tylko wtedy, gdy nie można zastosować mapowania dla danych wychodzących.',
         'Error code' => 'Kod błędu',
-        'An error identifier for this error handling module.' => '',
+        'An error identifier for this error handling module.' => 'Identyfikator błędu dla tego modułu obsługi błędów.',
         'This identifier will be available in XSLT-Mapping and shown in debugger output.' =>
-            '',
+            'Ten identyfikator będzie dostępny w XSLT-Mapping i pokazany na wyjściu debuggera.',
         'Error message' => 'Komunikat błędu',
-        'An error explanation for this error handling module.' => '',
+        'An error explanation for this error handling module.' => 'Objaśnienie błędu dla tego modułu obsługi błędów.',
         'This message will be available in XSLT-Mapping and shown in debugger output.' =>
-            '',
+            'Ta wiadomość będzie dostępna w XSLT-Mapping i pokazana na wyjściu debuggera.',
         'Define if processing should be stopped after module was executed, skipping all remaining modules or only those of the same backend.' =>
-            '',
-        'Default behavior is to resume, processing the next module.' => '',
+            'Zdefiniuj, czy przetwarzanie powinno zostać zatrzymane po wykonaniu modułu, pomijając wszystkie pozostałe moduły lub tylko te z tego samego zaplecza.',
+        'Default behavior is to resume, processing the next module.' => 'Domyślnym zachowaniem jest wznowienie, przetwarzanie następnego modułu.',
 
         # Template: AdminGenericInterfaceErrorHandlingRequestRetry
         'This module allows to configure scheduled retries for failed requests.' =>
-            '',
+            'Ten moduł umożliwia skonfigurowanie zaplanowanych ponownych prób dla nieudanych żądań.',
         'Default behavior of GenericInterface web services is to send each request exactly once and not to reschedule after errors.' =>
-            '',
+            'Domyślnym zachowaniem usług WWW ogólnego interfejsu jest wysyłanie każdego żądania dokładnie jeden raz i nieprzekazywanie po błędach.',
         'If more than one module capable of scheduling a retry is executed for an individual request, the module executed last is authoritative and determines if a retry is scheduled.' =>
-            '',
-        'Request retry options' => '',
+            'Jeśli dla pojedynczego żądania wykonywany jest więcej niż jeden moduł zdolny do planowania ponownej próby, ostatni wykonany moduł jest autorytatywny i określa, czy ponowna próba jest zaplanowana.',
+        'Request retry options' => 'Poproś o opcje ponowienia',
         'Retry options are applied when requests cause error handling module execution (based on processing options).' =>
-            '',
+            'Opcje ponowienia są stosowane, gdy żądania powodują wykonanie modułu obsługi błędów (w oparciu o opcje przetwarzania).',
         'Schedule retry' => 'Zaplanuj powtórzenie',
         'Should requests causing an error be triggered again at a later time?' =>
-            '',
-        'Initial retry interval' => '',
+            'Czy żądania powodujące błąd będą uruchamiane ponownie w późniejszym czasie?',
+        'Initial retry interval' => 'Początkowy interwał ponawiania próby',
         'Interval after which to trigger the first retry.' => 'Czas po którym ma zostać uruchomiona pierwsza powtórka próby.',
         'Note: This and all further retry intervals are based on the error handling module execution time for the initial request.' =>
-            '',
-        'Factor for further retries' => '',
+            'Uwaga: Ten i wszystkie kolejne interwały ponowienia są oparte na czasie wykonania modułu obsługi błędów dla początkowego żądania.',
+        'Factor for further retries' => 'Współczynnik dla dalszych prób',
         'If a request returns an error even after a first retry, define if subsequent retries are triggered using the same interval or in increasing intervals.' =>
             'Jeżeli żądanie zwróci błąd również po pierwszej powtórce próby, określ czy kolejne próby mają być uruchamiane w takich samych interwałach lub coraz większych.',
         'Example: If a request is initially triggered at 10:00 with initial interval at \'1 minute\' and retry factor at \'2\', retries would be triggered at 10:01 (1 minute), 10:03 (2*1=2 minutes), 10:07 (2*2=4 minutes), 10:15 (2*4=8 minutes), ...' =>
-            '',
-        'Maximum retry interval' => '',
+            'Przykład: jeśli żądanie jest początkowo uruchamiane o godzinie 10:00 z początkowym odstępem czasu o wartości: 1 minuta i współczynnikiem powtórzenia: 2, ponowne próby będą uruchamiane o 10:01 (1 minuta), 10:03 (2 * 1 = 2 minuty), 10:07 (2 * 2 = 4 minuty), 10:15 (2 * 4 = 8 minut), ...',
+        'Maximum retry interval' => 'Maksymalny interwał ponawiania prób',
         'If a retry interval factor of \'1.5\' or \'2\' is selected, undesirably long intervals can be prevented by defining the largest interval allowed.' =>
-            '',
+            'Jeżeli wybrano współczynnik interwału powtórzenia: 1,5 lub 2, można zapobiec niepożądanym długim interwałom, definiując maksymalny dopuszczalny przedział czasu.',
         'Intervals calculated to exceed the maximum retry interval will then automatically be shortened accordingly.' =>
-            '',
+            'Odstępy obliczone w celu przekroczenia maksymalnego interwału ponawiania będą wówczas automatycznie odpowiednio skracane.',
         'Example: If a request is initially triggered at 10:00 with initial interval at \'1 minute\', retry factor at \'2\' and maximum interval at \'5 minutes\', retries would be triggered at 10:01 (1 minute), 10:03 (2 minutes), 10:07 (4 minutes), 10:12 (8=>5 minutes), 10:17, ...' =>
-            '',
+            'Przykład: jeśli żądanie jest początkowo uruchamiane o godzinie 10:00 z początkowym interwałem: 1 minuta, współczynnik ponowienia: 2 i maksymalny czas: 5 minut, ponowne próby będą uruchamiane o 10:01 (1 minuta), 10:03 (2 minuty), 10:07 (4 minuty), 10:12 (8 => 5 minut), 10:17, ...',
         'Maximum retry count' => 'Maksymalna liczba powtórzeń',
         'Maximum number of retries before a failing request is discarded, not counting the initial request.' =>
-            '',
+            'Maksymalna liczba ponownych prób przed odrzuceniem żądania jest odrzucana, nie licząc początkowego żądania.',
         'Example: If a request is initially triggered at 10:00 with initial interval at \'1 minute\', retry factor at \'2\' and maximum retry count at \'2\', retries would be triggered at 10:01 and 10:02 only.' =>
-            '',
+            'Przykład: jeśli żądanie jest początkowo uruchamiane o godzinie 10:00 z początkowym interwałem: 1 minuta, współczynnik ponów: 2 i maksymalna liczba ponownych prób: 2, ponowne próby będą uruchamiane tylko o 10:01 i 10:02.',
         'Note: Maximum retry count might not be reached if a maximum retry period is configured as well and reached earlier.' =>
-            '',
-        'This field must be empty or contain a positive number.' => '',
+            'Uwaga: Maksymalna liczba powtórzeń może nie zostać osiągnięta, jeśli maksymalny czas ponowienia jest również skonfigurowany i osiągnięty wcześniej.',
+        'This field must be empty or contain a positive number.' => 'To pole musi być puste lub zawierać liczbę dodatnią.',
         'Maximum retry period' => 'Maksymalny okres powtarzania',
         'Maximum period of time for retries of failing requests before they are discarded (based on the error handling module execution time for the initial request).' =>
-            '',
+            'Maksymalny czas ponowienia próśb o niepowodzenie przed ich odrzuceniem (w oparciu o czas wykonania modułu obsługi błędów dla pierwotnego żądania).',
         'Retries that would normally be triggered after maximum period is elapsed (according to retry interval calculation) will automatically be triggered at maximum period exactly.' =>
-            '',
+            'Próby, które normalnie byłyby uruchamiane po upływie maksymalnego okresu (zgodnie z obliczeniem przedziału czasu ponownej próby), będą automatycznie uruchamiane dokładnie w maksymalnym okresie.',
         'Example: If a request is initially triggered at 10:00 with initial interval at \'1 minute\', retry factor at \'2\' and maximum retry period at \'30 minutes\', retries would be triggered at 10:01, 10:03, 10:07, 10:15 and finally at 10:31=>10:30.' =>
-            '',
+            'Przykład: jeśli żądanie jest początkowo wyzwalane o godzinie 10:00 z początkowym interwałem:  minuta, współczynnikiem powtórzenia: 2 i maksymalnym czasem ponowienia próby po: 30 minutach. Ponowne próby będą uruchamiane o 10:01, 10:03, 10:07, 10:15 i wreszcie o 10:31 => 10:30.',
         'Note: Maximum retry period might not be reached if a maximum retry count is configured as well and reached earlier.' =>
-            '',
+            'Uwaga: Maksymalny czas ponowienia może nie zostać osiągnięty, jeśli maksymalna liczba ponownych prób jest również skonfigurowana i osiągnięta wcześniej.',
 
         # Template: AdminGenericInterfaceInvokerDefault
-        'Add Invoker' => '',
-        'Edit Invoker' => '',
+        'Add Invoker' => 'Dodaj wywołanie',
+        'Edit Invoker' => 'Edytuj wywołanie',
         'Do you really want to delete this invoker?' => 'Czy na pewno chcesz usunąć ten invoker?',
         'Invoker Details' => 'Szczegóły invokera.',
         'The name is typically used to call up an operation of a remote web service.' =>
@@ -885,7 +886,7 @@ sub Data {
             'Dane z odpowiedzi będą przetworzone przez to mapowanie na dane oczekiwane przez invoker OTRS.',
         'Asynchronous' => 'Asynchroniczny',
         'Condition' => 'Warunek',
-        'Edit this event' => '',
+        'Edit this event' => 'Edytuj to zdarzenie',
         'This invoker will be triggered by the configured events.' => 'Ten invoker będzie wykonany przez skonfigurowane zdarzenia.',
         'To add a new event select the event object and event name and click on the "+" button' =>
             'Aby dodać nowe zdarzenie, zaznacz obiekt zdarzenia i nazwę zdarzenia i kliknij przycisk "+"',
@@ -2041,7 +2042,8 @@ sub Data {
         'This email address is already used as system email address.' => '',
         'The display name and email address will be shown on mail you send.' =>
             'Wyświetlana nazwa oraz adres e-mail będą umieszczane w wysyłanej poczcie.',
-        'This system address cannot be set to invalid, because it is used in one or more queue(s).' =>
+        'This system address cannot be set to invalid.' => '',
+        'This system address cannot be set to invalid, because it is used in one or more queue(s) or auto response(s).' =>
             '',
 
         # Template: AdminSystemConfiguration
@@ -2164,7 +2166,7 @@ sub Data {
         'Your email address is' => 'Twój adres e-mail to',
 
         # Template: AdminTemplateAttachment
-        'Manage Templates-Attachments Relations' => '',
+        'Manage Template-Attachment Relations' => '',
         'Toggle active for all' => 'Przełącz aktywność dla wszystkich',
         'Link %s to selected %s' => 'Łącz %s do zaznaczenia %s',
 
@@ -2477,9 +2479,9 @@ sub Data {
         'Split' => 'Podziel',
 
         # Template: AgentStatisticsAdd
-        'Statistics Overview' => 'Przegląd statystyk',
-        'Read more about statistics in OTRS' => '',
+        'Statistics Management' => '',
         'Add Statistics' => 'Dodaj Statystyki',
+        'Read more about statistics in OTRS' => '',
         'Dynamic Matrix' => 'Macierz dynamiczna',
         'Each cell contains a singular data point.' => '',
         'Dynamic List' => 'Lista dynamiczna',
@@ -2490,11 +2492,13 @@ sub Data {
         'Create Statistic' => 'Utwórz statystykę',
 
         # Template: AgentStatisticsEdit
+        'Edit Statistics' => '',
         'Run now' => 'Uruchom teraz',
         'Statistics Preview' => 'Podgląd statystyk',
         'Save Statistic' => 'Zapisz Statystyki',
 
         # Template: AgentStatisticsImport
+        'Import Statistics' => '',
         'Import Statistics Configuration' => '',
 
         # Template: AgentStatisticsOverview
@@ -2507,6 +2511,8 @@ sub Data {
         'Delete statistic %s' => 'Usuń statystykę %s',
 
         # Template: AgentStatisticsView
+        'Statistics Overview' => 'Przegląd statystyk',
+        'View Statistics' => '',
         'Statistics Information' => '',
         'Created by' => 'Utworzone przez',
         'Changed by' => 'Zmienione przez',
@@ -3318,7 +3324,6 @@ sub Data {
         'Deploying, please wait...' => 'Wdrażanie, proszę czekać...',
         'Preparing to deploy, please wait...' => 'Przygotowanie do wdrożenia, proszę czekać...',
         'Deploy now' => 'Wdróż teraz',
-        'Close' => 'Zamknij',
         'Try again' => 'Spróbuj ponownie',
 
         # JS Template: DialogReset
@@ -3369,6 +3374,7 @@ sub Data {
         'There was an error synchronizing the ACLs.' => 'Wystąpił błąd podczas synchronizacji ACLi.',
         'ACL %s could not be deleted' => 'ACL %s nie mógł zostać usunięty',
         'There was an error getting data for ACL with ID %s' => 'Nastąpił błąd przy pobieraniu danych dla ACL o ID %s',
+        '%s (copy) %s' => '',
         'Please note that ACL restrictions will be ignored for the Superuser account (UserID 1).' =>
             '',
         'Exact match' => 'Dokładne dopasowanie',
@@ -3407,6 +3413,7 @@ sub Data {
         'There was an error getting data for Notification with ID:%s!' =>
             '',
         'Unknown Notification %s!' => 'Nieznane Powiadomienie %s!',
+        '%s (copy)' => '',
         'There was an error creating the Notification' => 'Wystąpił błąd podczas tworzenia powiadomienia',
         'Notifications could not be Imported due to a unknown error, please check OTRS logs for more information' =>
             '',
@@ -3715,7 +3722,7 @@ sub Data {
         'Package could not be installed' => '',
         'Package could not be upgraded' => '',
         'Repository List' => 'Lista Repezytoriów',
-        'No packages or no new packages found in selected repository.' =>
+        'No packages found in selected repository. Please check log for more info!' =>
             '',
         'Package not verified due a communication issue with verification server!' =>
             '',
@@ -4067,11 +4074,15 @@ sub Data {
         # Perl Module: Kernel/Modules/AgentTicketBulk.pm
         'Can\'t lock Tickets, no TicketIDs are given!' => 'Nie można zablokować zgłoszeń, nie podano TicketID.',
         'Ticket (%s) is not unlocked!' => 'Zgłoszenie (%s) nie jest odblokowane!',
+        'The following tickets were ignored because they are locked by another agent or you don\'t have write access to tickets: %s.' =>
+            '',
+        'The following ticket was ignored because it is locked by another agent or you don\'t have write access to ticket: %s.' =>
+            '',
+        'You need to select at least one ticket.' => 'Musisz zaznaczyć przynajmniej jedno zgłoszenie.',
         'Bulk feature is not enabled!' => '',
         'No selectable TicketID is given!' => '',
         'You either selected no ticket or only tickets which are locked by other agents.' =>
             '',
-        'You need to select at least one ticket.' => 'Musisz zaznaczyć przynajmniej jedno zgłoszenie.',
         'The following tickets were ignored because they are locked by another agent or you don\'t have write access to these tickets: %s.' =>
             'Następujące zgłoszenia zostały zignorowane ponieważ albo są zablokowane przez innego agenta, albo nie masz praw zapisu do tych zgłoszeń: %s.',
         'The following tickets were locked: %s.' => '',
@@ -4451,6 +4462,10 @@ sub Data {
             '',
         'There are no selected encryption keys for the addresses: \'%s\'. ' =>
             '',
+        'Cannot use expired encryption keys for the addresses: \'%s\'. ' =>
+            '',
+        'Cannot use revoked encryption keys for the addresses: \'%s\'. ' =>
+            '',
         'Encrypt' => 'Zaszyfruj',
         'Keys/certificates will only be shown for recipients with more than one key/certificate. The first found key/certificate will be pre-selected. Please make sure to select the correct one.' =>
             '',
@@ -4465,6 +4480,8 @@ sub Data {
         'SMIME encrypt' => '',
 
         # Perl Module: Kernel/Output/HTML/ArticleCompose/Sign.pm
+        'Cannot use expired signing key: \'%s\'. ' => '',
+        'Cannot use revoked signing key: \'%s\'. ' => '',
         'There are no signing keys available for the addresses \'%s\'.' =>
             '',
         'There are no selected signing keys for the addresses \'%s\'.' =>
@@ -4519,6 +4536,7 @@ sub Data {
 
         # Perl Module: Kernel/Output/HTML/Layout.pm
         'Standard' => 'Standard',
+        'The following tickets are not updated: %s.' => '',
         'h' => 'godz.',
         'm' => 'min',
         'd' => 'd',
@@ -4799,9 +4817,7 @@ sub Data {
         'Can\'t read file!' => 'Nie można czytać pliku!',
         '<p>If you continue to install this package, the following issues may occur:</p><ul><li>Security problems</li><li>Stability problems</li><li>Performance problems</li></ul><p>Please note that issues that are caused by working with this package are not covered by OTRS service contracts.</p>' =>
             '',
-        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default.</p>' =>
-            '',
-        '<p>You can activate the installation of not verified packages in the <a href="%sAction=AdminSystemConfiguration;Subaction=View;Setting=Package%3A%3AAllowNotVerifiedPackages" target="_blank">System Configuration</a>.</p>' =>
+        '<p>The installation of packages which are not verified by the OTRS Group is not possible by default. You can activate the installation of not verified packages via the "AllowNotVerifiedPackages" system configuration setting.</p>' =>
             '',
 
         # Perl Module: Kernel/System/ProcessManagement/DB/Process.pm
@@ -5003,6 +5019,7 @@ sub Data {
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/KernelVersion.pm
         'Kernel Version' => 'Wersja jądra systemu',
+        'Could not determine kernel version.' => 'Nie udało się określić wersji jądra systemu.',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OS/Load.pm
         'System Load' => 'Obciążenie systemu',
@@ -5093,9 +5110,9 @@ sub Data {
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/LegacyConfigBackups.pm
         'Legacy Configuration Backups' => '',
         'No legacy configuration backup files found.' => '',
-        'Legacy configuration backup files found in %s, but they might still be required by some packages.' =>
+        'Legacy configuration backup files found in Kernel/Config/Backups folder, but they might still be required by some packages.' =>
             '',
-        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from %s.' =>
+        'Legacy configuration backup files are no longer needed for the installed packages, please remove them from Kernel/Config/Backups folder.' =>
             '',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/PackageDeployment.pm
@@ -5161,7 +5178,6 @@ sub Data {
         'OTRS time zone is not set.' => 'Strefa czasowa OTRS nie jest ustawiona.',
         'User default time zone' => 'Domyślna strefa czasowa użytkownika',
         'User default time zone is not set.' => 'Nie ustawiona domyślna strefa czasowa użytkownika.',
-        'OTRS time zone setting for calendar' => 'Strefa czasowa OTRS dla kalendarza',
         'Calendar time zone is not set.' => 'Strefa czasowa kalendarza nie jest ustawiona.',
 
         # Perl Module: Kernel/System/SupportDataCollector/Plugin/OTRS/UI/AgentSkinUsage.pm
@@ -5667,6 +5683,9 @@ sub Data {
         'Please remove the following words from your search as they cannot be searched for:' =>
             '',
 
+        # JS File: Core.Agent.SharedSecretGenerator
+        'Generate' => '',
+
         # JS File: Core.Agent.SortedTree
         'This element has children elements and can currently not be removed.' =>
             '',
@@ -5931,8 +5950,6 @@ Thanks for your help!
         'All customer users of a CustomerID' => 'Wszyscy użytkownicy  z identyfikatorem klienta',
         'All escalated tickets' => 'Wszystkie eskalowane zgłoszenia',
         'All new tickets, these tickets have not been worked on yet' => 'Wszystkie nowe zgłoszenia, nie podjęto jeszcze prac w związku z nimi',
-        'All open tickets, these tickets have already been worked on, but need a response' =>
-            'Wszystkie otwarte zgłoszenia, były już podjęte prace w związku z nimi ale obecnie wymagają odpowiedzi',
         'All open tickets, these tickets have already been worked on.' =>
             '',
         'All tickets with a reminder set where the reminder date has been reached' =>
@@ -5980,6 +5997,9 @@ Thanks for your help!
             '',
         'Allows extended search conditions in ticket search of the generic agent interface. With this feature you can search e. g. ticket title with this kind of conditions like "(*key1*&&*key2*)" or "(*key1*||*key2*)".' =>
             '',
+        'Allows generic agent to execute custom command line scripts.' =>
+            '',
+        'Allows generic agent to execute custom modules.' => '',
         'Allows having a medium format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
             '',
         'Allows having a small format ticket overview (CustomerInfo => 1 - shows also the customer information).' =>
@@ -6049,7 +6069,7 @@ Thanks for your help!
         'Balanced white skin by Felix Niklas (slim version).' => 'Biała zbalansowana skóra Felix Niklas (wersja odchudzona).',
         'Balanced white skin by Felix Niklas.' => 'Biała zbalansowana skóra Felix Niklas.',
         'Based on global RichText setting' => '',
-        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild" in order to generate a new index.' =>
+        'Basic fulltext index settings. Execute "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild" in order to generate a new index.' =>
             '',
         'Blocks all the incoming emails that do not have a valid ticket number in subject with From: @example.com address.' =>
             'Blokuje wszystkie przychodzące maile które nie posiadają ważnego numeru zgłoszenia w temacie z adresu: przyklad.pl.',
@@ -6117,6 +6137,7 @@ Thanks for your help!
             'Wybierz, dla jakich rodzajów zmian w zgłoszeniach, chcesz otrzymywać powiadomienia. Zauważ, że nie można całkowicie wyłączyć powiadomień oznaczonych jako obowiązkowe.',
         'Choose which notifications you\'d like to receive.' => '',
         'Christmas Eve' => 'Wigilia Bożego Narodzenia',
+        'Close' => 'Zamknij',
         'Close this ticket' => 'Zamknij to zgłoszenie',
         'Closed tickets (customer user)' => 'Zamknięte zgłoszenia (użytkownik)',
         'Closed tickets (customer)' => 'Zamknięte zgłoszenia (klient)',
@@ -6165,7 +6186,7 @@ Thanks for your help!
         'Configure which screen should be shown after a new ticket has been created.' =>
             'Określ, jaki ekran powinien wyświetlić się po utworzeniu nowego zgłoszenia.',
         'Configure your own log text for PGP.' => 'Skonfiguruj swój własny tekst-log dla PGP.',
-        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (http://otrs.github.io/doc/), chapter "Ticket Event Module".' =>
+        'Configures a default TicketDynamicField setting. "Name" defines the dynamic field which should be used, "Value" is the data that will be set, and "Event" defines the trigger event. Please check the developer manual (https://doc.otrs.com/doc/), chapter "Ticket Event Module".' =>
             '',
         'Controls how to display the ticket history entries as readable values.' =>
             '',
@@ -6263,6 +6284,7 @@ Thanks for your help!
         'Default ACL values for ticket actions.' => 'Domyślne wartości ACL dla zgłoszeń.',
         'Default ProcessManagement entity prefixes for entity IDs that are automatically generated.' =>
             '',
+        'Default agent name' => '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimePointFormat=year;TicketCreateTimePointStart=Last;TicketCreateTimePoint=2;".' =>
             '',
         'Default data to use on attribute for ticket search screen. Example: "TicketCreateTimeStartYear=2010;TicketCreateTimeStartMonth=10;TicketCreateTimeStartDay=4;TicketCreateTimeStopYear=2010;TicketCreateTimeStopMonth=11;TicketCreateTimeStopDay=3;".' =>
@@ -6508,13 +6530,15 @@ Thanks for your help!
         'Defines the date input format used in forms (option or input fields).' =>
             'Definiuje format daty używanej w formularzach (opcja lub pole wstawienia).',
         'Defines the default CSS used in rich text editors.' => 'Definiuje domyślny CSS używany w edytorach tekstu.',
+        'Defines the default agent name in the ticket zoom view of the customer interface.' =>
+            '',
         'Defines the default auto response type of the article for this operation.' =>
             'Definiuje rodzaj odpowiedzi automatycznej artykułu dla tej operacji.',
         'Defines the default body of a note in the ticket free text screen of the agent interface.' =>
             'Definiuje domyślną zawartość notatki w oknie tekstu interfejsu agenta.',
         'Defines the default filter fields in the customer user address book search (CustomerUser or CustomerCompany). For the CustomerCompany fields a prefix \'CustomerCompany_\' must be added.' =>
             '',
-        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at http://otrs.github.io/doc/.' =>
+        'Defines the default front-end (HTML) theme to be used by the agents and customers. If you like, you can add your own theme. Please refer the administrator manual located at https://doc.otrs.com/doc/.' =>
             '',
         'Defines the default front-end language. All the possible values are determined by the available language files on the system (see the next setting).' =>
             'Predefiniuje język interfejsu. Wszystkie możliwe wartości są określone przez dostępne pliki językowe w systemie (patrz kolejne ustawienie).',
@@ -6665,6 +6689,8 @@ Thanks for your help!
         'Defines the default viewable sender types of a ticket (default: customer).' =>
             'Definiuje domyślne widoczne typy wysyłających zgłoszenie (domyślny: klient).',
         'Defines the default visibility of the article to customer for this operation.' =>
+            '',
+        'Defines the displayed style of the From field in notes that are visible for customers. A default agent name can be defined in Ticket::Frontend::CustomerTicketZoom###DefaultAgentName setting.' =>
             '',
         'Defines the dynamic fields that are used for displaying on calendar events.' =>
             'Definiuje domyślne pola dynamiczne, które są użyte do wyświetlenia zdarzeń kalendarzowych.',
@@ -7188,7 +7214,7 @@ Thanks for your help!
         'English stop words for fulltext index. These words will be removed from the search index.' =>
             '',
         'Enroll process for this ticket' => '',
-        'Enter your shared secret to enable two factor authentication.' =>
+        'Enter your shared secret to enable two factor authentication. WARNING: Make sure that you add the shared secret to your generator application and the application works well. Otherwise you will be not able to login anymore without the two factor token.' =>
             '',
         'Escalated Tickets' => 'Zgłoszenia eskalowane',
         'Escalation view' => 'Zgłoszenia eskalowane',
@@ -7326,7 +7352,7 @@ Thanks for your help!
         'Graph: Stacked Area Chart' => '',
         'Greek' => 'Grecki',
         'Hebrew' => 'Hebrajski',
-        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndexRebuild".' =>
+        'Helps to extend your articles full-text search (From, To, Cc, Subject and Body search). It will strip all articles and will build an index after article creation, increasing fulltext searches about 50%. To create an initial index use "bin/otrs.Console.pl Maint::Ticket::FulltextIndex --rebuild".' =>
             '',
         'High Contrast' => '',
         'High contrast skin for visually impaired users.' => '',
@@ -7532,7 +7558,7 @@ Thanks for your help!
         'List of colors in hexadecimal RGB which will be available for selection during calendar creation. Make sure the colors are dark enough so white text can be overlayed on them.' =>
             '',
         'List of default Standard Templates which are assigned automatically to new Queues upon creation.' =>
-            '',
+            'Lista predefiniowanych szablonów standardowych, które są przypisywane automatycznie do nowych kolejek po utworzeniu.',
         'List of responsive CSS files to always be loaded for the agent interface.' =>
             '',
         'List of responsive CSS files to always be loaded for the customer interface.' =>
@@ -7550,17 +7576,19 @@ Thanks for your help!
         'Logout of customer panel.' => 'Wyloguj z panelu klienta.',
         'Look into a ticket!' => 'Szczegóły zgłoszenia!',
         'Loop protection: no auto-response sent to "%s".' => '',
+        'Macedonian' => '',
         'Mail Accounts' => 'Konta Pocztowe',
         'MailQueue configuration settings.' => '',
         'Main menu item registration.' => '',
         'Main menu registration.' => 'Rejstracja okna głównego.',
+        'Makes the application block external content loading.' => '',
         'Makes the application check the MX record of email addresses before sending an email or submitting a telephone or email ticket.' =>
             'Powoduje by aplikacja sprawdzała zapisy MX adresów e-mail przed wysłaniem e-mail lub zapisaniem zgłoszenia telefonicznego lub e-mail.',
         'Makes the application check the syntax of email addresses.' => 'Powoduje by aplikacja sprawdzała poprawność adresu e-mail.',
         'Makes the session management use html cookies. If html cookies are disabled or if the client browser disabled html cookies, then the system will work as usual and append the session id to the links.' =>
             '',
         'Malay' => 'Malajski',
-        'Manage OTRS Group cloud services.' => '',
+        'Manage OTRS Group cloud services.' => 'Zarządzaj usługami chmurowymi OTRS Group.',
         'Manage PGP keys for email encryption.' => 'Zarządzanie kluczami PGP do szyfrowania poczty.',
         'Manage POP3 or IMAP accounts to fetch email from.' => 'Ustawienia konto pocztowych POP3 i IMAP, z których pobierana jest poczta przychodząca do systemu',
         'Manage S/MIME certificates for email encryption.' => 'Zarządzanie certyfikatami S/MIME służącymi do szyfrowania poczty wychodzącej',
@@ -7693,7 +7721,6 @@ Thanks for your help!
             '',
         'OTRS doesn\'t support recurring Appointments without end date or number of iterations. During import process, it might happen that ICS file contains such Appointments. Instead, system creates all Appointments in the past, plus Appointments for the next N months (120 months/10 years by default).' =>
             '',
-        'Open Tickets / Need to be answered' => 'Zgłoszenia otwarte / wymagające odpowiedzi',
         'Open an external link!' => '',
         'Open tickets (customer user)' => 'Otwarte zgłoszenia (użytkownik klienta)',
         'Open tickets (customer)' => 'Otwarte zgłoszenia (klient)',
@@ -7842,13 +7869,15 @@ Thanks for your help!
         'Queue view' => 'Widok kolejek',
         'Queues ↔ Auto Responses' => '',
         'Rebuild the ticket index for AgentTicketQueue.' => '',
-        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number.' =>
+        'Recognize if a ticket is a follow-up to an existing ticket using an external ticket number. Note: the first capturing group from the \'NumberRegExp\' expression will be used as the ticket number value.' =>
             '',
         'Refresh interval' => 'Interwał odświeżania',
         'Registers a log module, that can be used to log communication related information.' =>
             '',
         'Reminder Tickets' => 'Przypomnienia zgłoszeń',
         'Removed subscription for user "%s".' => 'Usunięto subskrypcje dla użytkownika "%s".',
+        'Removes old generic interface debug log entries created before the specified amount of days.' =>
+            '',
         'Removes old system configuration deployments (Sunday mornings).' =>
             '',
         'Removes old ticket number counters (each 10 minutes).' => '',
@@ -7907,6 +7936,7 @@ Thanks for your help!
             '',
         'Right' => 'Prawa',
         'Roles ↔ Groups' => 'Role ↔ Grupy',
+        'Romanian' => '',
         'Run file based generic agent jobs (Note: module name needs to be specified in -configuration-module param e.g. "Kernel::System::GenericAgent").' =>
             '',
         'Running Process Tickets' => '',
@@ -8333,6 +8363,7 @@ Thanks for your help!
         'Shows information on how to start OTRS Daemon' => '',
         'Shows link to external page in the ticket zoom view of the agent interface. Additional access control to show or not show this link can be done by using Key "Group" and Content like "rw:group1;move_into:group2".' =>
             '',
+        'Shows the article head information in the agent zoom view.' => '',
         'Shows the articles sorted normally or in reverse, under ticket zoom in the agent interface.' =>
             'Pokazuje artykuły posortowane w zwykły lub odwrócony sposób pod przybliżeniem zgłoszenia w interfejsie agenta.',
         'Shows the customer user information (phone and email) in the compose screen.' =>
@@ -8474,6 +8505,7 @@ Thanks for your help!
         'Strips empty lines on the ticket preview in the queue view.' => 'Usuwa puste linie z podglądu zgłoszenia w widoku kolejki.',
         'Strips empty lines on the ticket preview in the service view.' =>
             '',
+        'Support Agent' => '',
         'Swahili' => '',
         'Swedish' => 'Szwedzki',
         'System Address Display Name' => '',
@@ -8534,6 +8566,7 @@ Thanks for your help!
             'Tekst na początku tematu w odpowiedziach e-mail np. RE lub Odp.',
         'The text at the beginning of the subject when an email is forwarded, e.g. FW, Fwd, or WG.' =>
             'Tekst na początku tematu w e-mailach przesłanch dalej np. FW lub Fwd.',
+        'The value of the From field' => '',
         'Theme' => 'Schemat',
         'This event module stores attributes from CustomerUser as DynamicFields tickets. Please see DynamicFieldFromCustomerUser::Mapping setting for how to configure the mapping.' =>
             '',
@@ -8765,7 +8798,6 @@ Thanks for your help!
         'Click to select a file or just drop it here.',
         'Click to select files or just drop them here.',
         'Clone web service',
-        'Close',
         'Close preview',
         'Close this dialog',
         'Complex %s with %s arguments',
@@ -8847,6 +8879,7 @@ Thanks for your help!
         'Fr',
         'Fri',
         'Friday',
+        'Generate',
         'Generate Result',
         'Generating...',
         'Grouped',

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -21,7 +21,9 @@ our @ObjectDependencies = (
 sub Configure {
     my ( $Self, %Param ) = @_;
 
-    $Self->Description('Flag articles to automatically rebuild the article search index or displays the index status.');
+    $Self->Description(
+        'Flag articles to automatically rebuild the article search index or displays the index status. Please use --status or --rebuild option, not both!'
+    );
     $Self->AddOption(
         Name        => 'status',
         Description => "Display the current status of the index.",
@@ -48,7 +50,7 @@ sub PreRun {
 
     if ( $Self->GetOption('status') && $Self->GetOption('rebuild') ) {
         $Self->Print( $Self->GetUsageHelp() );
-        die "Either --status or --rebuild must be given!\n";
+        die "Either --status or --rebuild must be given, not both!\n";
     }
 
     return;

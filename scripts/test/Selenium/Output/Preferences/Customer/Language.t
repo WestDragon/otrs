@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -36,15 +36,20 @@ $Selenium->RunTest(
         # go to customer preferences
         $Selenium->VerifiedGet("${ScriptAlias}customer.pl?Action=CustomerPreferences");
 
+        my $Language = 'de';
+
         # change test user language preference to Deutsch
         $Selenium->InputFieldValueSet(
             Element => '#UserLanguage',
-            Value   => 'de',
+            Value   => $Language,
         );
         $Selenium->find_element( "#UserLanguageUpdate", 'css' )->VerifiedClick();
 
         # check for update preference message on screen
-        my $UpdateMessage = "Benutzereinstellungen erfolgreich aktualisiert!";
+        my $LanguageObject = Kernel::Language->new(
+            UserLanguage => $Language,
+        );
+        my $UpdateMessage = $LanguageObject->Translate('Preferences updated successfully!');
         $Self->True(
             index( $Selenium->get_page_source(), $UpdateMessage ) > -1,
             'Customer preference language - updated'

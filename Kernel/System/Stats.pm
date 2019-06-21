@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -3943,6 +3943,15 @@ sub _FromOTRSTimeZone {
     );
     $DateTimeObject->ToTimeZone( TimeZone => $Param{TimeZone} );
 
+    if ( !$DateTimeObject ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Error creating DateTime object.",
+        );
+
+        return;
+    }
+
     return $DateTimeObject->ToString();
 }
 
@@ -3979,6 +3988,16 @@ sub _ToOTRSTimeZone {
         'Kernel::System::DateTime',
         ObjectParams => \%Param,
     );
+
+    if ( !$DateTimeObject ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Error creating DateTime object.",
+        );
+
+        return;
+    }
+
     $DateTimeObject->ToOTRSTimeZone();
 
     return $DateTimeObject->ToString();

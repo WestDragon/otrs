@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -75,6 +75,14 @@ $Selenium->RunTest(
             'Only one agent user accounted for'
         );
 
+        if ( $Kernel::OM->Get('Kernel::Config')->Get('Ticket::Agent::UnavailableForExternalChatsOnLogin') ) {
+            $Self->True(
+                1,
+                "UnavailableForExternalChatsOnLogin config is set, skipping test..."
+            );
+            return 1;
+        }
+
         # Test UserOnline plugin for agent.
         my $ExpectedAgent = "$TestUserLogin";
         $Self->True(
@@ -86,7 +94,7 @@ $Selenium->RunTest(
                 "return \$('table.DashboardUserOnline span.UserStatusIcon.Inline.Active:visible').length"
             ),
             "$TestUserLogin - found active status icon",
-        );
+        ) || die;
 
         # Verify only one customer user is accounted for.
         my $CustomersLink = $Selenium->find_element("//a[contains(\@id, \'UserOnlineCustomer' )]");
@@ -110,7 +118,7 @@ $Selenium->RunTest(
                 "return \$('table.DashboardUserOnline span.UserStatusIcon.Inline.Active:visible').length"
             ),
             "$TestCustomerUserLogin - found active status icon",
-        );
+        ) || die;
 
         $Self->Is(
             $Selenium->execute_script(

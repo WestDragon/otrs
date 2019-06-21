@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -786,7 +786,7 @@ my $ArticleAttachmentContentGet = sub {
             $Attachment{FileID} = $FileID;
 
             # convert content to base64
-            $Attachment{Content}            = $Param{NoContent} ? '' : encode_base64( $Attachment{Content} );
+            $Attachment{Content}            = $Param{NoContent} ? '' : encode_base64( $Attachment{Content}, '' );
             $Attachment{ContentID}          = '';
             $Attachment{ContentAlternative} = '';
             push @Attachments, {%Attachment};
@@ -1420,6 +1420,42 @@ my @Tests = (
                         (
                             %TicketEntryFour,
                             Article => [ $ArticleWithoutAttachments[0], $ArticleWithoutAttachments[1] ],
+                        )
+                    },
+                ],
+            },
+        },
+        Operation => 'TicketGet',
+    },
+    {
+        Name           => 'Test Ticket 4 - check ArticleLimit parameter when greater then number of articles',
+        SuccessRequest => '1',
+        RequestData    => {
+            TicketID     => $TicketID4,
+            AllArticles  => 1,
+            ArticleLimit => 10,
+        },
+        ExpectedReturnRemoteData => {
+            Success => 1,
+            Data    => {
+                Ticket => {
+                    %TicketEntryFour,
+                    Article =>
+                        [ $ArticleWithoutAttachments[0], $ArticleWithoutAttachments[1], $ArticleWithoutAttachments[2] ],
+                },
+            },
+        },
+        ExpectedReturnLocalData => {
+            Success => 1,
+            Data    => {
+                Ticket => [
+                    {
+                        (
+                            %TicketEntryFour,
+                            Article => [
+                                $ArticleWithoutAttachments[0], $ArticleWithoutAttachments[1],
+                                $ArticleWithoutAttachments[2]
+                            ],
                         )
                     },
                 ],

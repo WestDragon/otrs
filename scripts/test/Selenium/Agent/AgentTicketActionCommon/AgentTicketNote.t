@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -33,9 +33,83 @@ $Selenium->RunTest(
             Value => 0,
         );
 
+        # Create test group.
+        my $RandomID    = $Helper->GetRandomID();
+        my $GroupObject = $Kernel::OM->Get('Kernel::System::Group');
+        my $GroupName   = "Group" . $RandomID;
+        my $GroupID     = $GroupObject->GroupAdd(
+            Name    => $GroupName,
+            ValidID => 1,
+            UserID  => 1,
+        );
+        $Self->True(
+            $GroupID,
+            "Group ID $GroupID is created."
+        );
+
+        # Create test queue.
+        my $QueueObject = $Kernel::OM->Get('Kernel::System::Queue');
+        my $QueueName   = 'Queue' . $RandomID;
+        my $QueueID     = $QueueObject->QueueAdd(
+            Name            => $QueueName,
+            ValidID         => 1,
+            GroupID         => $GroupID,
+            SystemAddressID => 1,
+            SalutationID    => 1,
+            SignatureID     => 1,
+            Comment         => 'Selenium Queue',
+            UserID          => 1,
+        );
+        $Self->True(
+            $QueueID,
+            "Queue ID $QueueID is created."
+        );
+
+        # Create two test user. One with 'ro' and 'note' permissions, other one with only 'note' permission.
+        my $UserObject = $Kernel::OM->Get('Kernel::System::User');
+        my @CreatedUserIDs;
+        for my $Count ( 1 .. 2 ) {
+            my $UserID = $UserObject->UserAdd(
+                UserFirstname => $Count . 'First' . $RandomID,
+                UserLastname  => $Count . 'Last' . $RandomID,
+                UserLogin     => $Count . $RandomID,
+                UserEmail     => $Count . $RandomID . '@localhost.com',
+                ValidID       => 1,
+                ChangeUserID  => 1,
+            );
+            $Self->True(
+                $UserID,
+                "User ID $UserID is created."
+            );
+
+            # Add created test user to appropriate group.
+            my $Success = $GroupObject->PermissionGroupUserAdd(
+                GID        => $GroupID,
+                UID        => $UserID,
+                Permission => {
+                    ro        => $Count == 1 ? 1 : 0,
+                    move_into => 0,
+                    create    => 0,
+                    note      => 1,
+                    owner     => 0,
+                    priority  => 0,
+                    rw        => 0,
+                },
+                UserID => 1,
+            );
+            push @CreatedUserIDs, $UserID;
+        }
+
+        # Enable 'InformAgent' for AgentTicketNote screen.
+        $Helper->ConfigSettingChange(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###InformAgent',
+            Value => 1,
+        );
+
         # Create test user.
         my $TestUserLogin = $Helper->TestUserCreate(
-            Groups => [ 'admin', 'users' ],
+            Groups => [ 'admin', 'users', $GroupName ],
         ) || die "Did not get test user";
 
         # Get test user ID.
@@ -49,7 +123,7 @@ $Selenium->RunTest(
         # Create test ticket.
         my $TicketID = $TicketObject->TicketCreate(
             Title        => 'Selenium Test Ticket',
-            Queue        => 'Raw',
+            QueueID      => $QueueID,
             Lock         => 'unlock',
             Priority     => '3 normal',
             State        => 'new',
@@ -113,6 +187,21 @@ $Selenium->RunTest(
             $Element->is_displayed();
         }
 
+        # Verify only agent with 'ro' permission is available for Inform Agents selection.
+        # See bug#14488.
+        $Self->True(
+            $Selenium->execute_script(
+                "return \$('#InformUserID option[Value=$CreatedUserIDs[0]]').length"
+            ),
+            "UserID $CreatedUserIDs[0] with 'ro' and 'note' permission is available for selection in Inform Agents."
+        );
+        $Self->False(
+            $Selenium->execute_script(
+                "return \$('#InformUserID option[Value=$CreatedUserIDs[1]]').length"
+            ),
+            "UserID $CreatedUserIDs[1] with 'note' permission is not available for selection in Inform Agents."
+        );
+
         # Get default subject value from Ticket::Frontend::AgentTicketNote###Subject.
         my $DefaultNoteSubject = $ConfigObject->Get("Ticket::Frontend::AgentTicketNote")->{Subject};
 
@@ -133,23 +222,13 @@ $Selenium->RunTest(
         $Selenium->WaitFor( WindowCount => 1 );
         $Selenium->switch_to_window( $Handles->[0] );
 
-        $Selenium->VerifiedRefresh();
-
-        # Force sub menus to be visible in order to be able to click one of the links.
-        $Selenium->execute_script(
-            '$("#nav-Miscellaneous ul").css({ "height": "auto", "opacity": "100" });'
-        );
         $Selenium->WaitFor(
             JavaScript =>
-                'return $("#nav-Miscellaneous ul").css("opacity") == 1;'
+                'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete;'
         );
 
-        # Click on 'History' and switch window.
-        $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketHistory;TicketID=$TicketID' )]")->click();
-
-        $Selenium->WaitFor( WindowCount => 2 );
-        $Handles = $Selenium->get_window_handles();
-        $Selenium->switch_to_window( $Handles->[1] );
+        # Navigate to history of created test ticket.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketHistory;TicketID=$TicketID");
 
         # Wait until page has loaded, if necessary.
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $(".WidgetSimple").length;' );
@@ -161,12 +240,8 @@ $Selenium->RunTest(
             "Ticket note action completed",
         );
 
-        # Close history window.
-        $Selenium->find_element( ".CancelClosePopup", 'css' )->click();
-
-        # Switch window back to agent ticket zoom view of created test ticket.
-        $Selenium->WaitFor( WindowCount => 1 );
-        $Selenium->switch_to_window( $Handles->[0] );
+        # Navigate to zoom view of created test ticket.
+        $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketID");
 
         # Click 'Reply to note' in order to check for pre-loaded reply-to note subject, see bug #10931.
         $Selenium->find_element("//a[contains(\@href, \'ReplyToArticle' )]")->click();
@@ -238,7 +313,7 @@ $Selenium->RunTest(
         );
         $Self->True(
             $ArticleID,
-            "ArticleCreate - ID $ArticleID",
+            "ArticleCreate ID $ArticleID is created.",
         );
 
         # Navigate to added note article.
@@ -319,7 +394,6 @@ $Selenium->RunTest(
         );
 
         # Add a template.
-        my $RandomID               = $Helper->GetRandomID();
         my $TemplateText           = 'This is a test template';
         my $StandardTemplateObject = $Kernel::OM->Get('Kernel::System::StandardTemplate');
         my $TemplateID             = $StandardTemplateObject->StandardTemplateAdd(
@@ -333,11 +407,8 @@ $Selenium->RunTest(
 
         $Self->True(
             $TemplateID,
-            "Template is created - ID $TemplateID",
+            "Template ID $TemplateID is created.",
         );
-
-        my $QueueObject = $Kernel::OM->Get('Kernel::System::Queue');
-        my $QueueID     = $QueueObject->QueueLookup( Queue => 'Raw' );
 
         # Assign the template to our queue.
         my $Success = $QueueObject->QueueStandardTemplateMemberAdd(
@@ -348,7 +419,7 @@ $Selenium->RunTest(
         );
         $Self->True(
             $Success,
-            "Template got assigned to 'Raw'",
+            "Template got assigned to $QueueName",
         );
 
         # Now switch to mobile mode and reload the window.
@@ -412,7 +483,7 @@ $Selenium->RunTest(
         );
         $Self->True(
             $Success,
-            "Template is deleted - ID $TemplateID",
+            "Template ID $TemplateID is deleted.",
         );
 
         # Delete created test tickets.
@@ -431,7 +502,59 @@ $Selenium->RunTest(
         }
         $Self->True(
             $Success,
-            "Ticket is deleted - ID $TicketID",
+            "Ticket ID $TicketID is deleted.",
+        );
+
+        # Delete test created queue.
+        my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+        $Success = $DBObject->Do(
+            SQL  => "DELETE FROM queue WHERE id = ?",
+            Bind => [ \$QueueID ],
+        );
+        $Self->True(
+            $Success,
+            "QueueID $QueueID is deleted.",
+        );
+
+        # Delete group-user relations.
+        $Success = $DBObject->Do(
+            SQL  => "DELETE FROM group_user WHERE group_id = ?",
+            Bind => [ \$GroupID ],
+        );
+        $Self->True(
+            $Success,
+            "Relation for group ID $GroupID is deleted.",
+        );
+
+        # Delete test created users.
+        for my $UserID (@CreatedUserIDs) {
+            $Success = $DBObject->Do(
+                SQL  => "DELETE FROM user_preferences WHERE user_id = ?",
+                Bind => [ \$UserID ],
+            );
+            $Self->True(
+                $Success,
+                "User preferences for $UserID is deleted.",
+            );
+
+            $Success = $DBObject->Do(
+                SQL  => "DELETE FROM users WHERE id = ?",
+                Bind => [ \$UserID ],
+            );
+            $Self->True(
+                $Success,
+                "UserID $UserID is deleted.",
+            );
+        }
+
+        # Delete test created groups.
+        $Success = $DBObject->Do(
+            SQL  => "DELETE FROM groups WHERE id = ?",
+            Bind => [ \$GroupID ],
+        );
+        $Self->True(
+            $Success,
+            "GroupID $GroupID is deleted.",
         );
 
         # Make sure the cache is correct.

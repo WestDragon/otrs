@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -197,11 +197,16 @@ $Selenium->RunTest(
         $Selenium->find_element( "#Subject",        'css' )->send_keys("TestSubject");
         $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
 
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $("#ArticleTree td.Direction i").hasClass("fa-long-arrow-right")'
+        );
+
         # See the bug #13752
         $Self->True(
             $Selenium->execute_script("return \$('#ArticleTree td.Direction i').hasClass('fa-long-arrow-right')"),
             "There is right direction arrow",
-        );
+        ) || die;
 
         # navigate to AgentTicketHistory of created test ticket
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketHistory;TicketID=$TicketID");

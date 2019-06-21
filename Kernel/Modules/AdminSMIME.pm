@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -655,6 +655,11 @@ sub _Overview {
             if ( !defined $Attributes->{Type} && !defined $Attributes->{Subject} ) {
                 $Attributes->{Type}    = 'Invalid';
                 $Attributes->{Subject} = "The file: '$Attributes->{Filename}' is invalid";
+            }
+
+            if ( defined $Attributes->{EndDate} && $SMIMEObject->KeyExpiredCheck( EndDate => $Attributes->{EndDate} ) )
+            {
+                $Attributes->{Expired} = 1;
             }
             $LayoutObject->Block(
                 Name => 'Row',

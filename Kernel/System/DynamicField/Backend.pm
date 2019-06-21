@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -826,6 +826,70 @@ sub ValueValidate {
     return $Self->{$DynamicFieldBackend}->ValueValidate(%Param);
 }
 
+=head2 FieldValueValidate()
+
+Validates a dynamic field possible value.
+
+    my $Success = $BackendObject->FieldValueValidate(
+        DynamicFieldConfig => $DynamicFieldConfig,      # Complete config of the DynamicField.
+        Value              => $Value,                   # Value to validate from possible options.
+        UserID             => 1,
+    );
+
+=cut
+
+sub FieldValueValidate {
+    my ( $Self, %Param ) = @_;
+
+    for my $Needed (qw(DynamicFieldConfig UserID)) {
+        if ( !$Param{$Needed} ) {
+            $Kernel::OM->Get('Kernel::System::Log')->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
+            return;
+        }
+    }
+
+    # Check DynamicFieldConfig (general).
+    if ( !IsHashRefWithData( $Param{DynamicFieldConfig} ) ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "The field configuration is invalid",
+        );
+        return;
+    }
+
+    # Check DynamicFieldConfig (internally).
+    for my $Needed (qw(ID FieldType ObjectType)) {
+        if ( !$Param{DynamicFieldConfig}->{$Needed} ) {
+            $Kernel::OM->Get('Kernel::System::Log')->Log(
+                Priority => 'error',
+                Message  => "Need $Needed in DynamicFieldConfig!",
+            );
+            return;
+        }
+    }
+
+    # Set the DynamicField specific backend.
+    my $DynamicFieldBackend = 'DynamicField' . $Param{DynamicFieldConfig}->{FieldType} . 'Object';
+
+    if ( !$Self->{$DynamicFieldBackend} ) {
+        $Kernel::OM->Get('Kernel::System::Log')->Log(
+            Priority => 'error',
+            Message  => "Backend $Param{DynamicFieldConfig}->{FieldType} is invalid!"
+        );
+        return;
+    }
+
+    # Call FieldValueValidate on the specific backend if it is available.
+    if ( $Self->{$DynamicFieldBackend}->can('FieldValueValidate') ) {
+        return $Self->{$DynamicFieldBackend}->FieldValueValidate(%Param);
+    }
+
+    return $Self->{$DynamicFieldBackend}->ValueValidate(%Param);
+}
+
 =head2 ValueGet()
 
 get a dynamic field value.
@@ -868,7 +932,7 @@ sub ValueGet {
     {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
-            Message  => "Either ObjectID or ObjectName hast tob be given!"
+            Message  => "Either ObjectID or ObjectName has to be given!"
         );
         return;
     }
@@ -2073,6 +2137,8 @@ checks if the dynamic field as an specified behavior
                                                          # 'IsCustomerInterfaceCapable' to make
                                                          #     the field usable in the customer
                                                          #     interface
+                                                         # 'IsHTMLContent' to indicate that there is                                                        # 'IsCustomerInterfaceCapable' to make
+                                                         #     HTML content (avoid duble cnversion to HTML)
     );
 
     Returns:

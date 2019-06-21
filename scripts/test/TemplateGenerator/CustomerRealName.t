@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -182,6 +182,19 @@ my @Tests = (
         },
         ResultNotification => {
             To   => "$CustomerUser\@home.com",
+            Body => "OTRS_CUSTOMER_REALNAME tag: $CustomerUser $CustomerUser",
+        },
+    },
+    {
+        Name => 'Email with CustomerID and Reply-To tag',
+        Email =>
+            "From: $CustomerUser\@home.com\nTo: TestTo\@home.com\nReply-To: TestReplyTo\@home.com\nSubject: Email with valid CustomerID\nTest Body Email.\n",
+        ResultAutoResponse => {
+            To   => 'TestReplyTo@home.com',
+            Body => "OTRS_CUSTOMER_REALNAME tag: $CustomerUser $CustomerUser",
+        },
+        ResultNotification => {
+            To   => 'TestReplyTo@home.com',
             Body => "OTRS_CUSTOMER_REALNAME tag: $CustomerUser $CustomerUser",
         },
     },

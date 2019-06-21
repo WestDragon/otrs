@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -11,6 +11,7 @@ package Kernel::Modules::AgentTicketBulk;
 use strict;
 use warnings;
 
+use Kernel::System::VariableCheck qw(:all);
 use Kernel::Language qw(Translatable);
 
 our $ObjectManagerDisabled = 1;
@@ -289,6 +290,93 @@ sub Run {
             Type        => 'inline',
             NoCache     => 1,
         );
+    }
+
+    elsif ( $Self->{Subaction} eq 'AJAXIgnoreLockedTicketIDs' ) {
+
+        my @ValidTicketIDs;
+        my @IgnoreLockedTicketIDs;
+        my $TicketIDs = $ParamObject->GetParam( Param => 'TicketIDs' );
+        if ($TicketIDs) {
+            $TicketIDs = $Kernel::OM->Get('Kernel::System::JSON')->Decode(
+                Data => $TicketIDs
+            );
+
+        }
+
+        my $Config        = $ConfigObject->Get("Ticket::Frontend::$Self->{Action}");
+        my @TicketIDArray = split( /;/, $TicketIDs );
+
+        if ( $Config->{RequiredLock} ) {
+            for my $TicketID (@TicketIDArray) {
+                if ( $TicketObject->TicketLockGet( TicketID => $TicketID ) ) {
+                    my $AccessOk = $TicketObject->OwnerCheck(
+                        TicketID => $TicketID,
+                        OwnerID  => $Self->{UserID},
+                    );
+                    if ($AccessOk) {
+                        push @ValidTicketIDs, $TicketID;
+                    }
+                    else {
+                        push @IgnoreLockedTicketIDs, $TicketID;
+                    }
+                }
+                else {
+                    push @ValidTicketIDs, $TicketID;
+                }
+            }
+        }
+        else {
+            @ValidTicketIDs = @TicketIDArray;
+        }
+
+        my %DialogWarning;
+        my @IgnoreLockedTicketNumber;
+        if ( @IgnoreLockedTicketIDs && !@ValidTicketIDs ) {
+            for my $TicketID (@IgnoreLockedTicketIDs) {
+                my $TicketNumber = $TicketObject->TicketNumberLookup(
+                    TicketID => $TicketID,
+                );
+                push @IgnoreLockedTicketNumber, $TicketNumber;
+
+            }
+
+            if ( $Config->{RequiredLock} ) {
+                if ( scalar @IgnoreLockedTicketNumber > 1 ) {
+                    %DialogWarning = (
+                        Message => $LayoutObject->{LanguageObject}->Translate(
+                            "The following tickets were ignored because they are locked by another agent or you don't have write access to tickets: %s.",
+                            join( ", ", @IgnoreLockedTicketNumber ),
+                        )
+                    );
+                }
+                else {
+                    %DialogWarning = (
+                        Message => $LayoutObject->{LanguageObject}->Translate(
+                            "The following ticket was ignored because it is locked by another agent or you don't have write access to ticket: %s.",
+                            join( ", ", @IgnoreLockedTicketNumber ),
+                        )
+                    );
+                }
+            }
+            else {
+                %DialogWarning = (
+                    Message => Translatable('You need to select at least one ticket.'),
+                );
+            }
+        }
+
+        return $LayoutObject->Attachment(
+            ContentType => 'application/json; charset=' . $LayoutObject->{Charset},
+            Content     => $Kernel::OM->Get('Kernel::System::JSON')->Encode(
+                Data => {
+                    Message => $DialogWarning{Message} || '',
+                }
+            ),
+            Type    => 'inline',
+            NoCache => 1,
+        );
+
     }
 
     if ( !$Self->{Subaction} || $Self->{Subaction} ne 'AJAXRecipientList' ) {
@@ -609,6 +697,8 @@ sub Run {
 
         my @TicketsWithError;
         my @TicketsWithLockNotice;
+        my $Result;
+        my @NonUpdatedTickets;
 
         my $ArticleObject = $Kernel::OM->Get('Kernel::System::Ticket::Article');
 
@@ -650,13 +740,17 @@ sub Run {
                     );
 
                     # set user id
-                    $TicketObject->TicketOwnerSet(
+                    $Result = $TicketObject->TicketOwnerSet(
                         TicketID  => $TicketID,
                         UserID    => $Self->{UserID},
                         NewUserID => $Self->{UserID},
                     );
 
                     push @TicketsWithLockNotice, $Ticket{TicketNumber};
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
                 }
             }
 
@@ -678,22 +772,31 @@ sub Run {
 
                 # set queue
                 if ( $GetParam{'QueueID'} || $GetParam{'Queue'} ) {
-                    $TicketObject->TicketQueueSet(
+                    $Result = $TicketObject->TicketQueueSet(
                         QueueID  => $GetParam{'QueueID'},
                         Queue    => $GetParam{'Queue'},
                         TicketID => $TicketID,
                         UserID   => $Self->{UserID},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
                 }
 
                 # set owner
                 if ( $Config->{Owner} && ( $GetParam{'OwnerID'} || $GetParam{'Owner'} ) ) {
-                    $TicketObject->TicketOwnerSet(
+                    $Result = $TicketObject->TicketOwnerSet(
                         TicketID  => $TicketID,
                         UserID    => $Self->{UserID},
                         NewUser   => $GetParam{'Owner'},
                         NewUserID => $GetParam{'OwnerID'},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
+
                     if ( !$Config->{RequiredLock} && $Ticket{StateType} !~ /^close/i ) {
                         $TicketObject->TicketLockSet(
                             TicketID => $TicketID,
@@ -710,12 +813,16 @@ sub Run {
                     && ( $GetParam{'ResponsibleID'} || $GetParam{'Responsible'} )
                     )
                 {
-                    $TicketObject->TicketResponsibleSet(
+                    $Result = $TicketObject->TicketResponsibleSet(
                         TicketID  => $TicketID,
                         UserID    => $Self->{UserID},
                         NewUser   => $GetParam{'Responsible'},
                         NewUserID => $GetParam{'ResponsibleID'},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
                 }
 
                 # set priority
@@ -724,22 +831,30 @@ sub Run {
                     && ( $GetParam{'PriorityID'} || $GetParam{'Priority'} )
                     )
                 {
-                    $TicketObject->TicketPrioritySet(
+                    $Result = $TicketObject->TicketPrioritySet(
                         TicketID   => $TicketID,
                         UserID     => $Self->{UserID},
                         Priority   => $GetParam{'Priority'},
                         PriorityID => $GetParam{'PriorityID'},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
                 }
 
                 # set type
                 if ( $ConfigObject->Get('Ticket::Type') && $Config->{TicketType} ) {
                     if ( $GetParam{'TypeID'} ) {
-                        $TicketObject->TicketTypeSet(
+                        $Result = $TicketObject->TicketTypeSet(
                             TypeID   => $GetParam{'TypeID'},
                             TicketID => $TicketID,
                             UserID   => $Self->{UserID},
                         );
+
+                        if ( !$Result ) {
+                            push @NonUpdatedTickets, $Ticket{TicketNumber};
+                        }
                     }
                 }
 
@@ -840,12 +955,17 @@ sub Run {
 
                 # set state
                 if ( $Config->{State} && ( $GetParam{'StateID'} || $GetParam{'State'} ) ) {
-                    $TicketObject->TicketStateSet(
+                    $Result = $TicketObject->TicketStateSet(
                         TicketID => $TicketID,
                         StateID  => $GetParam{'StateID'},
                         State    => $GetParam{'State'},
                         UserID   => $Self->{UserID},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
+
                     my %Ticket = $TicketObject->TicketGet(
                         TicketID      => $TicketID,
                         DynamicFields => 0,
@@ -975,11 +1095,15 @@ sub Run {
 
                 # should I unlock tickets at user request?
                 if ( $GetParam{'Unlock'} ) {
-                    $TicketObject->TicketLockSet(
+                    $Result = $TicketObject->TicketLockSet(
                         TicketID => $TicketID,
                         Lock     => 'unlock',
                         UserID   => $Self->{UserID},
                     );
+
+                    if ( !$Result ) {
+                        push @NonUpdatedTickets, $Ticket{TicketNumber};
+                    }
                 }
 
                 # call Store() in all ticket bulk modules
@@ -1029,6 +1153,17 @@ sub Run {
 
         # redirect
         if ($ActionFlag) {
+
+            if ( IsArrayRefWithData( \@NonUpdatedTickets ) ) {
+                my $NonUpdatedTicketsString = join ', ', @NonUpdatedTickets;
+                $Kernel::OM->Get('Kernel::System::Cache')->Set(
+                    Type  => 'Ticket',
+                    TTL   => 60,
+                    Key   => 'NonUpdatedTicketsString-' . $Self->{UserID},
+                    Value => $NonUpdatedTicketsString,
+                );
+            }
+
             my $DestURL = defined $MainTicketID
                 ? "Action=AgentTicketZoom;TicketID=$MainTicketID"
                 : ( $Self->{LastScreenOverview} || 'Action=AgentDashboard' );

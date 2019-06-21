@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -14,16 +14,17 @@ use vars (qw($Self));
 
 use Kernel::Language;
 
-my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
+my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
 # Fake a running daemon.
-my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
-my $NodeID       = $ConfigObject->Get('NodeID') || 1;
-my $Running      = $Kernel::OM->Get('Kernel::System::Cache')->Set(
+my $NodeID  = $ConfigObject->Get('NodeID') || 1;
+my $Running = $Kernel::OM->Get('Kernel::System::Cache')->Set(
     Type  => 'DaemonRunning',
     Key   => $NodeID,
     Value => 1,
 );
+
+my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
     sub {
@@ -56,6 +57,19 @@ $Selenium->RunTest(
 
         # Navigate to AdminRegistration screen.
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminRegistration");
+
+        # Check if needed frontend module is registered in sysconfig.
+        if ( !$ConfigObject->Get('Frontend::Module')->{AdminRegistration} ) {
+            $Self->True(
+                index(
+                    $Selenium->get_page_source(),
+                    'Module Kernel::Modules::AdminRegistration not registered in Kernel/Config.pm!'
+                ) > 0,
+                'Module AdminRegistration is not registered in sysconfig, skipping test...'
+            );
+
+            return 1;
+        }
 
         # Check breadcrumb on Overview screen.
         $Self->Is(

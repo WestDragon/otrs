@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
+# Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -15,7 +15,7 @@ package Kernel::System::ObjectManager;
 use strict;
 use warnings;
 
-use Carp qw(carp confess);
+use Carp ();
 use Scalar::Util qw(weaken);
 
 # use the "standard" modules directly, so that persistent environments
@@ -629,11 +629,9 @@ sub _DieWithError {
             Priority => 'Error',
             Message  => $Param{Error},
         );
-        confess $Param{Error};    # this will die()
     }
 
-    carp $Param{Error};
-    confess $Param{Error};
+    Carp::croak $Param{Error};    # This will die().
 }
 
 sub DESTROY {
